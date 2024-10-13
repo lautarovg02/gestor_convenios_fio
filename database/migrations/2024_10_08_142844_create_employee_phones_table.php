@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('employee_phones', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('number')->length(10);
+            $table->string('number')->length(10);
             $table->unsignedBigInteger('employee_id');
             $table->foreign('employee_id')->references('id')->on('employees');
             $table->timestamps();

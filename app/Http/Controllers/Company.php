@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company as CompanyModel; 
 use Illuminate\Http\Request;
 
 class Company extends Controller
@@ -11,7 +12,11 @@ class Company extends Controller
      */
     public function index()
     {
-        //
+        // Obtener todas las compañías usando el modelo Company
+        $companies = CompanyModel::paginate(10);
+
+        // Retornar la vista 'companies.index' pasando las compañías
+        return view('companies.index', compact('companies'));
     }
 
     /**
