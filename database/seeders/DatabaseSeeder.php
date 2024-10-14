@@ -8,9 +8,12 @@ use App\Models\Province;
 use App\Models\Company;
 use App\Models\Employee;
 use App\Models\City;
+use App\Models\Department;
 use App\Models\EmployeePhone;
 use App\Models\Secretary;
 use App\Models\SecretaryPhone;
+use App\Models\Teacher;
+use App\Models\Career;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,5 +29,9 @@ class DatabaseSeeder extends Seeder
         EmployeePhone::factory()->count(100)->create();
         Secretary::factory()->count(10)->create();
         SecretaryPhone::factory()->count(10)->create();
+        Teacher::factory(20)->create();
+        Department::factory(4)->create();
+        Career::factory(9)->create();
+        $this->call(CareerTeacherSeeder::class);
     }
 }
