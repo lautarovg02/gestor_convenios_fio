@@ -25,4 +25,12 @@ class Career extends Model
     {
         return $this->belongsTo(Teacher::class, 'coordinator_id');
     }
+
+    /** Relación con Department *..1
+     * Obtener el department al que pertenece la career.
+     */
+    public function department():BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
 }

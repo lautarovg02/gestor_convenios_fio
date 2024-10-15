@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Department extends Model
 {
@@ -19,5 +20,13 @@ class Department extends Model
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class, 'director_id');
+    }
+
+    /** Relación con Career 1..*
+     * Obtener las careers que  pertenecen al department.
+     */
+    public function careers():HasMany
+    {
+        return $this->hasMany(Career::class);
     }
 }
