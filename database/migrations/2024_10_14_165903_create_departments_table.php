@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('teacher_id')->unique();
+            $table->unsignedBigInteger('director_id')->unique()->nullable();
 
-            $table->string('name', 2000);
+            $table->string('name', 200);
 
             $table->timestamps();
 
-            $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
+            //Si se elimina director_id, la relación se rompe, pero department permanece intacta.
+            $table->foreign('director_id')->references('id')->on('teachers')->onDelete('set null');
 
         });
     }

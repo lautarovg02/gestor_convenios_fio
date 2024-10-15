@@ -20,8 +20,9 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->foreign('coordinator_id')->references('id')->on('teachers')->onDelete('cascade');
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');        });
+            $table->foreign('coordinator_id')->references('id')->on('teachers')->onDelete('set null');
+            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
+        });
     }
 
     /**

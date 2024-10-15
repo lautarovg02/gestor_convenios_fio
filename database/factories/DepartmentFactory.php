@@ -25,7 +25,7 @@ class DepartmentFactory extends Factory
                 'Ingeniería en Seguridad e Higiene en el Trabajo',
             ]),
 
-            'teacher_id' => Teacher::inRandomOrder()->first()->id, // DEBEMOS AGRAGAR EN teacher is_department_director
+            'director_id' => Teacher::inRandomOrder()->first()->id, // DEBEMOS AGRAGAR EN teacher is_department_director
         ];
     }
 }

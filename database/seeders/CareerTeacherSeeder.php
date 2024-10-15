@@ -19,8 +19,10 @@ class CareerTeacherSeeder extends Seeder
 
         // Asocia un número aleatorio de Teachers a cada Career
         foreach ($careers as $career) {
+
             // Asocia entre 1 y 5 Teachers aleatorios a cada Career
             $teachers = Teacher::inRandomOrder()->take(rand(2, 5))->pluck('id');
+
             // Asocia los IDs de los profesores a la carrera
             $career->teachers()->attach($teachers);
         };

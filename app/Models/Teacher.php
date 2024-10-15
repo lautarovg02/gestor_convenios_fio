@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Career;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Teacher extends Model
 {
@@ -25,5 +26,21 @@ class Teacher extends Model
     {
         return $this->belongsToMany(Career::class, 'career_teacher');
 
+    }
+
+    /** Relación con Department (uno a uno)
+     * Obtener el department del cual el teacher es director de departemento.
+     */
+    public function department():HasOne
+    {
+        return  $this->hasOne(Department::class);
+    }
+
+    /** Relación con Career (uno a uno)
+     * Obtener la career del cual el teacher es coordinador.
+     */
+    public function career():HasOne
+    {
+        return $this->hasOne(Career::class);
     }
 }
