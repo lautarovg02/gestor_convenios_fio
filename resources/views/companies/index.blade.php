@@ -1,9 +1,21 @@
 <!-- resources/views/companies/index.blade.php -->
-@extends('layouts.app')
+<!-- @extends('layouts.app') -->
 
 @section('content')
-<div class="container mt-4">
-    <h1 class="mb-4">Listado de Compañías</h1>
+<div class="container mt-1">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+       
+
+        <!-- Botón "Crear Convenio" -->
+        <a href="#" class="btn btn-secondary " onclick="event.preventDefault();">
+            Crear Convenio <i class="bi bi-plus"></i>
+        </a>
+
+        <!-- Barra de búsqueda -->
+        <input type="text" class="form-control w-50" placeholder="Buscar empresas...">
+
+        
+    </div>
 
     <table class="table table-striped">
         <thead>
@@ -31,17 +43,18 @@
                 <td>{{ $company->company_category ?? 'N/A' }}</td>
                 <td>{{ $company->city->name ?? 'N/A' }}</td>
                 <td>
-                    <a href="#" class="btn btn-primary btn-sm">Ver</a>
-                    <a href="#" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="#" class="btn btn-danger btn-sm">Eliminar</a>
+                    <a href="#" class="btn btn-info btn-sm">Ver</a>
+                    <a href="#" class="btn btn-primary btn-sm">Editar</a>
+                    <a href="#" class="btn btn-secondary btn-sm">Eliminar</a>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
+
     <!-- Mostrar enlaces de paginación -->
     <div class="d-flex justify-content-center">
-        {{ $companies->links() }}
-    </div>
+        {{ $companies->onEachSide(1)->links('pagination::bootstrap-4') }}
+    </div> 
 </div>
 @endsection

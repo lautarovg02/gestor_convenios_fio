@@ -1,0 +1,12 @@
+/* Estilo para el botón de "Crear Convenio" */
+.btn-crear-convenio {
+    background-color: #66bb6a; 
+    color: #fff;
+    font-weight: bold;
+}
+
+.btn-crear-convenio:hover {
+    background-color: #4caf50; 
+}
+
+

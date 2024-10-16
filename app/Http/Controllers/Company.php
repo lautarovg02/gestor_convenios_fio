@@ -13,7 +13,7 @@ class Company extends Controller
     public function index()
     {
         // Obtener todas las compañías usando el modelo Company
-        $companies = CompanyModel::paginate(10);
+        $companies = CompanyModel::paginate(9);
 
         // Retornar la vista 'companies.index' pasando las compañías
         return view('companies.index', compact('companies'));
