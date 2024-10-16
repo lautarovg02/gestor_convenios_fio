@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('secretaries', function (Blueprint $table) {
             $table->id();
-            $table->string("user_name", 40);
+            $table->string("user_name", 40)->unique();
             $table->string("password");
-            $table->string("email");
+            $table->string("email")->unique();
             $table->timestamps();
         });
     }
