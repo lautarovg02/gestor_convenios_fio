@@ -9,6 +9,8 @@ use App\Models\Company;
 use App\Models\Employee;
 use App\Models\City;
 use App\Models\EmployeePhone;
+use App\Models\Secretary;
+use App\Models\SecretaryPhone;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,5 +24,7 @@ class DatabaseSeeder extends Seeder
         Company::factory()->count(20)->create();
         Employee::factory()->count(100)->create();
         EmployeePhone::factory()->count(100)->create();
+        Secretary::factory()->count(10)->create();
+        SecretaryPhone::factory()->count(10)->create();
     }
 }

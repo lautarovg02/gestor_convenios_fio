@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class SecretaryPhone extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['phone_number', 'secretary_id'];
+
+    // Define la relación inversa con Secretary
+    public function secretary()
+    {
+        return $this->belongsTo(Secretary::class);
+    }
 }
