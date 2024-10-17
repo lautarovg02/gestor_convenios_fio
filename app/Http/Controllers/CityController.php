@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCityRequest;
 use App\Models\City;
 use App\Models\Province;
-use Doctrine\DBAL\Schema\View;
 use Illuminate\Http\Request;
 
 class CityController extends Controller

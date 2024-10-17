@@ -9,7 +9,7 @@ use App\Models\Company;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use PhpParser\Node\Stmt\TryCatch;
+
 
 /**
 * Class CompanyController
@@ -84,7 +84,11 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-       //
+       // request()->validate(Company::$rules);
+
+        $company->update($request->all());
+
+        return redirect()->route('companies.index')->with('success' , 'Empresa fue actualizada exitosamente.');
     }
 
     /**
