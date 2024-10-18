@@ -9,6 +9,7 @@ class SecretaryPhone extends Model
 {
     use HasFactory;
 
+    protected $table = 'secretaries_phones';
     protected $fillable = ['phone_number', 'secretary_id'];
 
     // Define la relación inversa con Secretary
