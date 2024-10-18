@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string('denomination',40);
-            $table->integer('cuit');
-            $table->string('company_name',100)->nullable();
-            $table->string('sector',40)->nullable();
-            $table->string('entity',40)->nullable();
-            $table->string('company_category',20)->nullable();
-            $table->string('scope',40)->nullable();
-            $table->string('street',40)->nullable();
+            $table->string('denomination');
+            $table->integer('cuit')->unique();
+            $table->string('company_name',100)->unique()->nullable();
+            $table->string('sector')->nullable();
+            $table->string('entity')->nullable();
+            $table->string('company_category')->nullable();
+            $table->string('scope')->nullable();
+            $table->string('street')->nullable();
             $table->integer('number')->nullable();
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('cities');

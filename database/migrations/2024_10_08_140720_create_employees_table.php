@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string("name",40);
             $table->string("lastname",40);
-            $table->integer("dni")->length(10);
-            $table->integer("cuil")->length(12)->nullable();
-            $table->string("email")->nullable();
-            $table->string("position",100);
+            $table->integer("dni")->length(10)->unique();
+            $table->integer("cuil")->length(12)->nullable()->unique();
+            $table->string("email")->nullable()->unique();
+            $table->string("position");
             $table->boolean("is_represent");
             $table->unsignedBigInteger("company_id");
             $table->foreign('company_id')->references('id')->on('companies');
