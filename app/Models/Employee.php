@@ -9,7 +9,7 @@ class Employee extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'lastname', 'dni', 'position', 'company_id'];
+    protected $fillable = ['name', 'lastname', 'dni', 'cuil' , 'email' , 'position', 'is_represent','company_id'];
 
        // Define la relación uno a muchos con EmployeePhone
     public function phones()
