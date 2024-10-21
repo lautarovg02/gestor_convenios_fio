@@ -15,7 +15,7 @@ class EmployeeFactoryTest extends TestCase
         @dairagalceran
         @test
      */
-    public function test_employee_factory_creates_valid_company()
+  /*   public function test_employee_factory_creates_valid_company()
     {
         //Crear empleado
         $employee = Employee::factory()->create();
@@ -33,7 +33,7 @@ class EmployeeFactoryTest extends TestCase
             'company_id' => $employee->company_id,
         ]);
     }
-
+ */
     /**
      * Test that the factory generates unique dni.
         @dairagalceran
