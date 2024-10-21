@@ -14,8 +14,6 @@ class CompanyFactoryTest extends TestCase
 
     use RefreshDatabase;
 
-
-
     /**
      * Test that the factory creates a Company with valid attributes.
         @dairagalceran
@@ -63,7 +61,7 @@ class CompanyFactoryTest extends TestCase
     }
 
     /**
-     * Test that the factory generates unique cuit.
+     * Test that the factory generates  cuit with exactly  11 digits.
         @dairagalceran
         @test
      */
