@@ -18,7 +18,7 @@ class CompanyFactory extends Factory
     {
         return [
             'denomination' => $this->faker->word,
-            'cuit' => $this->faker->unique()->numberBetween(20000000000, 30000000000),
+            'cuit' => $this->faker->unique()->numberBetween(20000000000,30000000000,),
             'company_name' => $this->faker->unique()->company,
             'sector' => $this->faker->word,
             'entity' => $this->faker->word,
