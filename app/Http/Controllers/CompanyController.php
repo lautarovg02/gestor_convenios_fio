@@ -25,8 +25,9 @@ class CompanyController extends Controller
     public function index():View
     {
         $companies = Company::orderBy('denomination' , 'ASC')
-            ->paginate(12);
-        $cities = City::all();
+            ->paginate(10);
+
+        $cities = City::orderBy('name', 'ASC')->get();
 
         return view('companies.index' , ['companies' => $companies , 'cities' => $cities])
             ->with('i', (request()->input('page', 1) - 1) * $companies->perPage());
@@ -34,6 +35,8 @@ class CompanyController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function create():View
     {
@@ -43,6 +46,7 @@ class CompanyController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
@@ -60,27 +64,41 @@ class CompanyController extends Controller
 
     }
 
+
     /**
      * Display the specified resource.
+     *
+     * @param  Company $company
+     * @return \Illuminate\Http\Response
      */
-    public function show(string $id)
+    public function show(Company $company):View
     {
+        $company = Company::find($company->id);
+
+        return view('companies.show', compact('company'));
     }
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param  Company $company
+     * @return \Illuminate\Http\Response
      */
-    public function edit(Company $company)
+    public function edit(Company $company):View
     {
         //dd($company);
         $company = Company::find($company->id);
         $cities = City::orderBy('name' , 'ASC')->get();
 
-        return view('companies.create' , ['company' => $company , 'cities' => $cities]);
+        return view('companies.edit' , ['company' => $company , 'cities' => $cities]);
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  Company $company
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Company $company)
     {
@@ -93,9 +111,12 @@ class CompanyController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * SE DEBE ADVERTIR SOBRE LA IMPOSIBILIDAD DE HACERLO Y DAR OPCIÓN DE DESVINCULAR
+     * PARA NO MOSTRARLA EN EL LISTADO
      */
-    public function destroy(string $id)
+    public function destroy(Company $company)
     {
         //
     }
+
 }

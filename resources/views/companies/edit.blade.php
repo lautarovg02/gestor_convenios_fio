@@ -1,3 +1,7 @@
+<!-- resources/views/companies/edit.blade.php -->
+<!-- @extends('layouts.app') -->
+
+@section('content')
 
 <div class="row row-deck row-cards">
     <div class="col-12">
@@ -108,3 +112,4 @@
     </div>
 </div>
 
+@endsection
