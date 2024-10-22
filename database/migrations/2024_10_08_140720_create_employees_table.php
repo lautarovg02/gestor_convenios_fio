@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("name",40);
             $table->string("lastname",40);
             $table->integer("dni")->length(8)->unique();
-            $table->integer("cuil")->length(10)->nullable()->unique();
+            $table->bigInteger("cuil")->length(11)->nullable()->unique();
             $table->string("email")->nullable()->unique();
             $table->string("position");
             $table->boolean("is_represent");
