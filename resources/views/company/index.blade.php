@@ -1,161 +1,60 @@
+<!-- resources/views/companies/index.blade.php -->
+<!-- @extends('layouts.app') -->
 
-    <!-- Page header -->
-    <div class="page-header d-print-none">
-        <div class="container-xl">
-            <div class="row g-2 align-items-center">
-                <div class="col">
-                    <!-- Page pre-title -->
-                    <div class="page-pretitle">
-                        List
-                    </div>
-                    <h2 class="page-title">
-                        {{ __('Company ') }}
-                    </h2>
-                </div>
-                <!-- Page title actions -->
-                <div class="col-12 col-md-auto ms-auto d-print-none">
-                    <div class="btn-list">
-                        <a href="{{ route('companies.create') }}" class="btn btn-primary d-none d-sm-inline-block">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <line x1="12" y1="5" x2="12" y2="19"/>
-                                <line x1="5" y1="12" x2="19" y2="12"/>
-                            </svg>
-                            Create Company
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Page body -->
-    <div class="page-body">
-        <div class="container-xl">
+@section('content')
+<div class="container mt-1">
+    <div class="d-flex justify-content-between align-items-center mb-3">
 
-            <div class="row row-deck row-cards">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Company</h3>
-                        </div>
-                        <div class="card-body border-bottom py-3">
-                            <div class="d-flex">
-                                <div class="text-muted">
-                                    Show
-                                    <div class="mx-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm" value="10" size="3"
-                                               aria-label="Invoices count">
-                                    </div>
-                                    entries
-                                </div>
-                                <div class="ms-auto text-muted">
-                                    Search:
-                                    <div class="ms-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm"
-                                               aria-label="Search invoice">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="table-responsive min-vh-100">
-                            <table class="table card-table table-vcenter text-nowrap datatable">
-                                <thead>
-                                <tr>
-                                    <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox"
-                                                           aria-label="Select all invoices"></th>
-                                    <th class="w-1">No.
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                             class="icon icon-sm text-dark icon-thick" width="24" height="24"
-                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                             stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <polyline points="6 15 12 9 18 15"/>
-                                        </svg>
-                                    </th>
 
-										<th>Denomination</th>
-										<th>Cuit</th>
-										<th>Company Name</th>
-										<th>Sector</th>
-										<th>Entity</th>
-										<th>Company Category</th>
-										<th>Scope</th>
-										<th>Street</th>
-										<th>Number</th>
-										<th>City</th>
+        <!-- Botón "Crear Convenio" -->
+        <a href="#" class="btn btn-secondary " onclick="event.preventDefault();">
+            Crear Convenio <i class="bi bi-plus"></i>
+        </a>
 
-                                    <th class="w-1"></th>
-                                </tr>
-                                </thead>
+        <!-- Barra de búsqueda -->
+        <input type="text" class="form-control w-50" placeholder="Buscar empresas...">
 
-                                <tbody>
-                                @forelse ($companies as $company)
-                                    <tr>
-                                        <td><input class="form-check-input m-0 align-middle" type="checkbox"
-                                                   aria-label="Select company"></td>
-                                        <td>{{ ++$i }}</td>
 
-											<td>{{ $company->denomination }}</td>
-											<td>{{ $company->cuit }}</td>
-											<td>{{ $company->company_name }}</td>
-											<td>{{ $company->sector }}</td>
-											<td>{{ $company->entity }}</td>
-											<td>{{ $company->company_category }}</td>
-											<td>{{ $company->scope }}</td>
-											<td>{{ $company->street }}</td>
-											<td>{{ $company->number }}</td>
-											<td>{{ $company->city->name}}</td>
-
-                                        <td>
-                                            <div class="btn-list flex-nowrap">
-                                                <div class="dropdown">
-                                                    <button class="btn dropdown-toggle align-text-top"
-                                                            data-bs-toggle="dropdown">
-                                                        Actions
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item"
-                                                           href="{{ route('companies.show',$company->id) }}">
-                                                            View
-                                                        </a>
-                                                        <a class="dropdown-item"
-                                                           href="{{ route('companies.edit',$company) }}">
-                                                            Editar
-                                                        </a>
-                                                        <form
-                                                            action="{{ route('companies.destroy',$company->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit"
-                                                                    onclick="if(!confirm('Do you Want to Proceed?')){return false;}"
-                                                                    class="dropdown-item text-red"><i
-                                                                    class="fa fa-fw fa-trash"></i>
-                                                                Delete
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <td>No Data Found</td>
-                                @endforelse
-                                </tbody>
-
-                            </table>
-                        </div>
-                       <div class="card-footer d-flex align-items-center">
-                            {{-- {!! $companies->links('pagination') !!} --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Denominación</th>
+                <th>CUIT</th>
+                <th>Nombre de la Compañía</th>
+                <th>Sector</th>
+                <th>Entidad</th>
+                <th>Categoría</th>
+                <th>Ciudad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($companies as $company)
+            <tr>
+                <td>{{ $company->id }}</td>
+                <td>{{ $company->denomination }}</td>
+                <td>{{ $company->cuit }}</td>
+                <td>{{ $company->company_name ?? 'N/A' }}</td>
+                <td>{{ $company->sector ?? 'N/A' }}</td>
+                <td>{{ $company->entity ?? 'N/A' }}</td>
+                <td>{{ $company->company_category ?? 'N/A' }}</td>
+                <td>{{ $company->city->name ?? 'N/A' }}</td>
+                <td>
+                    <a href="#" class="btn btn-info btn-sm">Ver</a>
+                    <a href="#" class="btn btn-primary btn-sm">Editar</a>
+                    <a href="#" class="btn btn-secondary btn-sm">Eliminar</a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Mostrar enlaces de paginación -->
+    <div class="d-flex justify-content-center">
+        {{ $companies->onEachSide(1)->links('pagination::bootstrap-4') }}
+    </div>
+</div>
+@endsection
