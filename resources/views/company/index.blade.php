@@ -7,8 +7,8 @@
 
 
         <!-- Botón "Crear Convenio" -->
-        <a href="#" class="btn btn-secondary " onclick="event.preventDefault();">
-            Crear Convenio <i class="bi bi-plus"></i>
+        <a href="{{route('companies.create')}}" class="btn btn-secondary " onclick="event.preventDefault();">
+            Crear empresa <i class="bi bi-plus"></i>
         </a>
 
         <!-- Barra de búsqueda -->
