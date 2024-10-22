@@ -1,3 +1,7 @@
+<!-- resources/views/companies/create.blade.php -->
+<!-- @extends('layouts.app') -->
+
+@section('content')
 
 <div class="row">
     <div class="col-12">
@@ -20,9 +24,10 @@
                     @csrf
 
                     <input type="hidden" name="_token" value="" autocomplete="off">
+
                     <div class="form-group mb-3">
                         <label class="form-label required">
-                            <label for="denomination" class="required">Denomination</label>
+                            <label for="denomination" class="required">Denominación</label>
                         </label>
                         <div>
                             <input class="form-control" placeholder="Denomination" name="denomination" type="text" id="denomination">
@@ -38,7 +43,7 @@
                     </div>
                     </div>
                     <div class="form-group mb-3">
-                    <label class="form-label">   <label for="company_name">Company Name</label></label>
+                    <label class="form-label">   <label for="company_name">Nombre de la compañía</label></label>
                     <div>
                     <input class="form-control" placeholder="Company Name" name="company_name" type="text" id="company_name">
 
@@ -54,7 +59,7 @@
                     </div>
                     </div>
                     <div class="form-group mb-3">
-                    <label class="form-label">   <label for="entity">Entity</label></label>
+                    <label class="form-label">   <label for="entity">Entidad</label></label>
                     <div>
                     <input class="form-control" placeholder="Entity" name="entity" type="text" id="entity">
 
@@ -62,7 +67,7 @@
                     </div>
                     </div>
                     <div class="form-group mb-3">
-                    <label class="form-label">   <label for="company_category">Company Category</label></label>
+                    <label class="form-label">   <label for="company_category">Categoría de compañía</label></label>
                     <div>
                     <input class="form-control" placeholder="Company Category" name="company_category" type="text" id="company_category">
 
@@ -70,7 +75,7 @@
                     </div>
                     </div>
                     <div class="form-group mb-3">
-                    <label class="form-label">   <label for="scope">Scope</label></label>
+                    <label class="form-label">   <label for="scope">Ámbito</label></label>
                     <div>
                     <input class="form-control" placeholder="Scope" name="scope" type="text" id="scope">
 
@@ -78,7 +83,7 @@
                     </div>
                     </div>
                     <div class="form-group mb-3">
-                    <label class="form-label">   <label for="street">Street</label></label>
+                    <label class="form-label">   <label for="street">Calle</label></label>
                     <div>
                     <input class="form-control" placeholder="Street" name="street" type="text" id="street">
 
@@ -86,7 +91,7 @@
                     </div>
                     </div>
                     <div class="form-group mb-3">
-                    <label class="form-label">   <label for="number">Number</label></label>
+                    <label class="form-label">   <label for="number">Número</label></label>
                     <div>
                     <input class="form-control" placeholder="Number" name="number" type="text" id="number">
 
@@ -94,7 +99,7 @@
                     </div>
                     </div>
                     <div class="form-group mb-3">
-                    <label class="form-label">   <label for="city_id">City Id</label></label>
+                    <label class="form-label">   <label for="city_id">Ciudad</label></label>
                     <div>
                     <input class="form-control" placeholder="City Id" name="city_id" type="text" id="city_id">
 
@@ -117,3 +122,4 @@
         </div>
     </div>
 </div>
+@endsection

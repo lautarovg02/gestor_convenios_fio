@@ -7,7 +7,7 @@
 
 
         <!-- Botón "Crear Convenio" -->
-        <a href="{{route('companies.create')}}" class="btn btn-secondary " onclick="event.preventDefault();">
+        <a href="{{route('companies.create')}}" class="btn btn-secondary ">
             Crear empresa <i class="bi bi-plus"></i>
         </a>
 
@@ -43,9 +43,9 @@
                 <td>{{ $company->company_category ?? 'N/A' }}</td>
                 <td>{{ $company->city->name ?? 'N/A' }}</td>
                 <td>
-                    <a href="#" class="btn btn-info btn-sm">Ver</a>
-                    <a href="#" class="btn btn-primary btn-sm">Editar</a>
-                    <a href="#" class="btn btn-secondary btn-sm">Eliminar</a>
+                    <a href="{{route('companies.show' , $company)}}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{{route('companies.edit', $company)}}" class="btn btn-primary btn-sm">Editar</a>
+                    <a href="#" class="btn btn-secondary btn-sm">Desvincular</a>
                 </td>
             </tr>
             @endforeach
