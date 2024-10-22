@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('denomination');
-            $table->bigInteger('cuit')->length(10)->unique()->nullable();
+            $table->bigInteger('cuit')->length(11)->unique()->nullable();
             $table->string('company_name',100)->unique()->nullable();
             $table->string('sector')->nullable();
             $table->string('entity')->nullable();
