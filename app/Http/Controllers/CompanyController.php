@@ -57,7 +57,6 @@ class CompanyController extends Controller
      */
     public function show(string $id)
     {
-        //
     }
 
     /**
@@ -77,11 +76,7 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        request()->validate(Company::$rules);
-
-        $company->update($request->all());
-
-        return redirect()->route('companies.index')->with('success' , 'Empresa fue actualizada exitosamente.');
+       //
     }
 
     /**
