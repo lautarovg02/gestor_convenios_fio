@@ -34,7 +34,8 @@ class CompanyController extends Controller
      */
     public function create():View
     {
-        return view('company.create');
+        $cities = City::orderBy('name', 'ASC')->get();
+        return view('companies.create' , compact('cities'));
     }
 
     /**

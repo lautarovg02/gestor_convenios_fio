@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
+use App\Models\Province;
+use Doctrine\DBAL\Schema\View;
 use Illuminate\Http\Request;
 
 class CityController extends Controller
@@ -19,7 +22,8 @@ class CityController extends Controller
      */
     public function create()
     {
-        //
+        $provinces = Province::orderBy('name', 'ASC')->get();
+        return view('cities.create', compact('provinces'));
     }
 
     /**
@@ -27,7 +31,12 @@ class CityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate(City::$rules);
+
+        City::create($validated);
+
+        return redirect()->route('companies.create')
+            ->with('success', 'Ciudad agregada correctamente');
     }
 
     /**

@@ -101,18 +101,23 @@
                     <div class="form-group mb-3">
                     <label class="form-label">   <label for="city_id">Ciudad</label></label>
                     <div>
-                    <input class="form-control" placeholder="City Id" name="city_id" type="text" id="city_id">
+                        <select class=" form-control" name="city_id" id="">
+                            @foreach ($cities as $city)
+                                <option value="{{$city->id}}">{{$city->name}}</option>
+                            @endforeach
+                        </select>
 
-                    <small class="form-hint">company <b>city_id</b> instruction.</small>
+
+                    <small class="form-hint">Si no encuentra la <b>ciudad</b> en la lista, ingresarla en  <a href="{{route('cities.create')}}">Agregar Ciudad.</a></small>
                     </div>
                     </div>
 
                     <div class="form-footer">
                         <div class="text-end">
                             <div class="d-flex">
-                                <a href="{{route('companies.index')}}" class="btn btn-danger">Cancelar</a>
+                                <a href="{{route('companies.index')}}" class="btn btn-danger m-2">Cancelar</a>
                                 <div>
-                                    <button type="submit" class="btn btn-primary ms-auto ">Crear</button>
+                                    <button type="submit" class="btn btn-primary ms-auto m-2">Crear</button>
                                 </div>
                             </div>
                         </div>
