@@ -2,11 +2,15 @@
 
 namespace Tests\Unit\Factory;
 
+use App\Models\City;
+use App\Models\Company;
 use App\Models\Employee;
+use App\Models\Province;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
+use Tests\TestCase as TestsTestCase;
 
-class EmployeeFactoryTest extends TestCase
+class EmployeeFactoryTest extends TestsTestCase
 {
     use RefreshDatabase;
 
@@ -15,8 +19,11 @@ class EmployeeFactoryTest extends TestCase
         @dairagalceran
         @test
      */
-  /*   public function test_employee_factory_creates_valid_company()
+    public function test_employee_factory_creates_valid_company()
     {
+        Province::factory()->create();
+        City::factory()->create();
+        Company::factory()->create();
         //Crear empleado
         $employee = Employee::factory()->create();
 
@@ -26,14 +33,14 @@ class EmployeeFactoryTest extends TestCase
             'name' => $employee->name,
             'lastname' => $employee->lastname,
             'dni' => $employee->dni,
-            //'cuil' => $employee->cuil,
+            'cuil' => $employee->cuil,
             'email' => $employee->email,
             'position' => $employee->position,
             'is_represent' => $employee->is_represent,
             'company_id' => $employee->company_id,
         ]);
     }
- */
+
     /**
      * Test that the factory generates unique dni.
         @dairagalceran
@@ -41,7 +48,9 @@ class EmployeeFactoryTest extends TestCase
      */
     public function test_factory_generates_unique_dni()
     {
-
+        Province::factory()->create();
+        City::factory()->create();
+        Company::factory()->create();
         Employee::factory()->create(['dni' => '23415500']);
 
         $this->expectException(\Illuminate\Database\QueryException::class);
@@ -55,7 +64,9 @@ class EmployeeFactoryTest extends TestCase
      */
     public function test_factory_generates_unique_cuil()
     {
-
+        Province::factory()->create();
+        City::factory()->create();
+        Company::factory()->create();
         Employee::factory()->create(['cuil' => '27234155001']);
 
         $this->expectException(\Illuminate\Database\QueryException::class);
@@ -69,6 +80,9 @@ class EmployeeFactoryTest extends TestCase
      */
     public function test_factory_generates_unique_email()
     {
+        Province::factory()->create();
+        City::factory()->create();
+        Company::factory()->create();
         Employee::factory()->create(['email' => 'test@example.com']);
 
         $this->expectException(\Illuminate\Database\QueryException::class);
@@ -82,7 +96,10 @@ class EmployeeFactoryTest extends TestCase
      */
     public function test_company_factory_generates_valid_cuil_with_eleven_digits()
     {
-        $employee = Employee::factory()->create();
+
+        Province::factory()->create();
+        City::factory()->create();
+        Company::factory()->create();$employee = Employee::factory()->create();
         $cuil = $employee->cuil;
 
         // Verificar que el CUIL tiene exactamente 11 caracteres
@@ -99,7 +116,9 @@ class EmployeeFactoryTest extends TestCase
      */
     public function test_company_factory_has_required_attributes()
     {
-
+        Province::factory()->create();
+        City::factory()->create();
+        Company::factory()->create();
         $employee = Employee::factory()->make();
 
         $this->assertNotNull($employee->name);

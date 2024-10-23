@@ -50,12 +50,11 @@ class EmployeeMigrationTest extends TestCase
         $employee->save();
     }
 
-        /**
-            * Test to ensure required columns are present in the 'employees' table.
-            *
-            @test
-            @dairagalceran
-            */
+    /**
+        * Test to ensure required columns are present in the 'employees' table
+        @test
+        @dairagalceran
+    */
     public function test_it_has_required_columns_in_employees_table()
     {
         // Get the list of columns in the 'companies' table

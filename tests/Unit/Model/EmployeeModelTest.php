@@ -21,7 +21,7 @@ class EmployeeModelTest extends TestCase
 
         $expectedFillable = ['name', 'lastname', 'dni', 'cuil' , 'email', 'position','is_represent', 'company_id']; // Adjust according to the necessary fields
         foreach ($expectedFillable as $field) {
-            $this->assertTrue(in_array($field, $fillable), "The field {$field} is not in the fillable property of the Company model.");
+            $this->assertTrue(in_array($field, $fillable), "The field {$field} is not in the fillable property of the Employee model.");
         }
     }
 }

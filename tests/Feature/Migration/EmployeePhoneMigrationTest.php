@@ -26,9 +26,9 @@ class EmployeePhoneMigrationTest extends TestCase
     {
         // Check if the 'employee_phones' table exists
         if (Schema::hasTable('employee_phones')) {
-                $this->assertTrue(true, 'Test passed: The employees table was successfully created.');
+                $this->assertTrue(true, 'Test passed: The employeePhones table was successfully created.');
             } else {
-                $this->assertTrue(false, 'Test failed: The employees table was not created.');
+                $this->assertTrue(false, 'Test failed: The employeesPhones table was not created.');
             }
     }
 

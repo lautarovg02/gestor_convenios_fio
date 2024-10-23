@@ -71,7 +71,7 @@ class CompanyMigrationTest extends TestCase
     @test
     @dairagalceran
     */
-    public function test_it_ensures_cuit_city_id_and_company_name_are_unique()
+    public function test_it_ensures_cuit_and_company_name_are_unique()
     {
         // Create a company with unique email and user_name
         Province::factory()->Create();
