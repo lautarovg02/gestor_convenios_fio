@@ -10,4 +10,11 @@ class Company extends Model
     use HasFactory;
 
     protected $fillable = ['denomination','company_name' ,'city_id'];
+
+// Definir la relación con el modelo City
+public function city()
+{
+    return $this->belongsTo(City::class);
+}
+
 }

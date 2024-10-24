@@ -2,19 +2,18 @@
 <!-- @extends('layouts.app') -->
 
 @section('content')
+
 <div class="container mt-1">
     <div class="d-flex justify-content-between align-items-center mb-3">
-       
-
-        <!-- Botón "Crear Convenio" -->
-        <a href="#" class="btn btn-secondary " onclick="event.preventDefault();">
+        <a href="#" class="btn btn-secondary" onclick="event.preventDefault();">
             Crear Convenio <i class="bi bi-plus"></i>
         </a>
 
         <!-- Barra de búsqueda -->
-        <input type="text" class="form-control w-50" placeholder="Buscar empresas...">
-
-        
+        <form action="{{ route('companies.index') }}" method="GET" class="d-flex">
+            <input type="text" name="search" class="form-control" placeholder="Buscar empresas..." value="{{ request()->input('search') }}" style="min-width: 400px;">
+            <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+        </form>
     </div>
 
     <table class="table table-striped">
@@ -35,13 +34,13 @@
             @foreach($companies as $company)
             <tr>
                 <td>{{ $company->id }}</td>
-                <td>{{ $company->denomination }}</td>
-                <td>{{ $company->cuit }}</td>
-                <td>{{ $company->company_name ?? 'N/A' }}</td>
-                <td>{{ $company->sector ?? 'N/A' }}</td>
-                <td>{{ $company->entity ?? 'N/A' }}</td>
-                <td>{{ $company->company_category ?? 'N/A' }}</td>
-                <td>{{ $company->city->name ?? 'N/A' }}</td>
+                <td>{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
+                <td>{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
+                <td>{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
+                <td>{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
+                <td>{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
+                <td>{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
+                <td>{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
                 <td>
                     <a href="#" class="btn btn-info btn-sm">Ver</a>
                     <a href="#" class="btn btn-primary btn-sm">Editar</a>
@@ -52,9 +51,8 @@
         </tbody>
     </table>
 
-    <!-- Mostrar enlaces de paginación -->
     <div class="d-flex justify-content-center">
-        {{ $companies->onEachSide(1)->links('pagination::bootstrap-4') }}
-    </div> 
+        {{ $companies->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}
+    </div>
 </div>
 @endsection
