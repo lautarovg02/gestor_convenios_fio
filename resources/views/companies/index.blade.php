@@ -15,6 +15,13 @@
             <button type="submit" class="btn btn-primary ms-2">Buscar</button>
         </form>
     </div>
+    <!-- Verificar si hay resultados -->
+    @if($companies->isEmpty())
+        <div class="alert text-center mx-auto" style="background-color: #e9ecef; color: #6c757d; max-width: 500px; margin-top: 40px;">
+            No se encontraron resultados para "{{ request()->input('search') }}".<br>
+            <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
+        </div>
+    @else
 
     <table class="table table-striped">
         <thead>
@@ -54,5 +61,6 @@
     <div class="d-flex justify-content-center">
         {{ $companies->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}
     </div>
+    @endif
 </div>
 @endsection
