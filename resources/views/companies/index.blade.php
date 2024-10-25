@@ -4,9 +4,10 @@
 @section('content')
 
 <div class="container mt-1">
+    <!-- Botón agregar -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <a href="#" class="btn btn-secondary" onclick="event.preventDefault();">
-            Crear Convenio <i class="bi bi-plus"></i>
+            Agregar Compañía <i class="bi bi-plus"></i>
         </a>
 
         <!-- Barra de búsqueda -->
@@ -22,7 +23,6 @@
             <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
         </div>
     @else
-
     <table class="table table-striped">
         <thead>
             <tr>
@@ -57,7 +57,7 @@
             @endforeach
         </tbody>
     </table>
-
+    <!-- Paginación -->
     <div class="d-flex justify-content-center">
         {{ $companies->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}
     </div>
