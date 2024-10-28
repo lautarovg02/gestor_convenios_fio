@@ -124,8 +124,26 @@ class EmployeeFactoryTest extends TestsTestCase
         $this->assertNotNull($employee->name);
         $this->assertNotNull($employee->lastname);
         $this->assertNotNull($employee->dni);
+        $this->assertNotNull($employee->cuil);
+        $this->assertNotNull($employee->email);
         $this->assertNotNull($employee->position);
         $this->assertNotNull($employee->is_represent);
         $this->assertNotNull($employee->company_id);
+    }
+
+    public function test_employee_factory_generates_realistic_data()
+    {
+        Province::factory()->create();
+        City::factory()->create();
+        Company::factory()->create();
+        $employee = Employee::factory()->make();
+
+        $this->assertIsString($employee->name);
+        $this->assertIsString($employee->lastname);
+        $this->assertIsInt($employee->dni);
+        $this->assertIsInt($employee->cuil);
+        $this->assertIsString($employee->email);
+        $this->assertIsString($employee->position);
+        $this->assertIsBool($employee->is_represent);
     }
 }

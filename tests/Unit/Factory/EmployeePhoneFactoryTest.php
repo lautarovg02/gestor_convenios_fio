@@ -19,7 +19,7 @@ class EmployeePhoneFactoryTest extends TestCase
         @dairagalceran
         @test
      */
-    public function test_employee_factory_creates_valid_company(){
+    public function test_employee_factory_creates_valid_employee_phone(){
         Province::factory()->create();
         City::factory()->create();
         Company::factory()->create();
@@ -33,4 +33,15 @@ class EmployeePhoneFactoryTest extends TestCase
         ]);
     }
 
+    public function test_employee_phone_has_required_attributes(){
+        Province::factory()->create();
+        City::factory()->create();
+        Company::factory()->create();
+        Employee::factory()->create(); //error al no reconocer faker->firstName
+        $employee_phone = EmployeePhone::factory()->make();
+
+        $this->assertNotNull($employee_phone->number);
+        $this->assertNotNull($employee_phone->employee_id);
+
+    }
 }

@@ -50,14 +50,14 @@ class CompanyFactoryTest extends TestCase
         @dairagalceran
         @test
      */
-    public function test_factory_generates_unique_cuit()
+    public function test_factory_generates_unique_cuit_and_company_name()
     {
         Province::factory()->create();
         City::factory()->create();
-        Company::factory()->create(['cuit' => '27234155001']);
+        Company::factory()->create(['cuit' => '27234155001' , 'company_name' => 'La Buena Esperanza']);
 
         $this->expectException(\Illuminate\Database\QueryException::class);
-        Company::factory()->create(['cuit' => '27234155001']);
+        Company::factory()->create(['cuit' => '27234155001', 'company_name' => 'La Buena Esperanza']);
     }
 
     /**
@@ -93,6 +93,22 @@ class CompanyFactoryTest extends TestCase
         $this->assertNotNull($company->denomination);
         $this->assertNotNull($company->cuit);
         $this->assertNotNull($company->city_id);
+    }
+
+    public function test_factory_generates_realistic_data()
+    {
+        Province::factory()->create();
+        City::factory()->create();
+        $company = Company::factory()->make();
+        $this->assertIsString($company->denomination);
+        $this->assertIsInt($company->cuit);
+        $this->assertIsString($company->company_name);
+        $this->assertIsString($company->sector);
+        $this->assertIsString($company->entity);
+        $this->assertIsString($company->company_category);
+        $this->assertIsString($company->scope);
+        $this->assertIsString($company->street);
+        $this->assertIsInt($company->number);
     }
 
 }
