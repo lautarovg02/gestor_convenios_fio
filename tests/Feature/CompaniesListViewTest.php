@@ -134,7 +134,7 @@ class CompaniesListViewTest extends TestCase
       @test
       @lautarovg02
      */
-    public function testPaginationControlsAreVisible()
+    public function test_pagination_controls_are_visible()
     {
         // Seed the database with multiple companies to trigger pagination
         Province::factory()->count(10)->create();
@@ -154,7 +154,7 @@ class CompaniesListViewTest extends TestCase
      * @test
      * @lautarovg02
      */
-    public function testCompaniesDisplayedPerPage()
+    public function test_companies_displayed_per_page()
     {
         // Seed database with 30 companies
         Province::factory()->count(10)->create();
@@ -164,5 +164,28 @@ class CompaniesListViewTest extends TestCase
         $response = $this->get(route('companies.index', ['page' => 1]));
         $response->assertStatus(200);
         $this->assertCount(9, $response->viewData('companies'));
+    }
+
+    /**
+     * Test that each company row displays the action buttons: Ver, Editar, and Eliminar Details.
+     *
+      @test
+      @lautarovg02
+     */
+    public function test_action_buttons_are_visible_for_each_company()
+    {
+        // Seed the database with a sample company
+        Province::factory()->count(10)->create();
+        City::factory()->count(10)->create();
+        Company::factory()->count(30)->create();
+
+        // Visit the index page where companies are listed
+        $response = $this->get(route('companies.index'));
+
+        // Check that the page loads successfully and contains the action buttons for each company
+        $response->assertStatus(200)
+            ->assertSee('<a href="#" class="btn btn-info btn-sm">Ver</a>', false) //  Check for View Details button text
+            ->assertSee('<a href="#" class="btn btn-secondary btn-sm">Eliminar</a>', false) // Check for Delete button text
+            ->assertSee('<a href="#" class="btn btn-primary btn-sm">Editar</a>', false); // Check for Edit button text
     }
 }
