@@ -15,18 +15,8 @@ class Company extends Controller
         // Obtener el término de búsqueda
         $searchTerm = $request->input('search');
 
-        // Obtener todas las compañías usando el modelo Company, aplicando la búsqueda
-        $companies = CompanyModel::when($searchTerm, function ($query) use ($searchTerm) {
-            return $query->where('denomination', 'LIKE', "%{$searchTerm}%")
-                         ->orWhere('company_name', 'LIKE', "%{$searchTerm}%")
-                         ->orWhere('cuit', 'LIKE', "%{$searchTerm}%")
-                         ->orWhere('sector', 'LIKE', "%{$searchTerm}%")
-                         ->orWhere('entity', 'LIKE', "%{$searchTerm}%")
-                         ->orWhere('company_category', 'LIKE', "%{$searchTerm}%")
-                         ->orWhereHas('city', function($query) use ($searchTerm) {
-                             $query->where('name', 'LIKE', "%{$searchTerm}%");
-                         });
-        })->paginate(9);
+        // Obtener todas las compañías usando el modelo Company y el scope de búsqueda
+        $companies = CompanyModel::search($searchTerm)->paginate(9);
 
         return view('companies.index', compact('companies', 'searchTerm'));
     }
