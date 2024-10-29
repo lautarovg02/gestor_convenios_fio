@@ -188,4 +188,67 @@ class CompanySearchTest extends TestCase
         $response->assertStatus(200);
         $response->assertSeeText('No se encontraron resultados para ');
     }
+
+    /**
+     * Test searching companies by denomination.
+     *
+      @test
+      @lautarovg02
+     */
+    public function test_search_companies_by_denomination()
+    {
+        // Arrange
+        $province = Province::factory()->create();
+        $city = City::factory()->create(['name' => 'TestCity']);
+        $company = Company::factory()->create(['denomination' => 'Tech Solutions']);
+
+        // Act
+        $response = $this->get('/companies?search=Tech');
+
+        // Assert
+        $response->assertStatus(200);
+        $response->assertSeeText('Tech Solutions');
+    }
+
+    /**
+     * Test searching companies by company name.
+     *
+      @test
+      @lautarovg02
+     */
+    public function test_search_companies_by_name()
+    {
+        // Arrange
+        $province = Province::factory()->create();
+        $city = City::factory()->create(['name' => 'TestCity']);
+        $company = Company::factory()->create(['company_name' => 'Alpha Corp']);
+
+        // Act
+        $response = $this->get('/companies?search=Alpha');
+
+        // Assert
+        $response->assertStatus(200);
+        $response->assertSeeText('Alpha Corp');
+    }
+
+    /**
+     * Test searching by city name through related City model.
+     *
+      @test
+      @lautarovg02
+     */
+    public function test_search_by_city_name()
+    {
+        // Arrange
+        $province = Province::factory()->create();
+        $city = City::factory()->create(['name' => 'San Francisco']);
+        $company = Company::factory()->create(['city_id' => $city->id]);
+
+        // Act
+        $response = $this->get('/companies?search=San Francisco');
+
+        // Assert
+        $response->assertStatus(200);
+        $response->assertSeeText($company->company_name);
+    }
 }
