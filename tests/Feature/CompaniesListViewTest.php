@@ -127,4 +127,42 @@ class CompaniesListViewTest extends TestCase
             $response->assertSeeText($company->company_name);
         }
     }
+
+    /**
+     * Test that the pagination controls appear on the company listing page.
+     *
+      @test
+      @lautarovg02
+     */
+    public function testPaginationControlsAreVisible()
+    {
+        // Seed the database with multiple companies to trigger pagination
+        Province::factory()->count(10)->create();
+        City::factory()->count(10)->create();
+        Company::factory()->count(30)->create();
+
+        // Visit the index page and check pagination controls
+        $response = $this->get(route('companies.index'));
+        $response->assertStatus(200)
+            ->assertSee('<nav>', false) // Verify the navigation wrapper exists
+            ->assertSee('<ul class="pagination">', false); // Ensure pagination ul is present
+    }
+
+    /**
+     * Test that the number of companies displayed per page matches the defined limit.
+     *
+     * @test
+     * @lautarovg02
+     */
+    public function testCompaniesDisplayedPerPage()
+    {
+        // Seed database with 30 companies
+        Province::factory()->count(10)->create();
+        City::factory()->count(10)->create();
+        Company::factory()->count(30)->create();
+        // Get the first page and assert it contains exactly 10 items
+        $response = $this->get(route('companies.index', ['page' => 1]));
+        $response->assertStatus(200);
+        $this->assertCount(9, $response->viewData('companies'));
+    }
 }
