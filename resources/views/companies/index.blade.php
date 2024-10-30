@@ -16,8 +16,13 @@
         </form>
     </div>
 
-    <!-- Mensajes de error y busqueda sin resultados -->
+    <!-- Mensajes de error, carga y busqueda sin resultados -->
     <div class="alert-container text-center mx-auto mb-3" style="max-width: 500px;">
+        @if(isset($loadingMessage))
+            <div class="alert alert-secondary"> 
+                {{ $loadingMessage }}
+            </div>
+        @endif
         @if(isset($errorMessage))
             <div class="alert alert-secondary">
                 {{ $errorMessage }}
