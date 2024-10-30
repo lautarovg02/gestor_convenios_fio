@@ -12,13 +12,21 @@ class Company extends Controller
      */
     public function index(Request $request)
     {
-        // Obtener el término de búsqueda
-        $searchTerm = $request->input('search');
+        $searchTerm = $request->input('search'); // Obtiene el termino de búsqueda
+        $companies = collect(); // Inicializa una colección vacía
+        $errorMessage = null; // Variable para el mensaje de error
 
-        // Obtener todas las compañías usando el modelo Company y el scope de búsqueda
-        $companies = CompanyModel::search($searchTerm)->paginate(9);
+        try {
 
-        return view('companies.index', compact('companies', 'searchTerm'));
+            // Obtener todas las compañías usando el modelo Company y el scope de búsqueda
+            $companies = CompanyModel::search($searchTerm)->paginate(9);
+
+            } catch (\Exception $e) {
+                // Si ocurre un error, captura la excepción y establece el mensaje de error
+                $errorMessage = 'Error al cargar las compañías: ' . $e->getMessage();
+            }
+
+            return view('companies.index', compact('companies', 'searchTerm', 'errorMessage'));
     }
 
     /**
