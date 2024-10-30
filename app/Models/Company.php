@@ -31,19 +31,6 @@ class Company extends Model
 {
     use HasFactory;
 
-    static $rules = [
-        'denomination' => 'required|string|max:40',
-		'cuit' => 'required|Integer|max_digits:11',
-		'city_id' => 'required|integer',
-        'company_name' => 'nullable|string|max:100',
-        'sector' => 'nullable|string|max:40',
-        'entity' => 'nullable|string|max:40',
-        'company_category' => 'nullable|string|max:20',
-        'scope' => 'nullable|string|max:40',
-        'street' => 'nullable|string|max:40',
-        'number' => 'nullable|integer',
-    ];
-
     /**
      * Attributes that should be mass-assignable.
      *

@@ -2,9 +2,16 @@
 <!-- @extends('layouts.app') -->
 
 @section('content')
+
 <div class="container mt-1">
     <div class="d-flex justify-content-between align-items-center mb-3">
 
+        <!-- Mensajes flash de success-->
+        @if (Session::has('success'))
+            <div class="alert alert-success">
+                {{Session::get('success')}}
+            </div>
+        @endif
 
         <!-- Botón "Crear Convenio" -->
         <a href="{{route('companies.create')}}" class="btn btn-secondary ">

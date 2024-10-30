@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCityRequest;
 use App\Models\City;
 use App\Models\Province;
 use Doctrine\DBAL\Schema\View;
@@ -29,11 +30,10 @@ class CityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCityRequest $request)
     {
-        $validated = $request->validate(City::$rules);
 
-        City::create($validated);
+        City::create($request->validated());
 
         return redirect()->route('companies.create')
             ->with('success', 'Ciudad agregada correctamente');

@@ -11,10 +11,6 @@ class City extends Model
     use HasFactory;
     protected $fillable = ['name', 'province_id'];
 
-    static $rules = [
-        'name' => 'required|string|max:40',
-		'province_id' => 'required|integer',
-    ];
 
     public function company():BelongsTo
     {

@@ -1,0 +1,5 @@
+.required-field::after {
+    content: " *";
+    color: rgb(228, 63, 63);
+    font-weight: bold;
+}

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCompanyRequest;
 use App\Models\City;
 use Illuminate\Http\Request;
 use App\Models\Company;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use PhpParser\Node\Stmt\TryCatch;
 
 /**
 * Class CompanyController
@@ -43,14 +46,18 @@ class CompanyController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request):RedirectResponse
+    public function store(StoreCompanyRequest $request):RedirectResponse
     {
-        $validated = $request->validate(Company::$rules);
+        try{
+            Company::create($request->validated());
 
-        Company::create($validated);
+            return  redirect()->route('companies.index')
+                ->with('success' , 'Empresa ingresada exitosamente.');
+        }
+        catch(Exception $e){
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
 
-        return  redirect()->route('companies.index')
-            ->with('success' , 'Empresa ingresada exitosamente.');
     }
 
     /**
