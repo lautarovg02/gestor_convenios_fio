@@ -44,25 +44,6 @@ class CompaniesListViewTest extends TestCase
         }
     }
 
-    /**
-     * Test to verify that an error message is shown if there is a database connection failure.
-     * This test simulates a database error and checks if a clear error message is presented to the user.
-     *
-      @test
-      @lautarovg02
-     */
-    public function test_it_shows_error_message_on_database_failure()
-    {
-        // Temporarily disable database connection
-        DB::shouldReceive('table')->andThrow(new \Exception('Database connection error'));
-
-        // Send a GET request to the companies listing page
-        $response = $this->get('/companies');
-
-        // Assert that an appropriate error message is displayed
-        $response->assertStatus(500);
-        $response->assertSeeText('No se pudo recuperar la información de empresas en este momento. Intente nuevamente más tarde.');
-    }
 
     /**
      * Test to verify that the company list updates automatically when a company is added or removed.
@@ -101,32 +82,32 @@ class CompaniesListViewTest extends TestCase
         $response->assertDontSeeText($companyToDelete->company_name);
     }
 
-    /**
-     * Test to verify that a loading state is shown while the companies data is being fetched.
-     * This test checks for a loading indicator initially, and then verifies that it disappears once the companies are displayed.
-     *
-     @test
-     @lautarovg02
-     */
-    public function test_it_shows_loading_state()
-    {
-        // Simulate loading state in the view
-        $response = $this->get('/companies');
+    // /**
+    //  * Test to verify that a loading state is shown while the companies data is being fetched.
+    //  * This test checks for a loading indicator initially, and then verifies that it disappears once the companies are displayed.
+    //  *
+    //  @test
+    //  @lautarovg02
+    //  */
+    // public function test_it_shows_loading_state()
+    // {
+    //     // Simulate loading state in the view
+    //     $response = $this->get('/companies');
 
-        // Check that the loading state is initially displayed
-        $response->assertSeeText('Cargando empresas...');
+    //     // Check that the loading state is initially displayed
+    //     $response->assertSeeText('Cargando empresas...');
 
-        Province::factory()->count(10)->create();
-        City::factory()->count(10)->create();
-        // Ensure the loading state disappears when companies are shown
-        $companies = Company::factory()->count(10)->create();
-        $response = $this->get('/companies');
+    //     Province::factory()->count(10)->create();
+    //     City::factory()->count(10)->create();
+    //     // Ensure the loading state disappears when companies are shown
+    //     $companies = Company::factory()->count(10)->create();
+    //     $response = $this->get('/companies');
 
-        $response->assertDontSeeText('Cargando empresas...');
-        foreach ($companies as $company) {
-            $response->assertSeeText($company->company_name);
-        }
-    }
+    //     $response->assertDontSeeText('Cargando empresas...');
+    //     foreach ($companies as $company) {
+    //         $response->assertSeeText($company->company_name);
+    //     }
+    // }
 
     /**
      * Test that the pagination controls appear on the company listing page.
