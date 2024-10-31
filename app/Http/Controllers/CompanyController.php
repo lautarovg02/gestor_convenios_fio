@@ -22,15 +22,28 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index():View
+    public function index(Request $request)
     {
-        $companies = Company::orderBy('denomination' , 'ASC')
-            ->paginate(10);
+        $searchTerm = $request->input('search'); // Obtiene el termino de búsqueda
+        $companies = collect(); // Inicializa una colección vacía
+        $errorMessage = null; // Variable para el mensaje de error
+        $loadingMessage = null; // Variable para el mensaje de carga
 
-        $cities = City::orderBy('name', 'ASC')->get();
+        try {
 
-        return view('companies.index' , ['companies' => $companies , 'cities' => $cities])
-            ->with('i', (request()->input('page', 1) - 1) * $companies->perPage());
+            // Mensaje que se muestra durante la carga
+            $loadingMessage = 'Cargando empresas...';
+
+            // Obtener todas las compañías usando el modelo Company y el scope de búsqueda
+            $companies = Company::search($searchTerm)->paginate(9);
+
+            } catch (\Exception $e) {
+                $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
+                // Opcional: Puedes registrar el error para fines de depuración.
+                \Log::error('Error al obtener compañías: ' . $e->getMessage());
+            }
+
+            return view('companies.index', compact('companies', 'searchTerm', 'errorMessage'));
     }
 
     /**
