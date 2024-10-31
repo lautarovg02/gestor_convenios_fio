@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company as CompanyModel; 
+use App\Models\Company as CompanyModel;
 use Illuminate\Http\Request;
 
 class Company extends Controller
@@ -20,14 +20,15 @@ class Company extends Controller
         try {
 
             // Mensaje que se muestra durante la carga
-            $loadingMessage = 'Cargando empresas...'; 
+            $loadingMessage = 'Cargando empresas...';
 
             // Obtener todas las compañías usando el modelo Company y el scope de búsqueda
             $companies = CompanyModel::search($searchTerm)->paginate(9);
 
             } catch (\Exception $e) {
-                // Si ocurre un error, captura la excepción y establece el mensaje de error
-                $errorMessage = 'Error: ' . $e->getMessage();
+                $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
+                // Opcional: Puedes registrar el error para fines de depuración.
+                \Log::error('Error al obtener compañías: ' . $e->getMessage());
             }
 
             return view('companies.index', compact('companies', 'searchTerm', 'errorMessage'));
