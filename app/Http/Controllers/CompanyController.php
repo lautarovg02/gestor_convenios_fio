@@ -28,7 +28,7 @@ class CompanyController extends Controller
             ->paginate(12);
         $cities = City::all();
 
-        return view('company.index' , ['companies' => $companies , 'cities' => $cities])
+        return view('companies.index' , ['companies' => $companies , 'cities' => $cities])
             ->with('i', (request()->input('page', 1) - 1) * $companies->perPage());
     }
 
@@ -76,7 +76,7 @@ class CompanyController extends Controller
         $company = Company::find($company->id);
         $cities = City::orderBy('name' , 'ASC')->get();
 
-        return view('company.edit' , ['company' => $company , 'cities' => $cities]);
+        return view('companies.create' , ['company' => $company , 'cities' => $cities]);
     }
 
     /**
