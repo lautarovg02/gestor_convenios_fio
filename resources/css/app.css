@@ -1,0 +1,7 @@
+:root{
+    --main-bg-text-color: #0d6efd;
+}
+
+.bg-text-color{
+    background-color: var(--main-bg-text-color);
+}
