@@ -12,23 +12,25 @@ class Company extends Controller
      */
     public function index(Request $request)
     {
-        // Obtener el término de búsqueda
-        $searchTerm = $request->input('search');
+        $searchTerm = $request->input('search'); // Obtiene el termino de búsqueda
+        $companies = collect(); // Inicializa una colección vacía
+        $errorMessage = null; // Variable para el mensaje de error
+        $loadingMessage = null; // Variable para el mensaje de carga
 
-        // Obtener todas las compañías usando el modelo Company, aplicando la búsqueda
-        $companies = CompanyModel::when($searchTerm, function ($query) use ($searchTerm) {
-            return $query->where('denomination', 'LIKE', "%{$searchTerm}%")
-                         ->orWhere('company_name', 'LIKE', "%{$searchTerm}%")
-                         ->orWhere('cuit', 'LIKE', "%{$searchTerm}%")
-                         ->orWhere('sector', 'LIKE', "%{$searchTerm}%")
-                         ->orWhere('entity', 'LIKE', "%{$searchTerm}%")
-                         ->orWhere('company_category', 'LIKE', "%{$searchTerm}%")
-                         ->orWhereHas('city', function($query) use ($searchTerm) {
-                             $query->where('name', 'LIKE', "%{$searchTerm}%");
-                         });
-        })->paginate(9);
+        try {
 
-        return view('companies.index', compact('companies', 'searchTerm'));
+            // Mensaje que se muestra durante la carga
+            $loadingMessage = 'Cargando empresas...'; 
+
+            // Obtener todas las compañías usando el modelo Company y el scope de búsqueda
+            $companies = CompanyModel::search($searchTerm)->paginate(9);
+
+            } catch (\Exception $e) {
+                // Si ocurre un error, captura la excepción y establece el mensaje de error
+                $errorMessage = 'Error: ' . $e->getMessage();
+            }
+
+            return view('companies.index', compact('companies', 'searchTerm', 'errorMessage'));
     }
 
     /**

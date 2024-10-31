@@ -1,5 +1,4 @@
-<!-- resources/views/companies/index.blade.php -->
-<!-- @extends('layouts.app') -->
+@extends('layouts.app')
 
 @section('content')
 
@@ -16,13 +15,28 @@
             <button type="submit" class="btn btn-primary ms-2">Buscar</button>
         </form>
     </div>
-    <!-- Verificar si hay resultados -->
-    @if($companies->isEmpty())
-        <div class="alert text-center mx-auto" style="background-color: #e9ecef; color: #6c757d; max-width: 500px; margin-top: 40px;">
-            No se encontraron resultados para "{{ request()->input('search') }}".<br>
-            <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
-        </div>
-    @else
+
+    <!-- Mensajes de error, carga y busqueda sin resultados -->
+    <div class="alert-container text-center mx-auto mb-3" style="max-width: 500px;">
+        @if(isset($loadingMessage))
+            <div class="alert alert-secondary"> 
+                {{ $loadingMessage }}
+            </div>
+        @endif
+        @if(isset($errorMessage))
+            <div class="alert alert-secondary">
+                {{ $errorMessage }}
+            </div>
+        @elseif($companies->isEmpty() && request()->input('search'))
+            <div class="alert alert-secondary">
+                No se encontraron resultados para "{{ request()->input('search') }}".<br>
+                <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
+            </div>
+        @endif
+    </div>
+
+    <!-- Tabla de resultados -->
+    @if(!$companies->isEmpty())
     <table class="table table-striped">
         <thead>
             <tr>
