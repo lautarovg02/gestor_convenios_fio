@@ -20,12 +20,12 @@ class CompanyFactory extends Factory
     {
 
         // Definir el nombre de la compañía
-        $companyName = $this->faker->company; 
+        $companyName = $this->faker->company;
 
         return [
-            'denomination' => $this->faker->word,
+            'denomination' => 'Denominacion nro: ' . $this->faker->randomNumber(2),
             'cuit' => $this->faker->unique()->numberBetween(20000000, 20999999),
-            'company_name' => $this->faker->company,
+            'company_name' => $companyName,
             'sector' => $this->faker->word,
             'entity' => $this->faker->word,
             'company_category' => $this->faker->word,
