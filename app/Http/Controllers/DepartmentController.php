@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCityRequest;
-use App\Models\City;
-use App\Models\Province;
-use Doctrine\DBAL\Schema\View;
+use App\Models\Department;
 use Illuminate\Http\Request;
 
-class CityController extends Controller
+class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,26 +20,21 @@ class CityController extends Controller
      */
     public function create()
     {
-        $provinces = Province::orderBy('name', 'ASC')->get();
-        return view('cities.create', compact('provinces'));
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCityRequest $request)
+    public function store(Request $request)
     {
-
-        City::create($request->validated());
-
-        return redirect()->route('companies.create')
-            ->with('success', 'Ciudad agregada correctamente');
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Department $department)
     {
         //
     }
@@ -50,7 +42,7 @@ class CityController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Department $department)
     {
         //
     }
@@ -58,7 +50,7 @@ class CityController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Department $department)
     {
         //
     }
@@ -66,7 +58,7 @@ class CityController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Department $department)
     {
         //
     }

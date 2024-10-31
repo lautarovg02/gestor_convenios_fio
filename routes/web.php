@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\CompanyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +18,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// COMPANIES
+Route::resource('/companies' , CompanyController::class);
+
+
+//CITIES
+Route::get('/cities/create' , [CityController::class , 'create' ])->name('cities.create');
+Route::post('cities', [CityController::class, 'store'])->name('cities.store');
