@@ -17,23 +17,7 @@
     </div>
 
     <!-- Mensajes de error, carga y busqueda sin resultados -->
-    <div class="alert-container text-center mx-auto mb-3" style="max-width: 500px;">
-        @if(isset($loadingMessage))
-            <div class="alert alert-secondary"> 
-                {{ $loadingMessage }}
-            </div>
-        @endif
-        @if(isset($errorMessage))
-            <div class="alert alert-secondary">
-                {{ $errorMessage }}
-            </div>
-        @elseif($companies->isEmpty() && request()->input('search'))
-            <div class="alert alert-secondary">
-                No se encontraron resultados para "{{ request()->input('search') }}".<br>
-                <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
-            </div>
-        @endif
-    </div>
+
 
     <!-- Tabla de resultados -->
     @if(!$companies->isEmpty())
@@ -78,3 +62,20 @@
     @endif
 </div>
 @endsection
+   <div class="alert-container text-center mx-auto mb-3" style="max-width: 500px;">
+        @if(isset($loadingMessage))
+            <div class="alert alert-secondary">
+                {{ $loadingMessage }}
+            </div>
+        @endif
+        @if(isset($errorMessage))
+            <div class="alert alert-secondary error">
+                {{ $errorMessage }}
+            </div>
+        @elseif($companies->isEmpty() && request()->input('search'))
+            <div class="alert alert-secondary">
+                No se encontraron resultados para "{{ request()->input('search') }}".<br>
+                <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
+            </div>
+        @endif
+    </div>
