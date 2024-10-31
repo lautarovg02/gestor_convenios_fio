@@ -53,6 +53,10 @@ class CompanyController extends Controller
     public function store(StoreCompanyRequest $request):RedirectResponse
     {
         try{
+            $exists = Company::where('cuit',$request->cuit)->first();
+
+            if($exists) throw new Exception("Cuit duplicado");
+
             Company::create($request->validated());
 
             return  redirect()->route('companies.index')
@@ -100,13 +104,23 @@ class CompanyController extends Controller
      * @param  Company $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(StoreCompanyRequest $request, Company $company)
     {
-       // request()->validate(Company::$rules);
+        try{
+            dd($request);
+            $exists  = Company::where('cuit', $request->cuit)
+            ->where('id', '<>', $company->id)
+            ->first();
 
-        $company->update($request->all());
+            if($exists) throw new Exception("Cuit duplicado");
 
-        return redirect()->route('companies.index')->with('success' , 'Empresa fue actualizada exitosamente.');
+            $company->update($request->validated());
+            return redirect()->route('companies.index')->with('success' , 'Empresa actualizada exitosamente.');
+        }
+        catch(Exception $e)
+        {
+            return redirect()->route('companies.edit', $company->id)->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
     /**

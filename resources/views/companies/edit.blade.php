@@ -45,19 +45,19 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label required" for= "cuit">CUIT</label>
+                        <label class="form-label required-field" for= "cuit">CUIT</label>
                         <div>
                             <input class="form-control" name="cuit" id="cuit" type="text" value="{{$company->cuit}}" placeholder="Ingrese el CUIT de la empresa " autocomplete="off">
                             <small class="form-hint">Ingresar <b>CUIT</b> sin guiones.</small>
                         </div>
+                        @error('cuit')
+                            <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
                     <div class="form-group mb-3">
                         <label class="form-label" for= "company_name">Nombre de la empresa</label>
                         <div>
                             <input class="form-control" name="company_name" id="company_name" type="text" value="{{$company->company_name}}" placeholder="Ingrese el nombre de la empresa " autocomplete="off">
-                            @error('cuit')
-                                <div class="text-danger">{{$message}}</div>
-                            @enderror
                         </div>
                     </div>
                     <div class="form-group mb-3">
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label required" for= "city_id">Ciudad</label>
+                        <label class="form-label required-field" for= "city_id">Ciudad</label>
                         <select name="city_id" id="" class="form-control required">
                             @foreach ($cities as $city)
                                 <option value="{{$city->id}}"
