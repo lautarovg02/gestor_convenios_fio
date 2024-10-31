@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company as CompanyModel;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -9,9 +10,28 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $searchTerm = $request->input('search'); // Obtiene el termino de búsqueda
+        $companies = collect(); // Inicializa una colección vacía
+        $errorMessage = null; // Variable para el mensaje de error
+        $loadingMessage = null; // Variable para el mensaje de carga
+
+        try {
+
+            // Mensaje que se muestra durante la carga
+            $loadingMessage = 'Cargando empresas...';
+
+            // Obtener todas las compañías usando el modelo Company y el scope de búsqueda
+            $companies = CompanyModel::search($searchTerm)->paginate(9);
+
+            } catch (\Exception $e) {
+                $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
+                // Opcional: Puedes registrar el error para fines de depuración.
+                \Log::error('Error al obtener compañías: ' . $e->getMessage());
+            }
+
+            return view('companies.index', compact('companies', 'searchTerm', 'errorMessage'));
     }
 
     /**

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('is_enabled')->default(false);
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('cities');
+            $table->string('slug');
             $table->timestamps();
         });
     }

@@ -32,7 +32,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{route('companies.index')}}">
+                <a class="nav-link" href="#">
                     <i class="bi bi-building"></i>
                     Empresas
                 </a>
@@ -46,5 +46,3 @@
         </ul>
     </div>
 </nav>
-
-

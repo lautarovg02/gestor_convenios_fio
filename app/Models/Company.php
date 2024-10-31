@@ -47,4 +47,27 @@ class Company extends Model
         return $this->hasOne(City::class , 'id', 'city_id');
     }
 
+    // Scope para la búsqueda
+    public function scopeSearch($query, $searchTerm)
+    {
+        if ($searchTerm) {
+        
+            $terms = explode(' ', $searchTerm);
+
+            foreach ($terms as $term) {
+                $query->where(function ($subQuery) use ($term) {
+                    $subQuery->where('denomination', 'LIKE', "%{$term}%")
+                         ->orWhere('company_name', 'LIKE', "%{$term}%")
+                         ->orWhere('cuit', 'LIKE', "%{$term}%")
+                         ->orWhere('sector', 'LIKE', "%{$term}%")
+                         ->orWhere('entity', 'LIKE', "%{$term}%")
+                         ->orWhere('company_category', 'LIKE', "%{$term}%")
+                         ->orWhereHas('city', function ($query) use ($term) {
+                             $query->where('name', 'LIKE', "%{$term}%");
+                         });
+                });
+            }
+        }
+        return $query;
+    }
 }

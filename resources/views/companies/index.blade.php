@@ -1,29 +1,26 @@
-<!-- resources/views/companies/index.blade.php -->
-<!-- @extends('layouts.app') -->
+@extends('layouts.app')
 
 @section('content')
 
 <div class="container mt-1">
+    <!-- Botón agregar -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-
-        <!-- Mensajes flash de success-->
-        @if (Session::has('success'))
-            <div class="alert alert-success">
-                {{Session::get('success')}}
-            </div>
-        @endif
-
-        <!-- Botón "Crear Convenio" -->
-        <a href="{{route('companies.create')}}" class="btn btn-secondary ">
-            Crear empresa <i class="bi bi-plus"></i>
+        <a href="#" class="btn btn-secondary" onclick="event.preventDefault();">
+            Agregar Compañía <i class="bi bi-plus"></i>
         </a>
 
         <!-- Barra de búsqueda -->
-        <input type="text" class="form-control w-50" placeholder="Buscar empresas...">
-
-
+        <form action="{{ route('companies.index') }}" method="GET" class="d-flex">
+            <input type="text" name="search" class="form-control" placeholder="Buscar empresas..." value="{{ request()->input('search') }}" style="min-width: 400px;">
+            <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+        </form>
     </div>
 
+    <!-- Mensajes de error, carga y busqueda sin resultados -->
+
+
+    <!-- Tabla de resultados -->
+    @if(!$companies->isEmpty())
     <table class="table table-striped">
         <thead>
             <tr>
@@ -42,26 +39,43 @@
             @foreach($companies as $company)
             <tr>
                 <td>{{ $company->id }}</td>
-                <td>{{ $company->denomination }}</td>
-                <td>{{ $company->cuit }}</td>
-                <td>{{ $company->company_name ?? 'N/A' }}</td>
-                <td>{{ $company->sector ?? 'N/A' }}</td>
-                <td>{{ $company->entity ?? 'N/A' }}</td>
-                <td>{{ $company->company_category ?? 'N/A' }}</td>
-                <td>{{ $company->city->name ?? 'N/A' }}</td>
+                <td>{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
+                <td>{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
+                <td>{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
+                <td>{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
+                <td>{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
+                <td>{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
+                <td>{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
                 <td>
-                    <a href="{{route('companies.show' , $company)}}" class="btn btn-info btn-sm">Ver</a>
-                    <a href="{{route('companies.edit', $company)}}" class="btn btn-primary btn-sm">Editar</a>
-                    <a href="#" class="btn btn-secondary btn-sm">Desvincular</a>
+                    <a href="#" class="btn btn-info btn-sm">Ver</a>
+                    <a href="#" class="btn btn-primary btn-sm">Editar</a>
+                    <a href="#" class="btn btn-secondary btn-sm">Eliminar</a>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
-
-    <!-- Mostrar enlaces de paginación -->
+    <!-- Paginación -->
     <div class="d-flex justify-content-center">
-        {{ $companies->onEachSide(1)->links('pagination::bootstrap-4') }}
+        {{ $companies->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}
     </div>
+    @endif
 </div>
 @endsection
+   <div class="alert-container text-center mx-auto mb-3" style="max-width: 500px;">
+        @if(isset($loadingMessage))
+            <div class="alert alert-secondary">
+                {{ $loadingMessage }}
+            </div>
+        @endif
+        @if(isset($errorMessage))
+            <div class="alert alert-secondary error">
+                {{ $errorMessage }}
+            </div>
+        @elseif($companies->isEmpty() && request()->input('search'))
+            <div class="alert alert-secondary">
+                No se encontraron resultados para "{{ request()->input('search') }}".<br>
+                <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
+            </div>
+        @endif
+    </div>

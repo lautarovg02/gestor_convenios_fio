@@ -4,6 +4,10 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\CompanyController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Company;
+
+Route::resource('companies', Company::class);
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
