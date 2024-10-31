@@ -11,6 +11,6 @@ if (!function_exists('highlightKeyword')) {
 
         $pattern = '/(' . implode('|', array_map('preg_quote', $terms)) . ')/i';
 
-        return preg_replace($pattern, '<span class="bg-warning">$1</span>', $text);
+        return preg_replace($pattern, '<span class="bg-text-color">$1</span>', $text);
     }
 }
