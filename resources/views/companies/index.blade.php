@@ -80,5 +80,9 @@
     <!-- Modal -->
     @include('layouts/modals/modal-delete')
 </div>
+
+<!--Linkeamos el .js del modal al template utilizando Vite-->
+@vite('resources/js/modals/modalDelete.js')
+
 @endsection
 
