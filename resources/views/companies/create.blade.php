@@ -26,7 +26,7 @@
                 </div>
             @endif
 
-            <!-- Mensajes flash de erroo-->
+            <!-- Mensajes flash de error-->
             @if ($errors->has('error'))
                 <div class="alert alert-danger">
                     {{ $errors->first('error') }}

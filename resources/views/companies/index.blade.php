@@ -5,9 +5,15 @@
 <div class="container mt-1">
     <!-- Botón agregar -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <a href="#" class="btn btn-secondary" onclick="event.preventDefault();">
+        <a href="{{route('companies.create')}}" class="btn btn-secondary" onclick="">
             Agregar Compañía <i class="bi bi-plus"></i>
         </a>
+        <!-- Mensajes flash de success-->
+            @if (Session::has('success'))
+                <div class="alert alert-success">
+                    {{Session::get('success')}}
+                </div>
+            @endif
 
         <!-- Barra de búsqueda -->
         <form action="{{ route('companies.index') }}" method="GET" class="d-flex">
@@ -63,8 +69,8 @@
                 <td>{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
                 <td>{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
                 <td>
-                    <a href="#" class="btn btn-info btn-sm">Ver</a>
-                    <a href="#" class="btn btn-primary btn-sm">Editar</a>
+                    <a href="{{route('companies.show', $company)}}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{{route('companies.edit', $company)}}" class="btn btn-primary btn-sm">Editar</a>
                     <a href="#" class="btn btn-secondary btn-sm">Eliminar</a>
                 </td>
             </tr>
@@ -78,4 +84,4 @@
     @endif
 </div>
 @endsection
-   
+

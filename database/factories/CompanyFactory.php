@@ -33,7 +33,7 @@ class CompanyFactory extends Factory
             'street' => $this->faker->streetName,
             'number' => $this->faker->numberBetween(1, 1000),
             'city_id' => City::inRandomOrder()->first()->id, // Asegúrate de que los IDs de ciudad existan
-            'slug' => Str::slug($companyName),  // Generar un slug basado en el nombre de la compañía
+            //'slug' => Str::slug($companyName),  // Generar un slug basado en el nombre de la compañía
         ];
     }
 }

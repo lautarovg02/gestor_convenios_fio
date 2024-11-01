@@ -59,4 +59,5 @@ class CompanyFormTest extends TestCase
         $response->assertSessionHas('success', 'Empresa ingresada exitosamente.');
     }
 
+
 }
