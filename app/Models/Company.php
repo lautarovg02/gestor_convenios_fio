@@ -51,7 +51,7 @@ class Company extends Model
     public function scopeSearch($query, $searchTerm)
     {
         if ($searchTerm) {
-        
+
             $terms = explode(' ', $searchTerm);
 
             foreach ($terms as $term) {
@@ -70,4 +70,10 @@ class Company extends Model
         }
         return $query;
     }
+
+    //Scope que devuelve a las empresas que están activas
+    public function scopeEnabled($query) {
+        return $query->where('is_enabled', true);
+    }
+
 }

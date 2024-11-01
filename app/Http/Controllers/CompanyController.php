@@ -34,8 +34,8 @@ class CompanyController extends Controller
             // Mensaje que se muestra durante la carga
             $loadingMessage = 'Cargando empresas...';
 
-            // Obtener todas las compañías usando el modelo Company y el scope de búsqueda
-            $companies = Company::search($searchTerm)->paginate(9);
+            // Obtener todas las compañías activas usando el modelo Company y el scope de búsqueda
+            $companies = Company::enabled()->search($searchTerm)->paginate(9);
 
             } catch (\Exception $e) {
                 $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
@@ -117,7 +117,7 @@ class CompanyController extends Controller
      * @param  Company $company
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreCompanyRequest $request, Company $company)
+    public function update(StoreCompanyRequest $request, Company $company) : RedirectResponse
     {
         try{
             dd($request);
