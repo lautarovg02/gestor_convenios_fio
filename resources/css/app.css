@@ -8,6 +8,6 @@
 
 .required-field::after {
     content: " *";
-    color: red;
+    color: rgb(168, 54, 54);
     font-weight: bold;
 }
