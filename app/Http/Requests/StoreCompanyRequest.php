@@ -23,7 +23,7 @@ class StoreCompanyRequest extends FormRequest
     {
         return [
                 'denomination' => 'required|string|max:40',
-                'cuit' => 'required|Integer|digits:11',
+                'cuit' => 'required|Integer|digits:11|unique:companies,cuit',
                 'city_id' => 'required|exists:cities,id|integer',
                 'company_name' => 'nullable|string|max:100',
                 'sector' => 'nullable|string|max:40',
@@ -42,6 +42,7 @@ class StoreCompanyRequest extends FormRequest
             'denomination.max' => 'La cantidad máxima de caracteres es de 40',
             'cuit.required' => 'El CUIT es un campo obligatorio.',
             'cuit.digits' => 'El CUIT debe tener exactamente 11 dígitos.',
+            'cuit.unique' => 'El cuit ya existe en la besa de datos.',
             'city_id.required' => 'La ciudad  es  un campo obligatorio.',
             'city_id.exists' => 'La ciudad seleccionada no es válida.',
         ];
