@@ -24,7 +24,7 @@ class CompanyFactory extends Factory
 
         return [
             'denomination' => 'Denominacion nro: ' . $this->faker->randomNumber(2),
-            'cuit' => $this->faker->unique()->numberBetween(20000000, 20999999),
+            'cuit' => $this->faker->unique()->numberBetween(20000000000, 90999999000),
             'company_name' => $companyName,
             'sector' => $this->faker->word,
             'entity' => $this->faker->word,
