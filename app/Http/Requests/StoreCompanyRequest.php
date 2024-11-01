@@ -42,7 +42,7 @@ class StoreCompanyRequest extends FormRequest
             'denomination.max' => 'La cantidad máxima de caracteres es de 40',
             'cuit.required' => 'El CUIT es un campo obligatorio.',
             'cuit.digits' => 'El CUIT debe tener exactamente 11 dígitos.',
-            'cuit.unique' => 'El cuit ya existe en la besa de datos.',
+            'cuit.unique' => 'El cuit ya existe en la base de datos.',
             'city_id.required' => 'La ciudad  es  un campo obligatorio.',
             'city_id.exists' => 'La ciudad seleccionada no es válida.',
         ];

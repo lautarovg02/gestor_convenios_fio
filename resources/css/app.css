@@ -5,3 +5,9 @@
 .bg-text-color{
     background-color: var(--main-bg-text-color);
 }
+
+.required-field::after {
+    content: " *";
+    color: rgb(168, 54, 54);
+    font-weight: bold;
+}
