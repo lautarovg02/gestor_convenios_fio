@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('scope')->nullable();
             $table->string('street')->nullable();
             $table->integer('number')->nullable();
-            $table->boolean('is_enabled')->default(false);
+            $table->boolean('is_enabled')->default(true);
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('cities');
             $table->string('slug');
