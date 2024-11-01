@@ -104,10 +104,10 @@ class CompanyController extends Controller
      * @param  Company $company
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreCompanyRequest $request, Company $company)
+    public function update(StoreCompanyRequest $request, Company $company):RedirectResponse
     {
         try{
-            dd($request);
+
             $exists  = Company::where('cuit', $request->cuit)
             ->where('id', '<>', $company->id)
             ->first();
