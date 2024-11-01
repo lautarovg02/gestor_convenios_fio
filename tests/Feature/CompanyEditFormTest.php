@@ -118,4 +118,19 @@ class CompanyEditFormTest extends TestCase
         $response->assertRedirect(route('companies.index'));
         $response->assertSessionHas('success', 'Empresa actualizada exitosamente.');
     }
+
+      /** @test */
+    public function it_requires_required_fields_when_update()
+    {
+        // Arrange: Crea una compañía
+        Province::factory()->create();
+        City::factory()->create();
+        $company = Company::factory()->create();
+
+        // Act: envía el formulario sin ningún dato
+        $response = $this->patch(route('companies.update' , $company), []);
+
+          // Assert: verifica que se redirige a la misma página y muestra los errores
+        $response->assertSessionHasErrors(['denomination', 'cuit', 'city_id']);
+    }
 }

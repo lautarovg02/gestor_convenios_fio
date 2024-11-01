@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label required" for= "entity">Sector</label>
+                        <label class="form-label required" for= "entity">Entidad</label>
                         <div>
                             <input class="form-control" name="entity" id="entity" type="text" value="{{$company->entity}}" placeholder="Ingrese la entidad a la que pertenece la empresa " autocomplete="off">
                         </div>
@@ -118,8 +118,8 @@
                         <div class="form-footer">
                             <div class="text-end">
                                 <div class="d-flex">
-                                    <a href="{{route('companies.index')}}" class="btn btn-danger">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary ms-auto">Guardar modificación</button>
+                                    <a href="{{route('companies.index')}}" class="btn btn-danger m-2">Cancelar</a>
+                                    <button type="submit" class="btn btn-primary ms-auto m-2">Guardar modificación</button>
                                 </div>
                             </div>
                         </div>
