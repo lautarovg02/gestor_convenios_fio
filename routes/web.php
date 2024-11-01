@@ -27,3 +27,4 @@ Route::resource('/companies' , CompanyController::class);
 //CITIES
 Route::get('/cities/create' , [CityController::class , 'create' ])->name('cities.create');
 Route::post('cities', [CityController::class, 'store'])->name('cities.store');
+
