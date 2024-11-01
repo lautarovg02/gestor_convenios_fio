@@ -65,7 +65,7 @@
                 <td>
                     <a href="#" class="btn btn-info btn-sm">Ver</a>
                     <a href="#" class="btn btn-primary btn-sm">Editar</a>
-                    <a href="#" class="btn btn-secondary btn-sm">Eliminar</a>
+                    <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{$company->id}}" data-entity-name="{{$company->company_name}}" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
                 </td>
             </tr>
             @endforeach
@@ -76,6 +76,9 @@
         {{ $companies->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}
     </div>
     @endif
+
+    <!-- Modal -->
+    @include('layouts/modals/modal-delete')
 </div>
 @endsection
-   
+
