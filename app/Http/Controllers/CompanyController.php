@@ -152,7 +152,7 @@ class CompanyController extends Controller
             $company->save();
 
             //Se redirecciona con mensaje de success
-            return redirect()->route('companies.index')->with('success', 'La empresa "' . $company->company_name . '" fue deshabilitada correctamente.');
+            return redirect()->route('companies.index')->with('success', 'La empresa "<span class="fw-bold">' . $company->company_name . '</span>" fue deshabilitada correctamente.');
 
         } else if ($employeesCount > 0) {   //Si la empresa tiene convenios en curso, no se puede ni eliminar ni deshabilitar.
             //Se redirecciona con mensaje de error
