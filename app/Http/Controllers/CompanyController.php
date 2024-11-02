@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCompanyRequest;
 use App\Models\City;
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\Employee;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -140,7 +141,11 @@ class CompanyController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Company $company) {
-        if (2 + 2 == 5) {   //Si la empresa solo tiene convenios finalizados, se deshabilita
+        //Verifica si hay empleados relacionados a la empresa
+        $employeesCount = Employee::where('company_id', $company->id)->count();
+
+        //!!!!NOTA!!!!: Las condición dentro de los operadores if son temporales hasta que la tabla 'contract' esta disponible.
+        if ($employeesCount == 0) {   //Si la empresa solo tiene convenios finalizados, se deshabilita.
             $company->is_enabled = false;
 
             //Se actualiza a la empresa en la base de datos
@@ -149,7 +154,7 @@ class CompanyController extends Controller
             //Se redirecciona con mensaje de success
             return redirect()->route('companies.index')->with('success', 'La empresa "' . $company->company_name . '" fue deshabilitada correctamente.');
 
-        } else if (2 + 2 == 4) {   //Si la empresa tiene convenios en curso, no se puede ni eliminar ni deshabilitar
+        } else if ($employeesCount > 0) {   //Si la empresa tiene convenios en curso, no se puede ni eliminar ni deshabilitar.
             //Se redirecciona con mensaje de error
             return redirect()->route('companies.index')->with('error', 'La empresa "<span class="fw-bold">' . $company->company_name . '</span>" tiene convenios activos y no puede ser deshabilitada.');
         }
