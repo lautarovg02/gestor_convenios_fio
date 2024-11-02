@@ -147,15 +147,16 @@ class CompanyController extends Controller
 
         // Verifica si hay empleados relacionados
         $employeesCount = Employee::where('company_id', $company->id)->count();
+        $companyName = $company->company_name; // Guardo el nombre de la empresa antes de eliminarla
         if ($employeesCount > 0) {
             // Redirige con un mensaje de error si hay empleados asociados
-            return redirect()->route('companies.index')->with('error', 'No se puede eliminar la empresa porque tiene empleados asociados.');
+            return redirect()->route('companies.index')->with('error', "No se puede eliminar la Empresa '$companyName', ya que tiene empleados asociados.");
         }
 
         // Si no hay empleados, procede con la eliminación
         $company->delete();
 
         // Redirecciona a la lista de empresas con un mensaje de éxito
-        return redirect()->route('companies.index')->with('success', 'Compañía eliminada correctamente.');
+        return redirect()->route('companies.index')->with('success', "Empresa '$companyName' eliminada exitosamente!");
     }
 }
