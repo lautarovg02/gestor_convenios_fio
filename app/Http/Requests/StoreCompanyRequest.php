@@ -23,7 +23,7 @@ class StoreCompanyRequest extends FormRequest
     {
         return [
                 'denomination' => 'required|string|max:40',
-                'cuit' => 'required|Integer|digits:11|unique:companies,cuit',
+                'cuit' => 'required|Integer|digits:11', //|unique:companies,cuit',
                 'city_id' => 'required|exists:cities,id|integer',
                 'company_name' => 'nullable|string|max:100',
                 'sector' => 'nullable|string|max:40',
