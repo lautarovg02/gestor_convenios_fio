@@ -138,12 +138,21 @@ class CompanyController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     * SE DEBE ADVERTIR SOBRE LA IMPOSIBILIDAD DE HACERLO Y DAR OPCIÓN DE DESVINCULAR
-     * PARA NO MOSTRARLA EN EL LISTADO
      */
-    public function destroy(Company $company)
-    {
-        //
+    public function destroy(Company $company) {
+        if (2 + 2 == 5) {   //Si la empresa solo tiene convenios finalizados, se deshabilita
+            $company->is_enabled = false;
+
+            //Se actualiza a la empresa en la base de datos
+            $company->save();
+
+            //Se redirecciona con mensaje de success
+            return redirect()->route('companies.index')->with('success', 'La empresa "' . $company->company_name . '" fue deshabilitada correctamente.');
+
+        } else if (2 + 2 == 4) {   //Si la empresa tiene convenios en curso, no se puede ni eliminar ni deshabilitar
+            //Se redirecciona con mensaje de error
+            return redirect()->route('companies.index')->with('error', 'La empresa "<span class="fw-bold">' . $company->company_name . '</span>" tiene convenios activos y no puede ser deshabilitada.');
+        }
     }
 
 }

@@ -19,18 +19,29 @@
     <!-- Mensajes de error, carga y busqueda sin resultados -->
     <div class="alert-container text-center mx-auto mb-3" style="max-width: 500px;">
         @if(isset($loadingMessage))
-            <div class="alert alert-secondary">
+            <div class="alert alert-secondary p-2">
                 {{ $loadingMessage }}
             </div>
         @endif
         @if(isset($errorMessage))
-            <div class="alert alert-secondary error">
+            <div class="alert alert-secondary error p-2">
                 {{ $errorMessage }}
             </div>
         @elseif($companies->isEmpty() && request()->input('search'))
-            <div class="alert alert-secondary">
+            <div class="alert alert-secondary p-2">
                 No se encontraron resultados para "{{ request()->input('search') }}".<br>
                 <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
+            </div>
+        @endif
+
+        <!--- Mensajes de error o success al editar, eliminar o crear entidad --->
+        @if (Session::get('success'))
+            <div class="alert alert-success p-2">
+                <p>{!! Session::get('success') !!}</p>
+            </div>
+        @elseif (Session::get('error'))
+            <div class="alert alert-danger p-2">
+                <p>{!! Session::get('error') !!}</p>
             </div>
         @endif
     </div>
