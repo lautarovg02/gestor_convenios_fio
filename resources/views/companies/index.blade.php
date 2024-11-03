@@ -2,6 +2,8 @@
 
 @section('content')
 
+<!-- Resto de tu vista para listar las empresas -->
+
 <div class="container mt-1">
     <!-- Botón agregar -->
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -25,18 +27,29 @@
     <!-- Mensajes de error, carga y busqueda sin resultados -->
     <div class="alert-container text-center mx-auto mb-3" style="max-width: 500px;">
         @if(isset($loadingMessage))
-            <div class="alert alert-secondary">
+            <div class="alert alert-secondary p-2">
                 {{ $loadingMessage }}
             </div>
         @endif
         @if(isset($errorMessage))
-            <div class="alert alert-secondary error">
+            <div class="alert alert-secondary error p-2">
                 {{ $errorMessage }}
             </div>
         @elseif($companies->isEmpty() && request()->input('search'))
-            <div class="alert alert-secondary">
+            <div class="alert alert-secondary p-2">
                 No se encontraron resultados para "{{ request()->input('search') }}".<br>
                 <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
+            </div>
+        @endif
+
+        <!--- Mensajes de error o success al editar, eliminar o crear entidad --->
+        @if (Session::get('success'))
+            <div class="alert alert-success p-2">
+                <p>{!! Session::get('success') !!}</p>
+            </div>
+        @elseif (Session::get('error'))
+            <div class="alert alert-danger p-2">
+                <p>{!! Session::get('error') !!}</p>
             </div>
         @endif
     </div>
@@ -71,7 +84,7 @@
                 <td>
                     <a href="{{route('companies.show', $company)}}" class="btn btn-info btn-sm">Ver</a>
                     <a href="{{route('companies.edit', $company)}}" class="btn btn-primary btn-sm">Editar</a>
-                    <a href="#" class="btn btn-secondary btn-sm">Eliminar</a>
+                    <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{$company->id}}" data-entity-name="{{$company->company_name}}" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
                 </td>
             </tr>
             @endforeach
@@ -82,6 +95,13 @@
         {{ $companies->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}
     </div>
     @endif
+
+    <!-- Modal -->
+    @include('layouts/modals/modal-delete')
 </div>
+
+<!--Linkeamos el .js del modal al template utilizando Vite-->
+@vite('resources/js/modals/modalDelete.js')
+
 @endsection
 

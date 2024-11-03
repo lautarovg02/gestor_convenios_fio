@@ -1,1 +1,1 @@
-import './bootstrap';
+import 'bootstrap'; // Importa Bootstrap
