@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Str;
 
 /**
  * Class Company
@@ -36,7 +37,7 @@ class Company extends Model
      *
      * @var array
      */
-    protected $fillable = ['denomination','cuit','company_name','sector','entity','company_category','scope','street','number','city_id'];
+    protected $fillable = ['denomination','cuit','company_name','sector','entity','company_category','scope','street','number','city_id', 'slug'];
 
     /**
      * Relación 1:*
@@ -75,5 +76,13 @@ class Company extends Model
     public function scopeEnabled($query) {
         return $query->where('is_enabled', true);
     }
+
+      // Mutator para generar el slug automáticamente basado en la denominación
+    public function setDenominationAttribute($value)
+    {
+        $this->attributes['denomination'] = $value;
+        $this->attributes['slug'] = Str::slug($value) . '-' . uniqid();
+    }
+
 
 }

@@ -51,6 +51,7 @@ class CompanyFormTest extends TestCase
             'denomination' => 'Empresa Test',
             'cuit' => '12345678901',
             'city_id' => $city->id,
+            'slug' => Str::slug('Empresa Test'),
         ];
 
         // Act: envía el formulario
