@@ -10,8 +10,6 @@ use App\Models\Employee;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use App\Models\Employee;
-
 
 /**
  * Class CompanyController
@@ -38,12 +36,11 @@ class CompanyController extends Controller
 
             // Obtener todas las compañías activas usando el modelo Company y el scope de búsqueda
             $companies = Company::enabled()->search($searchTerm)->paginate(9);
-
-            } catch (\Exception $e) {
-                $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
-                // Opcional: Puedes registrar el error para fines de depuración.
-                \Log::error('Error al obtener compañías: ' . $e->getMessage());
-            }
+        } catch (\Exception $e) {
+            $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
+            // Opcional: Puedes registrar el error para fines de depuración.
+            \Log::error('Error al obtener compañías: ' . $e->getMessage());
+        }
 
         return view('companies.index', compact('companies', 'searchTerm', 'errorMessage'));
     }
@@ -117,7 +114,7 @@ class CompanyController extends Controller
      * @param  Company $company
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreCompanyRequest $request, Company $company) : RedirectResponse
+    public function update(StoreCompanyRequest $request, Company $company): RedirectResponse
     {
         try {
             dd($request);
@@ -137,12 +134,22 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Company $company) {
+    public function destroy(Company $company)
+    {
+        // Encuentra la empresa por ID
+        $company = Company::findOrFail($company->id);
+
         //Verifica si hay empleados relacionados a la empresa
         $employeesCount = Employee::where('company_id', $company->id)->count();
 
         //!!!!NOTA!!!!: Las condición dentro de los operadores if son temporales hasta que la tabla 'contract' esta disponible.
-        if ($employeesCount == 0) {   //Si la empresa solo tiene convenios finalizados, se deshabilita.
+        if ($employeesCount == 0) {
+            // Si no hay empleados, procede con la eliminación
+            $company->delete();
+
+            // Redirecciona a la lista de empresas con un mensaje de éxito
+            return redirect()->route('companies.index')->with('success', 'La empresa "<span class="fw-bold">' . $company->company_name . '</span>" eliminada exitosamente!');
+        } else if ($employeesCount > 3) {   //Si la empresa solo tiene convenios finalizados, se deshabilita.
             $company->is_enabled = false;
 
             //Se actualiza a la empresa en la base de datos
@@ -150,11 +157,9 @@ class CompanyController extends Controller
 
             //Se redirecciona con mensaje de success
             return redirect()->route('companies.index')->with('success', 'La empresa "<span class="fw-bold">' . $company->company_name . '</span>" fue deshabilitada correctamente.');
-
-        } else if ($employeesCount > 0) {   //Si la empresa tiene convenios en curso, no se puede ni eliminar ni deshabilitar.
+        } else if ($employeesCount <= 3) {   //Si la empresa tiene convenios en curso, no se puede ni eliminar ni deshabilitar.
             //Se redirecciona con mensaje de error
             return redirect()->route('companies.index')->with('error', 'La empresa "<span class="fw-bold">' . $company->company_name . '</span>" tiene convenios activos y no puede ser deshabilitada.');
         }
     }
-
 }
