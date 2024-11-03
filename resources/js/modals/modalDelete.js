@@ -19,3 +19,4 @@ MODAL_DELETE.addEventListener('show.bs.modal', function(e) {
     const MODAL_DELETE_FORM = MODAL_DELETE.querySelector('#modal-delete-form');
     MODAL_DELETE_FORM.action = `/companies/${ENTITY_ID}`;
 });
+
