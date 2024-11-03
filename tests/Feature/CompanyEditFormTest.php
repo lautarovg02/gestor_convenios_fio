@@ -133,4 +133,121 @@ class CompanyEditFormTest extends TestCase
           // Assert: verifica que se redirige a la misma página y muestra los errores
         $response->assertSessionHasErrors(['denomination', 'cuit', 'city_id']);
     }
+
+     /** @test */
+    public function it_loads_existing_company_data_in_the_edit_form()
+    {
+         // Crear ciudad y empresa de prueba
+        Province::factory()->create();
+        $city = City::factory()->create();
+        $company = Company::factory()->create([
+            'denomination' => 'Empresa Test',
+            'cuit' => '12345678901',
+            'city_id' => $city->id,
+            'company_name' => 'Nombre Test',
+            'sector' => 'Sector Test',
+            'entity' => 'Entidad Test',
+            'company_category' => 'Categoría Test',
+            'scope' => 'Ámbito Test',
+            'street' => 'Calle Falsa',
+            'number' => '123',
+        ]);
+
+        // Acceder al formulario de edición
+        $response = $this->get(route('companies.edit', $company->id));
+
+        // Comprobar que el formulario carga los datos actuales
+        $response->assertStatus(200);
+        $response->assertSee($company->denomination);
+        $response->assertSee($company->cuit);
+        $response->assertSee($company->company_name);
+        $response->assertSee($company->sector);
+        $response->assertSee($company->entity);
+        $response->assertSee($company->company_category);
+        $response->assertSee($company->scope);
+        $response->assertSee($company->street);
+        $response->assertSee($company->number);
+    }
+
+    /** @test */
+    public function it_updates_company_successfully_and_redirects_with_success_message()
+    {
+        // Crear ciudad y empresa de prueba
+        Province::factory()->create();
+        $city = City::factory()->create();
+        $company = Company::factory()->create(['city_id' => $city->id]);
+
+        // Datos para actualizar la empresa
+        $data = [
+            'denomination' => 'Empresa Modificada',
+            'cuit' => '98765432109',
+            'company_name' => 'Nombre Modificado',
+            'sector' => 'Sector Modificado',
+            'entity' => 'Entidad Modificada',
+            'company_category' => 'Categoría Modificada',
+            'scope' => 'Ámbito Modificado',
+            'street' => 'Calle Modificada',
+            'number' => '321',
+            'city_id' => $city->id,
+        ];
+
+        // Enviar el formulario de actualización
+        $response = $this->patch(route('companies.update', $company->id), $data);
+
+        // Verificar redirección y mensaje de éxito
+        $response->assertRedirect(route('companies.index'));
+        $response->assertSessionHas('success', 'Empresa actualizada exitosamente.');
+
+        // Confirmar que los datos se actualizaron en la base de datos
+        $this->assertDatabaseHas('companies', $data);
+    }
+
+
+    /** @test */
+    public function it_shows_validation_error_when_required_fields_are_missing()
+    {
+        // Crear ciudad y empresa de prueba
+        Province::factory()->create();
+        $city = City::factory()->create();
+        $company = Company::factory()->create(['city_id' => $city->id]);
+
+        // Actuar: Enviar solicitud de actualización sin algunos datos obligatorios
+        $response = $this->patch(route('companies.update', $company->id), [
+            'denomination' => '',
+            'cuit' => '',
+            'city_id' => '',
+        ]);
+
+        // Verificar que se redirige al formulario de edición con errores de validación
+        $response->assertSessionHasErrors(['denomination', 'cuit', 'city_id']);
+    }
+
+    /** @test */
+    public function it_handles_duplicate_cuit_exception_correctly()
+    {
+        // Crear dos empresas de prueba
+        Province::factory()->create();
+        $city = City::factory()->create();
+        $existingCompany = Company::factory()->create(['cuit' => '12345678901', 'city_id' => $city->id]);
+        $companyToUpdate = Company::factory()->create(['cuit' => '98765432109', 'city_id' => $city->id]);
+
+        // Intentar actualizar la segunda empresa con un CUIT duplicado
+        $response = $this->patch(route('companies.update', $companyToUpdate->id), [
+            'denomination' => 'Empresa Actualizada',
+            'cuit' => '12345678901', // CUIT duplicado
+            'company_name' => 'Nombre Actualizado',
+            'sector' => 'Sector Actualizado',
+            'entity' => 'Entidad Actualizada',
+            'company_category' => 'Categoría Actualiza',
+            'scope' => 'Ámbito Actualizado',
+            'street' => 'Calle Actualizada',
+            'number' => '321',
+            'city_id' => $city->id,
+        ]);
+
+        // Verificar que se redirige al formulario de edición con un mensaje de error por CUIT duplicado
+        $response->assertRedirect(route('companies.edit', $companyToUpdate->id));
+        $response->assertSessionHasErrors(['error' => 'Cuit duplicado']);
+    }
+
 }

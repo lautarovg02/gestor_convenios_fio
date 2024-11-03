@@ -51,7 +51,7 @@ class Company extends Model
     public function scopeSearch($query, $searchTerm)
     {
         if ($searchTerm) {
-        
+
             $terms = explode(' ', $searchTerm);
 
             foreach ($terms as $term) {

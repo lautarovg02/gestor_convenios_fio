@@ -6,11 +6,13 @@ use App\Models\City;
 use App\Models\Company;
 use App\Models\Province;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Str;
 use Tests\TestCase;
 
 class CompanyFormTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase,WithFaker;
 
     /** @test */
     public function it_displays_the_create_company_form()
@@ -57,6 +59,74 @@ class CompanyFormTest extends TestCase
         // Assert: verifica que se redirige con un mensaje de éxito
         $response->assertRedirect(route('companies.index'));
         $response->assertSessionHas('success', 'Empresa ingresada exitosamente.');
+    }
+
+     /** @test */
+    public function it_saves_company_data_correctly()
+    {
+         // Arrange: Crear una ciudad para asignarla a la compañía
+        $province = Province::factory()->create();
+        $city = City::factory()->create();
+
+       // Datos válidos para la compañía
+        $data = [
+            'denomination' => 'Empresa Test',
+            'cuit' => '12345678901',
+            'company_name' => 'Nombre de la Compañía',
+            'sector' => 'Sector',
+            'entity' => 'Entidad',
+            'company_category' => 'Categoría',
+            'scope' => 'Ámbito',
+            'street' => 'Calle Falsa',
+            'number' => '123',
+            'city_id' => $city->id,
+        ];
+
+         // Act: Enviar la solicitud de creación
+        $response = $this->post(route('companies.store'), $data);
+
+         // Assert: Verificar redirección y mensaje de éxito
+        $response->assertRedirect(route('companies.index'));
+        $response->assertSessionHas('success', 'Empresa ingresada exitosamente.');
+
+         // Verificar que los datos se guardaron en la base de datos
+        $this->assertDatabaseHas('companies', $data);
+    }
+
+     /** @test */
+    public function it_throws_exception_for_duplicate_cuit()
+    {
+         // Arrange: Crear una ciudad y una compañía con un cuit específico
+        Province::factory()->create();
+        $city = City::factory()->create();
+        Company::factory()->create([
+            'cuit' => '12345678901',
+            'city_id' => $city->id,
+        ]);
+
+         // Datos duplicados para la compañía
+        $data = [
+            'denomination' => 'Empresa Duplicada',
+            'cuit' => '12345678901',  // cuit duplicado
+            'company_name' => 'Otra Compañía',
+            'sector' => 'Otro Sector',
+            'entity' => 'Otra Entidad',
+            'company_category' => 'Otra Categoría',
+            'scope' => 'Otro Ámbito',
+            'street' => 'Otra Calle',
+            'number' => '456',
+            'city_id' => $city->id,
+        ];
+
+         // Act: Enviar la solicitud de creación con datos duplicados
+        $response = $this->post(route('companies.store'), $data);
+
+         // Assert: Verificar redirección con mensaje de error
+        $response->assertRedirect();
+        $response->assertSessionHasErrors(['error' => 'Cuit duplicado']);
+
+         // Verificar que los datos no se guardaron nuevamente en la base de datos
+        $this->assertDatabaseCount('companies', 1);
     }
 
 }
