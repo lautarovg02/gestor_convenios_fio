@@ -148,7 +148,7 @@ class CompanyController extends Controller
             $company->delete();
 
             // Redirecciona a la lista de empresas con un mensaje de éxito
-            return redirect()->route('companies.index')->with('success', 'La empresa "<span class="fw-bold">' . $company->company_name . '</span>" eliminada exitosamente!');
+            return redirect()->route('companies.index')->with('success', 'La empresa "<span class="fw-bold">' . $company->denomination . '</span>" eliminada exitosamente!');
         } else if ($employeesCount > 3) {   //Si la empresa solo tiene convenios finalizados, se deshabilita.
             $company->is_enabled = false;
 
@@ -156,10 +156,10 @@ class CompanyController extends Controller
             $company->save();
 
             //Se redirecciona con mensaje de success
-            return redirect()->route('companies.index')->with('success', 'La empresa "<span class="fw-bold">' . $company->company_name . '</span>" fue deshabilitada correctamente.');
+            return redirect()->route('companies.index')->with('success', 'La empresa "<span class="fw-bold">' . $company->denomination . '</span>" fue deshabilitada correctamente.');
         } else if ($employeesCount <= 3) {   //Si la empresa tiene convenios en curso, no se puede ni eliminar ni deshabilitar.
             //Se redirecciona con mensaje de error
-            return redirect()->route('companies.index')->with('error', 'La empresa "<span class="fw-bold">' . $company->company_name . '</span>" tiene convenios activos y no puede ser deshabilitada.');
+            return redirect()->route('companies.index')->with('error', 'La empresa "<span class="fw-bold">' . $company->denomination . '</span>" tiene convenios activos y no puede ser deshabilitada.');
         }
     }
 }
