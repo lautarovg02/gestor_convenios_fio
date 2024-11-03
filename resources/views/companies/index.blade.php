@@ -10,12 +10,6 @@
         <a href="{{route('companies.create')}}" class="btn btn-secondary" onclick="">
             Agregar Compañía <i class="bi bi-plus"></i>
         </a>
-        <!-- Mensajes flash de success-->
-            @if (Session::has('success'))
-                <div class="alert alert-success">
-                    {{Session::get('success')}}
-                </div>
-            @endif
 
         <!-- Barra de búsqueda -->
         <form action="{{ route('companies.index') }}" method="GET" class="d-flex">
@@ -25,18 +19,18 @@
     </div>
 
     <!-- Mensajes de error, carga y busqueda sin resultados -->
-    <div class="alert-container text-center mx-auto mb-3" style="max-width: 500px;">
+    <div class="alert-container text-center mx-auto d-flex align-items-center justify-content-center">
         @if(isset($loadingMessage))
-            <div class="alert alert-secondary p-2">
+            <div class="alert alert-secondary">
                 {{ $loadingMessage }}
             </div>
         @endif
         @if(isset($errorMessage))
-            <div class="alert alert-secondary error p-2">
+            <div class="alert alert-secondary error">
                 {{ $errorMessage }}
             </div>
         @elseif($companies->isEmpty() && request()->input('search'))
-            <div class="alert alert-secondary p-2">
+            <div class="alert alert-secondary">
                 No se encontraron resultados para "{{ request()->input('search') }}".<br>
                 <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
             </div>
@@ -44,12 +38,12 @@
 
         <!--- Mensajes de error o success al editar, eliminar o crear entidad --->
         @if (Session::get('success'))
-            <div class="alert alert-success p-2">
-                <p>{!! Session::get('success') !!}</p>
+            <div class="alert alert-success">
+                <p class="mb-1">{!! Session::get('success') !!}</p>
             </div>
         @elseif (Session::get('error'))
-            <div class="alert alert-danger p-2">
-                <p>{!! Session::get('error') !!}</p>
+            <div class="alert alert-danger">
+                <p class="mb-1">{!! Session::get('error') !!}</p>
             </div>
         @endif
     </div>
