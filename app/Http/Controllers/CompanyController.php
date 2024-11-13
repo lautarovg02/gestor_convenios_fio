@@ -39,7 +39,7 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
             // Opcional: Puedes registrar el error para fines de depuración.
-            \Log::error('Error al obtener compañías: ' . $e->getMessage());
+            \Log::error('Error al obtener las empresas: ' . $e->getMessage());
         }
 
         return view('companies.index', compact('companies', 'searchTerm', 'errorMessage'));

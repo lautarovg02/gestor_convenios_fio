@@ -63,7 +63,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label class="form-label fs-6">
-                            <label for="company_name">Nombre de la compañía</label>
+                            <label for="company_name">Nombre de la empresa</label>
                         </label>
                         <div>
                             <input class="form-control" placeholder="Nombre de la empresa" name="company_name" type="text" id="company_name">

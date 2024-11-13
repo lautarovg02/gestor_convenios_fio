@@ -8,7 +8,7 @@
     <!-- Botón agregar -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <a href="{{route('companies.create')}}" class="btn btn-secondary" onclick="">
-            Agregar Compañía <i class="bi bi-plus"></i>
+            Agregar Empresa <i class="bi bi-plus"></i>
         </a>
 
         <!-- Barra de búsqueda -->
@@ -56,7 +56,7 @@
                 <th>#</th>
                 <th>Denominación</th>
                 <th>CUIT</th>
-                <th>Nombre de la Compañía</th>
+                <th>Nombre de la Empresa</th>
                 <th>Sector</th>
                 <th>Entidad</th>
                 <th>Categoría</th>
