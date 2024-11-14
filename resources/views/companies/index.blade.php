@@ -50,40 +50,40 @@
 
     <!-- Tabla de resultados -->
     @if(!$companies->isEmpty())
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Denominación</th>
-                <th>CUIT</th>
-                <th>Nombre de la Compañía</th>
-                <th>Sector</th>
-                <th>Entidad</th>
-                <th>Categoría</th>
-                <th>Ciudad</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($companies as $company)
-            <tr>
-                <td>{{ $company->id }}</td>
-                <td>{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
-                <td>
-                    <a href="{{route('companies.show', $company)}}" class="btn btn-info btn-sm">Ver</a>
-                    <a href="{{route('companies.edit', $company)}}" class="btn btn-primary btn-sm">Editar</a>
-                    <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{$company->id}}" data-entity-name="{{$company->company_name}}" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <table class="table table-striped table-responsive">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th style="max-width: 150px;">Denominación</th>
+            <th>CUIT</th>
+            <th style="max-width: 180px;">Nombre de la Compañía</th>
+            <th style="max-width: 120px;">Sector</th>
+            <th style="max-width: 120px;">Entidad</th>
+            <th style="max-width: 120px;">Categoría</th>
+            <th style="max-width: 120px;">Ciudad</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($companies as $company)
+        <tr>
+            <td>{{ $company->id }}</td>
+            <td class="text-truncate" style="max-width: 150px;">{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
+            <td>{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
+            <td class="text-truncate" style="max-width: 180px;">{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
+            <td class="text-truncate" style="max-width: 120px;">{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
+            <td class="text-truncate" style="max-width: 120px;">{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
+            <td class="text-truncate" style="max-width: 120px;">{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
+            <td class="text-truncate" style="max-width: 120px;">{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
+            <td>
+                <a href="{{route('companies.show', $company)}}" class="btn btn-info btn-sm">Ver</a>
+                <a href="{{route('companies.edit', $company)}}" class="btn btn-primary btn-sm">Editar</a>
+                <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{$company->id}}" data-entity-name="{{$company->company_name}}" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
     <!-- Paginación -->
     <div class="d-flex justify-content-center">
         {{ $companies->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}

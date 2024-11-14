@@ -11,3 +11,9 @@
     color: rgb(168, 54, 54);
     font-weight: bold;
 }
+
+.table td.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
