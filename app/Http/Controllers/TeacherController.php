@@ -5,19 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Teacher;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Exception;
 
 class TeacherController extends Controller
 {
     /**
-     * Display a listing of the resource.
+      @lautarovg02
+     * Display a listing of the teachers.
      */
-    public function index():View
+    public function index()
     {
-        $teachers = Teacher::orderBy('lastname' , 'ASC')->paginate(8);
+        $teachers = collect();
+        // $errorMessage = null;
+        try {
+            $teachers = Teacher::getAllWithRoles();
+            dd($teachers);
+        } catch (Exception $e) {
+            // $errorMessage = ';
+            \Log::error('Error al obtener compañías: ' . $e->getMessage());
+        }
 
-        return view('teachers.index' , [
-            'teachers' => $teachers,
-        ]);
+
+        // return view('teacher.index', compact('teachers'));
+
     }
 
     /**
