@@ -56,7 +56,7 @@
                 <th>#</th>
                 <th>Denominación</th>
                 <th>CUIT</th>
-                <th>Nombre de la Empresa</th>
+                <th>Nombre</th>
                 <th>Sector</th>
                 <th>Entidad</th>
                 <th>Categoría</th>
