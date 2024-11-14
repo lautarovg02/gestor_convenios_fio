@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label required" for= "company_category">Categoría</label>
+                        <label class="form-label required" for= "company_category">Rubro</label>
                         <div>
                             <input class="form-control" name="company_category" id="company_category" type="text" value="{{$company->company_category}}" placeholder="Ingrese la categoría de la empresa " autocomplete="off">
                         </div>

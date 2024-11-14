@@ -64,7 +64,7 @@
                 <th>Nombre de la Empresa</th>
                 <th>Sector</th>
                 <th>Entidad</th>
-                <th>Categoría</th>
+                <th>Rubro</th>
                 <th>Ciudad</th>
                 <th>Acciones</th>
             </tr>
