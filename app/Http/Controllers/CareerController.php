@@ -7,6 +7,7 @@ use App\Models\Department;
 use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
 use App\Models\Province;
+use Faker\Core\Coordinates;
 
 class CareerController extends Controller
 {
@@ -23,8 +24,10 @@ class CareerController extends Controller
      */
     public function create()
     {
+        $coordinators = collect([(object) ['id' => 1, 'name' => 'Coordinador 1'], (object) ['id' => 2, 'name' => 'Coordinador 2'], (object) ['id' => 3, 'name' => 'Coordinador 3']]);
+
         $departaments = Department::orderBy('name', 'ASC')->get();
-        return view('careers.create', compact('departaments'));
+        return view('careers.create', compact('departaments', 'coordinators'));
     }
 
     /**
