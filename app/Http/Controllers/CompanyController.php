@@ -28,21 +28,47 @@ class CompanyController extends Controller
         $companies = collect(); // Inicializa una colección vacía
         $errorMessage = null; // Variable para el mensaje de error
         $loadingMessage = null; // Variable para el mensaje de carga
+        $filters = $request->only(['city', 'scope','sector']); //Varialbes para filtrar empresas
 
         try {
 
             // Mensaje que se muestra durante la carga
             $loadingMessage = 'Cargando empresas...';
 
-            // Obtener todas las compañías activas usando el modelo Company y el scope de búsqueda
-            $companies = Company::enabled()->search($searchTerm)->paginate(9);
+            // Obtener todas las ciudades para el filtro
+            $cities = City::orderBy('name' , 'ASC')->get();
+
+            // Obtener todas las compañías activas usando el modelo Company y el scope de búsqueda y filtro
+            $companies = Company::enabled()->search($searchTerm)->filter($filters)->paginate(9);
+
+            //Obtener todos los sectors y no solo los 9 que se obtienen de las compañias paginadas
+            //Reemplaza en la colección de $sector, los sectores vacíos con N/A antes de enviarlos a la vista. map()
+            $sectors = Company::select('sector')->distinct()->orderBy('sector', 'ASC')->get()
+                                ->map(function ($company) {
+                                    return $company->sector ?: 'N/A';
+                                    })
+                                ->unique();
+
+            //Obtener todos los scopes y no solo los 9 que se obtienen de las compañias paginadas
+            //Reemplaza en la colección de $scopes, los sectores vacíos con N/A antes de enviarlos a la vista. map()
+            $scopes = Company::select('scope')->distinct()->orderBy('scope', 'asc')->get()
+                                ->map(function($company) {
+                                    return $company->scope ? : 'N/A';
+                                })
+                                ->unique();
+
         } catch (\Exception $e) {
             $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
             // Opcional: Puedes registrar el error para fines de depuración.
             \Log::error('Error al obtener compañías: ' . $e->getMessage());
         }
 
-        return view('companies.index', compact('companies', 'searchTerm', 'errorMessage'));
+         // Verifica si no se encontraron empresas después del filtro
+        if ($companies->isEmpty()) {
+            $errorMessage = 'No se ha encontrado ninguna compañía con los filtros seleccionados.';
+        }
+
+        return view('companies.index',compact('companies','cities','sectors', 'scopes', 'searchTerm', 'errorMessage'));
     }
 
     /**

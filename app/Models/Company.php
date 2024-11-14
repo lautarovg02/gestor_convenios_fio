@@ -84,5 +84,27 @@ class Company extends Model
         $this->attributes['slug'] = Str::slug($value) . '-' . uniqid();
     }
 
+    //Scope para filtrar
+    public function scopefilter($query , array $filters )
+    {
+            $query->when($filters['city']?? null, fn($q, $city) => $q->where('city_id',$city))
+                    ->when($filters['sector'] ?? null, function($q, $sector){
+                if ($sector === 'N/A') {
+                    $q->whereNull('sector');
+                } else {
+                    $q->where('sector', $sector);
+                }
+            })
+            ->when($filters['scope'] ?? null, function($q, $scope) {
+                if($scope ===' N/A') {
+                    $q->whereNull('scope');
+                }else{
+                    $q->where('scope', $scope);
+                }
+            });
+
+            return $query;
+
+    }
 
 }

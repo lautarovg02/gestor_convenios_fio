@@ -30,7 +30,7 @@ class StoreCityRequest extends FormRequest
     public function messages(){
         return [
             'name.required' => 'La ciudad es un campo obligatorio.',
-            'name.max' => 'La máxima cantidad de caracteres permitida es de 40',
+            'name.max' => 'La máxima cantidad de caracteres permitida es de :max',
             'province_id.required' => 'La provincia es un campo obligatorio.'
         ];
     }
