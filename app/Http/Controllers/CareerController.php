@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Career;
+use App\Models\Department;
+use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
+use App\Models\Province;
 
 class CareerController extends Controller
 {
@@ -12,7 +15,7 @@ class CareerController extends Controller
      */
     public function index()
     {
-        //
+        return view('careers.index');
     }
 
     /**
@@ -20,7 +23,8 @@ class CareerController extends Controller
      */
     public function create()
     {
-        //
+        $departaments = Department::orderBy('name', 'ASC')->get();
+        return view('careers.create', compact('departaments'));
     }
 
     /**
