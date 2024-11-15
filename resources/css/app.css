@@ -1,5 +1,6 @@
 :root{
     --main-bg-text-color: #0d6efd;
+    --max-column-width: 120px;
 }
 
 .bg-text-color{
@@ -13,7 +14,12 @@
 }
 
 .table td.text-truncate {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: visible;
+    overflow-wrap: break-word;
+}
+
+.table .col-max-width {
+    max-width: var(--max-column-width);
+    overflow-wrap: break-word;
 }

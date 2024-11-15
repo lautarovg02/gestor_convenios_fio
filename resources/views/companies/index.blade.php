@@ -56,7 +56,7 @@
             <th>#</th>
             <th style="max-width: 150px;">Denominación</th>
             <th>CUIT</th>
-            <th style="max-width: 180px;">Nombre de la Compañía</th>
+            <th style="max-width: 180px;">Nombre</th>
             <th style="max-width: 120px;">Sector</th>
             <th style="max-width: 120px;">Entidad</th>
             <th style="max-width: 120px;">Categoría</th>
@@ -68,7 +68,7 @@
         @foreach($companies as $company)
         <tr>
             <td>{{ $company->id }}</td>
-            <td class="text-truncate" style="max-width: 150px;">{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
+            <td class="text-truncate col-max-width">{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
             <td>{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
             <td class="text-truncate" style="max-width: 180px;">{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
             <td class="text-truncate" style="max-width: 120px;">{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
