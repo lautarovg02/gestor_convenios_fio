@@ -11,3 +11,13 @@
     color: rgb(168, 54, 54);
     font-weight: bold;
 }
+
+/*SIDEBAR*/
+.active-nav-link {
+    background-color: #c2e7ff;
+    font-weight: 500;
+}
+
+.nav-item:not(.active-nav-link):hover {     /*todos los '.nav-item' que no tienen la clase '.active-nav-link*/
+    background-color: #d3dbe5;
+}
