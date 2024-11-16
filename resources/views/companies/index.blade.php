@@ -54,13 +54,13 @@
     <thead>
         <tr>
             <th>#</th>
-            <th style="max-width: 150px;">Denominación</th>
+            <th>Denominación</th>
             <th>CUIT</th>
-            <th style="max-width: 180px;">Nombre</th>
-            <th style="max-width: 120px;">Sector</th>
-            <th style="max-width: 120px;">Entidad</th>
-            <th style="max-width: 120px;">Categoría</th>
-            <th style="max-width: 120px;">Ciudad</th>
+            <th>Nombre</th>
+            <th>Sector</th>
+            <th>Entidad</th>
+            <th>Categoría</th>
+            <th>Ciudad</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -70,7 +70,7 @@
             <td>{{ $company->id }}</td>
             <td class="text-truncate col-max-width">{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
             <td>{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
-            <td class="text-truncate" style="max-width: 180px;">{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
+            <td class="text-truncate col-max-width">{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
             <td class="text-truncate" style="max-width: 120px;">{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
             <td class="text-truncate" style="max-width: 120px;">{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
             <td class="text-truncate" style="max-width: 120px;">{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
