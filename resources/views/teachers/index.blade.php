@@ -17,6 +17,20 @@
             </form>
         </div>
 
+
+        <!-- Mensajes de error -->
+        <div class="alert-container text-center m-5  mx-auto d-flex align-items-center justify-content-center">
+            @if (isset($errorMessage))
+                <div class="alert alert-secondary error">
+                    {{ $errorMessage }}
+                </div>
+            @elseif ($teachers->isEmpty())
+                <div class="alert alert-secondary error">
+                   <p class="m-2">!La tabla de docentes, esta vacia!</p>
+                </div>
+            @endif
+        </div>
+
         <!-- Tabla de resultados -->
         @if (!$teachers->isEmpty())
             <table class="table table-striped">
