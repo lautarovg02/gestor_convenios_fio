@@ -40,7 +40,7 @@ class CareerController extends Controller
     {
 
         $exists = Career::where('name',$request->input('name'))
-                    ->where('departament_id', $request->input('departament_id'))->exists();
+                    ->where('department_id', $request->input('departament_id'))->exists();
         if(!$exists){
             $career = Career::create([
                 'name' => $request->input('name'),
