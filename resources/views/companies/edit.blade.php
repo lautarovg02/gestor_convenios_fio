@@ -119,7 +119,7 @@
                             <div class="text-end">
                                 <div class="d-flex">
                                     <a href="{{route('companies.index')}}" class="btn btn-danger m-2">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary ms-auto m-2">Guardar modificación</button>
+                                    <button type="submit" class="btn btn-success ms-auto m-2">Guardar modificación</button>
                                 </div>
                             </div>
                         </div>

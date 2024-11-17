@@ -63,7 +63,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label class="form-label fs-6">
-                            <label for="company_name">Nombre de la compañía</label>
+                            <label for="company_name">Nombre de la empresa</label>
                         </label>
                         <div>
                             <input class="form-control" placeholder="Nombre de la empresa" name="company_name" type="text" id="company_name">
@@ -136,7 +136,7 @@
                             <div class="d-flex">
                                 <a href="{{route('companies.index')}}" class="btn btn-danger m-2">Cancelar</a>
                                 <div>
-                                    <button type="submit" class="btn btn-primary ms-auto m-2">Crear</button>
+                                    <button type="submit" class="btn btn-success ms-auto m-2">Crear</button>
                                 </div>
                             </div>
                         </div>
