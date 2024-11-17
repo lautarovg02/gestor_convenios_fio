@@ -1,5 +1,7 @@
 :root{
     --main-bg-text-color: #0d6efd;
+    --active-nav-bg-color: #c2e7ff;
+    --hover-inactive-nav-bg-color: #d3dbe5;
 }
 
 .bg-text-color{
@@ -14,10 +16,10 @@
 
 /*SIDEBAR*/
 .active-nav-link {
-    background-color: #c2e7ff;
+    background-color: var(--active-nav-bg-color);
     font-weight: 500;
 }
 
 .nav-item:not(.active-nav-link):hover {     /*todos los '.nav-item' que no tienen la clase '.active-nav-link*/
-    background-color: #d3dbe5;
+    background-color: var(--hover-inactive-nav-bg-color);
 }
