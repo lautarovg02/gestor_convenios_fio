@@ -1,4 +1,4 @@
-<!-- resources/views/companies/create.blade.php -->
+<!-- resources/views/careers/create.blade.php -->
 <!-- @extends('layouts.app') -->
 
 @section('content')
@@ -37,10 +37,10 @@
                             <label class="form-label required-field"> <label
                                     for="coordinator_id">Coordinador</label></label>
                             <div>
-                                <select class=" form-control " name="coodinator_id" id="">
+                                <select class="form-control" name="coordinator_id" id="">
                                     <option value="">Seleccionar</option>
                                     @foreach ($coordinators as $coordinator)
-                                        <option value="{{ $coordinator->id }}">{{ $coordinator->name }}</option>
+                                        <option value="{{ $coordinator->id }}">{{ $coordinator->name . " " . $coordinator->lastname }}</option>
                                     @endforeach
                                 </select>
                                 <small class="form-hint">Seleccione el <b>coordinador</b> al cual pertenece la
