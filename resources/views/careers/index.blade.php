@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- Resto de tu vista para listar las Carreras -->
+    <!-- Boton Agregar carrera -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <a href="{{ route('careers.create') }}" class="btn btn-secondary" onclick="">
             Agregar Carrera <i class="bi bi-plus"></i>
@@ -26,8 +26,15 @@
         </div>
     @endif
 
+     <!-- Mensaje de "Cargando" -->
+     <div id="loading-message" style="display: none;">
+        <div class="alert alert-info">
+            Cargando, por favor espera...
+        </div>
+    </div>
+
     <!--- Mensaje en Busqueda: No se encuentran carreras --->
-    @if ($careers->isEmpty())
+    @if (isset($noResults) && $noResults)
         <div class="alert alert-warning">
             No se encontraron resultados para la búsqueda: "{{ request()->input('search') }}"
         </div>

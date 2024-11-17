@@ -15,15 +15,26 @@ class CareerController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $careers = Career::when($search, function ($query) use ($search) {
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhereHas('department', function ($query) use ($search) {
-                    $query->where('name', 'like', "%{$search}%");
-                });
-        })
-            ->orderBy('name', 'asc') // Aquí ordenamos por el nombre de la carrera en orden ascendente
-            ->paginate(10);
-        return view('careers.index', compact('careers'));
+        try{
+            $careers = Career::when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhereHas('department', function ($query) use ($search) {
+                        $query->where('name', 'like', "%{$search}%");
+                    });
+            })
+                ->orderBy('name', 'asc') // ordena por el nombre de la carrera en forma ascendente
+                ->paginate(10);
+                //Mensaje de vacío si no hay carreras
+                if ($careers->isEmpty()) {
+                    return view('careers.index')->with(['careers' => $careers, 'noResults' => true]);
+                }
+
+                return view('careers.index', compact('careers'));
+
+        } catch (\Exception $e){
+            //Guardar el error en la sesión
+                return redirect()->route('careers.index')->with('error', 'Error al cargar las carreras. Inténtalo nuevamente.');
+        }
     }
 
 
