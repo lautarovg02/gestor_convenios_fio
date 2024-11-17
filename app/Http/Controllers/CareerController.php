@@ -4,20 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Career;
 use App\Models\Department;
-use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
-use App\Models\Province;
-use Faker\Core\Coordinates;
 
 class CareerController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @App\Models\Career;
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('careers.index');
+        $search = $request->input('search');
+        $careers = Career::when($search, function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhereHas('department', function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%");
+                });
+        })
+            ->paginate(10);
+        return view('careers.index', compact('careers'));
     }
+
 
     /**
      * Show the form for creating a new resource.
