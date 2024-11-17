@@ -40,7 +40,7 @@
                                 <select class="form-control" name="coordinator_id" id="">
                                     <option value="">Seleccionar</option>
                                     @foreach ($coordinators as $coordinator)
-                                        <option value="{{ $coordinator->id }}">{{ $coordinator->name }}</option>
+                                        <option value="{{ $coordinator->id }}">{{ $coordinator->name . " " . $coordinator->lastname }}</option>
                                     @endforeach
                                 </select>
                                 <small class="form-hint">Seleccione el <b>coordinador</b> al cual pertenece la

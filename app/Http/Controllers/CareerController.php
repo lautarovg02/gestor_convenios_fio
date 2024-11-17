@@ -26,7 +26,9 @@ class CareerController extends Controller
      */
     public function create()
     {
-        $coordinators = Teacher::orderBy('name', 'ASC')->get();
+        // $coordinators = Teacher::orderBy('name', 'ASC')->get();
+        $coordinators = Teacher::getTeachersWithoutRoles()->orderBy('name', 'ASC')->get();
+
         $departaments = Department::orderBy('name', 'ASC')->get();
         return view('careers.create', compact('departaments', 'coordinators'));
     }
@@ -36,11 +38,17 @@ class CareerController extends Controller
      */
     public function store(Request $request)
     {
-        $career = Career::create([
-            'name' => $request->input('name'),
-            'coordinator_id' => $request->input('coordinator_id'),
-            'department_id' => $request->input('departament_id'),
-        ]);
+
+        $exists = Career::where('name',$request->input('name'))
+                    ->where('departament_id', $request->input('departament_id'))->exists();
+        if(!$exists){
+            $career = Career::create([
+                'name' => $request->input('name'),
+                'coordinator_id' => $request->input('coordinator_id'),
+                'department_id' => $request->input('departament_id'),
+            ]);
+        }
+
 
         // Redirigir a la vista
         return redirect()->route('careers.index')->with('success', 'Carrera creada exitosamente.');
