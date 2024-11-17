@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Career;
 use App\Models\Teacher;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -13,17 +14,24 @@ class TeacherController extends Controller
       @lautarovg02
      * Display a listing of the teachers.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $teachers = collect(); // Inicializar para evitar errores en caso de fallo
+
+        $teachers = collect();
+        $careers = collect(); // Inicializa la variable
+        $roles = [];
+        $filters = $request->only(['career', 'role']);
+
         try {
 
+            $careers = Career::orderBy('name', 'ASC')->get();
+            $roles = ['Director', 'Coordinador', 'Sin rol'];
             $teachers = Teacher::getAllWithRoles()->paginate(9);
         } catch (Exception $e) {
             \Log::error('Error al obtener profesores: ' . $e->getMessage());
         }
 
-        return view('teachers.index', compact('teachers'));
+        return view('teachers.index', compact('teachers', 'careers', 'roles'));
     }
 
 

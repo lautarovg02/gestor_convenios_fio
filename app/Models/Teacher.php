@@ -65,7 +65,7 @@ class Teacher extends Model
             \DB::raw("CASE
                         WHEN departments.id IS NOT NULL THEN 'Director'
                         WHEN careers.id IS NOT NULL THEN 'Coordinador'
-                        ELSE 'None'
+                        ELSE 'Sin rol'
                       END as role")
         )
             ->leftJoin('departments', 'teachers.id', '=', 'departments.director_id')
