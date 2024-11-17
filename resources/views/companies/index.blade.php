@@ -68,14 +68,14 @@
             @foreach($companies as $company)
             <tr>
                 <td>{{ $company->id }}</td>
-                <td>{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
-                <td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">
                     <a href="{{route('companies.show', $company)}}" class="btn btn-info btn-sm">Ver</a>
                     <a href="{{route('companies.edit', $company)}}" class="btn btn-primary btn-sm">Editar</a>
                     <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{$company->id}}" data-entity-name="{{$company->company_name}}" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
