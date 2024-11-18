@@ -54,17 +54,17 @@
 
                         <div class="form-group mb-3 fs-6">
                             <label class="form-label required-field"> <label
-                                    for="departament_id">Departamento</label></label>
+                                    for="department_id">Departamento</label></label>
                             <div>
-                                <select class=" form-control " name="departament_id" id="">
+                                <select class=" form-control " name="department_id" id="">
                                     <option value="">Seleccionar</option>
-                                    @foreach ($departaments as $departament)
-                                        <option value="{{ $departament->id }}">{{ $departament->name }}</option>
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
                                     @endforeach
                                 </select>
                                 <small class="form-hint">Seleccione el <b>departamento</b> al cual pertenece la
                                     carrera.</small>
-                                @error('departament_id')
+                                @error('department_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>

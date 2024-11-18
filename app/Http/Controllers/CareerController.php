@@ -16,6 +16,7 @@ class CareerController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $departmentId = $request->input('department'); //filtro por departamento
         $sort = $request->input('sort', 'name'); // Valor por defecto
         $direction = $request->input('direction', 'asc'); // Valor por defecto
 
@@ -26,26 +27,41 @@ class CareerController extends Controller
 
         try {
             // Aplica la búsqueda y la ordenación
-            $careers = Career::when($search, function ($query) use ($search) {
+            $careers = Career::when($departmentId, function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId); // Primero aplica el filtro por departamento
+            })
+                ->when($search, function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhereHas('department', function ($query) use ($search) {
+                            $query->where('name', 'like', "%{$search}%");
+                        });
+                })
+                ->orderBy($sort, $direction) // Ordenar después de aplicar los filtros
+                ->paginate(10);
+
+            /*          $careers = Career::when($search, function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%")
                     ->orWhereHas('department', function ($query) use ($search) {
                         $query->where('name', 'like', "%{$search}%");
                     });
             })
+                ->when($departmentId, function ($query) use ($departmentId) {
+                    $query->where('department_id', $departmentId); // Filtra por departamento
+                })
                 ->orderBy($sort, $direction) // Ordena según el sort y la dirección
                 ->paginate(10);
-
+*/
+            $departments = Department::orderBy('name', 'ASC')->get();
             // Mensaje de vacío si no hay carreras
             if ($careers->isEmpty()) {
-                return view('careers.index')->with(['careers' => $careers, 'noResults' => true]);
+                return view('careers.index')->with(['careers' => $careers, 'departments' => $departments, 'noResults' => true]);
             }
 
-            $departments = Department::orderBy('name', 'ASC')->get();
+            //$departments = Department::orderBy('name', 'ASC')->get();
             return view('careers.index', compact('careers', 'departments'));
-
         } catch (\Exception $e) {
-            // Guardar el error en la sesión
-            return redirect()->route('careers.index')->with('error', 'Error al cargar las carreras. Inténtalo nuevamente.');
+            $departments = Department::orderBy('name', 'ASC')->get();
+            return redirect()->route('careers.index')->with(['error' => 'Error al cargar las carreras. Inténtalo nuevamente.'])->with(['departments' => $departments]);
         }
     }
 
@@ -55,8 +71,8 @@ class CareerController extends Controller
     public function create()
     {
         $coordinators = Teacher::getTeachersWithoutRoles()->orderBy('name', 'ASC')->get();
-        $departaments = Department::orderBy('name', 'ASC')->get();
-        return view('careers.create', compact('departaments', 'coordinators'));
+        $departments = Department::orderBy('name', 'ASC')->get();
+        return view('careers.create', compact('departments', 'coordinators'));
     }
 
     /**
@@ -65,12 +81,12 @@ class CareerController extends Controller
     public function store(Request $request)
     {
         $exists = Career::where('name', $request->input('name'))
-            ->where('department_id', $request->input('departament_id'))->exists();
+            ->where('department_id', $request->input('department_id'))->exists();
         if (!$exists) {
             $career = Career::create([
                 'name' => $request->input('name'),
                 'coordinator_id' => $request->input('coordinator_id'),
-                'department_id' => $request->input('departament_id'),
+                'department_id' => $request->input('department_id'),
             ]);
         }
 

@@ -76,7 +76,7 @@
                         <tr>
                             <td>{{ $career->id }}</td>
                             <td>{!! highlightKeyword($career->name, request()->input('search')) !!}</td>
-                            <td>{!! highlightKeyword($career->departament->name ?? 'N/A', request()->input('search')) !!}</td>
+                            <td>{!! highlightKeyword($career->department->name ?? 'N/A', request()->input('search')) !!}</td>
                             <td>{!! highlightKeyword($career->teacher->name ?? 'N/A', request()->input('search')) !!}</td>
                             <td>
                                 <a href="{{ route('careers.show', $career) }}" class="btn btn-info btn-sm">Ver</a>
