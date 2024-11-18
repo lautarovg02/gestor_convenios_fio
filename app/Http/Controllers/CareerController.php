@@ -4,12 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Career;
 use App\Models\Department;
-use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
-use App\Models\Province;
 use App\Models\Teacher;
-use Faker\Core\Coordinates;
-
 
 class CareerController extends Controller
 {
@@ -29,8 +25,8 @@ class CareerController extends Controller
         // $coordinators = Teacher::orderBy('name', 'ASC')->get();
         $coordinators = Teacher::getTeachersWithoutRoles()->orderBy('name', 'ASC')->get();
 
-        $departaments = Department::orderBy('name', 'ASC')->get();
-        return view('careers.create', compact('departaments', 'coordinators'));
+        $departments = Department::orderBy('name', 'ASC')->get();
+        return view('careers.create', compact('departments', 'coordinators'));
     }
 
     /**
@@ -39,16 +35,20 @@ class CareerController extends Controller
     public function store(Request $request)
     {
 
-        $exists = Career::where('name',$request->input('name'))
-                    ->where('department_id', $request->input('departament_id'))->exists();
-        if(!$exists){
+        $exists = Career::where('name', $request->input('name'))
+            ->where('department_id', $request->input('department_id'))->exists();
+
+        if ($exists) { // si la carrera ya existe
+            return redirect()->back()
+                ->withErrors(['name' => 'Ya existe una carrera con el mismo nombre.'])
+                ->withInput();
+        } else { //si la carrera no existe se crea
             $career = Career::create([
                 'name' => $request->input('name'),
                 'coordinator_id' => $request->input('coordinator_id'),
-                'department_id' => $request->input('departament_id'),
+                'department_id' => $request->input('department_id'),
             ]);
         }
-
 
         // Redirigir a la vista
         return redirect()->route('careers.index')->with('success', 'Carrera creada exitosamente.');
