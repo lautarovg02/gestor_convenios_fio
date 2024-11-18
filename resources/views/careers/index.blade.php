@@ -44,7 +44,18 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Carrera</th>
+                        <th>
+                            <a href="{{ route('careers.index', ['search' => request()->input('search'), 'sort' => 'name', 'direction' => (request()->input('sort') === 'name' && request()->input('direction') === 'asc') ? 'desc' : 'asc']) }}">
+                                Carrera
+                                @if (request()->input('sort') === 'name')
+                                    @if (request()->input('direction') === 'asc')
+                                        ↑
+                                    @else
+                                        ↓
+                                    @endif
+                                @endif
+                            </a>
+                        </th>
                         <th>Departamento</th>
                         <th>Coordinador</th>
                     </tr>
