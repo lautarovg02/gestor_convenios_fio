@@ -74,9 +74,20 @@ class CareerController extends Controller
      */
     public function store(Request $request)
     {
+        // Establecer reglas de validación
+        $request->validate([
+            'name' => 'required|string|max:255', // Campo 'name' no debe estar vacío
+            'coordinator_id' => 'required|exists:teachers,id', // Campo 'coordinator_id' debe seleccionarse
+            'department_id' => 'required|exists:departments,id', // Campo 'department_id' debe seleccionarse
+        ]);
         $exists = Career::where('name', $request->input('name'))
             ->where('department_id', $request->input('department_id'))->exists();
-        if (!$exists) {
+
+        if ($exists) { // si la carrera ya existe
+            return redirect()->back()
+                ->withErrors(['name' => 'Ya existe una carrera con el mismo nombre.'])
+                ->withInput();
+        } else { //si la carrera no existe se crea
             $career = Career::create([
                 'name' => $request->input('name'),
                 'coordinator_id' => $request->input('coordinator_id'),
