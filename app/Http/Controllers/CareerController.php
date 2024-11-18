@@ -11,7 +11,9 @@ class CareerController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @App\Models\Career;
+     * @App\Models\Career
+     * @Illuminate\Http\Request
+     * @App\Models\Department
      */
     public function index(Request $request)
     {
@@ -39,20 +41,9 @@ class CareerController extends Controller
                 ->orderBy($sort, $direction) // Ordenar después de aplicar los filtros
                 ->paginate(10);
 
-            /*          $careers = Career::when($search, function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhereHas('department', function ($query) use ($search) {
-                        $query->where('name', 'like', "%{$search}%");
-                    });
-            })
-                ->when($departmentId, function ($query) use ($departmentId) {
-                    $query->where('department_id', $departmentId); // Filtra por departamento
-                })
-                ->orderBy($sort, $direction) // Ordena según el sort y la dirección
-                ->paginate(10);
-*/
-            $departments = Department::orderBy('name', 'ASC')->get();
-            // Mensaje de vacío si no hay carreras
+             $departments = Department::orderBy('name', 'ASC')->get();
+
+             // Mensaje de vacío si no hay carreras
             if ($careers->isEmpty()) {
                 return view('careers.index')->with(['careers' => $careers, 'departments' => $departments, 'noResults' => true]);
             }
@@ -67,6 +58,8 @@ class CareerController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     * @App\Models\Teacher;
+     * @App\Models\Department;
      */
     public function create()
     {
@@ -77,6 +70,7 @@ class CareerController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @App\Models\Career
      */
     public function store(Request $request)
     {
