@@ -12,6 +12,16 @@
     <form action="{{ route('careers.index') }}" method="GET" class="d-flex">
         <input type="text" name="search" class="form-control" placeholder="Buscar carreras..."
             value="{{ request()->input('search') }}" style="min-width: 400px;">
+        <!-- Filtro por departamento -->
+        <select name="department" class="form-select ms-2" style="min-width: 200px;">
+            <option value="">Selecciona un departamento</option>
+            @foreach ($departments as $department)
+                <option value="{{ $department->id }}"
+                    {{ request()->input('department') == $department->id ? 'selected' : '' }}>
+                    {{ $department->name }}
+                </option>
+            @endforeach
+        </select>
         <button type="submit" class="btn btn-primary ms-2">Buscar</button>
     </form>
 
@@ -26,8 +36,8 @@
         </div>
     @endif
 
-     <!-- Mensaje de "Cargando" -->
-     <div id="loading-message" style="display: none;">
+    <!-- Mensaje de "Cargando" -->
+    <div id="loading-message" style="display: none;">
         <div class="alert alert-info">
             Cargando, por favor espera...
         </div>
@@ -45,7 +55,8 @@
                     <tr>
                         <th>#</th>
                         <th>
-                            <a href="{{ route('careers.index', ['search' => request()->input('search'), 'sort' => 'name', 'direction' => (request()->input('sort') === 'name' && request()->input('direction') === 'asc') ? 'desc' : 'asc']) }}">
+                            <a
+                                href="{{ route('careers.index', ['search' => request()->input('search'), 'sort' => 'name', 'direction' => request()->input('sort') === 'name' && request()->input('direction') === 'asc' ? 'desc' : 'asc']) }}">
                                 Carrera
                                 @if (request()->input('sort') === 'name')
                                     @if (request()->input('direction') === 'asc')

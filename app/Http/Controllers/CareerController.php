@@ -40,7 +40,9 @@ class CareerController extends Controller
                 return view('careers.index')->with(['careers' => $careers, 'noResults' => true]);
             }
 
-            return view('careers.index', compact('careers'));
+            $departments = Department::orderBy('name', 'ASC')->get();
+            return view('careers.index', compact('careers', 'departments'));
+
         } catch (\Exception $e) {
             // Guardar el error en la sesión
             return redirect()->route('careers.index')->with('error', 'Error al cargar las carreras. Inténtalo nuevamente.');
