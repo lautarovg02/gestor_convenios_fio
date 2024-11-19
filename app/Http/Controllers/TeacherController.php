@@ -16,19 +16,17 @@ class TeacherController extends Controller
     public function index()
     {
         $teachers = collect();
-        // $errorMessage = null;
+        $errorMessage = null; // Inicializar para evitar errores en caso de fallo
         try {
-            $teachers = Teacher::getAllWithRoles();
-            dd($teachers);
+            $teachers = Teacher::getAllWithRoles()->paginate(9);
         } catch (Exception $e) {
-            // $errorMessage = ';
-            \Log::error('Error al obtener compañías: ' . $e->getMessage());
+            $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
+            \Log::error('Error al obtener profesores: ' . $e->getMessage());
         }
 
-
-        // return view('teacher.index', compact('teachers'));
-
+        return view('teachers.index', compact('teachers', 'errorMessage'));
     }
+
 
     /**
      * Show the form for creating a new resource.
