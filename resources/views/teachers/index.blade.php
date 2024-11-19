@@ -19,7 +19,7 @@
 
 
         <!-- Mensajes de error -->
-        <div class="alert-container text-center m-5  mx-auto d-flex align-items-center justify-content-center">
+        <div class="alert-container text-center mx-auto d-flex align-items-center justify-content-center">
             @if (isset($errorMessage))
                 <div class="alert alert-secondary error">
                     {{ $errorMessage }}

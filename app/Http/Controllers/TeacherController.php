@@ -20,7 +20,7 @@ class TeacherController extends Controller
         try {
             $teachers = Teacher::getAllWithRoles()->paginate(9);
         } catch (Exception $e) {
-            $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
+            $errorMessage = 'No se pudo recuperar la información de Docentes en este momento. Por favor, inténtelo más tarde.';
             \Log::error('Error al obtener profesores: ' . $e->getMessage());
         }
 
