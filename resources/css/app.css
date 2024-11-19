@@ -1,5 +1,10 @@
 :root{
+    /* COLORS */
     --main-bg-text-color: #0d6efd;
+
+    /* */
+    --max-column-width: 150px;
+    --min-column-width: 80px;
 }
 
 .bg-text-color{
@@ -10,4 +15,19 @@
     content: " *";
     color: rgb(168, 54, 54);
     font-weight: bold;
+}
+
+.col-max-width{
+    max-width: var(--max-column-width);
+    overflow-wrap: break-word;
+}
+
+td.text-truncate{
+    white-space: normal;
+    overflow: visible;
+}
+
+.col-min-width{
+    min-width: var(--min-column-width);
+
 }

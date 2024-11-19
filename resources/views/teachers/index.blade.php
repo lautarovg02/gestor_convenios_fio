@@ -49,11 +49,11 @@
                 <tbody>
                     @foreach ($teachers as $teacher)
                         <tr>
-                            <td>{{ $teacher->id }}</td>
-                            <td>{!! highlightKeyword($teacher->name, request()->input('search')) !!} {!! highlightKeyword($teacher->lastname, request()->input('search')) !!}</td>
-                            <td>{!! highlightKeyword($teacher->dni, request()->input('search')) !!}</td>
-                            <td>{!! highlightKeyword($teacher->cuil ?? 'N/A', request()->input('search')) !!}</td>
-                            <td>
+                            <td >{{ $teacher->id }}</td>
+                            <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->name, request()->input('search')) !!} {!! highlightKeyword($teacher->lastname, request()->input('search')) !!}</td>
+                            <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->dni, request()->input('search')) !!}</td>
+                            <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->cuil ?? 'N/A', request()->input('search')) !!}</td>
+                            <td class="text-truncate col-min-width col-max-width">
                                 @if ($teacher->role == 'Director')
                                     <span class="badge bg-primary">Director</span>
                                 @elseif ($teacher->role == 'Coordinador')
@@ -62,18 +62,18 @@
                                     <span class="badge bg-secondary">Sin Rol</span>
                                 @endif
                             </td>
-                            <td>
+                            <td class="text-truncate col-min-width col-max-width">
                                 <span class="badge {{ $teacher->is_rector ? 'bg-success' : 'bg-danger' }}">
                                     {{ $teacher->is_rector ? 'Rector' : 'No es Rector' }}
                                 </span>
                             </td>
 
-                            <td>
+                            <td class="text-truncate col-min-width col-max-width">
                                 <span class="badge {{ $teacher->is_dean ? 'bg-success' : 'bg-danger' }}">
                                     {{ $teacher->is_dean ? 'Decano' : 'No es Decano' }}
                                 </span>
                             </td>
-                            <td>
+                            <td class="text-truncate col-min-width col-max-width">
                                 <a href="{{ route('teachers.show', $teacher) }}" class="btn btn-info btn-sm">Ver</a>
                                 <a href="{{ route('teachers.edit', $teacher) }}" class="btn btn-primary btn-sm">Editar</a>
                                 <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{ $teacher->id }}"
