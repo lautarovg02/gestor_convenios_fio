@@ -18,6 +18,11 @@
         </form>
     </div>
 
+    <!-- FILTROS-->
+    <div class="col-12">
+        @include('companies.filters')
+    </div>
+
     <!-- Mensajes de error, carga y busqueda sin resultados -->
     <div class="alert-container text-center mx-auto d-flex align-items-center justify-content-center">
         @if(isset($loadingMessage))
@@ -59,7 +64,7 @@
                 <th>Nombre de la Empresa</th>
                 <th>Sector</th>
                 <th>Entidad</th>
-                <th>Categoría</th>
+                <th>Rubro</th>
                 <th>Ciudad</th>
                 <th>Acciones</th>
             </tr>

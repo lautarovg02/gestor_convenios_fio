@@ -39,7 +39,7 @@ class StoreCompanyRequest extends FormRequest
     {
         return [
             'denomination.required' => 'La denominación es  un campo obligatorio.',
-            'denomination.max' => 'La cantidad máxima de caracteres es de 40',
+            'denomination.max' => 'La cantidad máxima de caracteres es de :max',
             'cuit.required' => 'El CUIT es un campo obligatorio.',
             'cuit.digits' => 'El CUIT debe tener exactamente 11 dígitos.',
             'cuit.unique' => 'El cuit ya existe en la base de datos.',
