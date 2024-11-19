@@ -1,10 +1,15 @@
-:root{
+:root {
+    /* COLORS */
     --main-bg-text-color: #0d6efd;
     --active-nav-bg-color: #c2e7ff;
     --hover-inactive-nav-bg-color: #d3dbe5;
+
+    /* */
+    --max-column-width: 150px;
+    --min-column-width: 80px;
 }
 
-.bg-text-color{
+.bg-text-color {
     background-color: var(--main-bg-text-color);
 }
 
@@ -20,6 +25,22 @@
     font-weight: 500;
 }
 
-.nav-item:not(.active-nav-link):hover {     /*todos los '.nav-item' que no tienen la clase '.active-nav-link*/
+.nav-item:not(.active-nav-link):hover {
+    /*todos los '.nav-item' que no tienen la clase '.active-nav-link*/
     background-color: var(--hover-inactive-nav-bg-color);
+
+    .col-max-width {
+        max-width: var(--max-column-width);
+        overflow-wrap: break-word;
+    }
+
+    td.text-truncate {
+        white-space: normal;
+        overflow: visible;
+    }
+
+    .col-min-width {
+        min-width: var(--min-column-width);
+
+    }
 }

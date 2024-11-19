@@ -20,8 +20,8 @@
                     Usuarios de secretaría
                 </a>
             </li>
-            <li class="nav-item rounded-pill {{request()->is('COMPLETAR*') ? 'active-nav-link' : ''}}">
-                <a class="nav-link text-body" href="#">
+            <li class="nav-item rounded-pill {{request()->is('teachers*') ? 'active-nav-link' : ''}}">
+                <a class="nav-link text-body" href="{{route('teachers.index')}}">
                     <i class="bi bi-people"></i>
                     Docentes
                 </a>

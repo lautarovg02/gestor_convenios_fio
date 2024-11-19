@@ -5,20 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Teacher;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Exception;
 
 class TeacherController extends Controller
 {
     /**
-     * Display a listing of the resource.
+      @lautarovg02
+     * Display a listing of the teachers.
      */
-    public function index():View
+    public function index()
     {
-        $teachers = Teacher::orderBy('lastname' , 'ASC')->paginate(8);
+        $teachers = collect();
+        $errorMessage = null; // Inicializar para evitar errores en caso de fallo
+        try {
+            $teachers = Teacher::getAllWithRoles()->paginate(9);
+        } catch (Exception $e) {
+            $errorMessage = 'No se pudo recuperar la información de Docentes en este momento. Por favor, inténtelo más tarde.';
+            \Log::error('Error al obtener profesores: ' . $e->getMessage());
+        }
 
-        return view('teachers.index' , [
-            'teachers' => $teachers,
-        ]);
+        return view('teachers.index', compact('teachers', 'errorMessage'));
     }
+
 
     /**
      * Show the form for creating a new resource.
