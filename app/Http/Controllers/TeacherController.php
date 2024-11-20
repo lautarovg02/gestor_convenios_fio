@@ -26,7 +26,18 @@ class TeacherController extends Controller
 
             $careers = Career::orderBy('name', 'ASC')->get();
             $roles = ['Director', 'Coordinador', 'Sin rol'];
-            $teachers = Teacher::getAllWithRoles()->paginate(9);
+            $query = Teacher::getAllWithRoles();
+
+            if(!empty($filters['career'])){
+                $query->filterByCareer($filters['career']);
+            }
+            if (!empty($filters['role'])) {
+                $query->having('role', '=', $filters['role']); // Filtro por rol
+            }
+
+            $teachers = $query->paginate(9);
+
+
         } catch (Exception $e) {
             \Log::error('Error al obtener profesores: ' . $e->getMessage());
         }

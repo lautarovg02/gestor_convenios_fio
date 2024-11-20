@@ -1,7 +1,7 @@
 <form action="{{ route('teachers.index') }}" method="GET" class="row g-3 mb-4 mt-3 justify-content-end">
     <div class=" d-flex col-md-6">
         <div class="me-2 flex-grow-1">
-            <select class="form-select" id="city" name="city">
+            <select class="form-select" id="career" name="career">
                 <option value="">Carrera</option>
                 <!-- Agregar opciones de Carreras dinámicamente -->
                 @foreach($careers as $career)
@@ -12,7 +12,7 @@
             </select>
         </div>
         <div class="me-2 flex-grow-1">
-            <select class="form-select" id="sector" name="sector">
+            <select class="form-select" id="role" name="role">
                 <option value="">Roles</option>
                 <!-- Agregar opciones de ciudades dinámicamente -->
                 @foreach($roles as $role)

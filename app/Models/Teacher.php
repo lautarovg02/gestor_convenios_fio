@@ -69,6 +69,34 @@ class Teacher extends Model
                       END as role")
         )
             ->leftJoin('departments', 'teachers.id', '=', 'departments.director_id')
-            ->leftJoin('careers', 'teachers.id', '=', 'careers.coordinator_id');
+            ->leftJoin('careers', 'teachers.id', '=', 'careers.coordinator_id')
+            ->distinct(); // Asegura que los resultados no se dupliquen
+    }
+
+    /**
+     * Scope para filtrar los profesores según la carrera.
+     *
+     * Este método aplica un filtro a la consulta para obtener los profesores
+     * que están asociados a una carrera específica. Verifica tanto si el profesor
+     * es coordinador de la carrera como si pertenece a ella a través de la tabla
+     * intermedia `career_teacher`.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query La consulta actual de Eloquent.
+     * @param int|null $careerId El ID de la carrera para aplicar el filtro.
+     * @return \Illuminate\Database\Eloquent\Builder La consulta filtrada.
+     *
+      @lautarovg02
+     */
+    public static function scopeFilterByCareer($query, $careerId)
+    {
+        if (!empty($careerId)) {
+            $query->where(function ($subQuery) use ($careerId) {
+                $subQuery->where('careers.id', $careerId)
+                    ->orWhereHas('careers', function ($q) use ($careerId) {
+                        $q->where('career_teacher.career_id', $careerId);
+                    });
+            });
+        }
+        return $query;
     }
 }
