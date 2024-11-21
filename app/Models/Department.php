@@ -42,4 +42,5 @@ class Department extends Model
     {
         return $this->hasMany(Career::class);
     }
+
 }

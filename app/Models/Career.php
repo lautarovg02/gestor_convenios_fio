@@ -11,7 +11,7 @@ class Career extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name' , 'department_id'];
+    protected $fillable = ['name' , 'coordinator_id', 'department_id'];
 
     public function teachers():BelongsToMany
     {

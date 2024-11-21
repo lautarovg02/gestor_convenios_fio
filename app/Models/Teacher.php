@@ -66,9 +66,32 @@ class Teacher extends Model
                         WHEN departments.id IS NOT NULL THEN 'Director'
                         WHEN careers.id IS NOT NULL THEN 'Coordinador'
                         ELSE 'None'
-                      END as role")
+                    END as role")
         )
             ->leftJoin('departments', 'teachers.id', '=', 'departments.director_id')
             ->leftJoin('careers', 'teachers.id', '=', 'careers.coordinator_id');
+        }
+        /**
+     * Recuperar todos los docentes que no sean directores de ningún departamento
+     * ni coordinadores de ninguna carrera.
+     *
+     * Este método realiza una consulta para obtener todos los docentes que no tengan
+     * roles de directores o coordinadores.
+     *
+     * @return \Illuminate\Support\Collection List of teachers without roles.
+      @lautarovg02
+     */
+    public static function getTeachersWithoutRoles()
+    {
+        return self::whereNotExists(function ($query) {
+            $query->select(\DB::raw(1))
+                ->from('careers')
+                ->whereColumn('careers.coordinator_id', 'teachers.id');
+        })
+            ->whereNotExists(function ($query) {
+                $query->select(\DB::raw(1))
+                    ->from('departments')
+                    ->whereColumn('departments.director_id', 'teachers.id');
+            });
     }
 }

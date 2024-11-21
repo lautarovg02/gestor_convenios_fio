@@ -26,8 +26,8 @@
                     Docentes
                 </a>
             </li>
-            <li class="nav-item rounded-pill {{request()->is('COMPLETAR*') ? 'active-nav-link' : ''}}">
-                <a class="nav-link text-body" href="#">
+            <li class="nav-item rounded-pill {{request()->is('careers*') ? 'active-nav-link' : ''}}">
+                <a class="nav-link" href="{{route('careers.index')}}">
                     <i class="bi bi-journal"></i>
                     Carreras
                 </a>
