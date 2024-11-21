@@ -13,6 +13,25 @@ class Teacher extends Model
 {
     use HasFactory;
 
+
+    /**
+     * Roles disponibles para los docentes.
+     */
+    const ROLE_DIRECTOR = 'Director';
+    const ROLE_COORDINATOR = 'Coordinador';
+    const ROLE_NONE = 'Sin rol';
+
+    /**
+     * Lista completa de roles disponibles.
+     *
+     * @var array
+     */
+    public const AVAILABLE_ROLES = [
+        self::ROLE_DIRECTOR,
+        self::ROLE_COORDINATOR,
+        self::ROLE_NONE,
+    ];
+
     protected $fillable = ['lastname', 'name', 'dni', 'faculty', 'teacher_id'];
 
     //Relación 1:n atributo multivaluado en la tabla Teacher
