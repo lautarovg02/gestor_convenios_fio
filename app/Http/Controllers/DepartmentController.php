@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 
 class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
+        $departments = Department::all();
+        return view('departments.index' , compact('departments'));
     }
 
     /**

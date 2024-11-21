@@ -27,7 +27,7 @@
                 </div>
             @elseif ($teachers->isEmpty())
                 <div class="alert alert-secondary error">
-                   <p class="m-2">!La tabla de docentes, esta vacia!</p>
+                    <p class="m-2">¡La tabla de docentes, esta vacia!</p>
                 </div>
             @endif
         </div>
