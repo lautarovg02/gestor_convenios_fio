@@ -1,3 +1,4 @@
+<!--resources/views/companies/index.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -91,7 +92,7 @@
     </table>
     <!-- Paginación -->
     <div class="d-flex justify-content-center">
-        {{ $companies->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}
+        {{ $companies->appends(request()->except('page'))->onEachSide(1)->links('pagination::bootstrap-4') }}
     </div>
     @endif
 
