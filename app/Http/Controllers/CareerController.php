@@ -38,6 +38,8 @@ class CareerController extends Controller
                             $query->where('name', 'like', "%{$search}%");
                         })->orWhereHas('teacher', function ($query) use ($search) {
                             $query->where('name', 'like', "%{$search}%");
+                        })->orWhereHas('teacher', function ($query) use ($search) {
+                            $query->where('lastname', 'like', "%{$search}%");
                         });
                 })
                 ->orderBy($sort, $direction) // Ordenar después de aplicar los filtros
