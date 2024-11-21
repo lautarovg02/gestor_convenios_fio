@@ -1,3 +1,4 @@
+<!-- resources/views/teachers/index.blade.php -->
 @extends('layouts.app')
 
 @section('content')
