@@ -20,7 +20,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        return view('departments.create');
     }
 
     /**
@@ -28,7 +28,7 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //MANEJAR VALIDACIONES
     }
 
     /**
