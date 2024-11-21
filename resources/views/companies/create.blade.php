@@ -123,39 +123,35 @@
                         </div>
                     </div>
 
-                    <!-- Campo nombre de la calle -->
-                    <div class="form-group mb-3">
-                        <label class="form-label fs-6">
-                            <label for="street">Calle</label>
-                        </label>
-                        <div>
-                        <input class="form-control" placeholder="Street" name="street" type="text" id="street" value="{{old('street')}}">
+                    <h6>Dirección:</h6>
+                    <div class="row">
+                        <!-- Campo nombre de la calle -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fs-6" for="street">Calle</label>
+                            <input class="form-control" placeholder="Calle" name="street" type="text" id="street" value="{{ old('street') }}">
                         </div>
-                    </div>
-                    <!-- Campo número -->
-                    <div class="form-group mb-3">
-                        <label class="form-label fs-6">
-                            <label for="number">Número</label>
-                        </label>
-                        <div>
-                            <input class="form-control" placeholder="Number" name="number" type="text" id="number" value="{{old('number')}}">
+
+                        <!-- Campo número -->
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label fs-6" for="number">Número</label>
+                            <input class="form-control" placeholder="Número" name="number" type="text" id="number" value="{{ old('number') }}">
                         </div>
-                    </div>
-                    <!-- Campo nombre de la ciudad -->
-                    <div class="form-group mb-3">
-                        <label class="form-label fs-6 required-field">
-                            <label for="city_id">Ciudad</label>
-                        </label>
-                        <div>
-                            <select class=" form-control" name="city_id" id="">
-                                    <option value="">Seleccionar</option>
+
+                        <!-- Campo nombre de la ciudad -->
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fs-6 required-field" for="city_id">Ciudad</label>
+                            <select class="form-control" name="city_id" id="city_id">
+                                <option value="">Seleccionar</option>
                                 @foreach ($cities as $city)
-                                    <option value="{{$city->id}}">{{$city->name}}</option>
+                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
                                 @endforeach
                             </select>
-                            <small class="form-hint">Si no encuentra la <b>ciudad</b> en la lista, ingresarla en  <a href="{{route('cities.create')}}">Agregar Ciudad.</a></small>
+                            <small class="form-hint">
+                                Si no encuentra la <b>ciudad</b> en la lista, ingresarla en
+                                <a href="{{ route('cities.create') }}">Agregar Ciudad.</a>
+                            </small>
                             @error('city_id')
-                                <div class="text-danger">{{$message}}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
