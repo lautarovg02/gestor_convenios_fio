@@ -14,6 +14,7 @@ class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @dairagalceran
      */
     public function index(): View
     {
@@ -66,26 +67,33 @@ class DepartmentController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     * @dairagalceran
      */
-    public function edit(Department $department)
+    public function edit(Department $department): View
     {
-        $department = Department::find($department->id);
 
-        return view('departments.edit', ['department' => $department]);
+        $departments = Department::orderBy('name', 'ASC')->get();
+        $teachersWithoutRol = Teacher::getTeachersWithoutRoles()->orderBy('lastname', 'ASC')->get();
+
+        return view('departments.edit', compact('department' , 'departments', 'teachersWithoutRol'));
     }
 
     /**
      * Update the specified resource in storage.
+     * @dairagalceran
      */
     public function update(StoreDepartmentRequest $request, Department $department) : RedirectResponse
     {
-        dd($request);
-
         try{
-            $exists = Department::where('director_id', $request->teacher->id)->first();
 
-            dd($department);
-            $department->update($request->validated());
+            $validatedData = $request->validated();
+
+            // Si seleccionó "Otro tipo", usa el valor del input de texto
+            if ($request->name === 'other') {
+                $validatedData['name'] = $request->input('other_entity_input');
+            }
+
+            $department->update($validatedData);
 
             return redirect()->route('departments.index')->with('success' , 'Departamento creado exitosamente');
 

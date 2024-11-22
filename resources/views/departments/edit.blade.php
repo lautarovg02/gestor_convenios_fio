@@ -42,29 +42,38 @@
                             @error('name')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
+
                         </div>
                     </div>
-                    <!-- Campo Director -->
-                    <div class="mb-3">
-                        <label class="form-label required-field" for="director">Director de Departamento</label>
-                        <!-- Campos Apellido y Nombre en una fila -->
-                        <div class="row">
-                            <!-- Campo Apellido -->
-                            <div class="col-md-6 mb-3">
-                                <input class="form-control" name="director" id="director" type="text" value="{{$department->teacher->lastname}}" placeholder="Ingrese el apellido del director" autocomplete="off">
-                                @error('director')
-                                    <div class="text-danger">{{$message}}</div>
-                                @enderror
-                            </div>
+                        @error('department_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                            <!-- Campo Nombre -->
-                            <div class="col-md-6 mb-3">
-                                <input class="form-control" name="director_id" id="director_id" type="text" value="{{$department->teacher->name}}" placeholder="Ingrese el nombre del director" autocomplete="off">
-                                @error('director_id')
-                                    <div class="text-danger">{{$message}}</div>
-                                @enderror
-                            </div>
-                        </div>
+                    <!-- Campo Director -->
+                    <!-- Selector con docentes sin rol" -->
+                    <div class="form-group mb-3">
+                        <label class="form-label fs-6" for="director_id">Director de departamento</label>
+                        <select name="director_id" id="director_id" class="form-select">
+                            <option value="" disabled>Seleccione un director</option>
+
+                            <!-- Primero mostrar el director actual si no hay errores de validación -->
+                            <option value="{{ $department->director_id }}"
+                                {{ old('director_id', $department->director_id) == $department->director_id ? 'selected' : '' }}>
+                                {{ $department->teacher->lastname }} {{ $department->teacher->name }}
+                            </option>
+
+                            <!-- Luego mostrar los docentes disponibles que no tienen roles -->
+                            @foreach ($teachersWithoutRol as $teacher)
+                                <option value="{{ $teacher->id }}"
+                                    {{ old('director_id', $department->director_id) == $teacher->id ? 'selected' : '' }}>
+                                    {{ $teacher->lastname }} {{ $teacher->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('director_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
 

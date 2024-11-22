@@ -48,6 +48,7 @@ class CareerController extends Controller
     public function create()
     {
         $coordinators = Teacher::getTeachersWithoutRoles()->orderBy('name', 'ASC')->get();
+        dd($coordinators);
         $departments = Department::orderBy('name', 'ASC')->get();
         return view('careers.create', compact('departments', 'coordinators'));
     }
