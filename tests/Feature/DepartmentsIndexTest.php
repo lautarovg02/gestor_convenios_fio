@@ -53,7 +53,8 @@ class DepartmentsIndexTest extends TestCase
 
     /**
      * Test that the success message is displayed when present in the session.
-     * @test
+     @rom-L
+     @test
      */
     public function displays_success_message()
     {
@@ -70,7 +71,8 @@ class DepartmentsIndexTest extends TestCase
 
     /**
      * Test that the error message is displayed when present in the session.
-     * @test
+     @rom-L
+     @test
      */
     public function displays_error_message()
     {
