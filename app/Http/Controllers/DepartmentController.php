@@ -24,8 +24,7 @@ class DepartmentController extends Controller
 
             return view('departments.index')->with(['departments' => $departments, 'noResults' => $noResults]);
 
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return redirect()->route('departments.index')->with('error', 'Error al cargar departamentos. Inténtalo nuevamente.');
         }
     }
