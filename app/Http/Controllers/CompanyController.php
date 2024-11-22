@@ -135,7 +135,6 @@ class CompanyController extends Controller
      */
     public function edit(Company $company): View
     {
-        //dd($company);
         $company = Company::find($company->id);
         $cities = City::orderBy('name', 'ASC')->get();
         $entityTypes = EntityType::values();
