@@ -11,20 +11,19 @@ class DepartmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
-    {
-
-        try{
-
+    public function index(): View {
+        try {
             $departments = Department::all();
 
             // Mensaje de vacío si no hay departamentos
             if ($departments->isEmpty()) {
-                return view('departments.index')->with(['departments' => $$departments, 'noResults' => true]);
-            }
-            return view('departments.index' , compact('departments'));
+                $noResultMessage = 'No se han encontrado departamentos';
 
-        }catch(\Exception $e){
+                return view('departments.index', compact('departments', 'noResultMessage'));
+            }
+
+            return view('departments.index', compact('departments'));
+        } catch (\Exception $e) {
             return redirect()->route('departments.index')->with('error', 'Error al cargar departamentos. Inténtalo nuevamente.');
         }
     }
