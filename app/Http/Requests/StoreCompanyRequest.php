@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\EntityType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreCompanyRequest extends FormRequest
 {
@@ -27,9 +29,10 @@ class StoreCompanyRequest extends FormRequest
                 'city_id' => 'required|exists:cities,id|integer',
                 'company_name' => 'nullable|string|max:100',
                 'sector' => 'nullable|string|max:40',
-                'entity' => 'nullable|string|max:40',
+                'entity' => ['nullable', 'in:' . implode(',', EntityType::values()) . ',other'],
+                'other_entity_input' => 'nullable|string',
                 'company_category' => 'nullable|string|max:20',
-                'scope' => 'nullable|string|max:40',
+                'scope' => 'nullable|string ',
                 'street' => 'nullable|string|max:40',
                 'number' => 'nullable|integer',
         ];
