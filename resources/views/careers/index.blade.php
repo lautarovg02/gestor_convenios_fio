@@ -26,8 +26,8 @@
         </div>
     @endif
 
-     <!-- Mensaje de "Cargando" -->
-     <div id="loading-message" style="display: none;">
+    <!-- Mensaje de "Cargando" -->
+    <div id="loading-message" style="display: none;">
         <div class="alert alert-info">
             Cargando, por favor espera...
         </div>
