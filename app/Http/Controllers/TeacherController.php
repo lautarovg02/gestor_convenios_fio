@@ -10,21 +10,27 @@ use Exception;
 class TeacherController extends Controller
 {
     /**
-      @lautarovg02
+      *@lautarovg02
      * Display a listing of the teachers.
+     * @dairaGalceran
+     * search with scope
      */
-    public function index()
+    public function index(Request $request) : View
     {
         $teachers = collect();
         $errorMessage = null; // Inicializar para evitar errores en caso de fallo
+        $searchTerm = $request->input('search');
+
         try {
-            $teachers = Teacher::getAllWithRoles()->paginate(9);
+            $teachers = Teacher::getAllWithRoles()->search($searchTerm)
+                ->paginate(9)
+                ->appends(['search' => $searchTerm]);
         } catch (Exception $e) {
             $errorMessage = 'No se pudo recuperar la información de Docentes en este momento. Por favor, inténtelo más tarde.';
             \Log::error('Error al obtener profesores: ' . $e->getMessage());
         }
 
-        return view('teachers.index', compact('teachers', 'errorMessage'));
+        return view('teachers.index', compact('teachers', 'searchTerm', 'errorMessage'));
     }
 
 

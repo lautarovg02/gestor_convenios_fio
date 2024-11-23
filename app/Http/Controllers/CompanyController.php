@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\EntityType;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Models\City;
 use Illuminate\Http\Request;
@@ -78,8 +79,10 @@ class CompanyController extends Controller
      */
     public function create(): View
     {
+        $entityTypes = EntityType::values();
         $cities = City::orderBy('name', 'ASC')->get();
-        return view('companies.create', compact('cities'));
+
+        return view('companies.create', compact('cities', 'entityTypes'));
     }
 
     /**
@@ -91,15 +94,21 @@ class CompanyController extends Controller
     public function store(StoreCompanyRequest $request): RedirectResponse
     {
         try {
+            // Verificar si el CUIT ya existe
             $exists = Company::where('cuit', $request->cuit)->first();
-
             if ($exists) throw new Exception("Cuit duplicado");
 
-            Company::create($request->validated());
+            //Si se seleccionó other_entity se reemplaza el valor de entity por other_entity
+            $entitySelected = $request->entity === 'other' ? $request->other_entity_input : $request->entity;
+
+            //Crear la empresa con el valor seleccionado de entidad
+            Company::create(array_merge($request->validated(), ['entity' => $entitySelected]));
 
             return  redirect()->route('companies.index')
                 ->with('success', 'Empresa ingresada exitosamente.');
         } catch (Exception $e) {
+            \Log::error('Error al crear la empresa: '.$e->getMessage());
+
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
@@ -126,11 +135,11 @@ class CompanyController extends Controller
      */
     public function edit(Company $company): View
     {
-        //dd($company);
         $company = Company::find($company->id);
         $cities = City::orderBy('name', 'ASC')->get();
+        $entityTypes = EntityType::values();
 
-        return view('companies.edit', ['company' => $company, 'cities' => $cities]);
+        return view('companies.edit', ['company' => $company, 'cities' => $cities, 'entityTypes' => $entityTypes]);
     }
 
     /**
@@ -140,19 +149,32 @@ class CompanyController extends Controller
      * @param  Company $company
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreCompanyRequest $request, Company $company):RedirectResponse
+    public function update(StoreCompanyRequest $request, Company $company): RedirectResponse
     {
-        try{
-
-            $exists  = Company::where('cuit', $request->cuit)
+        try {
+            // Verifica si el CUIT es duplicado
+            $exists = Company::where('cuit', $request->cuit)
                 ->where('id', '<>', $company->id)
                 ->first();
 
-            if ($exists) throw new Exception("Cuit duplicado");
+            if ($exists) {
+                throw new Exception("Cuit duplicado");
+            }
 
-            $company->update($request->validated());
+            // Verifica si la entidad es "Otro tipo" y actualiza el campo correspondiente
+            if ($request->entity === 'other' && $request->has('other_entity_input') && $request->other_entity_input) {
+                $entityEdited = $request->other_entity_input;
+            } else {
+                $entityEdited  = $request->entity;
+            }
+
+            // Actualiza el resto de los campos del modelo utilizando los datos validados
+                $company->update(array_merge($request->validated(), ['entity' => $entityEdited]));
+
+            // Redirige con un mensaje de éxito
             return redirect()->route('companies.index')->with('success', 'Empresa actualizada exitosamente.');
         } catch (Exception $e) {
+            // Redirige en caso de error
             return redirect()->route('companies.edit', $company->id)->withErrors(['error' => $e->getMessage()]);
         }
     }

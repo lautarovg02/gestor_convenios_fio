@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Career;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -54,7 +55,7 @@ class Teacher extends Model
      * @return \Illuminate\Support\Collection Lista de profesores con sus roles e información adicional.
      * @lautarovg02
      */
-    public static function getAllWithRoles()
+    public static function getAllWithRoles($searchTerm = null)
     {
         return self::select(
             'teachers.*',
@@ -66,9 +67,53 @@ class Teacher extends Model
                         WHEN departments.id IS NOT NULL THEN 'Director'
                         WHEN careers.id IS NOT NULL THEN 'Coordinador'
                         ELSE 'None'
-                      END as role")
+                    END as role")
         )
             ->leftJoin('departments', 'teachers.id', '=', 'departments.director_id')
             ->leftJoin('careers', 'teachers.id', '=', 'careers.coordinator_id');
+        }
+    /**
+     * Recuperar todos los docentes que no sean directores de ningún departamento
+     * ni coordinadores de ninguna carrera.
+     *
+     * Este método realiza una consulta para obtener todos los docentes que no tengan
+     * roles de directores o coordinadores.
+     *
+     * @return \Illuminate\Support\Collection List of teachers without roles.
+      *@lautarovg02
+     */
+    public static function getTeachersWithoutRoles()
+    {
+        return self::whereNotExists(function ($query) {
+            $query->select(\DB::raw(1))
+                ->from('careers')
+                ->whereColumn('careers.coordinator_id', 'teachers.id');
+        })
+            ->whereNotExists(function ($query) {
+                $query->select(\DB::raw(1))
+                    ->from('departments')
+                    ->whereColumn('departments.director_id', 'teachers.id');
+            });
+    }
+
+    /**
+     * @dairagalceran
+     * Scope for search in teachers.index
+     */
+    public function scopeSearch($query , $searchTerm)
+    {
+        if($searchTerm)
+        {
+            $query->where(function($query) use ($searchTerm){
+                // Buscar en el nombre del docente
+                $query->where('teachers.name','LIKE','%' . $searchTerm . '%')
+                // Buscar en el apellido del docente
+                ->orWhere('teachers.lastname','LIKE','%' . $searchTerm . '%')
+                // Buscar en el CUIL del docente
+                ->orWhere('teachers.cuil','LIKE','%' . $searchTerm . '%')
+                // Buscar en el dni del docente
+                ->orWhere('teachers.dni','LIKE', '%' . $searchTerm . '%');
+            });
+        }
     }
 }

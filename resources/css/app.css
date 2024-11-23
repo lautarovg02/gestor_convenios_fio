@@ -3,6 +3,7 @@
     --main-bg-text-color: #0d6efd;
     --active-nav-bg-color: #c2e7ff;
     --hover-inactive-nav-bg-color: #d3dbe5;
+    --required-field-color: rgb(168, 54, 54);
 
     /* */
     --max-column-width: 150px;
@@ -15,7 +16,7 @@
 
 .required-field::after {
     content: " *";
-    color: rgb(168, 54, 54);
+    color: var(--required-field-color);
     font-weight: bold;
 }
 
@@ -44,3 +45,11 @@
 
     }
 }
+
+/* Este estilo evita que se apliquen los estilos de hover cuando el submenú está abierto */
+.no-hover:hover {
+    background-color: transparent;
+    color: inherit;
+    cursor: default; /* Opcional: cambia el cursor para que no parezca un enlace */
+}
+

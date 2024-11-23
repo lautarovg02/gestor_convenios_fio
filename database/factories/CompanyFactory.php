@@ -29,7 +29,7 @@ class CompanyFactory extends Factory
             'sector' => $this->faker->word,
             'entity' => $this->faker->word,
             'company_category' => $this->faker->word,
-            'scope' => $this->faker->word,
+            'scope' => $this->faker->randomElement(['NACIONAL', 'INTERNACIONAL']), // Seleccionar entre Nacional o Internacional
             'street' => $this->faker->streetName,
             'number' => $this->faker->numberBetween(1, 1000),
             'city_id' => City::inRandomOrder()->first()->id, // Asegúrate de que los IDs de ciudad existan
