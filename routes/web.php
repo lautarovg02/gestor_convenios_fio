@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CareerController;
+
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CompanyController;
