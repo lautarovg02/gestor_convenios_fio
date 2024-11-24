@@ -15,14 +15,18 @@ class Teacher extends Model
     use HasFactory;
 
     protected $fillable = ['lastname', 'name', 'dni', 'faculty', 'teacher_id'];
+    protected $fillable = ['lastname', 'name', 'dni', 'faculty', 'teacher_id'];
 
     //Relación 1:n atributo multivaluado en la tabla Teacher
     public function cathedras(): HasMany
+    public function cathedras(): HasMany
     {
+        return $this->hasMany(Cathedra::class, 'teacher_id');
         return $this->hasMany(Cathedra::class, 'teacher_id');
     }
 
     //Relación n:n con tabla Teacher
+    public function careers(): BelongsToMany
     public function careers(): BelongsToMany
     {
         return $this->belongsToMany(Career::class, 'career_teacher');
@@ -32,6 +36,7 @@ class Teacher extends Model
      * Obtener el department del cual el teacher es director de departemento.
      */
     public function department(): HasOne
+    public function department(): HasOne
     {
         return  $this->hasOne(Department::class);
     }
@@ -39,6 +44,7 @@ class Teacher extends Model
     /** Relación con Career (uno a uno)
      * Obtener la career del cual el teacher es coordinador.
      */
+    public function career(): HasOne
     public function career(): HasOne
     {
         return $this->hasOne(Career::class);

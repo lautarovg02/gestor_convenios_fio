@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Teacher;
 use App\Models\Career;
 use App\Models\Department;
-use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
-use App\Models\Province;
-use Faker\Core\Coordinates;
+use App\Models\Teacher;
 
 class CareerController extends Controller
 {
