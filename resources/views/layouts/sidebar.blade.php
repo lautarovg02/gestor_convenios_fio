@@ -20,12 +20,25 @@
                     Usuarios de secretaría
                 </a>
             </li>
+<<<<<<< HEAD
 
             <!-- Nuevo elemento principal llamado Gestión  Académica -->
             <li class="nav-item rounded-pill" id="academicoMenu">
                 <a class="nav-link text-body " href="#" id="academicoToggle"  aria-expanded="false" aria-controls="academicoSubmenu">
                     <i class="bi bi-book"></i>
                     Gestión Académica
+=======
+            <li class="nav-item rounded-pill {{request()->is('teachers*') ? 'active-nav-link' : ''}}">
+                <a class="nav-link text-body" href="{{route('teachers.index')}}">
+                    <i class="bi bi-people"></i>
+                    Docentes
+                </a>
+            </li>
+            <li class="nav-item rounded-pill {{request()->is('careers*') ? 'active-nav-link' : ''}}">
+                <a class="nav-link" href="{{route('careers.index')}}">
+                    <i class="bi bi-journal"></i>
+                    Carreras
+>>>>>>> US-336
                 </a>
                 <!-- Submenú para Académico que solo se muestra al hacer clic -->
                 <ul id="academicoSubmenu" class="collapse nav flex-column ms-3">

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Career;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Department;
 use App\Models\Teacher;
@@ -11,6 +12,7 @@ use App\Models\Teacher;
  */
 class CareerFactory extends Factory
 {
+    protected $model = Career::class;
 
     //Arreglo estático para almacenar los teacher_ids ya utilizados
     protected static $assignedTeachers = [];
