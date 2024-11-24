@@ -40,3 +40,4 @@ Route::resource('/careers' , CareerController::class);
 
 //DEPARTMENTS
 route::resource('/departments', DepartmentController::class);
+

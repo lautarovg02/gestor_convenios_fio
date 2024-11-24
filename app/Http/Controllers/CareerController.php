@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Teacher;
+
 use App\Models\Career;
 use App\Models\Department;
 use Illuminate\Http\Request;
