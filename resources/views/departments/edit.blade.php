@@ -32,8 +32,6 @@
                     {{ method_field('PATCH') }}
                     @csrf
 
-                    {{-- edit form --}}
-
                     <!-- Campo nombre departamento -->
                     <div class="form-group mb-3">
                         <label class="form-label required-field fs-6" for='name'> Denominación</label>
@@ -44,7 +42,6 @@
                             @enderror
 
                         </div>
-                    </div>
                         @error('department_id')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
