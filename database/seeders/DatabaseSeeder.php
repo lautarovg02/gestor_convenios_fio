@@ -29,9 +29,9 @@ class DatabaseSeeder extends Seeder
         EmployeePhone::factory()->count(100)->create();
         Secretary::factory()->count(10)->create();
         SecretaryPhone::factory()->count(10)->create();
-        Teacher::factory(20)->create();
+        Teacher::factory(80)->create();
         Department::factory(4)->create();
-        Career::factory(9)->create();
+        Career::factory(40)->create();
         $this->call(CareerTeacherSeeder::class);
     }
 }

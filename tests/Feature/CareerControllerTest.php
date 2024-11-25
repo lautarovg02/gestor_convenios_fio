@@ -109,8 +109,6 @@ class CareerControllerTest extends TestCase
         $department3 = Department::factory()->create(['name' => 'Departamento-6', 'director_id' => $teacher6->id]);
 
         Teacher::factory()->count(10)->create();
-
-
         // Crear carreras con diferentes nombres
         Career::factory()->create([
             'department_id' => $department1->id,
@@ -216,7 +214,7 @@ class CareerControllerTest extends TestCase
 
     /**
      * Test para verificar que se muestra un mensaje cuando no hay resultados.
-     * @lautarovg02
+     *= @lautarovg02
      */
     public function test_no_results_message_is_displayed_when_no_careers_match()
     {
