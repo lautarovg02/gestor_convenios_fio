@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Teacher;
 use App\Models\Career;
 use App\Models\Department;
@@ -11,11 +10,14 @@ class CareerController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @App\Models\Career;
+     * @App\Models\Career
+     * @Illuminate\Http\Request
+     * @App\Models\Department
      */
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $departmentId = $request->input('department'); //filtro por departamento
         $sort = $request->input('sort', 'name'); // Valor por defecto
         $direction = $request->input('direction', 'asc'); // Valor por defecto
 
@@ -26,29 +28,41 @@ class CareerController extends Controller
 
         try {
             // Aplica la búsqueda y la ordenación
-            $careers = Career::when($search, function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhereHas('department', function ($query) use ($search) {
-                        $query->where('name', 'like', "%{$search}%");
-                    });
+            $careers = Career::when($departmentId, function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId); // Primero aplica el filtro por departamento
             })
-                ->orderBy($sort, $direction) // Ordena según el sort y la dirección
+                ->when($search, function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhereHas('department', function ($query) use ($search) {
+                            $query->where('name', 'like', "%{$search}%");
+                        })->orWhereHas('teacher', function ($query) use ($search) {
+                            $query->where('name', 'like', "%{$search}%");
+                        })->orWhereHas('teacher', function ($query) use ($search) {
+                            $query->where('lastname', 'like', "%{$search}%");
+                        });
+                })
+                ->orderBy($sort, $direction) // Ordenar después de aplicar los filtros
                 ->paginate(10);
 
-            // Mensaje de vacío si no hay carreras
+            $departments = Department::orderBy('name', 'ASC')->get();
+
+             // Mensaje de vacío si no hay carreras
             if ($careers->isEmpty()) {
-                return view('careers.index')->with(['careers' => $careers, 'noResults' => true]);
+                return view('careers.index')->with(['careers' => $careers, 'departments' => $departments, 'noResults' => true]);
             }
 
-            return view('careers.index', compact('careers'));
+            //$departments = Department::orderBy('name', 'ASC')->get();
+            return view('careers.index', compact('careers', 'departments'));
         } catch (\Exception $e) {
-            // Guardar el error en la sesión
-            return redirect()->route('careers.index')->with('error', 'Error al cargar las carreras. Inténtalo nuevamente.');
+            $departments = Department::orderBy('name', 'ASC')->get();
+            return redirect()->route('careers.index')->with(['error' => 'Error al cargar las carreras. Inténtalo nuevamente.'])->with(['departments' => $departments]);
         }
     }
 
     /**
      * Show the form for creating a new resource.
+     * @App\Models\Teacher;
+     * @App\Models\Department;
      */
     public function create()
     {
@@ -59,6 +73,7 @@ class CareerController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @App\Models\Career
      */
     public function store(Request $request)
     {

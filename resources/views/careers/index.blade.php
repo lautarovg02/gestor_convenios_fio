@@ -2,17 +2,21 @@
 
 @section('content')
     <!-- Boton Agregar carrera -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex justify-content-between align-items-center mt-1 mb-3">
         <a href="{{ route('careers.create') }}" class="btn btn-secondary" onclick="">
             Agregar Carrera <i class="bi bi-plus"></i>
         </a>
+
+        <!-- Barra de búsqueda -->
+        <form action="{{ route('careers.index') }}" method="GET" class="d-flex">
+            <input type="text" name="search" class="form-control" placeholder="Buscar carreras..." value="{{ request()->input('search') }}" style="min-width: 400px;">
+            <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+        </form>
     </div>
 
-    <!-- Barra de búsqueda -->
-    <form action="{{ route('careers.index') }}" method="GET" class="d-flex">
-        <input type="text" name="search" class="form-control" placeholder="Buscar carreras..."
-            value="{{ request()->input('search') }}" style="min-width: 400px;">
-        <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+    <!-- FILTROS-->
+    <div class="col-12">
+        @include('careers.filters')
     </form>
 
     <!--- Mensajes de error o success al editar, eliminar o crear entidad --->
@@ -26,8 +30,8 @@
         </div>
     @endif
 
-     <!-- Mensaje de "Cargando" -->
-     <div id="loading-message" style="display: none;">
+    <!-- Mensaje de "Cargando" -->
+    <div id="loading-message" style="display: none;">
         <div class="alert alert-info">
             Cargando, por favor espera...
         </div>
@@ -45,7 +49,8 @@
                     <tr>
                         <th>#</th>
                         <th>
-                            <a href="{{ route('careers.index', ['search' => request()->input('search'), 'sort' => 'name', 'direction' => (request()->input('sort') === 'name' && request()->input('direction') === 'asc') ? 'desc' : 'asc']) }}">
+                            <a
+                                href="{{ route('careers.index', ['search' => request()->input('search'), 'sort' => 'name', 'direction' => request()->input('sort') === 'name' && request()->input('direction') === 'asc' ? 'desc' : 'asc']) }}">
                                 Carrera
                                 @if (request()->input('sort') === 'name')
                                     @if (request()->input('direction') === 'asc')

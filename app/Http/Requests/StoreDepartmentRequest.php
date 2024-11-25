@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCityRequest extends FormRequest
+class StoreDepartmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +22,20 @@ class StoreCityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:40',
-            'province_id' => 'required|integer',
+            'name' => 'required|string|max:200',
+            'director_id' => 'required|exists:teachers,id|integer',
         ];
     }
 
-    public function messages(){
+    public function messages(): array
+    {
         return [
-            'name.required' => 'La ciudad es un campo obligatorio.',
-            'name.max' => 'La máxima cantidad de caracteres permitida es de :max',
-            'province_id.required' => 'La provincia es un campo obligatorio.'
+            'name.required' => 'La denominación es  un campo obligatorio.',
+            'name.max' => 'La cantidad máxima de caracteres es de :max',
+            'director_id.required' => 'El director es  un campo obligatorio.',
+            'director_id.exists' => 'El  director seleccionado no es válido.',
         ];
     }
 }
+
+
