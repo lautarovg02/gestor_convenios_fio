@@ -63,7 +63,9 @@ class TeacherController extends Controller
      */
     public function edit(Teacher $teacher)
     {
-        //
+        $teacher = $teacher->getAllWithRoles()->find($teacher->id);
+
+        return view('teachers.edit', ['teacher' => $teacher]);
     }
 
     /**
