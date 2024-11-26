@@ -87,7 +87,7 @@ class DepartmentController extends Controller
         try{
 
            // \Log::info('Datos recibidos', $request->all());
-           dd($request->all());
+          // dd($request->all());
 
             $validatedData = $request->validated();
 

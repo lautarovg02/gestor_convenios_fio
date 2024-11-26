@@ -73,18 +73,11 @@
                         @enderror
                     </div>
 
-
                     <div class="form-footer">
                         <div class="text-end">
                             <div class="d-flex">
                                 <a href="{{route('departments.index')}}" class="btn btn-danger m-2">Cancelar</a>
-                                <button type="button" class="btn btn-success ms-auto m-2"
-                                    data-id= "{{$department->id}}"
-                                    data-director-id="{{$department->director_id}}"
-                                    data-director-name="{{$department->teacher->name}}"
-                                    data-director-lastname="{{$department->teacher->lastname}}"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modal-edit">Guardar modificación</button>
+                                <button type="submit" class="btn btn-success ms-auto m-2">Guardar modificación</button>
                             </div>
                         </div>
                     </div>
@@ -92,11 +85,12 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
-    @include('layouts/modals/modal-edit')
 </div>
 
 <!--Link a .js del modal al template utilizando Vite-->
 @vite('resources/js/modals/modalEdit.js')
 
 @endsection
+b
+
+
