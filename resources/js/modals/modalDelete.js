@@ -9,6 +9,7 @@ MODAL_DELETE.addEventListener('show.bs.modal', function(e) {
     //Extraemos la información de los atributos data
     const ENTITY_ID = BUTTON.getAttribute('data-entity-id');
     const ENTITY_NAME = BUTTON.getAttribute('data-entity-name');
+    const ENTITY_TYPE = BUTTON.getAttribute('data-entity-type');
 
 
     //Actualizamos el contenido del modal haciendo referencia a la entidad que queremos eliminar
@@ -17,6 +18,6 @@ MODAL_DELETE.addEventListener('show.bs.modal', function(e) {
 
     //Actualizamos la acción del formulario haciendo referencia a la entidad que queremos eliminar para que lo pueda borrar correctamente
     const MODAL_DELETE_FORM = MODAL_DELETE.querySelector('#modal-delete-form');
-    MODAL_DELETE_FORM.action = `/companies/${ENTITY_ID}`;
+    MODAL_DELETE_FORM.action = `/${ENTITY_TYPE}/${ENTITY_ID}`;
 });
 
