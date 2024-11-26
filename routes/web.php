@@ -40,4 +40,5 @@ Route::resource('/careers' , CareerController::class);
 
 //DEPARTMENTS
 route::resource('/departments', DepartmentController::class);
+Route::delete('/departments/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 

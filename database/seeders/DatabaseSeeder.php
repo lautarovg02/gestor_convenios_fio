@@ -33,5 +33,6 @@ class DatabaseSeeder extends Seeder
         Department::factory(4)->create();
         Career::factory(9)->create();
         $this->call(CareerTeacherSeeder::class);
+        $this->call(CareerSeeder::class);
     }
 }

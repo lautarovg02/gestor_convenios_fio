@@ -50,11 +50,8 @@
                         ) !!}</td>
                         <td class="text-truncate col-min-width col-max-width">
                             <a href="{{ route('departments.show', $department) }}" class="btn btn-info btn-sm">Ver</a>
-                            <a href="{{ route('departments.edit', $department) }}"
-                                class="btn btn-primary btn-sm">Editar</a>
-                            <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{ $department->id }}"
-                                data-entity-name="{{ $department->name }}" data-bs-toggle="modal"
-                                data-bs-target="#modal-delete">Eliminar</button>
+                            <a href="{{ route('departments.edit', $department) }}" class="btn btn-primary btn-sm">Editar</a>
+                            <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{$department->id}}" data-entity-name="{{$department->name}}" data-entity-type="departments" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
                         </td>
                     </tr>
                 @endforeach
