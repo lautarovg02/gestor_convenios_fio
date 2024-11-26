@@ -4,19 +4,12 @@
 @section('content')
 
 
-<div class="row">
-    <div class="col-12 d-flex justify-content-between align-items-center ps-4 pe-4">
-            <h4>Agregar nuevo departamento</h4>
-            <a href="{{route('departments.index')}}" class="btn btn-secondary m-2">Volver</a>
-    </div>
-
-</div>
-
 <div class="row row-deck row-cards">
-    <div class="col-12">
+    <div class="col-12 ">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Detalles de Departamento</h3>
+            <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
+                <h3 class="card-title"> Agregar un nuevo departamento</h3>
+                <a href="{{route('departments.index')}}" class="btn btn-secondary m-2">Volver</a>
             </div>
 
             <!-- Mensajes flash de success-->
@@ -53,14 +46,17 @@
 
                     <div class="form-group mb-3">
                         <label class="form-label fs-6 required-field">
-                            <label for="teacher">Director</label>
+                            <label for="director">Director</label>
                         </label>
                         <div>
-                            <select class="form-control" name="teacher" id="">
-                                    <option value="">Seleccionar Director</option>
+                            <select class="form-control" name="director_id" id="">
+                                    <option value="" disabled selected hidden>Seleccionar Director</option>
+                                    @foreach ($teachers as $teacher)
+                                        <option value="{{$teacher->id}}">{{$teacher->lastname}} {{$teacher->name}}</option>
+                                    @endforeach
                             </select>
-                            <small class="form-hint">Si no encuentra al <b>docente</b> en la lista, agregarlo en  <a href="">Agregar Docente</a>.</small>
-                            @error('teacher')
+                            <small class="form-hint">Si no encuentra al <b>docente</b> en la lista, agregarlo en  <a href="{{route('teachers.create')}}">Agregar Docente</a>.</small>
+                            @error('director_id')
                                 <div class="text-danger">{{$message}}</div>
                             @enderror
                         </div>
@@ -69,7 +65,7 @@
                     <div class="form-footer">
                         <div class="text-end">
                             <div class="d-flex">
-                                <a href="{{route('companies.index')}}" class="btn btn-danger m-2">Cancelar</a>
+                                <a href="{{route('departments.index')}}" class="btn btn-danger m-2">Cancelar</a>
                                 <div>
                                     <button type="submit" class="btn btn-success ms-auto m-2">Crear</button>
                                 </div>

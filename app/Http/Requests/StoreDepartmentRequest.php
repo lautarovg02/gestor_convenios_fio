@@ -30,10 +30,10 @@ class StoreDepartmentRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'La denominación es  un campo obligatorio.',
+            'name.required' => 'La denominación es un campo obligatorio.',
             'name.max' => 'La cantidad máxima de caracteres es de :max',
-            'director_id.required' => 'El director es  un campo obligatorio.',
-            'director_id.exists' => 'El  director seleccionado no es válido.',
+            'director_id.required' => 'El director es un campo obligatorio.',
+            'director_id.exists' => 'El docente seleccionado no es válido.',
         ];
     }
 }
