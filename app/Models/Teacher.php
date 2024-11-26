@@ -71,7 +71,7 @@ class Teacher extends Model
         )
             ->leftJoin('departments', 'teachers.id', '=', 'departments.director_id')
             ->leftJoin('careers', 'teachers.id', '=', 'careers.coordinator_id');
-        }
+    }
     /**
      * Recuperar todos los docentes que no sean directores de ningún departamento
      * ni coordinadores de ninguna carrera.
@@ -80,7 +80,7 @@ class Teacher extends Model
      * roles de directores o coordinadores.
      *
      * @return \Illuminate\Support\Collection List of teachers without roles.
-      *@lautarovg02
+     *@lautarovg02
      */
     public static function getTeachersWithoutRoles()
     {
@@ -100,19 +100,18 @@ class Teacher extends Model
      * @dairagalceran
      * Scope for search in teachers.index
      */
-    public function scopeSearch($query , $searchTerm)
+    public function scopeSearch($query, $searchTerm)
     {
-        if($searchTerm)
-        {
-            $query->where(function($query) use ($searchTerm){
+        if ($searchTerm) {
+            $query->where(function ($query) use ($searchTerm) {
                 // Buscar en el nombre del docente
-                $query->where('teachers.name','LIKE','%' . $searchTerm . '%')
-                // Buscar en el apellido del docente
-                ->orWhere('teachers.lastname','LIKE','%' . $searchTerm . '%')
-                // Buscar en el CUIL del docente
-                ->orWhere('teachers.cuil','LIKE','%' . $searchTerm . '%')
-                // Buscar en el dni del docente
-                ->orWhere('teachers.dni','LIKE', '%' . $searchTerm . '%');
+                $query->where('teachers.name', 'LIKE', '%' . $searchTerm . '%')
+                    // Buscar en el apellido del docente
+                    ->orWhere('teachers.lastname', 'LIKE', '%' . $searchTerm . '%')
+                    // Buscar en el CUIL del docente
+                    ->orWhere('teachers.cuil', 'LIKE', '%' . $searchTerm . '%')
+                    // Buscar en el dni del docente
+                    ->orWhere('teachers.dni', 'LIKE', '%' . $searchTerm . '%');
             });
         }
     }

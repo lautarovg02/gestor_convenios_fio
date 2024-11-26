@@ -3,13 +3,12 @@
 
 @section('content')
     <div class="row">
-        <div class="col-12">
-            <div>
-                <h4>Agregar Carrera nueva</h4>
+        <div class="row">
+            <div class="col-12 d-flex justify-content-between align-items-center ps-4 pe-4">
+                    <h4>Crear nueva carrera</h4>
+                    <a href="{{route('careers.index')}}" class="btn btn-secondary m-2">Volver</a>
             </div>
-
         </div>
-
     </div>
 
     <div class="row row-deck row-cards">

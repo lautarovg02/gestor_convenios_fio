@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CompanyController;
@@ -38,3 +39,4 @@ Route::resource('/careers' , CareerController::class);
 
 //DEPARTMENTS
 route::resource('/departments', DepartmentController::class);
+
