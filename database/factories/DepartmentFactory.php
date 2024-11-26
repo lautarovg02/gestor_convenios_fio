@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Department;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Teacher;
 
@@ -10,6 +11,9 @@ use App\Models\Teacher;
  */
 class DepartmentFactory extends Factory
 {
+
+    protected $model = Department::class;
+
     /**
      * Define the model's default state.
      *
@@ -17,6 +21,9 @@ class DepartmentFactory extends Factory
      */
     public function definition(): array
     {
+        //Obtener un maestro aleatorio para asignarlo como coordinador
+        $teacher = Teacher::inRandomOrder()->first();
+
         return [
             'name' => $this->faker->unique()->randomElement([
                 'Ingeniería Civil y Agrimensura',
@@ -24,7 +31,7 @@ class DepartmentFactory extends Factory
                 'Ingeniería Electromecánica',
                 'Ingeniería en Seguridad e Higiene en el Trabajo',
             ]),
-            'director_id' => Teacher::inRandomOrder()->first()->id, // DEBEMOS AGRAGAR EN teacher is_department_director
+            'director_id' => $teacher->id, // DEBEMOS AGRAGAR EN teacher is_department_director
         ];
     }
 }

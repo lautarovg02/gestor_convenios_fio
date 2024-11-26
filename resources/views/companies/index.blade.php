@@ -1,3 +1,4 @@
+<!--resources/views/companies/index.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -7,8 +8,8 @@
 <div class="container mt-1">
     <!-- Botón agregar -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <a href="{{route('companies.create')}}" class="btn btn-secondary" onclick="">
-            Agregar Compañía <i class="bi bi-plus"></i>
+        <a href="{{route('companies.create')}}" class="btn btn-success" onclick="">
+            Agregar Empresa <i class="bi bi-plus"></i>
         </a>
 
         <!-- Barra de búsqueda -->
@@ -16,6 +17,11 @@
             <input type="text" name="search" class="form-control" placeholder="Buscar empresas..." value="{{ request()->input('search') }}" style="min-width: 400px;">
             <button type="submit" class="btn btn-primary ms-2">Buscar</button>
         </form>
+    </div>
+
+    <!-- FILTROS-->
+    <div class="col-12">
+        @include('companies.filters')
     </div>
 
     <!-- Mensajes de error, carga y busqueda sin resultados -->
@@ -56,10 +62,10 @@
                 <th>#</th>
                 <th>Denominación</th>
                 <th>CUIT</th>
-                <th>Nombre de la Compañía</th>
+                <th>Nombre de la Empresa</th>
                 <th>Sector</th>
                 <th>Entidad</th>
-                <th>Categoría</th>
+                <th>Rubro</th>
                 <th>Ciudad</th>
                 <th>Acciones</th>
             </tr>
@@ -68,14 +74,14 @@
             @foreach($companies as $company)
             <tr>
                 <td>{{ $company->id }}</td>
-                <td>{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
-                <td>{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
-                <td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">
                     <a href="{{route('companies.show', $company)}}" class="btn btn-info btn-sm">Ver</a>
                     <a href="{{route('companies.edit', $company)}}" class="btn btn-primary btn-sm">Editar</a>
                     <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{$company->id}}" data-entity-name="{{$company->company_name}}" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
@@ -86,7 +92,7 @@
     </table>
     <!-- Paginación -->
     <div class="d-flex justify-content-center">
-        {{ $companies->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}
+        {{ $companies->appends(request()->except('page'))->onEachSide(1)->links('pagination::bootstrap-4') }}
     </div>
     @endif
 

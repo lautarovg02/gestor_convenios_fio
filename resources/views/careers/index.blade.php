@@ -2,27 +2,21 @@
 
 @section('content')
     <!-- Boton Agregar carrera -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex justify-content-between align-items-center mt-1 mb-3">
         <a href="{{ route('careers.create') }}" class="btn btn-secondary" onclick="">
             Agregar Carrera <i class="bi bi-plus"></i>
         </a>
+
+        <!-- Barra de búsqueda -->
+        <form action="{{ route('careers.index') }}" method="GET" class="d-flex">
+            <input type="text" name="search" class="form-control" placeholder="Buscar carreras..." value="{{ request()->input('search') }}" style="min-width: 400px;">
+            <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+        </form>
     </div>
 
-    <!-- Barra de búsqueda -->
-    <form action="{{ route('careers.index') }}" method="GET" class="d-flex">
-        <input type="text" name="search" class="form-control" placeholder="Buscar carreras..."
-            value="{{ request()->input('search') }}" style="min-width: 400px;">
-        <!-- Filtro por departamento -->
-        <select name="department" class="form-select ms-2" style="min-width: 200px;">
-            <option value="">Selecciona un departamento</option>
-            @foreach ($departments as $department)
-                <option value="{{ $department->id }}"
-                    {{ request()->input('department') == $department->id ? 'selected' : '' }}>
-                    {{ $department->name }}
-                </option>
-            @endforeach
-        </select>
-        <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+    <!-- FILTROS-->
+    <div class="col-12">
+        @include('careers.filters')
     </form>
 
     <!--- Mensajes de error o success al editar, eliminar o crear entidad --->

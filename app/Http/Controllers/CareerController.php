@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Teacher;
 use App\Models\Career;
 use App\Models\Department;
@@ -36,12 +35,16 @@ class CareerController extends Controller
                     $query->where('name', 'like', "%{$search}%")
                         ->orWhereHas('department', function ($query) use ($search) {
                             $query->where('name', 'like', "%{$search}%");
+                        })->orWhereHas('teacher', function ($query) use ($search) {
+                            $query->where('name', 'like', "%{$search}%");
+                        })->orWhereHas('teacher', function ($query) use ($search) {
+                            $query->where('lastname', 'like', "%{$search}%");
                         });
                 })
                 ->orderBy($sort, $direction) // Ordenar después de aplicar los filtros
                 ->paginate(10);
 
-             $departments = Department::orderBy('name', 'ASC')->get();
+            $departments = Department::orderBy('name', 'ASC')->get();
 
              // Mensaje de vacío si no hay carreras
             if ($careers->isEmpty()) {
