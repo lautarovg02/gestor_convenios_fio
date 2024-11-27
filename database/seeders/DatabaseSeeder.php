@@ -14,6 +14,7 @@ use App\Models\Secretary;
 use App\Models\SecretaryPhone;
 use App\Models\Teacher;
 use App\Models\Career;
+use Database\Seeders\CareerSeeder;
 
 class DatabaseSeeder extends Seeder
 {
