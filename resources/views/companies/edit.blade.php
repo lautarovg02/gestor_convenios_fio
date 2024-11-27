@@ -82,6 +82,7 @@
                             <option value="other" {{ old('entity', $company->entity) == 'other' ? 'selected' : '' }}>Otro tipo</option>
                         </select>
 
+
                         <!-- Campo de texto oculto para ingresar otra opción -->
                         <div id="otherEntityInputWrapper" class="mt-2" style="display: {{ old('entity', $company->entity) == 'other' ? 'block' : 'none' }};">
                             <label for="other_entity_input">Especificar otra opción:</label>

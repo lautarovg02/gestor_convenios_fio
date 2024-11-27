@@ -15,7 +15,7 @@ use Str;
  * @property $cuit
  * @property $company_name
  * @property $sector
- * @property $entity
+ * @property $entity_id
  * @property $company_category
  * @property $scope
  * @property $street
@@ -37,7 +37,7 @@ class Company extends Model
      *
      * @var array
      */
-    protected $fillable = ['denomination','cuit','company_name','sector','entity','company_category','scope','street','number','city_id', 'slug'];
+    protected $fillable = ['denomination','cuit','company_name','sector','entity_id','company_category','scope','street','number','city_id', 'slug'];
 
     /**
      * Relación 1:*
@@ -46,6 +46,14 @@ class Company extends Model
     public function city():HasOne
     {
         return $this->hasOne(City::class , 'id', 'city_id');
+    }
+
+    /**
+     * Relación: una compañía tiene una entidad.
+     */
+    public function entity()
+    {
+        return $this->belongsTo(CompanyEntity::class);
     }
 
     // Scope para la búsqueda
@@ -61,7 +69,10 @@ class Company extends Model
                          ->orWhere('company_name', 'LIKE', "%{$term}%")
                          ->orWhere('cuit', 'LIKE', "%{$term}%")
                          ->orWhere('sector', 'LIKE', "%{$term}%")
-                         ->orWhere('entity', 'LIKE', "%{$term}%")
+                        //  ->orWhere('entity_id', 'LIKE', "%{$term}%")
+                         ->orWhereHas('entity', function ($query) use ($term) {
+                            $query->where('name', 'LIKE', "%{$term}%");
+                        })
                          ->orWhere('company_category', 'LIKE', "%{$term}%")
                          ->orWhereHas('city', function ($query) use ($term) {
                              $query->where('name', 'LIKE', "%{$term}%");
