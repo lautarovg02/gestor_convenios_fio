@@ -10,14 +10,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+/* document.addEventListener('DOMContentLoaded', function() {
     const entitySelect = document.getElementById('name');
     if (entitySelect) {
         entitySelect.addEventListener('change', function() {
             toggleOtherOption('name', 'otherEntityInputWrapper', 'other_entity_input', 'other_entity');
         });
     }
-});
+}); */
 
 export function toggleOtherOption(selectId, inputWrapperId, inputId, inputValueId) {
     const select = document.getElementById(selectId);

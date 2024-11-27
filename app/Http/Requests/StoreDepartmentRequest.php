@@ -24,9 +24,7 @@ class StoreDepartmentRequest extends FormRequest
     {
         return [
             'name' => ['required','string','max:200', Rule::unique('departments')->ignore($this->department)],
-            'other_department' => ['nullable', 'string', Rule::unique('departments', 'name'),],
             'director_id' => 'required|exists:teachers,id|integer',
-            'other_entity_input' => 'nullable|required_if:name,other|string|max:200',
         ];
     }
 
@@ -38,8 +36,6 @@ class StoreDepartmentRequest extends FormRequest
             'director_id.required' => 'El director es  un campo obligatorio.',
             'director_id.exists' => 'El  director seleccionado no es válido.',
             'name.unique' => 'Ya existe un departamento con ese nombre. Por favor, elige otro nombre.',
-            'other_department.unique' => 'El nombre ingresado ya está registrado como un departamento.',
-            'other_entity_input.required_if' => 'Por favor, especifique el nombre del departamento.',
 
         ];
     }

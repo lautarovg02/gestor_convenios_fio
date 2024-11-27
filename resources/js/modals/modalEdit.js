@@ -1,79 +1,62 @@
 // resources/js/modals/modalEdit.js
-"use strict";
 
-const MODAL_EDIT = document.querySelector('#modal-edit');
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('modal-edit');
+    const departmentNameElem = document.getElementById('department-name');
+    const directorNameElem = document.getElementById('director-name');
+    const directorLastnameElem = document.getElementById('director-lastname');
+    const directorIdInput = document.getElementById('director-id-input');
+    const departmentNameInput = document.getElementById('modal-department-name');
+    const directorSelect = document.getElementById('director_id'); // El campo select para el director en el formulario
 
-// Selector del <select> de directores
-const SELECT_DIRECTOR = document.querySelector('#director_id');
+    // Escuchar cuando el modal se muestra
+    modal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // El botón que activó el modal
 
-const BUTTON_SAVE = document.querySelector('button[data-bs-target="#modal-edit"]'); // Botón de guardar del modal
+        // Obtener los datos de los atributos data-* del botón
+        const departmentName = button.getAttribute('data-department-name');
+        const directorId = button.getAttribute('data-director-id');
+        const directorName = button.getAttribute('data-director-name');
+        const directorLastname = button.getAttribute('data-director-lastname');
 
+        // Llenar los campos del modal con los datos obtenidos
+        departmentNameElem.textContent = departmentName;
+        directorNameElem.textContent = directorName;
+        directorLastnameElem.textContent = directorLastname;
 
-// Evento para actualizar datos al cambiar el director en el <select>
-SELECT_DIRECTOR.addEventListener('change', function (e) {
-    const SELECT_OPTION = e.target.options[e.target.selectedIndex];
+        // Llenar el input oculto con el id del director
+        directorIdInput.value = directorId;
 
-    // Separar el nombre y apellido (si vienen juntos en el texto de la opción)
-    const [lastname, name] = SELECT_OPTION.textContent.trim().split(' ', 2);
-    const DIRECTOR_ID = SELECT_OPTION.value;
+        //Actualizar el campo 'name' en el form original
+        departmentNameInput.value = departmentName  // Actualiza el valor del campo "name" en el formulario de edición
+    });
+    // Sincronizar el cambio en el campo de "name" con el botón de guardar del modal
+    const nameInput = document.getElementById('name');
+    const saveButton = document.querySelector('[data-bs-target="#modal-edit"]'); // El botón que abre el modal
 
-    // Actualizamos los datos del modal
-    const DIRECTOR_NAME_SPAN = MODAL_EDIT.querySelector('#director-name');
-    const DIRECTOR_LASTNAME_SPAN = MODAL_EDIT.querySelector('#director-lastname');
-    DIRECTOR_NAME_SPAN.textContent = name || '';
-    DIRECTOR_LASTNAME_SPAN.textContent = lastname || '';
-
-    // Actualizamos el botón guardar para reflejar el nuevo director seleccionado
-    BUTTON_SAVE.setAttribute('data-director-id', DIRECTOR_ID);
-    BUTTON_SAVE.setAttribute('data-director-name', name || '');
-    BUTTON_SAVE.setAttribute('data-director-lastname', lastname || '');
+    // Función para actualizar el atributo data-department-name cuando el nombre cambie
+    nameInput.addEventListener('input', function() {
+        // Actualizar el atributo data-department-name con el valor del campo de nombre
+        saveButton.setAttribute('data-department-name', nameInput.value);
+    });
 });
 
-// Este código debe estar en el archivo modalEdit.js o en un bloque <script> en la vista correspondiente
-document.querySelector('#modal-edit').addEventListener('show.bs.modal', function (event) {
-    // Obtener el botón que activó el modal
-    const button = event.relatedTarget;
+document.addEventListener('DOMContentLoaded', function () {
+    const saveButton = document.querySelector('[data-bs-target="#modal-edit"]');
+    const directorSelect = document.getElementById('director_id'); // El campo select para el director
 
-    // Obtener los datos asociados al botón
-    const departmentId = button.getAttribute('data-id');  // ID del departamento
-    const directorId = button.getAttribute('data-director-id');  // ID del director
-    const directorName = button.getAttribute('data-director-name');  // Nombre del director
-    const directorLastname = button.getAttribute('data-director-lastname');  // Apellido del director
+    // Escuchar cambios en el select de director
+    directorSelect.addEventListener('change', function () {
+        const selectedOption = directorSelect.options[directorSelect.selectedIndex];
 
-    // Log de depuración: asegurarse de que los datos se obtienen correctamente
-    console.log("Department ID:", departmentId);
-    console.log("Director ID:", directorId);
-    console.log("Director Name:", directorName);
-    console.log("Director Lastname:", directorLastname);
+        const selectedDirectorId = selectedOption.value;
+        const selectedDirectorName = selectedOption.text.split(" ")[1]; // Nombre del director
+        const selectedDirectorLastname = selectedOption.text.split(" ")[0]; // Apellido del director
 
-    // Asignar el valor del director_id al campo oculto en el formulario
-    const directorIdInput = document.getElementById('director-id-input');
-    if (directorIdInput) {
-        directorIdInput.value = directorId;
-        console.log("Campo director_id actualizado con el valor:", directorIdInput.value);
-    }
+        // Actualizar los datos del botón que abre el modal
+        saveButton.setAttribute('data-director-id', selectedDirectorId);
+        saveButton.setAttribute('data-director-name', selectedDirectorName);
+        saveButton.setAttribute('data-director-lastname', selectedDirectorLastname);
 
-    // Actualizar el contenido del modal con los nombres del director
-    const directorNameSpan = document.getElementById('director-name');
-    const directorLastnameSpan = document.getElementById('director-lastname');
-    if (directorNameSpan && directorLastnameSpan) {
-        directorNameSpan.textContent = directorName || '';
-        directorLastnameSpan.textContent = directorLastname || '';
-    }
-
-    // Actualizar la acción del formulario con el ID del departamento
-    const modalEditForm = document.getElementById('modal-edit-form');
-    if (modalEditForm) {
-        modalEditForm.action = `/departments/${departmentId}`;
-    }
-
-    // Asegúrate de que el formulario esté enviando un PATCH
-    let methodField = modalEditForm.querySelector('input[name="_method"]');
-    if (!methodField) {
-        methodField = document.createElement('input');
-        methodField.type = 'hidden';
-        methodField.name = '_method';
-        modalEditForm.appendChild(methodField);
-    }
-    methodField.value = 'PATCH';
+    });
 });

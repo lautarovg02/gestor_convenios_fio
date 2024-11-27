@@ -72,10 +72,9 @@ class DepartmentController extends Controller
     public function edit(Department $department): View
     {
 
-        $departments = Department::orderBy('name', 'ASC')->get();
         $teachersWithoutRol = Teacher::getTeachersWithoutRoles()->orderBy('lastname', 'ASC')->get();
 
-        return view('departments.edit', compact('department' , 'departments', 'teachersWithoutRol'));
+        return view('departments.edit', compact('department' ,  'teachersWithoutRol'));
     }
 
     /**
@@ -86,25 +85,13 @@ class DepartmentController extends Controller
     {
         try{
 
-           // \Log::info('Datos recibidos', $request->all());
-          // dd($request->all());
-
             $validatedData = $request->validated();
-
-            // Si seleccionó "Otro tipo", usa el valor del input de texto
-            if ($request->name === 'other') {
-            $validatedData['name'] = $request->input('other_entity_input');
-            }
-
             $department->update($validatedData);
-
             return redirect()->route('departments.index')->with('success' , 'Departamento editado exitosamente');
 
         }catch(\Exception $e){
-// Manejo del error
-dd($e->getMessage());
-            return redirect()->route('departments.edit', $department->id)->withErrors(['error' => $e->getMessage()]);
 
+            return redirect()->route('departments.edit', $department->id)->withErrors(['error' => $e->getMessage()]);
         }
     }
 

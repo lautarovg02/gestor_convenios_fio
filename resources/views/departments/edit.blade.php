@@ -28,22 +28,20 @@
 
             <div class="card-body">
                 <form method="POST"
-                    action="{{ route('departments.update', $department) }}" id="" role="form" enctype="multipart/form-data">
+                    action="{{ route('departments.update', $department) }}" id="edit-department-form" role="form" enctype="multipart/form-data">
                     {{ method_field('PATCH') }}
                     @csrf
 
-                    <!-- Campo nombre departamento -->
+                    <!-- Campo Departamento -->
                     <div class="form-group mb-3">
-                        <label class="form-label required-field fs-6" for='name'> Denominación</label>
+                        <label class="form-label required-field" for= "cuit">Denominación del departamento</label>
                         <div>
-                            <input class="form-control" maxlength="200" name="name" id="name" type="text" value="{{$department->name}}" placeholder="Ingrese la denominación " autocomplete="off">
-                            @error('name')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-
+                            <input class="form-control" name="name" id="name" type="text" value="{{old('name', $department->name)}}"
+                                placeholder="Departamento " autocomplete="off">
+                            <small class="form-hint">Modifique el <b>nombre</b> del departamento de ser necesario.</small>
                         </div>
-                        @error('department_id')
-                            <div class="text-danger">{{ $message }}</div>
+                        @error('name')
+                            <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
 
@@ -77,7 +75,14 @@
                         <div class="text-end">
                             <div class="d-flex">
                                 <a href="{{route('departments.index')}}" class="btn btn-danger m-2">Cancelar</a>
-                                <button type="submit" class="btn btn-success ms-auto m-2">Guardar modificación</button>
+                                <button type="button" class="btn btn-success ms-auto m-2"
+                                    data-id= "{{$department->id}}"
+                                    data-department-name="{{old('name' , $department->name) }}"
+                                    data-director-id="{{$department->director_id}}"
+                                    data-director-name="{{$department->teacher->name}}"
+                                    data-director-lastname="{{$department->teacher->lastname}}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modal-edit">Guardar modificación</button>
                             </div>
                         </div>
                     </div>
@@ -89,6 +94,7 @@
 
 <!--Link a .js del modal al template utilizando Vite-->
 @vite('resources/js/modals/modalEdit.js')
+{{-- @vite('resources/js/utils/editDepartmentButton.js') --}}
 
 @endsection
 b
