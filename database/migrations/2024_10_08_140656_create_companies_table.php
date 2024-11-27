@@ -17,7 +17,6 @@ return new class extends Migration
             $table->bigInteger('cuit')->length(11)->unique()->nullable();
             $table->string('company_name',100)->unique()->nullable();
             $table->string('sector')->nullable();
-            $table->string('entity')->nullable();
             $table->string('company_category')->nullable();
             $table->string('scope')->nullable();
             $table->string('street')->nullable();
@@ -25,6 +24,8 @@ return new class extends Migration
             $table->boolean('is_enabled')->default(true);
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('cities');
+            $table->unsignedBigInteger('entity_id'); // Relación uno a uno
+            $table->foreign('entity_id')->references('id')->on('CompanyEntities');
             $table->string('slug');
             $table->timestamps();
         });

@@ -14,6 +14,7 @@ use App\Models\Secretary;
 use App\Models\SecretaryPhone;
 use App\Models\Teacher;
 use App\Models\Career;
+use App\Models\CompanyEntity;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
     {
         Province::factory()->count(23)->create();
         City::factory()->count(70)->create();
+        CompanyEntity::factory()->count(6)->create();
         Company::factory()->count(20)->create();
         Employee::factory()->count(100)->create();
         EmployeePhone::factory()->count(100)->create();

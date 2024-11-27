@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCompanyRequest;
 use App\Models\City;
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\CompanyEntity;
 use App\Models\Employee;
 use Exception;
 use Illuminate\Contracts\View\View;
@@ -138,8 +139,7 @@ class CompanyController extends Controller
         //dd($company);
         $company = Company::find($company->id);
         $cities = City::orderBy('name', 'ASC')->get();
-        $entityTypes = EntityType::values();
-
+        $entityTypes = CompanyEntity::orderBy('name', 'ASC')->get();
         return view('companies.edit', ['company' => $company, 'cities' => $cities, 'entityTypes' => $entityTypes]);
     }
 
