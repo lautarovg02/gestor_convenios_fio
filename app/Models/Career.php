@@ -27,7 +27,7 @@ class Career extends Model
     }
 
 
-    public function scopeSearchAndSort($query,  $departmentId, $search = null, $sort = 'name', $direction = 'asc')
+    public function scopeSearchAndSort($query, $search = null, $departmentId, $sort = 'name', $direction = 'asc')
     {
         // Asegúrate de que la dirección sea válida
         if (!in_array($direction, ['asc', 'desc'])) {

@@ -23,7 +23,7 @@ class CareerController extends Controller
 
         try {
             // Llama al nuevo método en el modelo
-            $careers = Career::searchAndSort($search, $departmentId , $sort, $direction)->paginate(10);
+            $careers = Career::searchAndSort($search, $departmentId , $sort, $direction)->paginate(9);
 
             $departments = Department::orderBy('name', 'ASC')->get();
 
