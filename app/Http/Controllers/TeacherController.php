@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTeacherRequest;
 use App\Models\Teacher;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 
 class TeacherController extends Controller
 {
     /**
-      *@lautarovg02
+     *@lautarovg02
      * Display a listing of the teachers.
      * @dairaGalceran
      * search with scope
      */
-    public function index(Request $request) : View
+    public function index(Request $request): View
     {
         $teachers = collect();
         $errorMessage = null; // Inicializar para evitar errores en caso de fallo
@@ -71,9 +73,28 @@ class TeacherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Teacher $teacher)
+    public function update(StoreTeacherRequest $request, Teacher $teacher): RedirectResponse
     {
-        //
+        try {
+
+            // Verifica si el CUIT es duplicado
+            $exists = Teacher::where('dni', $request->dni)
+                ->where('id', '<>', $teacher->id)
+                ->first();
+
+            if ($exists) {
+                throw new Exception("Dni duplicado");
+            }
+
+            // Guarda el mensaje en la sesión
+            $teacher->update($request->validated());
+
+            return redirect()->route('teachers.index')->with('success', 'Docente actualizado exitosamente.');
+        } catch (Exception $e) {
+            \Log::error($e->getMessage());
+
+            return redirect()->route('teachers.edit', $teacher->id)->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
     /**
