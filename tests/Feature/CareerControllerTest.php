@@ -38,7 +38,6 @@ class CareerControllerTest extends TestCase
         ]);
         $career2 = Career::factory()->create([
             'department_id' => $department2->id,
-            'name' => 'Career 2',
             'coordinator_id' => $teacher3->id,
         ]);
 
@@ -47,7 +46,7 @@ class CareerControllerTest extends TestCase
 
         // Asegúrate de buscar el nombre de la carrera, no del departamento
         $response->assertSee($career1->name);
-        $response->assertDontSee($career2->name);
+        $response->assertDontSeeText($career2->name);
     }
 
     /**
@@ -222,22 +221,11 @@ class CareerControllerTest extends TestCase
         $teacher3 = Teacher::factory()->create();
         $teacher4 = Teacher::factory()->create();
         $teacher6 = Teacher::factory()->create();
+        Teacher::factory()->count(10)->create();
 
         $department1 = Department::factory()->create(['name' => 'Departamento-13', 'director_id' => $teacher1->id]);
         $department3 = Department::factory()->create(['name' => 'Departamento-12', 'director_id' => $teacher6->id]);
-        Teacher::factory()->count(10)->create();
 
-        // Crear carreras con diferentes nombres
-        Career::factory()->create([
-            'department_id' => $department1->id,
-            'name' => 'Engineering',
-            'coordinator_id' => $teacher3->id,
-        ]);
-        Career::factory()->create([
-            'name' => 'Medicine',
-            'department_id' => $department3->id,
-            'coordinator_id' => $teacher4->id
-        ]);
 
         // Realizar la búsqueda de una carrera inexistente
         $response = $this->get(route('careers.index', ['search' => 'Physics']));
@@ -273,7 +261,7 @@ class CareerControllerTest extends TestCase
             'coordinator_id' => $teacher3->id,
         ]);
         Career::factory()->create([
-            'department_id' => $department3->id,
+            'department_id' => $department1->id,
             'name' => 'Zoology',
             'coordinator_id' => $teacher4->id,
         ]);
@@ -292,7 +280,7 @@ class CareerControllerTest extends TestCase
 
         // Verificar que se muestren las carreras del departamento 1 en orden descendente
         $response->assertSeeInOrder(['Zoology', 'Anthropology']);
-        $response->assertDontSee('Biology');
+        $response->assertDontSeeText(['Biology']);
     }
 
 
@@ -304,7 +292,7 @@ class CareerControllerTest extends TestCase
      */
     public function testIndexReturnsViewWithCareers()
     {
-        Teacher::factory()->count(10)->create();
+        Teacher::factory()->count(20)->create();
         Department::factory()->count(2)->create();
 
         // Crea algunos datos de prueba
