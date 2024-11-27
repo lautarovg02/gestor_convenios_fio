@@ -296,7 +296,7 @@ class CareerControllerTest extends TestCase
         Department::factory()->count(2)->create();
 
         // Crea algunos datos de prueba
-        Career::factory()->count(5)->create();
+        Career::factory()->count(2)->create();
 
 
         // Realiza la solicitud al método index
