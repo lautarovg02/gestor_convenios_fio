@@ -12,10 +12,6 @@ class CareerControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Test para verificar que las carreras se filtran correctamente por departamento.
-     * @lautarovg02
-     */
 
     /**
      * Test para verificar que las carreras se filtran correctamente por departamento.
@@ -273,7 +269,7 @@ class CareerControllerTest extends TestCase
             'coordinator_id' => $teacher3->id,
         ]);
         Career::factory()->create([
-            'department_id' => $department3->id,
+            'department_id' => $department1->id,
             'name' => 'Zoology',
             'coordinator_id' => $teacher4->id,
         ]);
