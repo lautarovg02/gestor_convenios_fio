@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         SecretaryPhone::factory()->count(10)->create();
         Teacher::factory(80)->create();
         Department::factory(4)->create();
-        Career::factory(40)->create();
+        Career::factory(9)->create();
         $this->call(CareerTeacherSeeder::class);
     }
 }
