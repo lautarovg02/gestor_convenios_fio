@@ -26,6 +26,23 @@ class Career extends Model
         return $this->belongsTo(Teacher::class, 'coordinator_id');
     }
 
+
+    public function scopeSearchAndSort($query, $search = null, $sort = 'name', $direction = 'asc')
+    {
+        // Asegúrate de que la dirección sea válida
+        if (!in_array($direction, ['asc', 'desc'])) {
+            $direction = 'asc';
+        }
+
+        // Aplicar la búsqueda
+        return $query->when($search, function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhereHas('department', function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%");
+                });
+        })->orderBy($sort, $direction);
+    }
+
     /** Relación con Department *..1
      * Obtener el department al que pertenece la career.
      */
