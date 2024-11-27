@@ -50,7 +50,11 @@
                         <th>#</th>
                         <th>
                             <a
-                                href="{{ route('careers.index', ['search' => request()->input('search'), 'sort' => 'name', 'direction' => request()->input('sort') === 'name' && request()->input('direction') === 'asc' ? 'desc' : 'asc']) }}">
+                                href="{{ route('careers.index', [
+                                'search' => request()->input('search'),
+                                'department' => request()->input('department'),
+                                'sort' => 'name',
+                                'direction' => request()->input('sort') === 'name' && request()->input('direction') === 'asc' ? 'desc' : 'asc']) }}">
                                 Carrera
                                 @if (request()->input('sort') === 'name')
                                     @if (request()->input('direction') === 'asc')
