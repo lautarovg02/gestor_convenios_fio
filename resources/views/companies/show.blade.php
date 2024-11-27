@@ -27,12 +27,12 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Detalles de la Compañía</h3>
+                            <h3 class="card-title">Detalles de la Empresa</h3>
                         </div>
                         <div class="card-body">
 
 <div class="form-group">
-<strong>Denomination:</strong>
+<strong>Denominación:</strong>
 {{ $company->denomination }}
 </div>
 <div class="form-group">
@@ -40,7 +40,7 @@
 {{ $company->cuit }}
 </div>
 <div class="form-group">
-<strong>Company Name:</strong>
+<strong>Nombre de la empresa:</strong>
 {{ $company->company_name }}
 </div>
 <div class="form-group">
@@ -48,28 +48,28 @@
 {{ $company->sector }}
 </div>
 <div class="form-group">
-<strong>Entity:</strong>
+<strong>Entidad:</strong>
 {{ $company->entity }}
 </div>
 <div class="form-group">
-<strong>Company Category:</strong>
+<strong>Rubro:</strong>
 {{ $company->company_category }}
 </div>
 <div class="form-group">
-<strong>Scope:</strong>
+<strong>Ámbito:</strong>
 {{ $company->scope }}
 </div>
 <div class="form-group">
-<strong>Street:</strong>
+<strong>Calle:</strong>
 {{ $company->street }}
 </div>
 <div class="form-group">
-<strong>Number:</strong>
+<strong>Número:</strong>
 {{ $company->number }}
 </div>
 <div class="form-group">
-<strong>City Id:</strong>
-{{ $company->city_id }}
+<strong>Ciudad:</strong>
+{{ $company->city->name}}
 </div>
 
                         </div>
