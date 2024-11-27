@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body d-flex flex-column align-items-center">
-                <img class="img-fluid" src="{{ asset('images/edit-icon.png') }}" alt="Logo editar" style="width:100px">
+                <img class="img-fluid" src="{{ asset('images/edit.png') }}" alt="Logo editar" style="width:100px">
                 <div class="text-center mt-2">
                     <h1 class="modal-title fw-bold" style="font-size: 30px">Confirmar modificación</h1>
                     <p class="mt-4"> ¿Confirma a  <span class="fw-bold" id="director-lastname"></span>

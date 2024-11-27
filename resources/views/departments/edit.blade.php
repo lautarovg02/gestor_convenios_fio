@@ -94,7 +94,6 @@
 
 <!--Link a .js del modal al template utilizando Vite-->
 @vite('resources/js/modals/modalEdit.js')
-{{-- @vite('resources/js/utils/editDepartmentButton.js') --}}
 
 @endsection
 b
