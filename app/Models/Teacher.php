@@ -52,7 +52,7 @@ class Teacher extends Model
      * coordinador, se incluye la información de la carrera.
      * Los profesores que no son ni directores ni coordinadores tendrán el rol 'Ninguno'.
      *
-     * @return \Illuminate\Support\Collection Lista de profesores con sus roles e información adicional.
+     * @return \Illuminate\Database\Eloquent\Builder Query builder para obtener profesores con sus roles.
      * @lautarovg02
      */
     public static function getAllWithRoles($searchTerm = null)
@@ -79,8 +79,8 @@ class Teacher extends Model
      * Este método realiza una consulta para obtener todos los docentes que no tengan
      * roles de directores o coordinadores.
      *
-     * @return \Illuminate\Support\Collection List of teachers without roles.
-      *@lautarovg02
+     * @return \Illuminate\Database\Eloquent\Builder Query builder para obtener docentes sin roles.
+     * @lautarovg02
      */
     public static function getTeachersWithoutRoles()
     {
