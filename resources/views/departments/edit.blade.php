@@ -3,8 +3,8 @@
 
 @section('content')
 
-<div class="row row-deck row-cards">
-    <div class="col-12 ">
+<div class="row row-deck row-cards justify-content-center">
+    <div class="col-8 ">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
                 <h3 class="card-title"> Detalles del departamento</h3>
