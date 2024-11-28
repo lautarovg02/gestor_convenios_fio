@@ -22,7 +22,7 @@ class StoreDepartmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:200',
+            'name' => 'required|string|max:200|unique:departments,name',
             'director_id' => 'required|exists:teachers,id|integer',
         ];
     }
@@ -30,10 +30,11 @@ class StoreDepartmentRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'La denominación es  un campo obligatorio.',
+            'name.required' => 'La denominación es un campo obligatorio.',
             'name.max' => 'La cantidad máxima de caracteres es de :max',
-            'director_id.required' => 'El director es  un campo obligatorio.',
-            'director_id.exists' => 'El  director seleccionado no es válido.',
+            'name.unique' => 'El nombre del departamento ya está en uso.',
+            'director_id.required' => 'El director es un campo obligatorio.',
+            'director_id.exists' => 'El docente seleccionado no es válido.',
         ];
     }
 }
