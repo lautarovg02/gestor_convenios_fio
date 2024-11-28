@@ -79,7 +79,7 @@ class Teacher extends Model
      * Este método realiza una consulta para obtener todos los docentes que no tengan
      * roles de directores o coordinadores.
      *
-     * @return \Illuminate\Database\Eloquent\Builder Query builder para obtener docentes sin roles.
+     * @return \Illuminate\Support\Collection Lista de profesores con sus roles e información adicional
      * @lautarovg02
      */
     public static function getTeachersWithoutRoles()
