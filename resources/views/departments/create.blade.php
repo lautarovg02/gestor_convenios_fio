@@ -8,7 +8,7 @@
     <div class="col-12 ">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
-                <h3 class="card-title"> Agregar un nuevo departamento</h3>
+                <h3 class="card-title">Agregar un nuevo departamento</h3>
                 <a href="{{route('departments.index')}}" class="btn btn-secondary m-2">Volver</a>
             </div>
 
