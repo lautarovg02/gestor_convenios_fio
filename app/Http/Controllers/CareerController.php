@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Teacher;
 use App\Models\Career;
 use App\Models\Department;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
@@ -92,12 +93,16 @@ class CareerController extends Controller
         //
     }
 
+
     /**
      * Show the form for editing the specified resource.
+     * @dairagalceran
      */
-    public function edit(Career $career)
+    public function edit(Career $career): View
     {
-        //
+        $teachersWithoutRol = Teacher::getTeachersWithoutRoles()->orderBy('lastname' , 'ASC')->get();
+        $departments = Department::orderBy('name' , 'ASC')->get();
+        return view('careers.edit', compact('career' , 'departments', 'teachersWithoutRol'));
     }
 
     /**
