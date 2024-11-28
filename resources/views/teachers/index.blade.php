@@ -27,11 +27,18 @@
                 </div>
             @elseif ($teachers->isEmpty())
                 <div class="alert alert-secondary error">
-<<<<<<< HEAD
-                    <p class="m-2">¡La tabla de docentes, esta vacia!</p>
-=======
                     <p class="m-2">!La tabla de docentes, esta vacia!</p>
->>>>>>> US-336
+                </div>
+            @endif
+
+            <!--- Mensajes de error o success al editar, eliminar o crear entidad --->
+            @if (Session::get('success'))
+                <div class="alert alert-success">
+                    <p class="mb-1">{!! Session::get('success') !!}</p>
+                </div>
+            @elseif (Session::get('error'))
+                <div class="alert alert-danger">
+                    <p class="mb-1">{!! Session::get('error') !!}</p>
                 </div>
             @endif
         </div>
@@ -54,8 +61,9 @@
                 <tbody>
                     @foreach ($teachers as $teacher)
                         <tr>
-                            <td >{{ $teacher->id }}</td>
-                            <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->name, request()->input('search')) !!} {!! highlightKeyword($teacher->lastname, request()->input('search')) !!}</td>
+                            <td>{{ $teacher->id }}</td>
+                            <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->name, request()->input('search')) !!}
+                                {!! highlightKeyword($teacher->lastname, request()->input('search')) !!}</td>
                             <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->dni, request()->input('search')) !!}</td>
                             <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->cuil ?? 'N/A', request()->input('search')) !!}</td>
                             <td class="text-truncate col-min-width col-max-width">
@@ -93,7 +101,6 @@
             <div class="d-flex justify-content-center">
                 {{ $teachers->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}
             </div>
-
         @endif
 
     </div>
