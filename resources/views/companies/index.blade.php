@@ -77,7 +77,7 @@
                 <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
                 <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
                 <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
-                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->entity->name ?? 'N/A', request()->input('search')) !!}</td>
                 <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
                 <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
                 <td class="text-truncate col-min-width col-max-width">
