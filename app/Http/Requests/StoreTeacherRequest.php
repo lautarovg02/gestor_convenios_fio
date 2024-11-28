@@ -31,12 +31,13 @@ class StoreTeacherRequest extends FormRequest
                 'digits:11',
                 function ($attribute, $value, $fail) {
                     $dni = $this->input('dni');
-                    // Verifica si el DNI está incluido en el CUIL
                     if (!str_contains($value, $dni) || strpos($value, $dni) !== 2) {
                         $fail('El CUIL debe contener el DNI en la posición correspondiente.');
                     }
                 },
             ],
+            'is_rector' => 'required|boolean',
+            'is_dean' => 'required|boolean',
         ];
     }
 

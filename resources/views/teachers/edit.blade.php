@@ -93,6 +93,7 @@
                                         {{ old('is_rector', $teacher->is_rector) == 0 ? 'checked' : '' }}>
                                     <label class="form-check-label" for="rector_2">No es Rector</label>
                                 </div>
+                                </div>
                             </div>
                             @error('is_rector')
                                 <small class="text-danger">{{ $message }}</small>

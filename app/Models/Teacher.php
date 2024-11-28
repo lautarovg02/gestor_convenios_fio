@@ -14,7 +14,8 @@ class Teacher extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['lastname', 'name', 'dni', 'cuil', 'teacher_id'];
+    protected $fillable = ['lastname', 'name', 'dni', 'cuil', 'teacher_id',     'is_rector',
+    'is_dean',];
 
     //Relación 1:n atributo multivaluado en la tabla Teacher
     public function cathedras(): HasMany
