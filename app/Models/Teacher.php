@@ -81,7 +81,7 @@ class Teacher extends Model
      * roles de directores o coordinadores.
      *
      * @return \Illuminate\Support\Collection List of teachers without roles.
-     *@lautarovg02
+     @lautarovg02
      */
     public static function getTeachersWithoutRoles()
     {
