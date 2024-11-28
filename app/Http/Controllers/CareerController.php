@@ -5,6 +5,7 @@ use App\Models\Teacher;
 use App\Models\Career;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class CareerController extends Controller
 {
@@ -126,11 +127,22 @@ class CareerController extends Controller
         //
     }
 
+
     /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Career $career)
+    * Remove the specified resource from storage.
+    */
+    public function destroy(Career $career): RedirectResponse
     {
-        //
+        try {
+            // Eliminar la carrera
+            $career->delete();
+
+            return redirect()->route('careers.index')
+                ->with('success', 'Carrera eliminada exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('careers.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar la carrera: ' . $e->getMessage());
+        }
     }
+
 }

@@ -33,7 +33,7 @@ Route::get('/cities/create' , [CityController::class , 'create' ])->name('cities
 Route::post('/cities', [CityController::class, 'store'])->name('cities.store');
 
 //TEACHERS
-Route::resource('/teachers', TeacherController::class);;
+Route::resource('/teachers', TeacherController::class);
 
 //CAREERS
 Route::resource('/careers' , CareerController::class);
