@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\StoreCareerRequest;
 use App\Models\Teacher;
 use App\Models\Career;
 use App\Models\Department;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 
 class CareerController extends Controller
 {
@@ -47,7 +50,7 @@ class CareerController extends Controller
      * @App\Models\Teacher;
      * @App\Models\Department;
      */
-    public function create()
+    public function create(): View
     {
         $coordinators = Teacher::getTeachersWithoutRoles()->orderBy('name', 'ASC')->get();
         $departments = Department::orderBy('name', 'ASC')->get();
@@ -58,7 +61,7 @@ class CareerController extends Controller
      * Store a newly created resource in storage.
      * @App\Models\Career
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         // Establecer reglas de validación
         $request->validate([
@@ -106,11 +109,22 @@ class CareerController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update a career with the specified resource in storage.
+     * @param  \Illuminate\Http\Request $request
+     * @param  Career $career
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Career $career)
+    public function update(StoreCareerRequest $request, Career $career)//: RedirectResponse
     {
-        //
+       /*  try{
+            $validatedData = $request->validated();
+            $career->update($validatedData);
+            return redirect()->route('careers.index')->with('success' , 'Carrera editada con éxito.');
+
+        }catch(\Exception $e){
+
+            return redirect()->route('careers.edit' , $career->id)->withErrors(['error' , $e->getMessage()]);
+        } */
     }
 
     /**
