@@ -35,7 +35,8 @@
                             <label class="form-label required" for="name">Nombre</label>
                             <div>
                                 <input class="form-control" name="name" id="name" type="text"
-                                    value="{{ old('name', $teacher->name) }}" placeholder="Ingrese el nombre" autocomplete="off">
+                                    value="{{ old('name', $teacher->name) }}" placeholder="Ingrese el nombre"
+                                    autocomplete="off">
                                 @error('name')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -47,7 +48,8 @@
                             <label class="form-label required" for="lastname">Apellido</label>
                             <div>
                                 <input class="form-control" name="lastname" id="lastname" type="text"
-                                    value="{{ old('lastname', $teacher->lastname) }}" placeholder="Ingrese el apellido" autocomplete="off">
+                                    value="{{ old('lastname', $teacher->lastname) }}" placeholder="Ingrese el apellido"
+                                    autocomplete="off">
                                 @error('lastname')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -59,7 +61,8 @@
                             <label class="form-label required" for="dni">DNI</label>
                             <div>
                                 <input class="form-control" name="dni" id="dni" type="number"
-                                    value="{{ old('dni', $teacher->dni) }}" maxlength="8" placeholder="Ingrese el dni" autocomplete="off">
+                                    value="{{ old('dni', $teacher->dni) }}" maxlength="8" placeholder="Ingrese el dni"
+                                    autocomplete="off">
                                 @error('dni')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -84,34 +87,32 @@
                             <label class="form-label" for="is_rector">Es rector</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <div>
-                                    <input class="form-check-input" type="radio" id="rector_1" name="is_rector" value="1"
-                                        {{ old('is_rector', $teacher->is_rector) == 1 ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="radio" id="rector_1" name="is_rector"
+                                        value="1" {{ old('is_rector', $teacher->is_rector) == 1 ? 'checked' : '' }}>
                                     <label class="form-check-label" for="rector_1">Es Rector</label>
                                 </div>
                                 <div>
-                                    <input class="form-check-input" type="radio" id="rector_2" name="is_rector" value="0"
-                                        {{ old('is_rector', $teacher->is_rector) == 0 ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="radio" id="rector_2" name="is_rector"
+                                        value="0" {{ old('is_rector', $teacher->is_rector) == 0 ? 'checked' : '' }}>
                                     <label class="form-check-label" for="rector_2">No es Rector</label>
                                 </div>
-                                </div>
                             </div>
-                            @error('is_rector')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
                         </div>
-
+                        @error('is_rector')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
                         <!-- Campo decano -->
                         <div class="form-group mb-3">
                             <label class="form-label" for="is_dean">Es decano</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <div>
-                                    <input class="form-check-input" type="radio" id="dean_1" name="is_dean" value="1"
-                                        {{ old('is_dean', $teacher->is_dean) == 1 ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="radio" id="dean_1" name="is_dean"
+                                        value="1" {{ old('is_dean', $teacher->is_dean) == 1 ? 'checked' : '' }}>
                                     <label class="form-check-label" for="dean_1">Es Decano</label>
                                 </div>
                                 <div>
-                                    <input class="form-check-input" type="radio" id="dean_2" name="is_dean" value="0"
-                                        {{ old('is_dean', $teacher->is_dean) == 0 ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="radio" id="dean_2" name="is_dean"
+                                        value="0" {{ old('is_dean', $teacher->is_dean) == 0 ? 'checked' : '' }}>
                                     <label class="form-check-label" for="dean_2">No es Decano</label>
                                 </div>
                             </div>
@@ -119,19 +120,22 @@
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-
-                        <div class="form-footer">
-                            <div class="text-end">
-                                <div class="d-flex">
-                                    <a href="{{ route('teachers.index') }}" class="btn btn-danger m-2">Cancelar</a>
-                                    <button type="submit" class="btn btn-success ms-auto m-2">Guardar modificación</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
                 </div>
 
+
+
+                <div class="form-footer">
+                    <div class="text-end">
+                        <div class="d-flex">
+                            <a href="{{ route('teachers.index') }}" class="btn btn-danger m-2">Cancelar</a>
+                            <button type="submit" class="btn btn-success ms-auto m-2">Guardar modificación</button>
+                        </div>
+                    </div>
+                </div>
+                </form>
             </div>
+
         </div>
+    </div>
     </div>
 @endsection
