@@ -116,7 +116,7 @@ class CareerController extends Controller
      */
     public function update(StoreCareerRequest $request, Career $career)//: RedirectResponse
     {
-       /*  try{
+        try{
             $validatedData = $request->validated();
             $career->update($validatedData);
             return redirect()->route('careers.index')->with('success' , 'Carrera editada con éxito.');
@@ -124,7 +124,7 @@ class CareerController extends Controller
         }catch(\Exception $e){
 
             return redirect()->route('careers.edit' , $career->id)->withErrors(['error' , $e->getMessage()]);
-        } */
+        }
     }
 
     /**

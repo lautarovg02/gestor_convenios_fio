@@ -23,7 +23,7 @@ class StoreCareerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255', // Campo 'name' no debe estar vacío
+            'name' => 'required|filled|string|max:255', // Campo 'name' no debe estar vacío
             'coordinator_id' => 'required|exists:teachers,id', // Campo 'coordinator_id' debe seleccionarse
             'department_id' => 'required|exists:departments,id', // Campo 'department_id' debe seleccionarse
         ];
@@ -40,8 +40,9 @@ class StoreCareerRequest extends FormRequest
     {
         return [
             // Mensajes para el campo "name"
-            'name.required' => 'Ya existe una carrera con el mismo nombre.',
+            'name.required' => 'La carrera es un dato requerido.',
             'name.max' => 'La cantidad máxima de caracteres  es de :max',
+            'name.filled' => 'El nombre de la carrera no puede estar vacío ni contener solo espacios.',
         ];
     }
 }

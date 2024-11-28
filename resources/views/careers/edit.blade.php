@@ -102,14 +102,14 @@
                         @enderror
                     </div>
 
-
                     <div class="form-footer">
                         <div class="text-end">
                             <div class="d-flex">
                                 <a href="{{route('careers.index')}}" class="btn btn-danger m-2">Cancelar</a>
                                 <button type="button" class="btn btn-success ms-auto m-2"
                                     data-id= "{{$career->id}}"
-                                    data-career-name="{{old('name' , $career->name) }}"
+                                    data-career-name ="{{old('name' , $career->name) }}"
+                                    data-department-id="{{$career->department_id}}"
                                     data-department-name="{{$career->department->name}}"
                                     data-coordinator-id="{{$career->coordinator_id}}"
                                     data-coordinator-name="{{$career->teacher->name}}"
