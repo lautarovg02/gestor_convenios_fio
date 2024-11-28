@@ -23,9 +23,9 @@ class TeacherController extends Controller
 
         try {
             $teachers = Teacher::getAllWithRoles()->search($searchTerm)
-            ->paginate(9)
-            ->appends(['search' => $searchTerm]);
-                } catch (Exception $e) {
+                ->paginate(9)
+                ->appends(['search' => $searchTerm]);
+        } catch (Exception $e) {
             $errorMessage = 'No se pudo recuperar la información de Docentes en este momento. Por favor, inténtelo más tarde.';
             \Log::error('Error al obtener profesores: ' . $e->getMessage());
         }
