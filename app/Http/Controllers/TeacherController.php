@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTeacherRequest;
+use App\Models\Career;
 use App\Models\Teacher;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use PhpParser\Node\Expr\Throw_;
 
 class TeacherController extends Controller
 {
     /**
-     *@lautarovg02
+     * @lautarovg02
      * Display a listing of the teachers.
      * @dairaGalceran
      * search with scope
@@ -39,17 +41,29 @@ class TeacherController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('teachers.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTeacherRequest $request)
     {
-        //
+        try{
+            $exists = Teacher::where('dni', $request->dni)->first();
+            if($exists) throw new Exception("Dni duplicado");
+
+            Teacher::create($request->validated());
+
+            return redirect()->route('teachers.index')
+            ->with('success', 'Docente ingresado exitosamente.');
+        } catch(Exception $e){
+            \Log::error('Error al crear la empresa: '.$e->getMessage());
+
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -77,7 +91,7 @@ class TeacherController extends Controller
     {
         try {
 
-            // Verifica si el CUIT es duplicado
+            // Verifica si el dni es duplicado
             $exists = Teacher::where('dni', $request->dni)
                 ->where('id', '<>', $teacher->id)
                 ->first();
