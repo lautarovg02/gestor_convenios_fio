@@ -1,11 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const entitySelect = document.getElementById('name');
-    if (entitySelect) {
-        entitySelect.addEventListener('change', function() {
-            toggleOtherOption('name', 'otherEntityInputWrapper', 'other_entity_input', 'other_entity');
-        });
-    }
-});
+"use strict";
 
 document.addEventListener('DOMContentLoaded', function () {
     const departmentSelect = document.getElementById('departmentSelect');
