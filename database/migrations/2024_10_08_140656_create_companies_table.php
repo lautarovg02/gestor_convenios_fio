@@ -25,7 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('cities');
             $table->unsignedBigInteger('entity_id'); // Relación uno a uno
-            $table->foreign('entity_id')->references('id')->on('CompanyEntities');
+            $table->foreign('entity_id')->references('id')->on('company_entities');
             $table->string('slug');
             $table->timestamps();
         });

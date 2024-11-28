@@ -2,37 +2,36 @@
 <!-- @extends('layouts.app') -->
 
 @section('content')
+    <div class="row row-deck row-cards">
+        <div class="col-12 ">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
+                    <h3 class="card-title"> Detalles de la empresa</h3>
+                    <a href="{{ route('companies.index') }}" class="btn btn-secondary m-2">Volver</a>
+                </div>
+                <div>
+                    <!-- Mensajes flash de success-->
+                    @if (Session::has('success'))
+                        <div class="alert alert-success">
+                            {{ Session::get('success') }}
+                        </div>
+                    @endif
 
-<div class="row row-deck row-cards">
-    <div class="col-12 ">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
-                <h3 class="card-title"> Detalles de la empresa</h3>
-                <a href="{{route('companies.index')}}" class="btn btn-secondary m-2">Volver</a>
-            </div>
-            <div>
-                <!-- Mensajes flash de success-->
-                @if (Session::has('success'))
-                    <div class="alert alert-success">
-                        {{Session::get('success')}}
-                    </div>
-                @endif
+                    <!-- Mensajes flash de erroo-->
+                    @if ($errors->has('error'))
+                        <div class="alert alert-danger">
+                            {{ $errors->first('error') }}
+                        </div>
+                    @endif
+                </div>
 
-                <!-- Mensajes flash de erroo-->
-                @if ($errors->has('error'))
-                    <div class="alert alert-danger">
-                        {{ $errors->first('error') }}
-                    </div>
-                @endif
-            </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ route('companies.update', $company) }}" id="" role="form"
+                        enctype="multipart/form-data">
+                        {{ method_field('PATCH') }}
+                        @csrf
 
-            <div class="card-body">
-                <form method="POST"
-                    action="{{ route('companies.update', $company) }}" id="" role="form" enctype="multipart/form-data">
-                    {{ method_field('PATCH') }}
-                    @csrf
-
-                    {{-- edit form --}}
+                        {{-- edit form --}}
 
                     <!-- Campo Denominación -->
                     <div class="form-group mb-3">
@@ -150,22 +149,104 @@
                         </select>
                         <small class="form-hint">Si no encuentra la <b>ciudad</b> en la lista, ingresarla en  <a href="">Agregar Ciudad.</a></small>
                             @error('city_id')
-                                <div class="text-danger">{{$message}}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
-                    </div>
+                        </div>
 
                         <div class="form-footer">
                             <div class="text-end">
                                 <div class="d-flex">
-                                    <a href="{{route('companies.index')}}" class="btn btn-danger m-2">Cancelar</a>
-                                    <button type="submit" class="btn btn-success ms-auto m-2">Guardar modificación</button>
+                                    <a href="{{ route('companies.index') }}" class="btn btn-danger m-2">Cancelar</a>
+                                    <button type="submit" class="btn btn-success ms-auto m-2">Guardar
+                                        modificación</button>
                                 </div>
                             </div>
                         </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+@endsection
+@extends('layouts.app')
 
+@section('content')
+    <div class="row row-deck row-cards">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
+                    <h3 class="card-title">Editar Empresa</h3>
+                    <a href="{{ route('companies.index') }}" class="btn btn-secondary m-2">Volver</a>
+                </div>
+                <div class="card-body">
+                    <!-- Mensajes flash de éxito y error -->
+                    @if (Session::has('success'))
+                        <div class="alert alert-success">{{ Session::get('success') }}</div>
+                    @endif
+
+                    @if ($errors->has('error'))
+                        <div class="alert alert-danger">{{ $errors->first('error') }}</div>
+                    @endif
+
+                    <form method="POST" action="{{ route('companies.update', $company) }}"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('PATCH')
+
+                        <!-- Campo Denominación -->
+                        <div class="mb-3">
+                            <label class="form-label">Denominación</label>
+                            <input type="text" name="denomination" class="form-control"
+                                value="{{ old('denomination', $company->denomination) }}"
+                                placeholder="Ingrese la denominación">
+                            @error('denomination')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Campo CUIT -->
+                        <div class="mb-3">
+                            <label class="form-label">CUIT</label>
+                            <input type="text" name="cuit" class="form-control"
+                                value="{{ old('cuit', $company->cuit) }}" placeholder="Ingrese el CUIT">
+                            @error('cuit')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Campo Entidad -->
+                        <div class="mb-3">
+                            <label class="form-label">Entidad</label>
+                            <select name="entity" id="entity" class="form-select">
+                                <option value="">Seleccionar</option>
+                                @foreach ($entityTypes as $type)
+                                    <option value="{{ $type->name }}"
+                                        {{ old('entity_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                                @endforeach
+                                <option value="other">Otro tipo</option>
+
+                            </select>
+                            @error('entity')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+
+                            <div id="otherEntityInputWrapper"
+                                style="display: {{ old('entity', $company->entity) == 'other' ? 'block' : 'none' }};">
+                                <input type="text" id="other_entity_input" name="other_entity_input"
+                                    class="form-control mt-2" placeholder="Especificar otra opción"
+                                    value="{{ old('other_entity_input') }}">
+                            </div>
+                        </div>
+
+                        <!-- Otros campos... -->
+                        <!-- Botones -->
+                        <div class="d-flex">
+                            <a href="{{ route('companies.index') }}" class="btn btn-danger m-2">Cancelar</a>
+                            <button type="submit" class="btn btn-success ms-auto m-2">Guardar Modificación</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
