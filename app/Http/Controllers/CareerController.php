@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
+use Str;
 
 class CareerController extends Controller
 {
@@ -91,9 +92,10 @@ class CareerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Career $career)
+    public function show(Career $career): View
     {
-        //
+        $teachersBelongsToCareer = $career->teachers;
+        return view('careers.show' , compact('career' , 'teachersBelongsToCareer'));
     }
 
 
@@ -118,6 +120,23 @@ class CareerController extends Controller
     {
         try{
             $validatedData = $request->validated();
+
+            // Normalizar el nombre: quitar acentos, espacios extras, y pasar a minúsculas
+            $normalizedNewName = Str::of($validatedData['name'])
+            ->lower()
+            ->ascii()
+            ->trim();
+            $existsCareer = Career::whereRaw('LOWER(TRIM(name)) = ?', [$normalizedNewName])
+                ->where('id','<>',$career->id)
+                ->first();
+
+
+            if($existsCareer){
+                return redirect()->back()
+                    ->withErrors(['name' => 'Ya existe una carrera con el mismo nombre.'])
+                    ->withInput();
+            }
+
             $career->update($validatedData);
             return redirect()->route('careers.index')->with('success' , 'Carrera editada con éxito.');
 

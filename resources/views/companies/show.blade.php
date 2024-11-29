@@ -12,7 +12,7 @@
                     <div class="btn-list">
                         <a href="{{ route('companies.index') }}" class="btn btn-primary d-none d-sm-inline-block">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                            Regresar
+                            Volver
                         </a>
                     </div>
                 </div>

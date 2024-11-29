@@ -23,7 +23,7 @@ class StoreCareerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|filled|string|max:255', // Campo 'name' no debe estar vacío
+            'name' => 'required|filled|string|max:255',
             'coordinator_id' => 'required|exists:teachers,id', // Campo 'coordinator_id' debe seleccionarse
             'department_id' => 'required|exists:departments,id', // Campo 'department_id' debe seleccionarse
         ];
