@@ -15,7 +15,7 @@
         <!-- Barra de búsqueda -->
         <form action="{{ route('companies.index') }}" method="GET" class="d-flex">
             <input type="text" name="search" class="form-control" placeholder="Buscar empresas..." value="{{ request()->input('search') }}" style="min-width: 400px;">
-            <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+            <button type="submit" class="btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#modal-loading">Buscar</button>
         </form>
     </div>
 
@@ -97,7 +97,8 @@
     @endif
 
     <!-- Modal -->
-    @include('layouts/modals/modal-delete')
+    @include('layouts.modals.modal-delete')
+    @include('layouts.modals.modal-loading')
 </div>
 
 <!--Linkeamos el .js del modal al template utilizando Vite-->
