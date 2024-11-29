@@ -14,8 +14,15 @@ class Teacher extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['lastname', 'name', 'dni', 'cuil', 'teacher_id',     'is_rector',
-    'is_dean',];
+    protected $fillable = [
+        'lastname',
+        'name',
+        'dni',
+        'cuil',
+        'teacher_id',
+        'is_rector',
+        'is_dean',
+    ];
 
     //Relación 1:n atributo multivaluado en la tabla Teacher
     public function cathedras(): HasMany
@@ -72,6 +79,67 @@ class Teacher extends Model
         )
             ->leftJoin('departments', 'teachers.id', '=', 'departments.director_id')
             ->leftJoin('careers', 'teachers.id', '=', 'careers.coordinator_id');
+    }
+
+    /**
+     * Verifica si el docente tiene el rol de Director de un Departamento.
+     *
+     * @return bool Retorna verdadero si el docente es director de un departamento, falso en caso contrario.
+     * @lautarovg02
+     */
+    public function hasDirectorRole(): bool
+    {
+        return Department::where('director_id', $this->id)->exists();
+    }
+
+    /**
+     * Verifica si el docente tiene el rol de Coordinador de una Carrera.
+     *
+     * @return bool Retorna verdadero si el docente es coordinador de una carrera, falso en caso contrario.
+     * @lautarovg02
+     */
+    public function hasCoordinatorRole(): bool
+    {
+        return Career::where('coordinator_id', $this->id)->exists();
+    }
+
+    /**
+     * Verifica si el docente tiene algún rol asociado (Director o Coordinador).
+     *
+     * @return bool Retorna verdadero si el docente tiene algún rol asociado, falso en caso contrario.
+     * @lautarovg02
+     */
+    public function hasAnyRole(): bool
+    {
+        return $this->hasDirectorRole() || $this->hasCoordinatorRole();
+    }
+
+
+    /**
+     * Obtiene el nombre del rol que tiene el docente, en caso de tener uno.
+     *
+     * @return string Retorna una descripción del rol del docente o "Sin rol asignado" si no tiene ninguno.
+     * @lautarovg02
+     */
+    public function getRoleName(): string
+    {
+        if ($this->hasDirectorRole()) {
+            return 'Director de Departamento';
+        }
+
+        if ($this->hasCoordinatorRole()) {
+            return 'Coordinador de Carrera';
+        }
+
+        if ($this->is_dean) {
+            return 'Decano';
+        }
+
+        if ($this->is_rector) {
+            return 'Rector';
+        }
+
+        return 'Sin rol asignado';
     }
     /**
      * Recuperar todos los docentes que no sean directores de ningún departamento
