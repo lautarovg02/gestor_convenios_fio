@@ -38,7 +38,7 @@
                     <div class="form-group mb-3">
                         <label class="form-label required-field fs-6" for='denomination'> Denominación</label>
                         <div>
-                            <input class="form-control" name="denomination" id="denomination" type="text" value="{{$company->denomination}}" placeholder="Ingrese la denominación " autocomplete="off">
+                            <input class="form-control" maxlength="40" name="denomination" id="denomination" type="text" value="{{$company->denomination}}" placeholder="Ingrese la denominación " autocomplete="off">
                             @error('denomination')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -48,7 +48,7 @@
                     <div class="form-group mb-3">
                         <label class="form-label required-field" for= "cuit">CUIT</label>
                         <div>
-                            <input class="form-control" name="cuit" id="cuit" type="text" value="{{$company->cuit}}" placeholder="Ingrese el CUIT de la empresa " autocomplete="off">
+                            <input class="form-control" maxlength="11" name="cuit" id="cuit" type="number" value="{{$company->cuit}}" placeholder="Ingrese el CUIT de la empresa " autocomplete="off" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                             <small class="form-hint">Ingresar <b>CUIT</b> sin guiones.</small>
                         </div>
                         @error('cuit')
@@ -59,14 +59,14 @@
                     <div class="form-group mb-3">
                         <label class="form-label" for= "company_name">Nombre de la empresa</label>
                         <div>
-                            <input class="form-control" name="company_name" id="company_name" type="text" value="{{$company->company_name}}" placeholder="Ingrese el nombre de la empresa " autocomplete="off">
+                            <input class="form-control" maxlength="100" name="company_name" id="company_name" type="text" value="{{$company->company_name}}" placeholder="Ingrese el nombre de la empresa " autocomplete="off">
                         </div>
                     </div>
                     <!-- Campo Sector -->
                     <div class="form-group mb-3">
                         <label class="form-label required" for= "sector">Sector</label>
                         <div>
-                            <input class="form-control" name="sector" id="sector" type="text" value="{{$company->sector}}" placeholder="Ingrese el sector al que pertenece la empresa " autocomplete="off">
+                            <input class="form-control" maxlength="40"name="sector" id="sector" type="text" value="{{$company->sector}}" placeholder="Ingrese el sector al que pertenece la empresa " autocomplete="off">
                         </div>
                     </div>
                     <!-- Campo Entidad -->
@@ -94,7 +94,7 @@
                     <div class="form-group mb-3">
                         <label class="form-label required" for= "company_category">Rubro</label>
                         <div>
-                            <input class="form-control" name="company_category" id="company_category" type="text" value="{{$company->company_category}}" placeholder="Ingrese la categoría de la empresa " autocomplete="off">
+                            <input class="form-control" maxlength="20" name="company_category" id="company_category" type="text" value="{{$company->company_category}}" placeholder="Ingrese la categoría de la empresa " autocomplete="off">
                         </div>
                     </div>
                     <!-- Campo Ámbito -->
@@ -124,7 +124,7 @@
                     <!-- Campo Calle -->
                         <label class="form-label required" for= "street">Calle</label>
                         <div>
-                            <input class="form-control" name="street" id="street" type="text" value="{{$company->street}}" placeholder="Calle " autocomplete="off">
+                            <input class="form-control" maxlength="100"name="street" id="street" type="text" value="{{$company->street}}" placeholder="Calle " autocomplete="off">
                         </div>
                     </div>
                     <!-- Campo número -->

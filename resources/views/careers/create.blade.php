@@ -23,8 +23,7 @@
                                 <label for="name" class="required-file">Carrera</label>
                             </label>
                             <div>
-                                <input class="form-control " placeholder="Carrera a ingresar..." name="name"
-                                    type="text" id="name">
+                                <input class="form-control" maxlength="255" placeholder="Carrera a ingresar..." name="name" type="text" id="name">
                                 <small class="form-hint">Carrera <b>nombre</b></small>
                                 @error('name')
                                     <div class="text-danger">{{ $message }}</div>

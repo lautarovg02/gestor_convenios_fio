@@ -22,8 +22,8 @@ class StoreTeacherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'lastname' => 'required|string',
+            'name' => 'required|string|max:40',
+            'lastname' => 'required|string|max:40',
             'dni' => 'required|integer|digits:8',
             'cuil' => [
                 'nullable',

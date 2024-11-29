@@ -34,7 +34,7 @@
                         <div class="form-group mb-3">
                             <label class="form-label required" for="name">Nombre</label>
                             <div>
-                                <input class="form-control" name="name" id="name" type="text"
+                                <input class="form-control" maxlength="40" name="name" id="name" type="text"
                                     value="{{ old('name', $teacher->name) }}" placeholder="Ingrese el nombre"
                                     autocomplete="off">
                                 @error('name')
@@ -47,7 +47,7 @@
                         <div class="form-group mb-3">
                             <label class="form-label required" for="lastname">Apellido</label>
                             <div>
-                                <input class="form-control" name="lastname" id="lastname" type="text"
+                                <input class="form-control" maxlength="40" name="lastname" id="lastname" type="text"
                                     value="{{ old('lastname', $teacher->lastname) }}" placeholder="Ingrese el apellido"
                                     autocomplete="off">
                                 @error('lastname')
@@ -62,7 +62,7 @@
                             <div>
                                 <input class="form-control" name="dni" id="dni" type="number"
                                     value="{{ old('dni', $teacher->dni) }}" maxlength="8" placeholder="Ingrese el dni"
-                                    autocomplete="off">
+                                    autocomplete="off" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                                 @error('dni')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -75,7 +75,7 @@
                             <div>
                                 <input class="form-control" name="cuil" id="cuil" type="number"
                                     value="{{ old('cuil', $teacher->cuil) }}" maxlength="11" placeholder="Ingrese el cuil"
-                                    autocomplete="off">
+                                    autocomplete="off" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                                 @error('cuil')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror

@@ -42,7 +42,7 @@
                             <label for="denomination" class="required-field fs-6">Denominación</label>
                         </label>
                         <div>
-                            <input class="form-control fs-6" placeholder="Denominación" name="denomination" type="text" id="denomination" value="{{ old('denomination') }}">
+                            <input class="form-control fs-6" maxlength="40" placeholder="Denominación" name="denomination" type="text" id="denomination" value="{{ old('denomination') }}">
                         </div>
                         @error('denomination')
                             <div class="text-danger">{{ $message }}</div>
@@ -54,7 +54,7 @@
                             <label for="cuit">Cuit</label>
                         </label>
                         <div>
-                            <input class="form-control fs-6" placeholder="Cuit" name="cuit" type="text" id="cuit" value="{{ old('cuit') }}">
+                            <input class="form-control fs-6" maxlength="11" placeholder="Cuit" name="cuit" type="number" id="cuit" value="{{ old('cuit') }}" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                             <small class="form-hint">Ingresar <b>CUIT</b> sin guiones.</small>
                             @error('cuit')
                                 <div class="text-danger">{{$message}}</div>
@@ -67,7 +67,7 @@
                             <label for="company_name">Nombre de la empresa</label>
                         </label>
                         <div>
-                            <input class="form-control" placeholder="Nombre de la empresa" name="company_name" type="text" id="company_name">
+                            <input class="form-control" maxlength="100" placeholder="Nombre de la empresa" name="company_name" type="text" id="company_name">
                         </div>
                     </div>
                     <div class="form-group mb-3">
@@ -75,7 +75,7 @@
                             <label for="sector">Sector</label>
                         </label>
                         <div>
-                            <input class="form-control" placeholder="Sector" name="sector" type="text" id="sector" value="{{old('sector')}}">
+                            <input class="form-control" maxlength="40" placeholder="Sector" name="sector" type="text" id="sector" value="{{old('sector')}}">
                         </div>
                     </div>
                     <!-- Selector de entidad con opción "Otros" -->
@@ -101,7 +101,7 @@
                     <div class="form-group mb-3">
                         <label class="form-label fs-6">   <label for="company_category">Categoría</label></label>
                         <div>
-                            <input class="form-control" placeholder="Categoría" name="company_category" type="text" id="company_category" value="{{old('company_category')}}">
+                            <input class="form-control" maxlength="20" placeholder="Categoría" name="company_category" type="text" id="company_category" value="{{old('company_category')}}">
                         </div>
                     </div>
                     <!-- Campo Ámbito con varias opciones -->
@@ -128,13 +128,13 @@
                         <!-- Campo nombre de la calle -->
                         <div class="col-md-6 mb-3">
                             <label class="form-label fs-6" for="street">Calle</label>
-                            <input class="form-control" placeholder="Calle" name="street" type="text" id="street" value="{{ old('street') }}">
+                            <input class="form-control" maxlength="100" placeholder="Calle" name="street" type="text" id="street" value="{{ old('street') }}">
                         </div>
 
                         <!-- Campo número -->
                         <div class="col-md-2 mb-3">
                             <label class="form-label fs-6" for="number">Número</label>
-                            <input class="form-control" placeholder="Número" name="number" type="text" id="number" value="{{ old('number') }}">
+                            <input class="form-control" placeholder="Número" name="number" type="number" id="number" value="{{ old('number') }}">
                         </div>
 
                         <!-- Campo nombre de la ciudad -->
