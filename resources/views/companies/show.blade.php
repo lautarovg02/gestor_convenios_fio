@@ -49,7 +49,7 @@
 </div>
 <div class="form-group">
 <strong>Entidad:</strong>
-{{ $company->entity }}
+{{ $company->entity->name }}
 </div>
 <div class="form-group">
 <strong>Rubro:</strong>
