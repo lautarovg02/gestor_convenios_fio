@@ -1,4 +1,4 @@
-<!-- resources/views/companies/show.blade.php -->
+<!-- resources/views/departments/show.blade.php -->
 <!-- @extends('layouts.app') -->
 
 @section('content')
@@ -33,7 +33,7 @@
                                     <h4><strong>Director del departamento:</strong></h4>
                                     <h4 class="ms-5">{{ $department->teacher->lastname }}{{ $department->teacher->name }}</h4>
                                 </div>
-                                <div class="form-group mb-4">
+                                <div class="form-group mb-2">
                                     <h4><strong>Carreras pertenecen al departamento:</strong></h4>
                                 </div>
                                 <div>
@@ -42,10 +42,11 @@
                                     @else
                                         <ul>
                                             @foreach ($careersBelongsToDepartment as $career)
-                                                <li class="mb-3 mt-5"><h5> <strong> {{$career->name}} , coordinador: </strong> {{ $career->teacher->lastname }}      {{ $career->teacher->name }}</h5>
+                                                <li class="mt-3"><h4> <strong> {{$career->name}}</strong></h4>
+                                                    <h5> <strong> Coordinador: {{ $career->teacher->lastname }} {{ $career->teacher->name }}</strong ></h5>
                                                     <h5>Docentes a cargo:</h5> </li>
                                                     @foreach ($career->teachers as $teacher)
-                                                    <li class="ms-5 ps-5 list-group-item"> <h6> <strong> {{ $teacher->lastname }}      {{ $teacher->name }}</strong></h6></li>
+                                                    <li class="ms-5 ps-5 list-group-item"> <h6> <strong> {{ $teacher->lastname }} {{ $teacher->name }}</strong></h6></li>
                                                     @endforeach
                                             @endforeach
                                         </ul>
