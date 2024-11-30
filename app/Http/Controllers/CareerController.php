@@ -22,28 +22,9 @@ class CareerController extends Controller
         $sort = $request->input('sort', 'name'); // Valor por defecto
         $direction = $request->input('direction', 'asc'); // Valor por defecto
 
-        // Asegúrate de que la dirección sea válida
-        if (!in_array($direction, ['asc', 'desc'])) {
-            $direction = 'asc';
-        }
-
         try {
-            // Aplica la búsqueda y la ordenación
-            $careers = Career::when($departmentId, function ($query) use ($departmentId) {
-                $query->where('department_id', $departmentId); // Primero aplica el filtro por departamento
-            })
-                ->when($search, function ($query) use ($search) {
-                    $query->where('name', 'like', "%{$search}%")
-                        ->orWhereHas('department', function ($query) use ($search) {
-                            $query->where('name', 'like', "%{$search}%");
-                        })->orWhereHas('teacher', function ($query) use ($search) {
-                            $query->where('name', 'like', "%{$search}%");
-                        })->orWhereHas('teacher', function ($query) use ($search) {
-                            $query->where('lastname', 'like', "%{$search}%");
-                        });
-                })
-                ->orderBy($sort, $direction) // Ordenar después de aplicar los filtros
-                ->paginate(10);
+            // Llama al nuevo método en el modelo
+            $careers = Career::searchAndSort($search, $departmentId , $sort, $direction)->paginate(9);
 
             $departments = Department::orderBy('name', 'ASC')->get();
 

@@ -1,7 +1,7 @@
 <!-- resources/views/careers/filters.blade.php-->
 
 <!-- Filtro por departamento -->
-<form action="{{ route('careers.index') }}" method="GET" class="row g-3 mb-4 mt-3 justify-content-end">
+<form action="{{ route('careers.index') }}" method="GET" class="row g-3 mb-4 mt-3 justify-content-center">
     <div class=" d-flex align-content-center col-md-auto">
         <select name="department" class="form-select ms-2" style="min-width: 200px;">
             <option value="">Selecciona un departamento</option>

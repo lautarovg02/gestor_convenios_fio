@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDepartmentRequest;
 use App\Models\Department;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Redirect;
 
 class DepartmentController extends Controller
 {
@@ -32,17 +34,26 @@ class DepartmentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function create(): View {
+        //Consigue a todos los teachers sin rol
+        $teachers = Teacher::getTeachersWithoutRoles()->orderBy('lastname', 'ASC')->get();
+
+        return view('departments.create', compact('teachers'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(StoreDepartmentRequest $request): RedirectResponse {
+        try {
+            Department::create($request->validated());
+
+            return redirect()->route('departments.index')->with('success', 'Departamento creado exitosamente');
+        } catch(\Exception $e) {
+            \Log::error('Error al crear el departamento: ' . $e->getMessage());
+
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
     /**

@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         SecretaryPhone::factory()->count(10)->create();
         Teacher::factory(80)->create();
         Department::factory(4)->create();
-        Career::factory(9)->create();
+        Career::factory(20)->create();
         $this->call(CareerTeacherSeeder::class);
     }
 }
