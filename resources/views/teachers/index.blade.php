@@ -17,6 +17,10 @@
             </form>
         </div>
 
+        <!-- FILTROS-->
+        <div class="col-12">
+            @include('teachers.filters')
+        </div>
 
         <!-- Mensajes de error -->
         <div class="alert-container text-center mx-auto d-flex align-items-center justify-content-center">
@@ -26,7 +30,7 @@
                 </div>
             @elseif ($teachers->isEmpty())
                 <div class="alert alert-secondary error">
-                   <p class="m-2">!La tabla de docentes, esta vacia!</p>
+                    <p class="m-2">!La tabla de docentes, esta vacia!</p>
                 </div>
             @endif
         </div>
@@ -49,8 +53,9 @@
                 <tbody>
                     @foreach ($teachers as $teacher)
                         <tr>
-                            <td >{{ $teacher->id }}</td>
-                            <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->name, request()->input('search')) !!} {!! highlightKeyword($teacher->lastname, request()->input('search')) !!}</td>
+                            <td>{{ $teacher->id }}</td>
+                            <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->name, request()->input('search')) !!}
+                                {!! highlightKeyword($teacher->lastname, request()->input('search')) !!}</td>
                             <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->dni, request()->input('search')) !!}</td>
                             <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->cuil ?? 'N/A', request()->input('search')) !!}</td>
                             <td class="text-truncate col-min-width col-max-width">
@@ -88,7 +93,6 @@
             <div class="d-flex justify-content-center">
                 {{ $teachers->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}
             </div>
-
         @endif
 
     </div>

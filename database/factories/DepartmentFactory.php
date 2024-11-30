@@ -17,6 +17,9 @@ class DepartmentFactory extends Factory
      */
     public function definition(): array
     {
+        // Obtener un docente único para asignar como director
+        $director = Teacher::inRandomOrder()->first() ?? Teacher::factory()->create();
+
         return [
             'name' => $this->faker->unique()->randomElement([
                 'Ingeniería Civil y Agrimensura',
@@ -24,7 +27,7 @@ class DepartmentFactory extends Factory
                 'Ingeniería Electromecánica',
                 'Ingeniería en Seguridad e Higiene en el Trabajo',
             ]),
-            'director_id' => Teacher::inRandomOrder()->first()->id, // DEBEMOS AGRAGAR EN teacher is_department_director
+            'director_id' => $director->id, // DEBEMOS AGRAGAR EN teacher is_department_director
         ];
     }
 }

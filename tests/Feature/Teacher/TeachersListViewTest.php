@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;  
-use Tests\TestCase; 
-use App\Models\Teacher;  
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+use App\Models\Teacher;
 use App\Models\Province; // Importar el modelo Province
 use App\Models\City; // Importar el modelo City
 
-class TeachersListViewTest extends TestCase  
-{  
+class TeachersListViewTest extends TestCase
+{
 
   use RefreshDatabase;
 
@@ -17,11 +17,11 @@ class TeachersListViewTest extends TestCase
      * Test to verify that all teachers are displayed correctly.
      *
      * @test
-     * 
+     *
      * @test
        @juan2645
      */
-     
+
     public function it_displays_list_of_teachers()
     {
         Province::factory()->count(9)->create();
@@ -108,7 +108,7 @@ public function test_teachers_displayed_per_page()
 
     $response = $this->get(route('teachers.index', ['page' => 1]));
     $response->assertStatus(200);
-    
+
     $this->assertCount(9, $response->viewData('teachers'));
 }
 
@@ -117,29 +117,29 @@ public function test_teachers_displayed_per_page()
  *
  * @test
  */
-public function test_buttons_are_visible_for_each_teacher()  
-{  
-    // Crea datos de prueba  
-    $teachers = Teacher::factory()->count(3)->create(); // Crea 3 docentes para pruebas  
+public function test_buttons_are_visible_for_each_teacher()
+{
+    // Crea datos de prueba
+    $teachers = Teacher::factory()->count(3)->create(); // Crea 3 docentes para pruebas
 
-    // Realiza la solicitud GET a la ruta de índice  
-    $response = $this->get(route('teachers.index'));  
-    $response->assertStatus(200);  
+    // Realiza la solicitud GET a la ruta de índice
+    $response = $this->get(route('teachers.index'));
+    $response->assertStatus(200);
 
-    // Verifica la presencia de cada docente y los botones correspondientes  
-    foreach ($teachers as $teacher) {  
-        // Verifica la existencia de la fila del docente  
-        $response->assertSee($teacher->id);  
-        $response->assertSee($teacher->name);  
-        $response->assertSee($teacher->lastname);  
-        
-        // Verifica que los botones "Ver" y "Editar" estén presentes  
-        $response->assertSee('Ver', false);  
-        $response->assertSee('Editar', false);  
-        
-        // Verifica el botón "Eliminar"  
-        $response->assertSee('data-entity-id="' . $teacher->id . '"', false);  
-        $response->assertSee('data-entity-name="' . trim($teacher->name . ' ' . $teacher->lastname) . '"', false);  
-    }  
-}  
+    // Verifica la presencia de cada docente y los botones correspondientes
+    foreach ($teachers as $teacher) {
+        // Verifica la existencia de la fila del docente
+        $response->assertSee($teacher->id);
+        $response->assertSee($teacher->name);
+        $response->assertSee($teacher->lastname);
+
+        // Verifica que los botones "Ver" y "Editar" estén presentes
+        $response->assertSee('Ver', false);
+        $response->assertSee('Editar', false);
+
+        // Verifica el botón "Eliminar"
+        $response->assertSee('data-entity-id="' . $teacher->id . '"', false);
+        $response->assertSee('data-entity-name="' . trim($teacher->name . ' ' . $teacher->lastname) . '"', false);
+    }
+}
 }

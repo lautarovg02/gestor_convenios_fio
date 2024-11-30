@@ -13,6 +13,8 @@ class Career extends Model
 
     protected $fillable = ['name' , 'department_id'];
 
+    /** Relación n:n con tabla Career
+    */
     public function teachers():BelongsToMany
     {
         return  $this->belongsToMany(Teacher::class, 'career_teacher')->withTimestamps();
