@@ -86,7 +86,7 @@
                         <select name="entity" id="entity" class="form-select">
                             <option value="">Seleccionar</option>
                             @foreach ($entityTypes as $type )
-                                <option value="{{$type}}" {{old('entity') == $type ? 'selected' : ''}}>{{$type}}</option>
+                                <option value="{{$type->name}}" {{old('entity_id') == $type->id ? 'selected' : ''}}>{{$type->name}}</option>
                             @endforeach
                             <option value="other">Otro tipo</option>
                         </select>

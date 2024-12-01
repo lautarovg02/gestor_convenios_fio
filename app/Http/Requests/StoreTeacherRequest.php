@@ -22,8 +22,8 @@ class StoreTeacherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:40',
-            'lastname' => 'required|string|max:40',
+            'name' => 'required|string|min:2|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/|max:40',
+            'lastname' => 'required|string|min:2|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/|max:40',
             'dni' => 'required|integer|digits:8',
             'cuil' => [
                 'nullable',
@@ -51,12 +51,17 @@ class StoreTeacherRequest extends FormRequest
     {
         return [
             // Mensajes para el campo "name"
-            'name.required' => 'El nombre es un campo obligatorio.',
-            'name.string' => 'El nombre debe ser una cadena de texto válida.',
+            'name.required' => 'El campo nombre es obligatorio.',
+            'name.min' => 'El nombre debe tener al menos :min caracteres.',
+            'name.max' => 'El nombre no puede tener mas de :max caracteres.',
+            'name.regex' => 'El nombre solo puede contener letras.',
 
             // Mensajes para el campo "lastname"
-            'lastname.required' => 'El apellido es un campo obligatorio.',
-            'lastname.string' => 'El apellido debe ser una cadena de texto válida.',
+            'lastname.required' => 'El campo apellido es obligatorio.',
+            'lastname.min' => 'El apellido debe tener al menos :min caracteres.',
+            'lastname.max' => 'El apellido no puede tener mas de :max caracteres.',
+            'lastname.regex' => 'El apellido solo puede contener letras.',
+
 
             // Mensajes para el campo "dni"
             'dni.required' => 'El DNI es un campo obligatorio.',
@@ -68,6 +73,7 @@ class StoreTeacherRequest extends FormRequest
             'cuil.integer' => 'El CUIL debe ser un número entero.',
             'cuil.digits' => 'El CUIL debe tener exactamente 11 dígitos.',
             'cuil.custom' => 'El CUIL debe contener el DNI en la posición correspondiente.',
+
         ];
     }
 }
