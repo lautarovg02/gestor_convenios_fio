@@ -81,13 +81,13 @@
                                 @endif
                             </td>
                             <td class="text-truncate col-min-width col-max-width">
-                                <span class="badge {{ $teacher->is_rector ? 'bg-success' : 'bg-danger' }}">
+                                <span class="badge {{ $teacher->is_rector ? 'bg-success' : 'bg-secondary' }}">
                                     {{ $teacher->is_rector ? 'Rector' : 'No es Rector' }}
                                 </span>
                             </td>
 
                             <td class="text-truncate col-min-width col-max-width">
-                                <span class="badge {{ $teacher->is_dean ? 'bg-success' : 'bg-danger' }}">
+                                <span class="badge {{ $teacher->is_dean ? 'bg-success' : 'bg-secondary' }}">
                                     {{ $teacher->is_dean ? 'Decano' : 'No es Decano' }}
                                 </span>
                             </td>
