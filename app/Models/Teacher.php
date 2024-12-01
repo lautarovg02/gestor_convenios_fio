@@ -14,8 +14,15 @@ class Teacher extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['lastname', 'name', 'dni', 'cuil', 'teacher_id',     'is_rector',
-    'is_dean',];
+    protected $fillable = [
+        'lastname',
+        'name',
+        'dni',
+        'cuil',
+        'teacher_id',
+        'is_rector',
+        'is_dean',
+    ];
 
     //Relación 1:n atributo multivaluado en la tabla Teacher
     public function cathedras(): HasMany
@@ -75,13 +82,12 @@ class Teacher extends Model
     }
     /**
      * Recuperar todos los docentes que no sean directores de ningún departamento
-     * ni coordinadores de ninguna carrera.
+     * ni coordinadores de ninguna carrera, ni rectores, ni decanos.
      *
      * Este método realiza una consulta para obtener todos los docentes que no tengan
-     * roles de directores o coordinadores.
+     * roles de directores, coordinadores, rectores o decanos.
      *
      * @return \Illuminate\Support\Collection List of teachers without roles.
-     @lautarovg02
      */
     public static function getTeachersWithoutRoles()
     {
@@ -94,6 +100,14 @@ class Teacher extends Model
                 $query->select(\DB::raw(1))
                     ->from('departments')
                     ->whereColumn('departments.director_id', 'teachers.id');
+            })
+            ->where(function ($query) {
+                $query->where('is_rector', 0)
+                      ->orWhereNull('is_rector');
+            })
+            ->where(function ($query) {
+                $query->where('is_dean', 0)
+                      ->orWhereNull('is_dean');
             });
     }
 
