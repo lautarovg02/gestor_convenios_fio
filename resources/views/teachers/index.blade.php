@@ -14,10 +14,15 @@
             <form action="{{ route('teachers.index') }}" method="GET" class="d-flex">
                 <input type="text" name="search" class="form-control" placeholder="Buscar docentes..."
                     value="{{ request()->input('search') }}" style="min-width: 400px;">
-                <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+                <button type="submit" class="btn btn-primary ms-2" data-bs-toggle="modal"
+                    data-bs-target="#modal-loading">Buscar</button>
             </form>
         </div>
 
+        <!-- FILTROS-->
+        <div class="col-12">
+            @include('teachers.filters')
+        </div>
 
         <!-- Mensajes de error -->
         <div class="alert-container text-center mx-auto d-flex align-items-center justify-content-center">
@@ -91,7 +96,8 @@
                                 <a href="{{ route('teachers.edit', $teacher) }}" class="btn btn-primary btn-sm">Editar</a>
                                 <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{ $teacher->id }}"
                                     data-entity-name="{{ $teacher->name . ' ' . $teacher->lastname }}"
-                                    data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
+                                    data-bs-toggle="modal" data-bs-target="#modal-delete"
+                                    data-entity-type="teachers">Eliminar</button>
                             </td>
                         </tr>
                     @endforeach
@@ -103,5 +109,11 @@
             </div>
         @endif
 
+        <!-- Modal -->
+        @include('layouts.modals.modal-delete')
+        @include('layouts.modals.modal-loading')
     </div>
+
+    <!--Linkeamos el .js del modal al template utilizando Vite-->
+    @vite('resources/js/modals/modalDelete.js')
 @endsection

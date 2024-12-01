@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTeacherRequest extends FormRequest
 {
@@ -19,12 +20,18 @@ class StoreTeacherRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      * @lautarovg02
      */
+
     public function rules(): array
     {
         return [
             'name' => 'required|string|min:2|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/|max:40',
             'lastname' => 'required|string|min:2|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/|max:40',
-            'dni' => 'required|integer|digits:8',
+            'dni' => [
+                'required',
+                'integer',
+                'digits:8',
+                Rule::unique('teachers')->ignore($this->teacher),
+            ],
             'cuil' => [
                 'nullable',
                 'integer',
@@ -36,11 +43,35 @@ class StoreTeacherRequest extends FormRequest
                     }
                 },
             ],
-            'is_rector' => 'required|boolean',
-            'is_dean' => 'required|boolean',
+            'is_rector' => [
+                'required',
+                'boolean', // Se separa la regla en su propio elemento.
+                function ($attribute, $value, $fail) {
+                    if ($value) {
+                        $exists = \DB::table('departments')->where('director_id', $this->teacher->id)->exists() ||
+                            \DB::table('careers')->where('coordinator_id', $this->teacher->id)->exists();
+                        if ($exists) {
+                            $fail('Un usuario no puede ser rector y ser director o coordinador al mismo tiempo.');
+                        }
+                    }
+                },
+            ],
+            'is_dean' => [
+                'required',
+                'boolean',
+                function ($attribute, $value, $fail) {
+                    if ($value) {
+                        $isRector = $this->input('is_rector');
+                        $exists = \DB::table('departments')->where('director_id', $this->teacher->id)->exists() ||
+                            \DB::table('careers')->where('coordinator_id', $this->teacher->id)->exists();
+                        if ($isRector || $exists) {
+                            $fail('Un usuario no puede ser decano y ser rector, director o coordinador al mismo tiempo.');
+                        }
+                    }
+                },
+            ],
         ];
     }
-
     /**
      * Get custom messages for validation errors.
      *
@@ -74,6 +105,7 @@ class StoreTeacherRequest extends FormRequest
             'cuil.digits' => 'El CUIL debe tener exactamente 11 dígitos.',
             'cuil.custom' => 'El CUIL debe contener el DNI en la posición correspondiente.',
 
+            'custom_validation.is_rector_and_dean' => 'Un usuario no puede ser rector y decano al mismo tiempo.',
         ];
     }
 }
