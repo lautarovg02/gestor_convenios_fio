@@ -49,18 +49,18 @@ class TeacherController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTeacherRequest $request)
+    public function store(StoreTeacherRequest $request): RedirectResponse
     {
-        try{
+        try {
             $exists = Teacher::where('dni', $request->dni)->first();
-            if($exists) throw new Exception("Dni duplicado");
+            if ($exists) throw new Exception("Dni duplicado");
 
             Teacher::create($request->validated());
 
             return redirect()->route('teachers.index')
-            ->with('success', 'Docente ingresado exitosamente.');
-        } catch(Exception $e){
-            \Log::error('Error al crear la empresa: '.$e->getMessage());
+                ->with('success', 'Docente ingresado exitosamente.');
+        } catch (Exception $e) {
+            \Log::error('Error al crear la empresa: ' . $e->getMessage());
 
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -69,19 +69,21 @@ class TeacherController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Teacher $teacher)
+    public function show(Teacher $teacher): View
     {
-        //
+        $teacher = Teacher::getTeacherWithRoles($teacher->id);
+        $teacherWithCareers = Teacher::getTeacherWithRelationToCareers($teacher->id);
+        return view('teachers.show', compact('teacherWithCareers', 'teacher'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Teacher $teacher)
+    public function edit(Teacher $teacher): View
     {
-        $teacher = $teacher->getAllWithRoles()->find($teacher->id);
+        $teacher = Teacher::getAllWithRoles()->find($teacher->id);
 
-        return view('teachers.edit', ['teacher' => $teacher]);
+        return view('teachers.edit', compact('teacher'));
     }
 
     /**

@@ -14,8 +14,15 @@ class Teacher extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['lastname', 'name', 'dni', 'cuil', 'teacher_id',     'is_rector',
-    'is_dean',];
+    protected $fillable = [
+        'lastname',
+        'name',
+        'dni',
+        'cuil',
+        'teacher_id',
+        'is_rector',
+        'is_dean',
+    ];
 
     //Relación 1:n atributo multivaluado en la tabla Teacher
     public function cathedras(): HasMany
@@ -115,5 +122,61 @@ class Teacher extends Model
                     ->orWhere('teachers.dni', 'LIKE', '%' . $searchTerm . '%');
             });
         }
+    }
+
+    /**
+     * Obtener un docente específico con su información relacionada (roles, departamento, carrera).
+     * Este método realiza una consulta para devolver un único docente junto con la información de
+     * si es director de un departamento o coordinador de una carrera.
+     *
+     * @param int $teacherId El ID del docente que se desea buscar.
+     * @return \Illuminate\Database\Eloquent\Model|null El docente con la información asociada o null si no existe.
+     * @lautarovg02
+     */
+    public static function getTeacherWithRoles($teacherId)
+    {
+        return self::select(
+            'teachers.*',
+            'departments.name as department_name',
+            'departments.id as department_id',
+            'careers.name as career_name',
+            'careers.id as career_id',
+            \DB::raw("CASE
+                    WHEN departments.id IS NOT NULL THEN 'Director'
+                    WHEN careers.id IS NOT NULL THEN 'Coordinador'
+                    ELSE 'None'
+                END as role")
+        )
+            ->leftJoin('departments', 'teachers.id', '=', 'departments.director_id')
+            ->leftJoin('careers', 'teachers.id', '=', 'careers.coordinator_id')
+            ->where('teachers.id', $teacherId)
+            ->first(); // Retornar el primer resultado o null si no existe.
+    }
+
+    /**
+     * Obtener las carreras relacionadas con un docente específico y determinar si es coordinador o profesor.
+     *
+     * Este método devuelve el nombre del docente, apellido, nombre de la carrera,
+     * y una columna adicional que indica si el docente es "Coordinador" o "Profesor".
+     *
+     * @param int $teacherId El ID del docente.
+     * @return \Illuminate\Support\Collection Resultado de la consulta con la relación del docente y sus carreras.
+     * @lautarovg02
+     */
+    public static function getTeacherWithRelationToCareers(int $teacherId)
+    {
+        return self::select(
+            'teachers.name',
+            'teachers.lastname',
+            'careers.name as career',
+            \DB::raw("CASE
+                        WHEN teachers.id = careers.coordinator_id THEN 'Coordinador'
+                        ELSE 'Profesor'
+                      END as relation")
+        )
+            ->join('career_teacher', 'teachers.id', '=', 'career_teacher.teacher_id')
+            ->join('careers', 'career_teacher.career_id', '=', 'careers.id')
+            ->where('teachers.id', $teacherId)
+            ->get();
     }
 }
