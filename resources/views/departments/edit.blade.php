@@ -48,7 +48,7 @@
                     <!-- Campo Director -->
                     <!-- Selector con docentes sin rol" -->
                     <div class="form-group mb-3">
-                        <label class="form-label fs-6" for="director_id">Director de departamento</label>
+                        <label class="form-label fs-6 required-field" for="director_id">Director de departamento</label>
                         <select name="director_id" id="director_id" class="form-select">
                             <option value="" disabled>Seleccione un director</option>
 
@@ -90,12 +90,11 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    @include('layouts/modals/modal-edit')
 </div>
 
 <!--Link a .js del modal al template utilizando Vite-->
 @vite('resources/js/modals/modalEdit.js')
 
 @endsection
-b
-
-
