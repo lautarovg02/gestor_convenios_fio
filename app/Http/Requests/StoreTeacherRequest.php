@@ -22,8 +22,8 @@ class StoreTeacherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'lastname' => 'required|string',
+            'name' => 'required|string|min:2|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/',
+            'lastname' => 'required|string|min:2|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/',
             'dni' => 'required|integer|digits:8',
             'cuil' => [
                 'nullable',
@@ -51,12 +51,15 @@ class StoreTeacherRequest extends FormRequest
     {
         return [
             // Mensajes para el campo "name"
-            'name.required' => 'El nombre es un campo obligatorio.',
-            'name.string' => 'El nombre debe ser una cadena de texto válida.',
+            'name.required' => 'El campo nombre es obligatorio.',
+            'name.min' => 'El nombre debe tener al menos :min caracteres.',
+            'name.regex' => 'El nombre solo puede contener letras.',
 
             // Mensajes para el campo "lastname"
-            'lastname.required' => 'El apellido es un campo obligatorio.',
-            'lastname.string' => 'El apellido debe ser una cadena de texto válida.',
+            'lastname.required' => 'El campo apellido es obligatorio.',
+            'lastname.min' => 'El apellido debe tener al menos :min caracteres.',
+            'lastname.regex' => 'El apellido solo puede contener letras.',
+
 
             // Mensajes para el campo "dni"
             'dni.required' => 'El DNI es un campo obligatorio.',
