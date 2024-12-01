@@ -61,9 +61,10 @@ class DepartmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Department $department)
+    public function show(Department $department): View
     {
-        //
+        $careersBelongsToDepartment = $department->careers;
+        return view('departments.show' , compact('department' , 'careersBelongsToDepartment'));
     }
 
     /**

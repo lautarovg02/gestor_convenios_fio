@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Career;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Department;
 use App\Models\Teacher;
@@ -14,7 +15,6 @@ class CareerFactory extends Factory
 
     protected static $assignedTeachers = [];
 
-
     //Arreglo estático para almacenar las carreras
     protected static $careerNames = [
         'Ingeniería Civil',
@@ -26,39 +26,6 @@ class CareerFactory extends Factory
         'Licenciatura en Tecnología Médica',
         'Licenciatura en Tecnología de los Alimentos',
         'Ingeniería en Seguridad e Higiene en el Trabajo',
-        // Nuevas carreras
-        'Licenciatura en Administración de Empresas',
-        'Licenciatura en Contaduría Pública',
-        'Licenciatura en Psicología',
-        'Licenciatura en Derecho',
-        'Licenciatura en Comunicación Social',
-        'Licenciatura en Educación',
-        'Licenciatura en Trabajo Social',
-        'Licenciatura en Mercadotecnia',
-        'Licenciatura en Diseño Gráfico',
-        'Licenciatura en Relaciones Internacionales',
-        'Licenciatura en Ciencias Políticas',
-        'Licenciatura en Biología',
-        'Licenciatura en Matemáticas',
-        'Licenciatura en Química',
-        'Licenciatura en Física',
-        'Licenciatura en Ciencias Ambientales',
-        'Ingeniería en Telecomunicaciones',
-        'Ingeniería en Software',
-        'Ingeniería de Transporte',
-        'Ingeniería en Energías Renovables',
-        'Licenciatura en Gastronomía',
-        'Licenciatura en Artes Visuales',
-        'Licenciatura en Música',
-        'Licenciatura en Filosofía',
-        'Licenciatura en Historia',
-        'Licenciatura en Sociología',
-        'Licenciatura en Deportes',
-        'Ingeniería en Robótica',
-        'Licenciatura en Marketing Digital',
-        'Licenciatura en Biotecnología',
-        'Ingeniería en Sistemas de Información',
-        'Licenciatura en Asistencia Ejecutiva',
     ];
 
     /**
@@ -92,3 +59,4 @@ class CareerFactory extends Factory
         ];
     }
 }
+
