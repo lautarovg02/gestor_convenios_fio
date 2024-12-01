@@ -18,6 +18,21 @@
             </form>
         </div>
 
+        <!-- FILTROS-->
+        <div class="col-12">
+            @include('teachers.filters')
+        </div>
+
+
+
+
+<<<<<<< HEAD
+=======
+        <!-- FILTROS-->
+        <div class="col-12">
+            @include('teachers.filters')
+        </div>
+>>>>>>> US-33-TASK-161
 
         <!-- Mensajes de error -->
         <div class="alert-container text-center mx-auto d-flex align-items-center justify-content-center">

@@ -14,6 +14,25 @@ class Teacher extends Model
 {
     use HasFactory;
 
+
+    /**
+     * Roles disponibles para los docentes.
+     */
+    const ROLE_DIRECTOR = 'Director';
+    const ROLE_COORDINATOR = 'Coordinador';
+    const ROLE_NONE = 'Sin rol';
+
+    /**
+     * Lista completa de roles disponibles.
+     *
+     * @var array
+     */
+    public const AVAILABLE_ROLES = [
+        self::ROLE_DIRECTOR,
+        self::ROLE_COORDINATOR,
+        self::ROLE_NONE,
+    ];
+
     protected $fillable = [
         'lastname',
         'name',
@@ -74,11 +93,39 @@ class Teacher extends Model
             \DB::raw("CASE
                         WHEN departments.id IS NOT NULL THEN 'Director'
                         WHEN careers.id IS NOT NULL THEN 'Coordinador'
-                        ELSE 'None'
-                    END as role")
+                        ELSE 'Sin rol'
+                      END as role")
         )
             ->leftJoin('departments', 'teachers.id', '=', 'departments.director_id')
-            ->leftJoin('careers', 'teachers.id', '=', 'careers.coordinator_id');
+            ->leftJoin('careers', 'teachers.id', '=', 'careers.coordinator_id')
+            ->distinct(); // Asegura que los resultados no se dupliquen
+    }
+
+    /**
+     * Scope para filtrar los profesores según la carrera.
+     *
+     * Este método aplica un filtro a la consulta para obtener los profesores
+     * que están asociados a una carrera específica. Verifica tanto si el profesor
+     * es coordinador de la carrera como si pertenece a ella a través de la tabla
+     * intermedia `career_teacher`.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query La consulta actual de Eloquent.
+     * @param int|null $careerId El ID de la carrera para aplicar el filtro.
+     * @return \Illuminate\Database\Eloquent\Builder La consulta filtrada.
+     *
+      @lautarovg02
+     */
+    public static function scopeFilterByCareer($query, $careerId)
+    {
+        if (!empty($careerId)) {
+            $query->where(function ($subQuery) use ($careerId) {
+                $subQuery->where('careers.id', $careerId)
+                    ->orWhereHas('careers', function ($q) use ($careerId) {
+                        $q->where('career_teacher.career_id', $careerId);
+                    });
+            });
+        }
+        return $query;
     }
     /**
      * Recuperar todos los docentes que no sean directores de ningún departamento
@@ -130,4 +177,6 @@ class Teacher extends Model
             });
         }
     }
+
+
 }
