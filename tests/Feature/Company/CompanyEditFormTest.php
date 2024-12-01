@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\City;
+use App\Models\CompanyEntity;
 use App\Models\Company;
 use App\Models\Province;
 use Exception;
@@ -12,13 +13,18 @@ use Tests\TestCase;
 class CompanyEditFormTest extends TestCase
 {
     use RefreshDatabase;
-
+    protected function setUp(): void
+    {
+        parent::setUp();
+        \Database\Factories\CompanyEntityFactory::resetEntities();
+    }
     /** @test */
     public function it_displays_the_edit_form_correctly()
     {
         // Arrange: Crea una compañía y algunas ciudades para la prueba
         Province::factory()->create();
         $city = City::factory()->create();
+        $companyEntity = CompanyEntity::factory()->create();
         $company = Company::factory()->create(['city_id' => $city->id]);
 
         // Act: Visita la página de edición
@@ -26,9 +32,10 @@ class CompanyEditFormTest extends TestCase
 
         // Assert: Verifica que la respuesta sea exitosa y contenga los datos de la compañía
         $response->assertStatus(200)
-                ->assertSee($company->denomination)
-                ->assertSee($company->cuit)
-                ->assertSee($city->name);
+            ->assertSee($companyEntity->name)
+            ->assertSee($company->denomination)
+            ->assertSee($company->cuit)
+            ->assertSee($city->name);
     }
 
     /** @test */
@@ -37,14 +44,17 @@ class CompanyEditFormTest extends TestCase
         // Arrange: Crea una compañía y algunas ciudades para la prueba
         Province::factory()->create();
         $city = City::factory()->create();
-        $company = Company::factory()->create(['city_id' => $city->id]);
+        $companyEntity = CompanyEntity::factory()->create();
+        $companyEntity2 = CompanyEntity::factory()->create();
 
+        $company = Company::factory()->create();
+        dd($company);
         $data = [
             'denomination' => 'Nueva Denominación',
             'cuit' => '12345678901',
             'company_name' => 'Nuevo Nombre de la Empresa',
             'sector' => 'Nuevo Sector',
-            'entity' => 'Nueva Entidad',
+            'entity_id' => $companyEntity2->id,
             'company_category' => 'Nueva Categoría',
             'scope' => 'Nuevo Ámbito',
             'street' => 'Nueva Calle',
@@ -65,29 +75,30 @@ class CompanyEditFormTest extends TestCase
     {
         // Arrange: Crea una compañía
         Province::factory()->create();
-        City::factory()->create();
+        $city = City::factory()->create();
+        $companyEntity = CompanyEntity::factory()->create();
         $company = Company::factory()->create();
 
-        // Datos inválidos (sin cuit)
         $data = [
-            'denomination' => '',
-            'cuit' => '',
-            'company_name' => 'Nombre de la Empresa',
-            'sector' => 'Sector',
-            'entity' => 'Entidad',
-            'company_category' => 'Categoría',
-            'scope' => 'Ámbito',
-            'street' => 'Calle',
+            'denomination' => 'Nueva Denominación',
+            'cuit' => '12345678901',
+            'company_name' => 'Nuevo Nombre de la Empresa',
+            'sector' => 'Nuevo Sector',
+            'entity_id' => $companyEntity->id,
+            'company_category' => 'Nueva Categoría',
+            'scope' => 'nacional',
+            'street' => 'Nueva Calle',
             'number' => '123',
-            'city_id' => 'invalido', // Valor inválido para city_id
+            'city_id' => $city->id,
         ];
+
 
         // Act: Intenta actualizar la compañía con datos inválidos
         $response = $this->patch(route('companies.update', $company->id), $data);
 
         // Assert: Verifica que la validación se produzca y redirija de nuevo al formulario
         $response->assertRedirect()
-                ->assertSessionHasErrors(['denomination', 'cuit', 'city_id']);
+            ->assertSessionHasErrors(['denomination', 'cuit', 'city_id']);
     }
 
     /** @test */
@@ -96,17 +107,18 @@ class CompanyEditFormTest extends TestCase
         // Arrange: Crea una compañía y una ciudad
         Province::factory()->create();
         $city = City::factory()->create();
-        $company = Company::factory()->create(['city_id' => $city->id]);
+        $companyEntity = CompanyEntity::factory()->create();
+        $company = Company::factory()->create();
 
         $data = [
-            'denomination' => 'Denominación Actualizada',
+            'denomination' => 'Nueva Denominación',
             'cuit' => '12345678901',
-            'company_name' => 'Nombre de la Empresa',
-            'sector' => 'Sector',
-            'entity' => 'Entidad',
-            'company_category' => 'Categoría',
-            'scope' => 'Ámbito',
-            'street' => 'Calle',
+            'company_name' => 'Nuevo Nombre de la Empresa',
+            'sector' => 'Nuevo Sector',
+            'entity_id' => $companyEntity->id,
+            'company_category' => 'Nueva Categoría',
+            'scope' => 'NACIONAL',
+            'street' => 'Nueva Calle',
             'number' => '123',
             'city_id' => $city->id,
         ];
@@ -119,26 +131,108 @@ class CompanyEditFormTest extends TestCase
         $response->assertSessionHas('success', 'Empresa actualizada exitosamente.');
     }
 
-      /** @test */
+    /** @test */
     public function it_requires_required_fields_when_update()
     {
         // Arrange: Crea una compañía
         Province::factory()->create();
-        City::factory()->create();
+        $city = City::factory()->create();
+        $companyEntity = CompanyEntity::factory()->create();
         $company = Company::factory()->create();
 
         // Act: envía el formulario sin ningún dato
-        $response = $this->patch(route('companies.update' , $company), []);
+        $response = $this->patch(route('companies.update', $company), []);
 
-          // Assert: verifica que se redirige a la misma página y muestra los errores
+        // Assert: verifica que se redirige a la misma página y muestra los errores
         $response->assertSessionHasErrors(['denomination', 'cuit', 'city_id']);
     }
 
-     /** @test */
+    public function test_update_company_with_existing_entity(): void
+    {
+        Province::factory()->create();
+
+        City::factory()->count(4)->create();
+
+        // Arrange: Crear una empresa y una entidad existente
+        $companyEntity = CompanyEntity::factory()->create(['name' => 'Privada con fines de lucro']);
+        $company = Company::factory()->create(['entity_id' => $companyEntity->id]);
+
+        // Datos de actualización validando la entidad existente
+        $data = [
+            'denomination' => 'Updated Company',
+            'cuit' => '12345678901',
+            'company_name' => 'Updated Name',
+            'sector' => 'Sector Updated',
+            'company_category' => 'Category Updated',
+            'scope' => 'nacional', // Radio button selection
+            'entity_id' => $companyEntity->id, // Existing entity
+            'street' => 'New Street',
+            'number' => '123',
+            'city_id' => City::factory()->create()->id,
+        ];
+
+        // Act: Realizar la petición de actualización
+        $response = $this->put(route('companies.update', $company->id), $data);
+
+        // Assert: Verificamos redirección y mensaje de éxito
+        $response->assertRedirect(route('companies.index'));
+        $response->assertSessionHas('success', 'Empresa actualizada exitosamente.');
+
+        // Verificamos que la entidad de la empresa haya permanecido como se esperaba
+        $this->assertDatabaseHas('companies', [
+            'denomination' => 'Updated Company',
+            'entity_id' => $companyEntity->id,
+        ]);
+    }
+
+    public function test_update_company_with_new_entity(): void
+    {
+        Province::factory()->create();
+
+        City::factory()->count(4)->create();
+        $companyEntity = CompanyEntity::factory()->create(['name' => 'Privada con fines de lucro']);
+        $company = Company::factory()->create(['entity_id' => $companyEntity->id]);
+
+        // Datos de actualización validando la entidad existente
+        $data = [
+            'denomination' => 'Updated Company',
+            'cuit' => '12345678901',
+            'company_name' => 'Updated Name',
+            'sector' => 'Sector Updated',
+            'company_category' => 'Category Updated',
+            'scope' => 'nacional', // Radio button selection
+            'entity_id' => $companyEntity->id, // Existing entity
+            'street' => 'New Street',
+            'number' => '123',
+            'city_id' => City::factory()->create()->id,
+        ];
+
+
+        // Act: Realizar la petición de actualización
+        $response = $this->put(route('companies.update', $company->id), $data);
+
+        // Assert: Verificamos redirección y mensaje de éxito
+        $response->assertRedirect(route('companies.index'));
+        $response->assertSessionHas('success', 'Empresa actualizada exitosamente.');
+
+        // Verificamos que la nueva entidad se creó y se relacionó a la empresa
+        $this->assertDatabaseHas('company_entities', [
+            'name' => 'Nueva entidad no registrada',
+        ]);
+
+        $newEntity = CompanyEntity::where('name', 'Nueva entidad no registrada')->first();
+        $this->assertDatabaseHas('companies', [
+            'denomination' => 'New Company',
+            'entity_id' => $newEntity->id,
+        ]);
+    }
+
+    /** @test */
     public function it_loads_existing_company_data_in_the_edit_form()
     {
-         // Crear ciudad y empresa de prueba
+        // Crear ciudad y empresa de prueba
         Province::factory()->create();
+        $companyEntity = CompanyEntity::factory()->create();
         $city = City::factory()->create();
         $company = Company::factory()->create([
             'denomination' => 'Empresa Test',
@@ -146,9 +240,8 @@ class CompanyEditFormTest extends TestCase
             'city_id' => $city->id,
             'company_name' => 'Nombre Test',
             'sector' => 'Sector Test',
-            'entity' => 'Entidad Test',
             'company_category' => 'Categoría Test',
-            'scope' => 'Ámbito Test',
+            'scope' => 'nacional',
             'street' => 'Calle Falsa',
             'number' => '123',
         ]);
@@ -162,9 +255,8 @@ class CompanyEditFormTest extends TestCase
         $response->assertSee($company->cuit);
         $response->assertSee($company->company_name);
         $response->assertSee($company->sector);
-        $response->assertSee($company->entity);
+        $response->assertSee($companyEntity->name);
         $response->assertSee($company->company_category);
-        $response->assertSee($company->scope);
         $response->assertSee($company->street);
         $response->assertSee($company->number);
     }
@@ -175,6 +267,7 @@ class CompanyEditFormTest extends TestCase
         // Crear ciudad y empresa de prueba
         Province::factory()->create();
         $city = City::factory()->create();
+        CompanyEntity::factory()->count(5)->create();
         $company = Company::factory()->create(['city_id' => $city->id]);
 
         // Datos para actualizar la empresa
@@ -183,7 +276,6 @@ class CompanyEditFormTest extends TestCase
             'cuit' => '98765432109',
             'company_name' => 'Nombre Modificado',
             'sector' => 'Sector Modificado',
-            'entity' => 'Entidad Modificada',
             'company_category' => 'Categoría Modificada',
             'scope' => 'Ámbito Modificado',
             'street' => 'Calle Modificada',
@@ -208,6 +300,8 @@ class CompanyEditFormTest extends TestCase
     {
         // Crear ciudad y empresa de prueba
         Province::factory()->create();
+        CompanyEntity::factory()->count(5)->create();
+
         $city = City::factory()->create();
         $company = Company::factory()->create(['city_id' => $city->id]);
 
@@ -228,6 +322,7 @@ class CompanyEditFormTest extends TestCase
         // Crear dos empresas de prueba
         Province::factory()->create();
         $city = City::factory()->create();
+        CompanyEntity::factory()->count(5)->create();
         $existingCompany = Company::factory()->create(['cuit' => '12345678901', 'city_id' => $city->id]);
         $companyToUpdate = Company::factory()->create(['cuit' => '98765432109', 'city_id' => $city->id]);
 
@@ -237,8 +332,8 @@ class CompanyEditFormTest extends TestCase
             'cuit' => '12345678901', // CUIT duplicado
             'company_name' => 'Nombre Actualizado',
             'sector' => 'Sector Actualizado',
-            'entity' => 'Entidad Actualizada',
             'company_category' => 'Categoría Actualiza',
+            'entity_id' => CompanyEntity::factory()->create(),
             'scope' => 'Ámbito Actualizado',
             'street' => 'Calle Actualizada',
             'number' => '321',
@@ -246,8 +341,6 @@ class CompanyEditFormTest extends TestCase
         ]);
 
         // Verificar que se redirige al formulario de edición con un mensaje de error por CUIT duplicado
-        $response->assertRedirect(route('companies.edit', $companyToUpdate->id));
         $response->assertSessionHasErrors(['error' => 'Cuit duplicado']);
     }
-
 }

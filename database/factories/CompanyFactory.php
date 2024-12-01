@@ -28,7 +28,7 @@ class CompanyFactory extends Factory
             'cuit' => $this->faker->unique()->numberBetween(20000000000, 90999999000),
             'company_name' => $companyName,
             'sector' => $this->faker->word,
-            'entity_id' => CompanyEntity::inRandomOrder()->first()->id,
+            'entity_id' => CompanyEntity::inRandomOrder()->first()->id ?? CompanyEntity::factory()->create()->id,
             'company_category' => $this->faker->word,
             'scope' => $this->faker->randomElement(['NACIONAL', 'INTERNACIONAL']), // Seleccionar entre Nacional o Internacional
             'street' => $this->faker->streetName,

@@ -29,7 +29,7 @@ class StoreCompanyRequest extends FormRequest
                 'city_id' => 'required|exists:cities,id|integer',
                 'company_name' => 'nullable|string|max:100',
                 'sector' => 'nullable|string|max:40',
-                'entity' => ['nullable', 'in:' . implode(',', EntityType::values()) . ',other'],
+                'entity_id' => ['nullable', 'in:' . implode(',', EntityType::values()) . ',other'],
                 'other_entity_input' => 'nullable|string',
                 'company_category' => 'nullable|string|max:20',
                 'scope' => 'nullable|string ',
