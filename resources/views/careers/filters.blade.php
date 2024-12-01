@@ -15,7 +15,7 @@
     </div>
 
     <div class="col-md-auto d-flex align-items-end">
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-loading">Filtrar</button>
         <a href="{{ route('careers.index') }}" class="btn btn-secondary ms-2">Limpiar</a>
     </div>
 </form>

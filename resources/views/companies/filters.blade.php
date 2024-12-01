@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="col-md-4 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-loading">Filtrar</button>
         <a href="{{ route('companies.index') }}" class="btn btn-secondary ms-2">Limpiar</a>
     </div>
 </form>

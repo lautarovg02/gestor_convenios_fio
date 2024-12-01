@@ -4,6 +4,8 @@
     --active-nav-bg-color: #c2e7ff;
     --hover-inactive-nav-bg-color: #d3dbe5;
     --required-field-color: rgb(168, 54, 54);
+    --loading-icon-bg-color: #ded7d7;
+    --loading-icon-line-color: #3498db;
 
     /* */
     --max-column-width: 150px;
@@ -53,3 +55,25 @@
     cursor: default; /* Opcional: cambia el cursor para que no parezca un enlace */
 }
 
+
+/*LOADING-MODAL*/
+.spinner {
+    border: 4px solid var(--loading-icon-bg-color);
+    /* Light grey */
+    border-top: 4px solid var(--loading-icon-line-color);
+    /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
