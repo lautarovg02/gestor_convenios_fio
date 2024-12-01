@@ -8,6 +8,7 @@ use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use App\Models\Career;
 use Redirect;
 
 class DepartmentController extends Controller
@@ -98,8 +99,25 @@ class DepartmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Department $department)
+    public function destroy(Department $department): RedirectResponse
     {
-        //
+        try {
+            // Verificar si el departamento tiene carreras asociadas
+            $careersCount = Career::where('department_id', $department->id)->count();
+
+            if ($careersCount > 0) {
+                return redirect()->route('departments.index')
+                    ->with('error', 'No se puede eliminar el departamento porque tiene carreras asociadas.');
+            }
+
+            // Eliminar el departamento
+            $department->delete();
+
+            return redirect()->route('departments.index')
+                ->with('success', 'Departamento eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('departments.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar el departamento: ' . $e->getMessage());
+        }
     }
 }
