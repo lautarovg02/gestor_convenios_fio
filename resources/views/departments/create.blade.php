@@ -37,7 +37,7 @@
                             <label for="name" class="required-field fs-6">Nombre</label>
                         </label>
                         <div>
-                            <input class="form-control fs-6" placeholder="Nombre" name="name" type="text" id="name">
+                            <input class="form-control fs-6" maxlength="200" placeholder="Nombre" name="name" type="text" id="name">
                         </div>
                         @error('name')
                             <div class="text-danger">{{ $message }}</div>

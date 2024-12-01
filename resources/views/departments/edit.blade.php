@@ -38,7 +38,7 @@
                     <div class="form-group mb-3">
                         <label class="form-label required-field fs-6" for='name'> Denominación</label>
                         <div>
-                            <input class="form-control" name="name" id="name" type="text" value="{{$department->name}}" placeholder="Ingrese la denominación " autocomplete="off">
+                            <input class="form-control" maxlength="200" name="name" id="name" type="text" value="{{$department->name}}" placeholder="Ingrese la denominación " autocomplete="off">
                             @error('name')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror

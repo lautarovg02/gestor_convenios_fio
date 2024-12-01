@@ -25,7 +25,7 @@
                             <label for="name" class="required-file">Ciudad</label>
                         </label>
                         <div>
-                            <input class="form-control " placeholder="Ciudad a ingresar..." name="name" type="text" id="name">
+                            <input class="form-control " maxlength="40" placeholder="Ciudad a ingresar..." name="name" type="text" id="name">
                             <small class="form-hint">Ciudad <b>nombre</b></small>
                             @error('name')
                                 <div class="text-danger">{{$message}}</div>
