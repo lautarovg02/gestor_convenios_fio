@@ -51,16 +51,11 @@ class TeacherController extends Controller
      */
     public function store(StoreTeacherRequest $request)
     {
-        try{
-            $exists = Teacher::where('dni', $request->dni)->first();
-            if($exists) throw new Exception("Dni duplicado");
-
+        try {
             Teacher::create($request->validated());
-
-            return redirect()->route('teachers.index')
-            ->with('success', 'Docente ingresado exitosamente.');
-        } catch(Exception $e){
-            \Log::error('Error al crear la empresa: '.$e->getMessage());
+            return redirect()->route('teachers.index')->with('success', 'Docente ingresado exitosamente.');
+        } catch (Exception $e) {
+            \Log::error('Error al crear la empresa: ' . $e->getMessage());
 
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -90,19 +85,8 @@ class TeacherController extends Controller
     public function update(StoreTeacherRequest $request, Teacher $teacher): RedirectResponse
     {
         try {
-
-            // Verifica si el dni es duplicado
-            $exists = Teacher::where('dni', $request->dni)
-                ->where('id', '<>', $teacher->id)
-                ->first();
-
-            if ($exists) {
-                throw new Exception("Dni duplicado");
-            }
-
             // Guarda el mensaje en la sesión
             $teacher->update($request->validated());
-
             return redirect()->route('teachers.index')->with('success', 'Docente actualizado exitosamente.');
         } catch (Exception $e) {
             \Log::error($e->getMessage());

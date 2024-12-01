@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTeacherRequest extends FormRequest
 {
@@ -24,7 +25,12 @@ class StoreTeacherRequest extends FormRequest
         return [
             'name' => 'required|string|min:2|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/|max:40',
             'lastname' => 'required|string|min:2|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/|max:40',
-            'dni' => 'required|integer|digits:8',
+            'dni' => [
+                'required',
+                'integer',
+                'digits:8',
+                Rule::unique('teachers')->ignore($this->teacher), // Ignora el registro actual en update
+            ],
             'cuil' => [
                 'nullable',
                 'integer',
@@ -37,10 +43,20 @@ class StoreTeacherRequest extends FormRequest
                 },
             ],
             'is_rector' => 'required|boolean',
-            'is_dean' => 'required|boolean',
+            'is_dean' => [
+                'required',
+                'boolean',
+                function ($attribute, $value, $fail) {
+                    $isRector = $this->input('is_rector');
+                    $isDean = $this->input('is_dean');
+
+                    if ($isRector && $isDean) {
+                        $fail('Un usuario no puede ser rector y decano al mismo tiempo.');
+                    }
+                },
+            ],
         ];
     }
-
     /**
      * Get custom messages for validation errors.
      *
@@ -74,6 +90,7 @@ class StoreTeacherRequest extends FormRequest
             'cuil.digits' => 'El CUIL debe tener exactamente 11 dígitos.',
             'cuil.custom' => 'El CUIL debe contener el DNI en la posición correspondiente.',
 
+            'custom_validation.is_rector_and_dean' => 'Un usuario no puede ser rector y decano al mismo tiempo.',
         ];
     }
 }
