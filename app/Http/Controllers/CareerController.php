@@ -108,17 +108,22 @@ class CareerController extends Controller
         //
     }
 
+
     /**
-     * Remove the specified resource from storage.
-     */
+    * Remove the specified resource from storage.
+    */
     public function destroy(Career $career): RedirectResponse
     {
         try {
+            // Eliminar la carrera
             $career->delete();
 
-            return redirect()->route('careers.index')->with('success', 'Carrera eliminada exitosamente.');
+            return redirect()->route('careers.index')
+                ->with('success', 'Carrera eliminada exitosamente.');
         } catch (\Exception $e) {
-            return redirect()->route('careers.index')->with('error', 'Error al eliminar la carrera: ' . $e->getMessage());
+            return redirect()->route('careers.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar la carrera: ' . $e->getMessage());
         }
     }
+
 }
