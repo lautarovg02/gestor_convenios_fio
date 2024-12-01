@@ -15,6 +15,7 @@ class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @dairagalceran
      */
     public function index(): View
     {
@@ -67,32 +68,31 @@ class DepartmentController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     * @dairagalceran
      */
-    public function edit(Department $department)
+    public function edit(Department $department): View
     {
-        $department = Department::find($department->id);
 
-        return view('departments.edit', ['department' => $department]);
+        $teachersWithoutRol = Teacher::getTeachersWithoutRoles()->orderBy('lastname', 'ASC')->get();
+
+        return view('departments.edit', compact('department' ,  'teachersWithoutRol'));
     }
 
     /**
      * Update the specified resource in storage.
+     * @dairagalceran
      */
     public function update(StoreDepartmentRequest $request, Department $department) : RedirectResponse
     {
-        dd($request);
-
         try{
-            $exists = Department::where('director_id', $request->teacher->id)->first();
 
-            dd($department);
-            $department->update($request->validated());
-
-            return redirect()->route('departments.index')->with('success' , 'Departamento creado exitosamente');
+            $validatedData = $request->validated();
+            $department->update($validatedData);
+            return redirect()->route('departments.index')->with('success' , 'Departamento editado exitosamente');
 
         }catch(\Exception $e){
-            return redirect()->route('departments.edit', $department->id)->withErrors(['error' => $e->getMessage()]);
 
+            return redirect()->route('departments.edit', $department->id)->withErrors(['error' => $e->getMessage()]);
         }
     }
 

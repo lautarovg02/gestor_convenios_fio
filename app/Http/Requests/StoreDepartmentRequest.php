@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreDepartmentRequest extends FormRequest
 {
@@ -22,7 +23,7 @@ class StoreDepartmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:200|unique:departments,name',
+            'name' => ['required','string','max:200', Rule::unique('departments')->ignore($this->department)],
             'director_id' => 'required|exists:teachers,id|integer',
         ];
     }
@@ -32,9 +33,10 @@ class StoreDepartmentRequest extends FormRequest
         return [
             'name.required' => 'La denominación es un campo obligatorio.',
             'name.max' => 'La cantidad máxima de caracteres es de :max',
-            'name.unique' => 'El nombre del departamento ya está en uso.',
-            'director_id.required' => 'El director es un campo obligatorio.',
-            'director_id.exists' => 'El docente seleccionado no es válido.',
+            'director_id.required' => 'El director es  un campo obligatorio.',
+            'director_id.exists' => 'El  director seleccionado no es válido.',
+            'name.unique' => 'Ya existe un departamento con ese nombre. Por favor, elige otro nombre.',
+
         ];
     }
 }
