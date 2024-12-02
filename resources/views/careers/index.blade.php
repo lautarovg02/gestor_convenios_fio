@@ -1,3 +1,4 @@
+<!-- resources/views/careers/index.blade.php-->
 @extends('layouts.app')
 
 @section('content')
@@ -75,11 +76,13 @@
                             <td>{{ $career->id }}</td>
                             <td>{!! highlightKeyword($career->name, request()->input('search')) !!}</td>
                             <td>{!! highlightKeyword($career->department->name ?? 'N/A', request()->input('search')) !!}</td>
-                            <td>{!! highlightKeyword($career->teacher->name ?? 'N/A', request()->input('search')) !!}</td>
+                            <td>{!! highlightKeyword($career->teacher->lastname.'  '. $career->teacher->name ?? 'N/A', request()->input('search')) !!}</td>
                             <td>
                                 <a href="{{ route('careers.show', $career) }}" class="btn btn-info btn-sm">Ver</a>
                                 <a href="{{ route('careers.edit', $career) }}" class="btn btn-primary btn-sm">Editar</a>
-                                <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{$career->id}}" data-entity-name="{{$career->name}}" data-entity-type="careers" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
+                                <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{ $career->id }}"
+                                    data-entity-name="{{ $career->name }}"  data-entity-type="careers" data-bs-toggle="modal"
+                                    data-bs-target="#modal-delete">Eliminar</button>
                             </td>
                         </tr>
                     @endforeach
@@ -93,10 +96,11 @@
     @endif
 
     <!-- Modal -->
+    @include('layouts/modals/modal-delete')
+</div>
 
-    </div>
-
-    <!--Linkeamos el .js del modal al template utilizando Vite-->
+<!--Linkeamos el .js del modal al template utilizando Vite-->
+@vite('resources/js/modals/modalDelete.js')
 
 
     @include('layouts.modals.modal-loading')
