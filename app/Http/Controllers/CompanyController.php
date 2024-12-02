@@ -153,38 +153,38 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
 
-    public function update(StoreCompanyRequest $request, Company $company): RedirectResponse
-    {
-        try {
-            // Validar CUIT único
-            $exists = Company::where('cuit', $request->cuit)
-                ->where('id', '!=', $company->id)
-                ->first();
-            if ($exists) {
-                throw new Exception("El CUIT ingresado ya está registrado.");
-            }
+     public function update(StoreCompanyRequest $request, Company $company): RedirectResponse
+     {
+         try {
+             // Validar CUIT único
+             $exists = Company::where('cuit', $request->cuit)
+                 ->where('id', '!=', $company->id)
+                 ->first();
+             if ($exists) {
+                 throw new Exception("El CUIT ingresado ya está registrado.");
+             }
 
-            // Manejar el campo entidad
-            $entitySelected = $request->entity === 'other' ? $request->other_entity_input : $request->entity;
-            $existsEntity = CompanyEntity::where('name', $entitySelected)->first();
-            if (!$existsEntity) {
-                $newEntity = CompanyEntity::create(['name' => $entitySelected]);
-                //Crear la empresa con el valor seleccionado de entidad
-                $company->update(array_merge(
-                    $request->validated(),
-                    ['entity_id' => $newEntity->id]
-                ));            } else {
-                // Actualizar empresa
-                $company->update(array_merge(
-                    $request->validated(),
-                    ['entity_id' => $existsEntity->id]
-                ));
-            }
-            return redirect()->route('companies.index')->with('success', 'Empresa actualizada exitosamente.');
-        } catch (Exception $e) {
-            return redirect()->route('companies.edit', $company->id)->withErrors(['error' => $e->getMessage()]);
-        }
-    }
+             // Manejar el campo entidad
+             $entitySelected = $request->entity === 'other' ? $request->other_entity_input : $request->entity;
+             $existsEntity = CompanyEntity::where('name', $entitySelected)->first();
+             if (!$existsEntity) {
+                 $newEntity = CompanyEntity::create(['name' => $entitySelected]);
+                 //Crear la empresa con el valor seleccionado de entidad
+                 $company->update(array_merge(
+                     $request->validated(),
+                     ['entity_id' => $newEntity->id]
+                 ));            } else {
+                 // Actualizar empresa
+                 $company->update(array_merge(
+                     $request->validated(),
+                     ['entity_id' => $existsEntity->id]
+                 ));
+             }
+             return redirect()->route('companies.index')->with('success', 'Empresa actualizada exitosamente.');
+         } catch (Exception $e) {
+             return redirect()->route('companies.edit', $company->id)->withErrors(['error' => $e->getMessage()]);
+         }
+     }
 
     /**
      * Remove the specified resource from storage.

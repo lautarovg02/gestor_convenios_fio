@@ -83,7 +83,7 @@
                                 <option value="" disabled>Seleccionar</option>
 
                                 <!-- Primero mostrar el ámbito actual si no hay errores de validación -->
-                                <option value="{{ $company->entity }}"
+                                <option value="{{ $company->entity->name }}"
                                     {{ old('entity', $company->entity) == $company->entity ? 'selected' : '' }}>
                                     {{ $company->entity->name }}
                                 </option>
@@ -144,37 +144,39 @@
                         </div>
 
                     <div class="form-group mb-3">
-                        <p>Dirección</p>
-                    <!-- Campo Calle -->
-                        <label class="form-label required" for= "street">Calle</label>
-                        <div>
-                            <input class="form-control" maxlength="100"name="street" id="street" type="text" value="{{$company->street}}" placeholder="Calle " autocomplete="off">
-                        </div>
-                    </div>
-                    <!-- Campo número -->
-                    <div class="form-group mb-3">
-                        <label class="form-label required" for= "number">Número</label>
-                        <div>
-                            <input class="form-control" name="number" id="number" type="text" value="{{$company->number}}" placeholder="Ingrese el ámbito de la empresa " autocomplete="off">
-                        </div>
-                    </div>
-                    <!-- Campo Ciudad -->
-                    <div class="form-group mb-3">
-                        <label class="form-label required-field" for= "city_id">Ciudad</label>
-                        <select name="city_id" id="" class="form-control required">
-                            @foreach ($cities as $city)
-                                <option value="{{$city->id}}"
-                                    @if ($company->city_id === $city->id)
-                                        selected
-                                    @endif>
-                                    {{$city->name}}
-                                </option>
-                            @endforeach
-                        </select>
-                        <small class="form-hint">Si no encuentra la <b>ciudad</b> en la lista, ingresarla en  <a href="">Agregar Ciudad.</a></small>
-                            @error('city_id')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                        <h6>Dirección:</h6>
+                        <div class="row align-items-end">
+                            <!-- Campo Calle -->
+                                <label class="form-label required" for= "street">Calle</label>
+                                <div>
+                                    <input class="form-control" maxlength="100"name="street" id="street" type="text" value="{{$company->street}}" placeholder="Calle " autocomplete="off">
+                                </div>
+                            </div>
+                            <!-- Campo número -->
+                            <div class="form-group mb-3">
+                                <label class="form-label required" for= "number">Número</label>
+                                <div>
+                                    <input class="form-control" name="number" id="number" type="text" value="{{$company->number}}" placeholder="Ingrese el ámbito de la empresa " autocomplete="off">
+                                </div>
+                            </div>
+                            <!-- Campo Ciudad -->
+                            <div class="form-group mb-3">
+                                <label class="form-label required-field" for= "city_id">Ciudad</label>
+                                <select name="city_id" id="" class="form-control required">
+                                    @foreach ($cities as $city)
+                                        <option value="{{$city->id}}"
+                                            @if ($company->city_id === $city->id)
+                                                selected
+                                            @endif>
+                                            {{$city->name}}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <small class="form-hint">Si no encuentra la <b>ciudad</b> en la lista, ingresarla en  <a href="">Agregar Ciudad.</a></small>
+                                    @error('city_id')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                            </div>
                         </div>
 
                         <div class="form-footer">

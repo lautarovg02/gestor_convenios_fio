@@ -23,9 +23,15 @@ class CompanyEntityFactory extends Factory
 
     public function definition(): array
     {
-        $index = array_rand(self::$entities); // Selecciona un índice al azar
+        $name = array_shift(self::$entities);
+
+        // Lanzar una excepción si no quedan nombres en la lista
+        if (!$name) {
+            throw new \Exception('No hay más nombres disponibles para tipos de entidades.');
+        }
+
         return [
-            'name' => self::$entities[$index], // Devuelve el nombre de la entidad seleccionada
+            'name' => $name,
         ];
     }
 

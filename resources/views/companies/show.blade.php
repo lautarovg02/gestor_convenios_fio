@@ -9,7 +9,7 @@
 
                 <!-- Page title actions -->
                 <div class="col-12 col-md-auto ms-auto d-print-none">
-                    <div class="btn-list">
+                    <div class="btn-list mb-3 mt-3">
                         <a href="{{ route('companies.index') }}" class="btn btn-primary d-none d-sm-inline-block">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             Volver
@@ -21,56 +21,56 @@
     </div>
     <!-- Page body -->
     <div class="page-body">
-        <div class="container-xl">
+        <div class="container-xl mb-5">
             <div class="row row-deck row-cards">
-                <div class="col-12">
+                <div class="row justify-content-center">
 
-                    <div class="card">
+                    <div class="card col-md-6">
                         <div class="card-header">
                             <h3 class="card-title">Detalles de la Empresa</h3>
                         </div>
                         <div class="card-body">
 
-<div class="form-group">
-<strong>Denominación:</strong>
-{{ $company->denomination }}
-</div>
-<div class="form-group">
-<strong>Cuit:</strong>
-{{ $company->cuit }}
-</div>
-<div class="form-group">
-<strong>Nombre de la empresa:</strong>
-{{ $company->company_name }}
-</div>
-<div class="form-group">
-<strong>Sector:</strong>
-{{ $company->sector }}
-</div>
-<div class="form-group">
-<strong>Entidad:</strong>
-{{ $company->entity->name }}
-</div>
-<div class="form-group">
-<strong>Rubro:</strong>
-{{ $company->company_category }}
-</div>
-<div class="form-group">
-<strong>Ámbito:</strong>
-{{ $company->scope }}
-</div>
-<div class="form-group">
-<strong>Calle:</strong>
-{{ $company->street }}
-</div>
-<div class="form-group">
-<strong>Número:</strong>
-{{ $company->number }}
-</div>
-<div class="form-group">
-<strong>Ciudad:</strong>
-{{ $company->city->name}}
-</div>
+                            <div class="form-group">
+                                <strong>Denominación:</strong>
+                                {{ $company->denomination }}
+                            </div>
+                            <div class="form-group">
+                                <strong>Cuit:</strong>
+                                {{ $company->cuit }}
+                            </div>
+                            <div class="form-group">
+                                <strong>Nombre de la empresa:</strong>
+                                {{ $company->company_name }}
+                            </div>
+                            <div class="form-group">
+                                <strong>Sector:</strong>
+                                {{ $company->sector }}
+                            </div>
+                            <div class="form-group">
+                                <strong>Entidad:</strong>
+                                {{ $company->entity->name }}
+                            </div>
+                            <div class="form-group">
+                                <strong>Rubro:</strong>
+                                {{ $company->company_category }}
+                            </div>
+                            <div class="form-group">
+                                <strong>Ámbito:</strong>
+                                {{ $company->scope }}
+                            </div>
+                            <div class="form-group">
+                                <strong>Calle:</strong>
+                                {{ $company->street }}
+                            </div>
+                            <div class="form-group">
+                                <strong>Número:</strong>
+                                {{ $company->number }}
+                            </div>
+                            <div class="form-group">
+                                <strong>Ciudad:</strong>
+                                {{ $company->city->name}}
+                            </div>
 
                         </div>
                     </div>
