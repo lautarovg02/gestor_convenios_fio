@@ -180,10 +180,33 @@ class TeacherController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Elimina un docente si no tiene roles asignados y no es decano o rector.
+     *
+     * @param Teacher $teacher El docente que se desea eliminar.
+     * @return \Illuminate\Http\RedirectResponse Redirige a la lista de docentes con un mensaje de éxito o error.
+     * @lautarovg02
      */
     public function destroy(Teacher $teacher)
     {
-        //
+        //* Verifica si el docente tiene algún rol asociado (Director o Coordinador).
+        if ($teacher->hasAnyRole()) {
+            return redirect()
+                ->route('teachers.index')
+                ->with('error', 'El docente "<span class="fw-bold">' . $teacher->name . ' ' . $teacher->lastname . '</span>" no se puede eliminar porque tiene el rol de <span class="fw-bold">' . $teacher->getRoleName() . '</span>.');
+        }
+
+        //* Verifica si el docente es decano o rector.
+        if ($teacher->is_dean || $teacher->is_rector) {
+            return redirect()
+                ->route('teachers.index')
+                ->with('error', 'El docente "<span class="fw-bold">' . $teacher->name . ' ' . $teacher->lastname . '</span>" no se puede eliminar porque es <span class="fw-bold">' . $teacher->getRoleName() . '</span>.');
+        }
+
+        //* Si no tiene roles y no es decano/rector, procede a eliminarlo.
+        $teacher->delete();
+
+        return redirect()
+            ->route('teachers.index')
+            ->with('success', 'El docente "<span class="fw-bold">' . $teacher->name . ' ' . $teacher->lastname . '</span>" fue eliminado exitosamente!');
     }
 }

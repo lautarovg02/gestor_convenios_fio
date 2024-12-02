@@ -20,7 +20,8 @@ class TeacherFactory extends Factory
             'name' =>  $this->faker->firstName,
             'lastname' =>  $this->faker->lastName(),
             'dni' => $this->faker->numberBetween(10000000, 50000000),
-
+            'is_dean' => false,
+            'is_rector' => false,
         ];
     }
 }

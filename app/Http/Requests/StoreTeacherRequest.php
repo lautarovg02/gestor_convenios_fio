@@ -14,15 +14,15 @@ class StoreTeacherRequest extends FormRequest
     {
         return true;
     }
-    /**
+        /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     * @lautarovg02
      */
-
     public function rules(): array
     {
+        $teacherExists = $this->teacher && $this->teacher->id; // Verifica si el docente ya existe
+
         return [
             'name' => 'required|string|min:2|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/|max:40',
             'lastname' => 'required|string|min:2|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/|max:40',
@@ -45,9 +45,9 @@ class StoreTeacherRequest extends FormRequest
             ],
             'is_rector' => [
                 'required',
-                'boolean', // Se separa la regla en su propio elemento.
-                function ($attribute, $value, $fail) {
-                    if ($value) {
+                'boolean',
+                function ($attribute, $value, $fail) use ($teacherExists) {
+                    if ($teacherExists && $value) {
                         $exists = \DB::table('departments')->where('director_id', $this->teacher->id)->exists() ||
                             \DB::table('careers')->where('coordinator_id', $this->teacher->id)->exists();
                         if ($exists) {
@@ -59,8 +59,8 @@ class StoreTeacherRequest extends FormRequest
             'is_dean' => [
                 'required',
                 'boolean',
-                function ($attribute, $value, $fail) {
-                    if ($value) {
+                function ($attribute, $value, $fail) use ($teacherExists) {
+                    if ($teacherExists && $value) {
                         $isRector = $this->input('is_rector');
                         $exists = \DB::table('departments')->where('director_id', $this->teacher->id)->exists() ||
                             \DB::table('careers')->where('coordinator_id', $this->teacher->id)->exists();
@@ -72,6 +72,7 @@ class StoreTeacherRequest extends FormRequest
             ],
         ];
     }
+
     /**
      * Get custom messages for validation errors.
      *
