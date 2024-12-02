@@ -43,7 +43,7 @@
                     @foreach ($departments as $department)
                         <tr>
                             <td>{{ $department->id }}</td>
-                            <td class=" text-center text-truncate col-min-width col-max-width">{!! highlightKeyword($department->name, request()->input('search')) !!}</td>
+                            <td class=" text-truncate col-min-width col-max-width">{!! highlightKeyword($department->name, request()->input('search')) !!}</td>
                             <td class="text-center text-truncate col-min-width col-max-width">{!! highlightKeyword(
                                 $department->teacher->lastname . ' ' . $department->teacher->name,
                                 request()->input('search'),
