@@ -48,7 +48,6 @@
                             @enderror
                         </div>
                         <!-- Campo cuit -->
-                        <!-- Campo cuit -->
                         <div class="form-group mb-3">
                             <div class="d-flex align-items-center justify-content-between">
                                 <label class="form-label fs-6 required-field">
@@ -140,7 +139,7 @@
                         </div>
 
                         <h6>Dirección:</h6>
-                        <div class="row">
+                        <div class="row align-items-end">
                             <!-- Campo nombre de la calle -->
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fs-6" for="street">Calle</label>
@@ -164,14 +163,14 @@
                                         <option value="{{ $city->id }}">{{ $city->name }}</option>
                                     @endforeach
                                 </select>
-                                <small class="form-hint">
-                                    Si no encuentra la <b>ciudad</b> en la lista, ingresarla en
-                                    <a href="{{ route('cities.create') }}">Agregar Ciudad.</a>
-                                </small>
                                 @error('city_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <small class="form-hint text-end d-block">
+                                Si no encuentra la <b>ciudad</b> en la lista, ingresarla en
+                                <a href="{{ route('cities.create') }}">Agregar Ciudad.</a>
+                            </small>
                         </div>
 
                         <!-- Botones -->

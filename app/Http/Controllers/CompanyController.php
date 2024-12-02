@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCompanyRequest;
 use App\Models\City;
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\CompanyEntity;
 use App\Models\Employee;
 use Exception;
 use Illuminate\Contracts\View\View;
@@ -29,7 +30,7 @@ class CompanyController extends Controller
         $companies = collect(); // Inicializa una colección vacía
         $errorMessage = null; // Variable para el mensaje de error
         $loadingMessage = null; // Variable para el mensaje de carga
-        $filters = $request->only(['city', 'scope','sector']); //Varialbes para filtrar empresas
+        $filters = $request->only(['city', 'scope', 'sector']); //Varialbes para filtrar empresas
 
         try {
 
@@ -37,7 +38,7 @@ class CompanyController extends Controller
             $loadingMessage = 'Cargando empresas...';
 
             // Obtener todas las ciudades para el filtro
-            $cities = City::orderBy('name' , 'ASC')->get();
+            $cities = City::orderBy('name', 'ASC')->get();
 
             // Obtener todas las compañías activas usando el modelo Company y el scope de búsqueda y filtro
             $companies = Company::enabled()->search($searchTerm)->filter($filters)->paginate(9);
@@ -45,31 +46,30 @@ class CompanyController extends Controller
             //Obtener todos los sectors y no solo los 9 que se obtienen de las compañias paginadas
             //Reemplaza en la colección de $sector, los sectores vacíos con N/A antes de enviarlos a la vista. map()
             $sectors = Company::select('sector')->distinct()->orderBy('sector', 'ASC')->get()
-                                ->map(function ($company) {
-                                    return $company->sector ?: 'N/A';
-                                    })
-                                ->unique();
+                ->map(function ($company) {
+                    return $company->sector ?: 'N/A';
+                })
+                ->unique();
 
             //Obtener todos los scopes y no solo los 9 que se obtienen de las compañias paginadas
             //Reemplaza en la colección de $scopes, los sectores vacíos con N/A antes de enviarlos a la vista. map()
             $scopes = Company::select('scope')->distinct()->orderBy('scope', 'asc')->get()
-                                ->map(function($company) {
-                                    return $company->scope ? : 'N/A';
-                                })
-                                ->unique();
-
+                ->map(function ($company) {
+                    return $company->scope ?: 'N/A';
+                })
+                ->unique();
         } catch (\Exception $e) {
             $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
             // Opcional: Puedes registrar el error para fines de depuración.
             \Log::error('Error al obtener las empresas: ' . $e->getMessage());
         }
 
-         // Verifica si no se encontraron empresas después del filtro
+        // Verifica si no se encontraron empresas después del filtro
         if ($companies->isEmpty()) {
             $errorMessage = 'No se ha encontrado ninguna compañía con los filtros seleccionados.';
         }
 
-        return view('companies.index',compact('companies','cities','sectors', 'scopes', 'searchTerm', 'errorMessage'));
+        return view('companies.index', compact('companies', 'cities', 'sectors', 'scopes', 'searchTerm', 'errorMessage'));
     }
 
     /**
@@ -79,7 +79,7 @@ class CompanyController extends Controller
      */
     public function create(): View
     {
-        $entityTypes = EntityType::values();
+        $entityTypes = CompanyEntity::orderBy('name', 'ASC')->get();
         $cities = City::orderBy('name', 'ASC')->get();
 
         return view('companies.create', compact('cities', 'entityTypes'));
@@ -100,14 +100,18 @@ class CompanyController extends Controller
 
             //Si se seleccionó other_entity se reemplaza el valor de entity por other_entity
             $entitySelected = $request->entity === 'other' ? $request->other_entity_input : $request->entity;
+            $existsEntity = CompanyEntity::where('name', $entitySelected)->first();
+            if (!$existsEntity) {
+                $newEntity = CompanyEntity::create(['name' => $entitySelected]);
+                //Crear la empresa con el valor seleccionado de entidad
+                Company::create(array_merge($request->validated(), ['entity_id' => $newEntity->id]));
+            } else Company::create(array_merge($request->validated(), ['entity_id' => $existsEntity->id]));
 
-            //Crear la empresa con el valor seleccionado de entidad
-            Company::create(array_merge($request->validated(), ['entity' => $entitySelected]));
 
             return  redirect()->route('companies.index')
                 ->with('success', 'Empresa ingresada exitosamente.');
         } catch (Exception $e) {
-            \Log::error('Error al crear la empresa: '.$e->getMessage());
+            \Log::error('Error al crear la empresa: ' . $e->getMessage());
 
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -118,7 +122,7 @@ class CompanyController extends Controller
      * Display the specified resource.
      *
      * @param  Company $company
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View;
      */
     public function show(Company $company): View
     {
@@ -131,53 +135,56 @@ class CompanyController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Company $company
-     * @return \Illuminate\Http\Response
+     * @return Illuminate\Contracts\View\View;
+     *
      */
     public function edit(Company $company): View
     {
         $company = Company::find($company->id);
         $cities = City::orderBy('name', 'ASC')->get();
-        $entityTypes = EntityType::values();
-
+        $entityTypes = CompanyEntity::orderBy('name', 'ASC')->get();
         return view('companies.edit', ['company' => $company, 'cities' => $cities, 'entityTypes' => $entityTypes]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
      * @param  Company $company
-     * @return \Illuminate\Http\Response
+     * @param StoreCompanyRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(StoreCompanyRequest $request, Company $company): RedirectResponse
-    {
-        try {
-            // Verifica si el CUIT es duplicado
-            $exists = Company::where('cuit', $request->cuit)
-                ->where('id', '<>', $company->id)
-                ->first();
 
-            if ($exists) {
-                throw new Exception("Cuit duplicado");
-            }
+     public function update(StoreCompanyRequest $request, Company $company): RedirectResponse
+     {
+         try {
+             // Validar CUIT único
+             $exists = Company::where('cuit', $request->cuit)
+                 ->where('id', '!=', $company->id)
+                 ->first();
+             if ($exists) {
+                 throw new Exception("El CUIT ingresado ya está registrado.");
+             }
 
-            // Verifica si la entidad es "Otro tipo" y actualiza el campo correspondiente
-            if ($request->entity === 'other' && $request->has('other_entity_input') && $request->other_entity_input) {
-                $entityEdited = $request->other_entity_input;
-            } else {
-                $entityEdited  = $request->entity;
-            }
-
-            // Actualiza el resto de los campos del modelo utilizando los datos validados
-                $company->update(array_merge($request->validated(), ['entity' => $entityEdited]));
-
-            // Redirige con un mensaje de éxito
-            return redirect()->route('companies.index')->with('success', 'Empresa actualizada exitosamente.');
-        } catch (Exception $e) {
-            // Redirige en caso de error
-            return redirect()->route('companies.edit', $company->id)->withErrors(['error' => $e->getMessage()]);
-        }
-    }
+             // Manejar el campo entidad
+             $entitySelected = $request->entity === 'other' ? $request->other_entity_input : $request->entity;
+             $existsEntity = CompanyEntity::where('name', $entitySelected)->first();
+             if (!$existsEntity) {
+                 $newEntity = CompanyEntity::create(['name' => $entitySelected]);
+                 //Crear la empresa con el valor seleccionado de entidad
+                 $company->update(array_merge(
+                     $request->validated(),
+                     ['entity_id' => $newEntity->id]
+                 ));            } else {
+                 // Actualizar empresa
+                 $company->update(array_merge(
+                     $request->validated(),
+                     ['entity_id' => $existsEntity->id]
+                 ));
+             }
+             return redirect()->route('companies.index')->with('success', 'Empresa actualizada exitosamente.');
+         } catch (Exception $e) {
+             return redirect()->route('companies.edit', $company->id)->withErrors(['error' => $e->getMessage()]);
+         }
+     }
 
     /**
      * Remove the specified resource from storage.
