@@ -56,40 +56,40 @@
 
     <!-- Tabla de resultados -->
     @if(!$companies->isEmpty())
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Denominación</th>
-                <th>CUIT</th>
-                <th>Nombre</th>
-                <th>Sector</th>
-                <th>Entidad</th>
-                <th>Rubro</th>
-                <th>Ciudad</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($companies as $company)
-            <tr>
-                <td>{{ $company->id }}</td>
-                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
-                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
-                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
-                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
-                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
-                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
-                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
-                <td class="text-truncate col-min-width col-max-width">
-                    <a href="{{route('companies.show', $company)}}" class="btn btn-info btn-sm">Ver</a>
-                    <a href="{{route('companies.edit', $company)}}" class="btn btn-primary btn-sm">Editar</a>
-                    <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{$company->id}}" data-entity-name="{{$company->company_name}}" data-entity-type="companies" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <table class="table table-striped table-responsive">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Denominación</th>
+            <th>CUIT</th>
+            <th>Nombre</th>
+            <th>Sector</th>
+            <th>Entidad</th>
+            <th>Categoría</th>
+            <th>Ciudad</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($companies as $company)
+        <tr>
+            <td>{{ $company->id }}</td>
+            <td class="text-truncate col-max-width">{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
+            <td>{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
+            <td class="text-truncate col-max-width">{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
+            <td class="text-truncate" style="max-width: 120px;">{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
+            <td class="text-truncate" style="max-width: 120px;">{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
+            <td class="text-truncate" style="max-width: 120px;">{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
+            <td class="text-truncate" style="max-width: 120px;">{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
+            <td>
+                <a href="{{route('companies.show', $company)}}" class="btn btn-info btn-sm">Ver</a>
+                <a href="{{route('companies.edit', $company)}}" class="btn btn-primary btn-sm">Editar</a>
+                <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{$company->id}}" data-entity-name="{{$company->company_name}}" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
     <!-- Paginación -->
     <div class="d-flex justify-content-center">
         {{ $companies->appends(request()->except('page'))->onEachSide(1)->links('pagination::bootstrap-4') }}
