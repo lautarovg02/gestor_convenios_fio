@@ -24,7 +24,7 @@
                     <!-- Input oculto para el id del director -->
                     <input type="hidden" name="director_id" id="director-id-input">
                     <input type="hidden" name="name" id="modal-department-name">
-                    <button type="submit" class="btn btn-danger">Confirmar modificación</button>
+                    <button type="submit" class="btn btn-success">Confirmar modificación</button>
                 </form>
             </div>
         </div>

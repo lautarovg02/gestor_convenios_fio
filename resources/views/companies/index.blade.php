@@ -62,9 +62,9 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Denominación</th>
+                        <th>Razón social</th>
                         <th>CUIT</th>
-                        <th>Nombre</th>
+                        <th>Nombre de fantasía</th>
                         <th>Sector</th>
                         <th>Entidad</th>
                         <th>Categoría</th>

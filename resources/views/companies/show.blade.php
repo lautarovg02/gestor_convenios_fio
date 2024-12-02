@@ -32,7 +32,7 @@
                         <div class="card-body">
 
                             <div class="form-group">
-                                <strong>Denominación:</strong>
+                                <strong>Razón social:</strong>
                                 {{ $company->denomination }}
                             </div>
                             <div class="form-group">
@@ -40,7 +40,7 @@
                                 {{ $company->cuit }}
                             </div>
                             <div class="form-group">
-                                <strong>Nombre de la empresa:</strong>
+                                <strong>Nombre de fantasía:</strong>
                                 {{ $company->company_name }}
                             </div>
                             <div class="form-group">

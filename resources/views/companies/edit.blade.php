@@ -33,12 +33,12 @@
 
                         {{-- edit form --}}
 
-                        <!-- Campo Denominación -->
+                        <!-- Campo Razón social -->
                         <div class="form-group mb-3">
-                            <label class="form-label required-field fs-6" for='denomination'> Denominación</label>
+                            <label class="form-label required-field fs-6" for='denomination'> Razón social</label>
                             <div>
                                 <input class="form-control" name="denomination" id="denomination" type="text"
-                                    value="{{ $company->denomination }}" placeholder="Ingrese la denominación "
+                                    value="{{ $company->denomination }}" placeholder="Ingrese la Razón social "
                                     autocomplete="off">
                                 @error('denomination')
                                     <div class="text-danger">{{ $message }}</div>
@@ -60,10 +60,10 @@
                         </div>
                         <!-- Campo nombre fantasía -->
                         <div class="form-group mb-3">
-                            <label class="form-label" for= "company_name">Nombre de la empresa</label>
+                            <label class="form-label" for= "company_name">Nombre de fantasía</label>
                             <div>
                                 <input class="form-control" name="company_name" id="company_name" type="text"
-                                    value="{{ $company->company_name }}" placeholder="Ingrese el nombre de la empresa "
+                                    value="{{ $company->company_name }}" placeholder="Ingrese el Nombre de fantasía "
                                     autocomplete="off">
                             </div>
                         </div>
