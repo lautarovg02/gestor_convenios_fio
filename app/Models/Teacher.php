@@ -268,30 +268,41 @@ class Teacher extends Model
             ->first(); // Retornar el primer resultado o null si no existe.
     }
 
-    /**
-     * Obtener las carreras relacionadas con un docente específico y determinar si es coordinador o profesor.
-     *
-     * Este método devuelve el nombre del docente, apellido, nombre de la carrera,
-     * y una columna adicional que indica si el docente es "Coordinador" o "Profesor".
-     *
-     * @param int $teacherId El ID del docente.
-     * @return \Illuminate\Support\Collection Resultado de la consulta con la relación del docente y sus carreras.
-     * @lautarovg02
-     */
-    public static function getTeacherWithRelationToCareers(int $teacherId)
-    {
-        return self::select(
-            'teachers.name',
-            'teachers.lastname',
-            'careers.name as career',
-            \DB::raw("CASE
-                        WHEN teachers.id = careers.coordinator_id THEN 'Coordinador'
-                        ELSE 'Profesor'
-                      END as relation")
-        )
-            ->join('career_teacher', 'teachers.id', '=', 'career_teacher.teacher_id')
-            ->join('careers', 'career_teacher.career_id', '=', 'careers.id')
-            ->where('teachers.id', $teacherId)
-            ->get();
-    }
+   /**
+ * Obtener las carreras relacionadas con un docente específico y determinar su relación (Coordinador o Profesor).
+ *
+ * Este método realiza una consulta que combina las carreras donde el docente está relacionado como "Profesor"
+ * y aquellas donde es "Coordinador". Devuelve el nombre y apellido del docente, el nombre de la carrera
+ * y una columna adicional que indica si el docente es "Coordinador" o "Profesor".
+ *
+ * @param int $teacherId El ID del docente.
+ * @return \Illuminate\Support\Collection Resultado de la consulta con la relación del docente y sus carreras.
+ * @lautarovg02
+ */
+public static function getTeacherWithRelationToCareers(int $teacherId)
+{
+    // Subconsulta para obtener las carreras donde el docente es Profesor
+    $professorQuery = self::select(
+        'teachers.name',
+        'teachers.lastname',
+        'careers.name as career',
+        \DB::raw("'Profesor' as relation")
+    )
+        ->join('career_teacher', 'teachers.id', '=', 'career_teacher.teacher_id')
+        ->join('careers', 'career_teacher.career_id', '=', 'careers.id')
+        ->where('teachers.id', $teacherId);
+
+    // Subconsulta para obtener las carreras donde el docente es Coordinador
+    $coordinatorQuery = self::select(
+        'teachers.name',
+        'teachers.lastname',
+        'careers.name as career',
+        \DB::raw("'Coordinador' as relation")
+    )
+        ->join('careers', 'careers.coordinator_id', '=', 'teachers.id')
+        ->where('teachers.id', $teacherId);
+
+    // Unión de ambas consultas
+    return $professorQuery->union($coordinatorQuery)->get();
+}
 }
