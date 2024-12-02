@@ -133,7 +133,7 @@ class TeacherController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTeacherRequest $request)
+    public function store(StoreTeacherRequest $request): RedirectResponse
     {
         try {
             Teacher::create($request->validated());
@@ -148,19 +148,21 @@ class TeacherController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Teacher $teacher)
+    public function show(Teacher $teacher): View
     {
-        //
+        $teacher = Teacher::getTeacherWithRoles($teacher->id);
+        $teacherWithCareers = Teacher::getTeacherWithRelationToCareers($teacher->id);
+        return view('teachers.show', compact('teacherWithCareers', 'teacher'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Teacher $teacher)
+    public function edit(Teacher $teacher): View
     {
-        $teacher = $teacher->getAllWithRoles()->find($teacher->id);
+        $teacher = Teacher::getAllWithRoles()->find($teacher->id);
 
-        return view('teachers.edit', ['teacher' => $teacher]);
+        return view('teachers.edit', compact('teacher'));
     }
 
     /**
