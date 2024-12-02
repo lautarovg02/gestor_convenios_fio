@@ -13,6 +13,12 @@
     --min-column-width: 80px;
 }
 
+main {
+    min-height: 500px; /* Altura máxima del main */
+    overflow-y: auto; /* Muestra scroll si el contenido excede la altura */
+}
+
+
 .bg-text-color {
     background-color: var(--main-bg-text-color);
 }
@@ -67,6 +73,7 @@ td.text-truncate {
 }
 
 
+
 /*LOADING-MODAL*/
 .spinner {
     border: 4px solid var(--loading-icon-bg-color);
@@ -87,6 +94,15 @@ td.text-truncate {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.fixed-footer {
+    height: 100px; /* Altura fija para el footer */
+    display: flex;
+    align-items: center; /* Centra verticalmente */
+    justify-content: center; /* Centra horizontalmente */
+    padding: 0; /* Eliminar padding */
+    margin: 0; /* Eliminar margen */
 }
 
 /*SIDEBAR*/
