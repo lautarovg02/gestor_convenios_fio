@@ -1,117 +1,230 @@
-<!-- resources/views/teachers/index.blade.php -->
+LautaroGallo
+lautarovg02
+Ausente
+
+
+
+LautaroGallo — hoy a las 0:15
+<!--resources/views/companies/index.blade.php -->
 @extends('layouts.app')
 
 @section('content')
-    <div class="container mt-1">
 
-        <!-- Botón agregar -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <a href="{{ route('teachers.create') }}" class="btn btn-secondary" onclick="">
-                Agregar un Docente <i class="bi bi-plus"></i>
-            </a>
+<!-- Resto de tu vista para listar las empresas -->
+Expandir
+message.txt
+6 KB
+<!--resources/views/companies/index.blade.php -->
+@extends('layouts.app')
 
-            <!-- Barra de búsqueda -->
-            <form action="{{ route('teachers.index') }}" method="GET" class="d-flex">
-                <input type="text" name="search" class="form-control" placeholder="Buscar docentes..."
-                    value="{{ request()->input('search') }}" style="min-width: 400px;">
-                <button type="submit" class="btn btn-primary ms-2" data-bs-toggle="modal"
-                    data-bs-target="#modal-loading">Buscar</button>
-            </form>
-        </div>
+@section('content')
 
-        <!-- FILTROS-->
-        <div class="col-12">
-            @include('teachers.filters')
-        </div>
+<!-- Resto de tu vista para listar las empresas -->
 
-        <!-- Mensajes de error -->
-        <div class="alert-container text-center mx-auto d-flex align-items-center justify-content-center">
-            @if (isset($errorMessage))
-                <div class="alert alert-secondary error">
-                    {{ $errorMessage }}
-                </div>
-            @elseif ($teachers->isEmpty())
-                <div class="alert alert-secondary error">
-                    <p class="m-2">!La tabla de docentes, esta vacia!</p>
-                </div>
-            @endif
+<div class="container mt-1">
+    <!-- Botón agregar -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="{{route('companies.create')}}" class="btn btn-success" onclick="">
+            Agregar Empresa <i class="bi bi-plus"></i>
+        </a>
 
-            <!--- Mensajes de error o success al editar, eliminar o crear entidad --->
-            @if (Session::get('success'))
-                <div class="alert alert-success">
-                    <p class="mb-1">{!! Session::get('success') !!}</p>
-                </div>
-            @elseif (Session::get('error'))
-                <div class="alert alert-danger">
-                    <p class="mb-1">{!! Session::get('error') !!}</p>
-                </div>
-            @endif
-        </div>
+        <!-- Barra de búsqueda -->
+        <form action="{{ route('companies.index') }}" method="GET" class="d-flex">
+            <input type="text" name="search" class="form-control" placeholder="Buscar empresas..." value="{{ request()->input('search') }}" style="min-width: 400px;">
+            <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+        </form>
+    </div>
 
-        <!-- Tabla de resultados -->
-        @if (!$teachers->isEmpty())
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>Dni</th>
-                        <th>Cuit</th>
-                        <th>Rol</th>
-                        <th>Es rector</th>
-                        <th>Es decano</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($teachers as $teacher)
-                        <tr>
-                            <td>{{ $teacher->id }}</td>
-                            <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->name, request()->input('search')) !!}
-                                {!! highlightKeyword($teacher->lastname, request()->input('search')) !!}</td>
-                            <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->dni, request()->input('search')) !!}</td>
-                            <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($teacher->cuil ?? 'N/A', request()->input('search')) !!}</td>
-                            <td class="text-truncate col-min-width col-max-width">
-                                @if ($teacher->role == 'Director')
-                                    <span class="badge bg-primary">Director</span>
-                                @elseif ($teacher->role == 'Coordinador')
-                                    <span class="badge bg-success">Coordinador</span>
-                                @else
-                                    <span class="badge bg-secondary">Sin Rol</span>
-                                @endif
-                            </td>
-                            <td class="text-truncate col-min-width col-max-width">
-                                <span class="badge {{ $teacher->is_rector ? 'bg-success' : 'bg-secondary' }}">
-                                    {{ $teacher->is_rector ? 'Rector' : 'No es Rector' }}
-                                </span>
-                            </td>
+    <!-- FILTROS-->
+    <div class="col-12">
+        @include('companies.filters')
+    </div>
 
-                            <td class="text-truncate col-min-width col-max-width">
-                                <span class="badge {{ $teacher->is_dean ? 'bg-success' : 'bg-secondary' }}">
-                                    {{ $teacher->is_dean ? 'Decano' : 'No es Decano' }}
-                                </span>
-                            </td>
-                            <td class="text-truncate col-min-width col-max-width">
-                                <a href="{{ route('teachers.show', $teacher) }}" class="btn btn-info btn-sm">Ver</a>
-                                <a href="{{ route('teachers.edit', $teacher) }}" class="btn btn-primary btn-sm">Editar</a>
-                                <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{ $teacher->id }}"
-                                    data-entity-name="{{ $teacher->name . ' ' . $teacher->lastname }}"
-                                    data-entity-type="teachers" data-bs-toggle="modal"
-                                    data-bs-target="#modal-delete">Eliminar</button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <!-- Paginación -->
-            <div class="d-flex justify-content-center">
-                {{ $teachers->appends(array_merge(['search' => request()->input('search')], request()->only(['career', 'role'])))->onEachSide(1)->links('pagination::bootstrap-4') }}'
+    <!-- Mensajes de error, carga y busqueda sin resultados -->
+    <div class="alert-container text-center mx-auto d-flex align-items-center justify-content-center">
+        @if(isset($loadingMessage))
+            <div class="alert alert-secondary">
+                {{ $loadingMessage }}
             </div>
         @endif
-        @include('layouts/modals/modal-delete')
+        @if(isset($errorMessage))
+            <div class="alert alert-secondary error">
+                {{ $errorMessage }}
+            </div>
+        @elseif($companies->isEmpty() && request()->input('search'))
+            <div class="alert alert-secondary">
+                No se encontraron resultados para "{{ request()->input('search') }}".<br>
+                <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
+            </div>
+        @endif
 
-        <!-- Modal -->
-        @vite('resources/js/modals/modalDelete.js')
-        @include('layouts.modals.modal-loading')
+        <!--- Mensajes de error o success al editar, eliminar o crear entidad --->
+        @if (Session::get('success'))
+            <div class="alert alert-success">
+                <p class="mb-1">{!! Session::get('success') !!}</p>
+            </div>
+        @elseif (Session::get('error'))
+            <div class="alert alert-danger">
+                <p class="mb-1">{!! Session::get('error') !!}</p>
+            </div>
+        @endif
     </div>
+
+    <!-- Tabla de resultados -->
+    @if(!$companies->isEmpty())
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Denominación</th>
+                <th>CUIT</th>
+                <th>Nombre de la Empresa</th>
+                <th>Sector</th>
+                <th>Entidad</th>
+                <th>Rubro</th>
+                <th>Ciudad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($companies as $company)
+            <tr>
+                <td>{{ $company->id }}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">
+                    <a href="{{route('companies.show', $company)}}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{{route('companies.edit', $company)}}" class="btn btn-primary btn-sm">Editar</a>
+                    <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{$company->id}}" data-entity-name="{{$company->company_name}}" data-entity-type="companies" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center">
+        {{ $companies->appends(request()->except('page'))->onEachSide(1)->links('pagination::bootstrap-4') }}
+    </div>
+    @endif
+
+    <!-- Modal -->
+    @include('layouts/modals/modal-delete')
+... (8 líneas restantes)
+Contraer
+message.txt
+6 KB
+﻿
+<!--resources/views/companies/index.blade.php -->
+@extends('layouts.app')
+
+@section('content')
+
+<!-- Resto de tu vista para listar las empresas -->
+
+<div class="container mt-1">
+    <!-- Botón agregar -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="{{route('companies.create')}}" class="btn btn-success" onclick="">
+            Agregar Empresa <i class="bi bi-plus"></i>
+        </a>
+
+        <!-- Barra de búsqueda -->
+        <form action="{{ route('companies.index') }}" method="GET" class="d-flex">
+            <input type="text" name="search" class="form-control" placeholder="Buscar empresas..." value="{{ request()->input('search') }}" style="min-width: 400px;">
+            <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+        </form>
+    </div>
+
+    <!-- FILTROS-->
+    <div class="col-12">
+        @include('companies.filters')
+    </div>
+
+    <!-- Mensajes de error, carga y busqueda sin resultados -->
+    <div class="alert-container text-center mx-auto d-flex align-items-center justify-content-center">
+        @if(isset($loadingMessage))
+            <div class="alert alert-secondary">
+                {{ $loadingMessage }}
+            </div>
+        @endif
+        @if(isset($errorMessage))
+            <div class="alert alert-secondary error">
+                {{ $errorMessage }}
+            </div>
+        @elseif($companies->isEmpty() && request()->input('search'))
+            <div class="alert alert-secondary">
+                No se encontraron resultados para "{{ request()->input('search') }}".<br>
+                <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
+            </div>
+        @endif
+
+        <!--- Mensajes de error o success al editar, eliminar o crear entidad --->
+        @if (Session::get('success'))
+            <div class="alert alert-success">
+                <p class="mb-1">{!! Session::get('success') !!}</p>
+            </div>
+        @elseif (Session::get('error'))
+            <div class="alert alert-danger">
+                <p class="mb-1">{!! Session::get('error') !!}</p>
+            </div>
+        @endif
+    </div>
+
+    <!-- Tabla de resultados -->
+    @if(!$companies->isEmpty())
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Denominación</th>
+                <th>CUIT</th>
+                <th>Nombre de la Empresa</th>
+                <th>Sector</th>
+                <th>Entidad</th>
+                <th>Rubro</th>
+                <th>Ciudad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($companies as $company)
+            <tr>
+                <td>{{ $company->id }}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->denomination, request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->cuit, request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->company_name ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->sector ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->entity ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->company_category ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">{!! highlightKeyword($company->city->name ?? 'N/A', request()->input('search')) !!}</td>
+                <td class="text-truncate col-min-width col-max-width">
+                    <a href="{{route('companies.show', $company)}}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{{route('companies.edit', $company)}}" class="btn btn-primary btn-sm">Editar</a>
+                    <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{$company->id}}" data-entity-name="{{$company->company_name}}" data-entity-type="companies" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center">
+        {{ $companies->appends(request()->except('page'))->onEachSide(1)->links('pagination::bootstrap-4') }}
+    </div>
+    @endif
+
+    <!-- Modal -->
+    @include('layouts/modals/modal-delete')
+</div>
+
+<!--Linkeamos el .js del modal al template utilizando Vite-->
+@vite('resources/js/modals/modalDelete.js')
+
 @endsection
+
+message.txt
+6 KB
