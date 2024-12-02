@@ -73,7 +73,7 @@ class CompanyFormTest extends TestCase
         $data = [
             'denomination' => 'Empresa Test',
             'cuit' => '12345678901',
-            'company_name' => 'Nombre de la Compañía',
+            'company_name' => 'Nombre de la Empresa',
             'sector' => 'Sector',
             'entity' => 'Entidad',
             'company_category' => 'Categoría',
@@ -109,7 +109,7 @@ class CompanyFormTest extends TestCase
         $data = [
             'denomination' => 'Empresa Duplicada',
             'cuit' => '12345678901',  // cuit duplicado
-            'company_name' => 'Otra Compañía',
+            'company_name' => 'Otra Empresa',
             'sector' => 'Otro Sector',
             'entity' => 'Otra Entidad',
             'company_category' => 'Otra Categoría',
