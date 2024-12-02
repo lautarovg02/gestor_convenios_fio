@@ -91,7 +91,7 @@
                                 <a href="{{ route('teachers.edit', $teacher) }}" class="btn btn-primary btn-sm">Editar</a>
                                 <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{ $teacher->id }}"
                                     data-entity-name="{{ $teacher->name . ' ' . $teacher->lastname }}"
-                                    data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
+                                    data-entity-type="teachers" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
                             </td>
                         </tr>
                     @endforeach
@@ -102,6 +102,10 @@
                 {{ $teachers->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}
             </div>
         @endif
+        @include('layouts/modals/modal-delete')
 
     </div>
+
+    <!--Linkeamos el .js del modal al template utilizando Vite-->
+@vite('resources/js/modals/modalDelete.js')
 @endsection
