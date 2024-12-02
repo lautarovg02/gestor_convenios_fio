@@ -47,6 +47,14 @@
                                         <span class="badge bg-primary">Director</span>
                                     @elseif ($teacher->role == 'Coordinador')
                                         <span class="badge bg-success">Coordinador</span>
+                                    @elseif ($teacher->is_dean)
+                                        <span class="badge {{ $teacher->is_dean ? 'bg-success' : 'bg-secondary' }}">
+                                            {{ $teacher->is_dean ? 'Decano' : 'No es Decano' }}
+                                        </span>
+                                    @elseif ($teacher->is_rector)
+                                        <span class="badge {{ $teacher->is_rector ? 'bg-success' : 'bg-secondary' }}">
+                                            {{ $teacher->is_rector ? 'Rector' : 'No es Rector' }}
+                                        </span>
                                     @else
                                         <span class="badge bg-secondary">Sin Rol</span>
                                     @endif
@@ -60,7 +68,7 @@
                             </div>
                         </div>
                         <div class="card-footer text-center">
-                            <small class="text-muted">Información actualizada al {{ now()->format('d/m/Y') }}</small>
+                            <small class="text-muted fw-bold">Información actualizada al {{ now()->format('d/m/Y') }}</small>
                         </div>
                     </div>
                 </div>
