@@ -10,6 +10,7 @@ class StoreCompanyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     * @dairagalceran
      */
     public function authorize(): bool
     {
@@ -30,7 +31,7 @@ class StoreCompanyRequest extends FormRequest
                 'company_name' => 'nullable|string|max:100',
                 'sector' => 'nullable|string|max:40',
                 'entity_id' => ['nullable', 'in:' . implode(',', EntityType::values()) . ',other'],
-                'other_entity_input' => 'nullable|string',
+                'other_entity_input' => 'nullable|required_if:entity,other|string|max:40',
                 'company_category' => 'nullable|string|max:20',
                 'scope' => 'nullable|string ',
                 'street' => 'nullable|string|max:40',
@@ -48,6 +49,7 @@ class StoreCompanyRequest extends FormRequest
             'cuit.unique' => 'El cuit ya existe en la base de datos.',
             'city_id.required' => 'La ciudad  es  un campo obligatorio.',
             'city_id.exists' => 'La ciudad seleccionada no es válida.',
+            'other_entity_input' => 'Debe especificar una entidad si selecciona "Otro tipo".'
         ];
     }
 }

@@ -122,7 +122,7 @@ class CompanyController extends Controller
      * Display the specified resource.
      *
      * @param  Company $company
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View;
      */
     public function show(Company $company): View
     {
@@ -135,7 +135,8 @@ class CompanyController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Company $company
-     * @return \Illuminate\Http\Response
+     * @return Illuminate\Contracts\View\View;
+     *
      */
     public function edit(Company $company): View
     {
@@ -144,6 +145,13 @@ class CompanyController extends Controller
         $entityTypes = CompanyEntity::orderBy('name', 'ASC')->get();
         return view('companies.edit', ['company' => $company, 'cities' => $cities, 'entityTypes' => $entityTypes]);
     }
+
+    /**
+     * Update the specified resource in storage.
+     * @param  Company $company
+     * @param StoreCompanyRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
 
     public function update(StoreCompanyRequest $request, Company $company): RedirectResponse
     {

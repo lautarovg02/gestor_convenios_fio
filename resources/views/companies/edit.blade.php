@@ -33,91 +33,115 @@
 
                         {{-- edit form --}}
 
-                    <!-- Campo Denominación -->
-                    <div class="form-group mb-3">
-                        <label class="form-label required-field fs-6" for='denomination'> Denominación</label>
-                        <div>
-                            <input class="form-control" maxlength="40" name="denomination" id="denomination" type="text" value="{{$company->denomination}}" placeholder="Ingrese la denominación " autocomplete="off">
-                            @error('denomination')
+                        <!-- Campo Denominación -->
+                        <div class="form-group mb-3">
+                            <label class="form-label required-field fs-6" for='denomination'> Denominación</label>
+                            <div>
+                                <input class="form-control" name="denomination" id="denomination" type="text"
+                                    value="{{ $company->denomination }}" placeholder="Ingrese la denominación "
+                                    autocomplete="off">
+                                @error('denomination')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <!-- Campo CUIT -->
+                        <div class="form-group mb-3">
+                            <label class="form-label required-field" for= "cuit">CUIT</label>
+                            <div>
+                                <input class="form-control" name="cuit" id="cuit" type="text"
+                                    value="{{ $company->cuit }}" placeholder="Ingrese el CUIT de la empresa "
+                                    autocomplete="off">
+                                <small class="form-hint">Ingresar <b>CUIT</b> sin guiones.</small>
+                            </div>
+                            @error('cuit')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                    </div>
-                    <!-- Campo CUIT -->
-                    <div class="form-group mb-3">
-                        <label class="form-label required-field" for= "cuit">CUIT</label>
-                        <div>
-                            <input class="form-control" maxlength="11" name="cuit" id="cuit" type="number" value="{{$company->cuit}}" placeholder="Ingrese el CUIT de la empresa " autocomplete="off" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                            <small class="form-hint">Ingresar <b>CUIT</b> sin guiones.</small>
+                        <!-- Campo nombre fantasía -->
+                        <div class="form-group mb-3">
+                            <label class="form-label" for= "company_name">Nombre de la empresa</label>
+                            <div>
+                                <input class="form-control" name="company_name" id="company_name" type="text"
+                                    value="{{ $company->company_name }}" placeholder="Ingrese el nombre de la empresa "
+                                    autocomplete="off">
+                            </div>
                         </div>
-                        @error('cuit')
-                            <div class="text-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <!-- Campo nombre fantasía -->
-                    <div class="form-group mb-3">
-                        <label class="form-label" for= "company_name">Nombre de la empresa</label>
-                        <div>
-                            <input class="form-control" maxlength="100" name="company_name" id="company_name" type="text" value="{{$company->company_name}}" placeholder="Ingrese el nombre de la empresa " autocomplete="off">
+                        <!-- Campo Sector -->
+                        <div class="form-group mb-3">
+                            <label class="form-label required" for= "sector">Sector</label>
+                            <div>
+                                <input class="form-control" name="sector" id="sector" type="text"
+                                    value="{{ $company->sector }}"
+                                    placeholder="Ingrese el sector al que pertenece la empresa " autocomplete="off">
+                            </div>
                         </div>
-                    </div>
-                    <!-- Campo Sector -->
-                    <div class="form-group mb-3">
-                        <label class="form-label required" for= "sector">Sector</label>
-                        <div>
-                            <input class="form-control" maxlength="40"name="sector" id="sector" type="text" value="{{$company->sector}}" placeholder="Ingrese el sector al que pertenece la empresa " autocomplete="off">
-                        </div>
-                    </div>
-                    <!-- Campo Entidad -->
-                    <div class="form-group mb-3">
-                        <label class="form-label fs-6" for="entity">Entidad</label>
-                        <select name="entity" id="entity" class="form-select">
-                            <option value="">Seleccionar</option>
-                            @foreach ($entityTypes as $type)
-                                <option value="{{ $type }}" {{ old('entity', $company->entity) == $type ? 'selected' : '' }}>
-                                    {{ $type }}
+                        <!-- Campo Entidad -->
+                        <div class="mb-3">
+                            <label class="form-label">Entidad</label>
+                            <select name="entity" id="entity" class="form-select">
+                                <option value="" disabled>Seleccionar</option>
+
+                                <!-- Primero mostrar el ámbito actual si no hay errores de validación -->
+                                <option value="{{ $company->entity }}"
+                                    {{ old('entity', $company->entity) == $company->entity ? 'selected' : '' }}>
+                                    {{ $company->entity->name }}
                                 </option>
-                            @endforeach
-                            <option value="other" {{ old('entity', $company->entity) == 'other' ? 'selected' : '' }}>Otro tipo</option>
-                        </select>
 
+                                <!-- Luego mostrar los ámbitos establecidos sin seleccionar-->
+                                @foreach ($entityTypes as $type)
+                                    @if ($type->id !== $company->entity->id)
+                                        <option value="{{ $type->name }}"
+                                            {{ old('entity_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                                    @endif
+                                @endforeach
+                                <option value="other" {{ old('entity', $company->entity) == 'other' ? 'selected' : '' }}>
+                                    Otro tipo</option>
+                            </select>
+                            @error('entity')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
 
-                        <!-- Campo de texto oculto para ingresar otra opción -->
-                        <div id="otherEntityInputWrapper" class="mt-2" style="display: {{ old('entity', $company->entity) == 'other' ? 'block' : 'none' }};">
-                            <label for="other_entity_input">Especificar otra opción:</label>
-                            <input type="text" id="other_entity_input" name="other_entity_input"
-                                    placeholder="Nueva entidad">
-                            <input type="hidden" name="other_entity" id="other_entity">
-                        </div>
-                    </div>
-                    <!-- Campo Rubro -->
-                    <div class="form-group mb-3">
-                        <label class="form-label required" for= "company_category">Rubro</label>
-                        <div>
-                            <input class="form-control" maxlength="20" name="company_category" id="company_category" type="text" value="{{$company->company_category}}" placeholder="Ingrese la categoría de la empresa " autocomplete="off">
-                        </div>
-                    </div>
-                    <!-- Campo Ámbito -->
-                    <div class="form-group mb-3">
-                        <label class="form-label required" for="scope">Ámbito</label>
-                        <div>
-                            <div class="form-check form-check-inline">
-                                <input  class="form-check-input"  type="radio" name="scope"  id="scope_nacional"
-                                    value="NACIONAL" {{ old('scope', $company->scope) === 'NACIONAL' ? 'checked' : '' }}
-                                >
-                                <label class="form-check-label" for="scope_nacional">NACIONAL</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="scope" id="scope_internacional"
-                                    value="INTERNACIONAL" {{ old('scope', $company->scope) === 'INTERNACIONAL' ? 'checked' : '' }}
-                                >
-                                <label class="form-check-label" for="scope_internacional">INTERNACIONAL</label>
+                            <div id="otherEntityInputWrapper"
+                                style="display: {{ old('entity', $company->entity) == 'other' ? 'block' : 'none' }};">
+                                <input type="text" id="other_entity_input" name="other_entity_input"
+                                    class="form-control mt-2" placeholder="Especificar otra opción"
+                                    value="{{ old('other_entity_input') }}">
+                                @error('other_entity_input')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
-                        @error('scope')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <!-- Campo Rubro -->
+                        <div class="form-group mb-3">
+                            <label class="form-label required" for= "company_category">Rubro</label>
+                            <div>
+                                <input class="form-control" name="company_category" id="company_category" type="text"
+                                    value="{{ $company->company_category }}"
+                                    placeholder="Ingrese la categoría de la empresa " autocomplete="off">
+                            </div>
+                        </div>
+                        <!-- Campo Ámbito -->
+                        <div class="form-group mb-3">
+                            <label class="form-label required" for="scope">Ámbito</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="scope" id="scope_nacional"
+                                        value="NACIONAL"
+                                        {{ old('scope', $company->scope) === 'NACIONAL' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="scope_nacional">NACIONAL</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="scope" id="scope_internacional"
+                                        value="INTERNACIONAL"
+                                        {{ old('scope', $company->scope) === 'INTERNACIONAL' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="scope_internacional">INTERNACIONAL</label>
+                                </div>
+                            </div>
+                            @error('scope')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
 
                     <div class="form-group mb-3">
                         <p>Dirección</p>
