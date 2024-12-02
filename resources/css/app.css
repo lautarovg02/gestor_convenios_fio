@@ -95,16 +95,20 @@ td.text-truncate {
         transform: rotate(360deg);
     }
 }
-
 .fixed-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
     height: 100px; /* Altura fija para el footer */
     display: flex;
     align-items: center; /* Centra verticalmente */
     justify-content: center; /* Centra horizontalmente */
     padding: 0; /* Eliminar padding */
     margin: 0; /* Eliminar margen */
+    background-color: #f8f9fa; /* Color de fondo */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Sombra superior */
 }
-
 /*SIDEBAR*/
 .active-nav-link {
     background-color: var(--active-nav-bg-color);
