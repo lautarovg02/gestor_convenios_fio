@@ -6,7 +6,7 @@
 
         <!-- Botón agregar -->
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <a href="{{ route('teachers.create') }}" class="btn btn-secondary" onclick="">
+            <a href="{{ route('teachers.create') }}" class="btn btn-success" onclick="">
                 Agregar un Docente <i class="bi bi-plus"></i>
             </a>
 
