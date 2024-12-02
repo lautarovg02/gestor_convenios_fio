@@ -161,7 +161,6 @@ class TeacherController extends Controller
     public function edit(Teacher $teacher): View
     {
         $teacher = Teacher::getAllWithRoles()->find($teacher->id);
-        dd($teacher);
         return view('teachers.edit', compact('teacher'));
     }
 
