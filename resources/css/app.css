@@ -29,31 +29,32 @@
     font-weight: 500;
 }
 
-.nav-item:not(.active-nav-link):hover {
-    /*todos los '.nav-item' que no tienen la clase '.active-nav-link*/
+.nav-link:not(.active-nav-link):hover {
+    /*todos los '.nav-link' que no tienen la clase '.active-nav-link*/
     background-color: var(--hover-inactive-nav-bg-color);
+}
 
-    .col-max-width {
-        max-width: var(--max-column-width);
-        overflow-wrap: break-word;
-    }
+.col-max-width {
+    max-width: var(--max-column-width);
+    overflow-wrap: break-word;
+}
 
-    td.text-truncate {
-        white-space: normal;
-        overflow: visible;
-    }
+td.text-truncate {
+    white-space: normal;
+    overflow: visible;
+}
 
-    .col-min-width {
-        min-width: var(--min-column-width);
+.col-min-width {
+    min-width: var(--min-column-width);
 
-    }
 }
 
 /* Este estilo evita que se apliquen los estilos de hover cuando el submenú está abierto */
 .no-hover:hover {
     background-color: transparent;
     color: inherit;
-    cursor: default; /* Opcional: cambia el cursor para que no parezca un enlace */
+    cursor: default;
+    /* Opcional: cambia el cursor para que no parezca un enlace */
 }
 
 
@@ -85,33 +86,25 @@
     font-weight: 500;
 }
 
-.nav-item:not(.active-nav-link):hover {
-    /*todos los '.nav-item' que no tienen la clase '.active-nav-link*/
+.nav-link:not(.active-nav-link):hover {
+    /*todos los '.nav-link' que no tienen la clase '.active-nav-link*/
     background-color: var(--hover-inactive-nav-bg-color);
-
-    .col-max-width {
-        max-width: var(--max-column-width);
-        overflow-wrap: break-word;
-    }
-
-    td.text-truncate {
-        white-space: normal;
-        overflow: visible;
-    }
-
-    .col-min-width {
-        min-width: var(--min-column-width);
-
-    }
 }
 
-/* Este estilo evita que se apliquen los estilos de hover cuando el submenú está abierto */
-.no-hover:hover {
-    background-color: transparent;
-    color: inherit;
-    cursor: default; /* Opcional: cambia el cursor para que no parezca un enlace */
+.col-max-width {
+    max-width: var(--max-column-width);
+    overflow-wrap: break-word;
 }
 
+td.text-truncate {
+    white-space: normal;
+    overflow: visible;
+}
+
+.col-min-width {
+    min-width: var(--min-column-width);
+
+}
 
 /*LOADING-MODAL*/
 .spinner {
