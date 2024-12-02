@@ -27,22 +27,22 @@
         <!-- Mensajes de error -->
         <div class="alert-container text-center mx-auto d-flex align-items-center justify-content-center">
             @if (isset($errorMessage))
-                <div class="alert alert-secondary error">
+                <div class="alert message-box alert-secondary error">
                     {{ $errorMessage }}
                 </div>
             @elseif ($teachers->isEmpty())
-                <div class="alert alert-secondary error">
+                <div class="alert message-box alert-secondary error">
                     <p class="m-2">!La tabla de docentes, esta vacia!</p>
                 </div>
             @endif
 
             <!--- Mensajes de error o success al editar, eliminar o crear entidad --->
             @if (Session::get('success'))
-                <div class="alert alert-success">
+                <div class="alert message-box alert-success">
                     <p class="mb-1">{!! Session::get('success') !!}</p>
                 </div>
             @elseif (Session::get('error'))
-                <div class="alert alert-danger">
+                <div class="alert message-box alert-danger">
                     <p class="mb-1">{!! Session::get('error') !!}</p>
                 </div>
             @endif

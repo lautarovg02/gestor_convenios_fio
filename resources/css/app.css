@@ -17,6 +17,15 @@
     background-color: var(--main-bg-text-color);
 }
 
+.message-box {
+    max-width: 400px; /* Reducir ancho máximo */
+    margin: 1rem auto; /* Margen superior e inferior */
+    padding: 10px 15px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    font-size: 14px; /* Tamaño de fuente más pequeño */
+    text-align: center; /* Opcional: Centra el texto */
+}
+
 .required-field::after {
     content: " *";
     color: var(--required-field-color);

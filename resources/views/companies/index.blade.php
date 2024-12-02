@@ -29,16 +29,16 @@
         <!-- Mensajes de error, carga y busqueda sin resultados -->
         <div class="alert-container text-center mx-auto d-flex align-items-center justify-content-center">
             @if (isset($loadingMessage))
-                <div class="alert alert-secondary">
+                <div class="alert message-box  alert-secondary">
                     {{ $loadingMessage }}
                 </div>
             @endif
             @if (isset($errorMessage))
-                <div class="alert alert-secondary error">
+                <div class="alert message-box alert-secondary error">
                     {{ $errorMessage }}
                 </div>
             @elseif($companies->isEmpty() && request()->input('search'))
-                <div class="alert alert-secondary">
+                <div class="alert message-box alert-secondary">
                     No se encontraron resultados para "{{ request()->input('search') }}".<br>
                     <a href="{{ route('companies.index') }}" class="btn btn-secondary mt-2">Realizar otra búsqueda</a>
                 </div>
@@ -46,11 +46,11 @@
 
             <!--- Mensajes de error o success al editar, eliminar o crear entidad --->
             @if (Session::get('success'))
-                <div class="alert alert-success">
+                <div class="alert message-box alert-success">
                     <p class="mb-1">{!! Session::get('success') !!}</p>
                 </div>
             @elseif (Session::get('error'))
-                <div class="alert alert-danger">
+                <div class="alert message-box alert-danger">
                     <p class="mb-1">{!! Session::get('error') !!}</p>
                 </div>
             @endif

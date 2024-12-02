@@ -22,25 +22,19 @@
 
     <!--- Mensajes de error o success al editar, eliminar o crear entidad --->
     @if (Session::get('success'))
-        <div class="alert alert-success">
+        <div class="alert alert-success message-box">
             <p class="mb-1">{!! Session::get('success') !!}</p>
         </div>
     @elseif (Session::get('error'))
-        <div class="alert alert-danger">
+        <div class="alert alert-danger message-box">
             <p class="mb-1">{!! Session::get('error') !!}</p>
         </div>
     @endif
 
-    <!-- Mensaje de "Cargando" -->
-    <div id="loading-message" style="display: none;">
-        <div class="alert alert-info">
-            Cargando, por favor espera...
-        </div>
-    </div>
 
     <!--- Mensaje en Busqueda: No se encuentran carreras --->
     @if (isset($noResults) && $noResults)
-        <div class="alert alert-warning">
+        <div class="alert alert-warning message-box">
             No se encontraron resultados para la búsqueda: "{{ request()->input('search') }}"
         </div>
     @else
