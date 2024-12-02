@@ -111,7 +111,7 @@
         @include('layouts/modals/modal-delete')
 
         <!-- Modal -->
-        @include('layouts.modals.modal-delete')
+        @vite('resources/js/modals/modalDelete.js')
         @include('layouts.modals.modal-loading')
     </div>
 @endsection
