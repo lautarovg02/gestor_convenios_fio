@@ -4,7 +4,7 @@
 @section('content')
     <!-- Boton Agregar carrera -->
     <div class="d-flex justify-content-between align-items-center mt-1 mb-3">
-        <a href="{{ route('careers.create') }}" class="btn btn-secondary" onclick="">
+        <a href="{{ route('careers.create') }}" class="btn btn-success" onclick="">
             Agregar Carrera <i class="bi bi-plus"></i>
         </a>
 
