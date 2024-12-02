@@ -42,7 +42,7 @@ class StoreCompanyRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'denomination.required' => 'La denominación es  un campo obligatorio.',
+            'denomination.required' => 'La razón social es  un campo obligatorio.',
             'denomination.max' => 'La cantidad máxima de caracteres es de :max',
             'cuit.required' => 'El CUIT es un campo obligatorio.',
             'cuit.digits' => 'El CUIT debe tener exactamente 11 dígitos.',
