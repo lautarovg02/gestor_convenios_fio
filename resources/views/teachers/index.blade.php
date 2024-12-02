@@ -96,7 +96,8 @@
                                 <a href="{{ route('teachers.edit', $teacher) }}" class="btn btn-primary btn-sm">Editar</a>
                                 <button type="button" class="btn btn-danger btn-sm" data-entity-id="{{ $teacher->id }}"
                                     data-entity-name="{{ $teacher->name . ' ' . $teacher->lastname }}"
-                                    data-entity-type="teachers" data-bs-toggle="modal" data-bs-target="#modal-delete">Eliminar</button>
+                                    data-entity-type="teachers" data-bs-toggle="modal"
+                                    data-bs-target="#modal-delete">Eliminar</button>
                             </td>
                         </tr>
                     @endforeach
@@ -104,7 +105,7 @@
             </table>
             <!-- Paginación -->
             <div class="d-flex justify-content-center">
-                {{ $teachers->appends(['search' => request()->input('search')])->onEachSide(1)->links('pagination::bootstrap-4') }}
+                {{ $teachers->appends(array_merge(['search' => request()->input('search')], request()->only(['career', 'role'])))->onEachSide(1)->links('pagination::bootstrap-4') }}'
             </div>
         @endif
         @include('layouts/modals/modal-delete')
