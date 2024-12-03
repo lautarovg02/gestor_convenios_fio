@@ -1,6 +1,8 @@
 <!--resources/views/companies/index.blade.php -->
 @extends('layouts.app')
 
+@section('title', 'Empresas FIO')
+
 @section('content')
 
     <!-- Resto de tu vista para listar las empresas -->
