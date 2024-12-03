@@ -1,6 +1,8 @@
 <!-- resources/views/careers/index.blade.php-->
 @extends('layouts.app')
 
+@section('title', 'Carreras FIO')
+
 @section('content')
     <!-- Boton Agregar carrera -->
     <div class="d-flex justify-content-between align-items-center mt-1 mb-3">

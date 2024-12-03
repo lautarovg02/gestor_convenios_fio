@@ -36,7 +36,7 @@
                         @csrf
                         <!-- Campo nombre -->
                         <div class="form-group mb-3">
-                            <label class="form-label required" for="name">Nombre</label>
+                            <label class="form-label required-field" for="name">Nombre</label>
                             <div>
                                 <input class="form-control" maxlength="40" name="name" id="name" type="text"
                                     value="{{ old('name') }}" placeholder="Ingrese el nombre" autocomplete="off">
@@ -48,7 +48,7 @@
 
                         <!-- Campo apellido -->
                         <div class="form-group mb-3">
-                            <label class="form-label required" for="lastname">Apellido</label>
+                            <label class="form-label required-field" for="lastname">Apellido</label>
                             <div>
                                 <input class="form-control" maxlength="40" name="lastname" id="lastname" type="text"
                                     value="{{ old('lastname') }}" placeholder="Ingrese el apellido" autocomplete="off">
@@ -60,7 +60,7 @@
 
                         <!-- Campo dni -->
                         <div class="form-group mb-3">
-                            <label class="form-label required" for="dni">DNI</label>
+                            <label class="form-label required-field" for="dni">DNI</label>
                             <div>
                                 <input class="form-control" name="dni" id="dni" type="number"
                                     value="{{ old('dni') }}" maxlength="8" placeholder="Ingrese el dni"
