@@ -26,7 +26,7 @@
                     <input type="hidden" name="name" id="modal-career-name">
                     <input type="hidden" name="department_id" id="department-id-select">
                     <input type="hidden" name="coordinator_id" id="coordinator-id-input">
-                    <button type="submit" class="btn btn-danger">Confirmar modificación</button>
+                    <button type="submit" class="btn btn-success">Confirmar modificación</button>
                 </form>
             </div>
         </div>

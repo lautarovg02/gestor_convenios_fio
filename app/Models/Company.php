@@ -88,7 +88,7 @@ class Company extends Model
         return $query->where('is_enabled', true);
     }
 
-      // Mutator para generar el slug automáticamente basado en la denominación
+      // Mutator para generar el slug automáticamente basado en la razon social
     public function setDenominationAttribute($value)
     {
         $this->attributes['denomination'] = $value;

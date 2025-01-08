@@ -1,6 +1,8 @@
 <!-- resources/views/departments/index.blade.php-->
 @extends('layouts.app')
 
+@section('title', 'Departamentos FIO')
+
 @section('content')
     <!-- Resto de tu vista para listar departamentos -->
 

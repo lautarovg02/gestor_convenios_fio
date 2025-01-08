@@ -34,13 +34,13 @@
                 <div class="card-body">
                     <form method="POST" action=" {{ route('companies.store') }} " id="" role="form">
                         @csrf
-                        <!-- Campo denominación -->
+                        <!-- Campo Razón social -->
                         <div class="form-group mb-3">
                             <label class="form-label">
-                                <label for="denomination" class="required-field fs-6">Denominación</label>
+                                <label for="denomination" class="required-field fs-6">Razón social</label>
                             </label>
                             <div>
-                                <input class="form-control fs-6" maxlength="40" placeholder="Denominación"
+                                <input class="form-control fs-6" maxlength="40" placeholder="Razón social"
                                     name="denomination" type="text" id="denomination" value="{{ old('denomination') }}">
                             </div>
                             @error('denomination')
@@ -72,10 +72,10 @@
                         <!-- Campo nombre de la empresa -->
                         <div class="form-group mb-3">
                             <label class="form-label fs-6">
-                                <label for="company_name">Nombre de la empresa</label>
+                                <label for="company_name">Nombre de fantasía</label>
                             </label>
                             <div>
-                                <input class="form-control" maxlength="100" placeholder="Nombre de la empresa"
+                                <input class="form-control" maxlength="100" placeholder="Nombre de fantasía"
                                     name="company_name" type="text" id="company_name">
                             </div>
                         </div>

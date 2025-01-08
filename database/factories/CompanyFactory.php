@@ -22,7 +22,7 @@ class CompanyFactory extends Factory
         $companyName = $this->faker->unique()->company;
 
         return [
-            'denomination' => 'Denominacion nro: ' . $this->faker->randomNumber(2),
+            'denomination' => 'Razón social nro: ' . $this->faker->randomNumber(2),
             'cuit' => $this->faker->unique()->numberBetween(20000000000, 90999999000),
             'company_name' => $companyName,
             'entity_id' => CompanyEntity::inRandomOrder()->first()->id ?? CompanyEntity::factory()->create()->id,

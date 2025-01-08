@@ -49,7 +49,7 @@ class CompanyEditFormTest extends TestCase
 
         $company = Company::factory()->create();
         $data = [
-            'denomination' => 'Nueva Denominación',
+            'denomination' => 'Nueva Razón social',
             'cuit' => '12345678901',
             'company_name' => 'Nuevo Nombre de la Empresa',
             'sector' => 'Nuevo Sector',

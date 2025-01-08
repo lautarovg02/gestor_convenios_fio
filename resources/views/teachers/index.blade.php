@@ -1,6 +1,8 @@
 <!-- resources/views/teachers/index.blade.php -->
 @extends('layouts.app')
 
+@section('title', 'Docentes FIO')
+
 @section('content')
     <div class="container mt-1">
 
