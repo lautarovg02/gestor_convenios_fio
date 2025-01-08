@@ -15,6 +15,7 @@ use App\Models\SecretaryPhone;
 use App\Models\Teacher;
 use App\Models\Career;
 use App\Models\CompanyEntity;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,10 +24,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Otras seeders
         Province::factory()->count(23)->create();
         City::factory()->count(70)->create();
         CompanyEntity::factory()->count(6)->create();
-        Company::factory()->count(20)->create();
+
+        // Ruta del archivo CSV
+        $filePath = 'storage\app\csv\companyNames.csv'; // Cambia según la ubicación real del archivo
+
+        // Obtener los nombres únicos de las compañías
+        $companyNames = \Database\Factories\CompanyFactory::loadCompanyNamesFromCSV($filePath);
+
+        foreach ($companyNames as $name) {
+            Company::factory()->create([
+                'company_name' => $name,
+                'slug' => Str::slug($name),
+            ]);
+        }
+
         Employee::factory()->count(100)->create();
         EmployeePhone::factory()->count(100)->create();
         Secretary::factory()->count(10)->create();

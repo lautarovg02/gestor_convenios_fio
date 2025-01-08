@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('denomination');
             $table->bigInteger('cuit')->length(11)->unique()->nullable();
-            $table->string('company_name',100)->unique()->nullable();
+            $table->string('company_name')->unique()->nullable();
             $table->string('sector')->nullable();
             $table->string('company_category')->nullable();
             $table->string('scope')->nullable();

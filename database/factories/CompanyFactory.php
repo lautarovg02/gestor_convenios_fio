@@ -19,22 +19,49 @@ class CompanyFactory extends Factory
      */
     public function definition(): array
     {
-
-        // Definir el nombre de la compañía
-        $companyName = $this->faker->company;
+        $companyName = $this->faker->unique()->company;
 
         return [
             'denomination' => 'Denominacion nro: ' . $this->faker->randomNumber(2),
             'cuit' => $this->faker->unique()->numberBetween(20000000000, 90999999000),
             'company_name' => $companyName,
-            'sector' => $this->faker->word,
             'entity_id' => CompanyEntity::inRandomOrder()->first()->id ?? CompanyEntity::factory()->create()->id,
-            'company_category' => $this->faker->word,
-            'scope' => $this->faker->randomElement(['NACIONAL', 'INTERNACIONAL']), // Seleccionar entre Nacional o Internacional
-            'street' => $this->faker->streetName,
-            'number' => $this->faker->numberBetween(1, 1000),
-            'city_id' => City::inRandomOrder()->first()->id, // Asegúrate de que los IDs de ciudad existan
-            'slug' => Str::slug($companyName),  // Generar un slug basado en el nombre de la compañía
+            'city_id' => City::inRandomOrder()->first()->id,
+            'slug' => Str::slug($companyName),
         ];
     }
+
+    /**
+     * Load unique company names from a CSV file.
+     *
+     * @param string $filePath
+     * @return array
+     */
+    public static function loadCompanyNamesFromCSV(string $filePath): array
+{
+    if (!file_exists($filePath)) {
+        throw new \Exception("File not found: $filePath");
+    }
+
+    $file = fopen($filePath, 'r');
+    $names = [];
+
+    // Leer la primera línea y eliminar el BOM si existe
+    $firstLine = fgets($file);
+    $firstLine = str_replace("\xEF\xBB\xBF", '', $firstLine); // Remover BOM UTF-8
+    $names[] = trim($firstLine);
+
+    // Continuar leyendo el resto del archivo
+    while (($line = fgetcsv($file)) !== false) {
+        $names[] = trim($line[0]); // Asume que el nombre está en la primera columna
+    }
+
+    fclose($file);
+
+    // Eliminar el encabezado y duplicados
+    return array_values(array_unique(array_filter($names, function ($name) {
+        return strtolower($name) !== 'companyname'; // Eliminar encabezado
+    })));
+}
+
 }

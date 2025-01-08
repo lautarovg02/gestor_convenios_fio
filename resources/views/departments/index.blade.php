@@ -34,8 +34,8 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th class="text-center">Denominación</th>
-                        <th class="text-center">Director de Departamento</th>
+                        <th style="max-width:500px" >Denominación</th>
+                        <th >Director de Departamento</th>
                         <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
@@ -43,12 +43,12 @@
                     @foreach ($departments as $department)
                         <tr>
                             <td>{{ $department->id }}</td>
-                            <td class=" text-truncate col-min-width col-max-width">{!! highlightKeyword($department->name, request()->input('search')) !!}</td>
-                            <td class="text-center text-truncate col-min-width col-max-width">{!! highlightKeyword(
+                            <td style="max-width:440px"  class=" text-truncate col-min-width col-max-width">{!! highlightKeyword($department->name, request()->input('search')) !!}</td>
+                            <td class="  text-truncate col-min-width col-max-width">{!! highlightKeyword(
                                 $department->teacher->lastname . ' ' . $department->teacher->name,
                                 request()->input('search'),
                             ) !!}</td>
-                            <td class="text-center text-truncate col-min-width col-max-width">
+                            <td class=" text-center text-truncate col-min-width col-max-width">
                                 <a href="{{ route('departments.show', $department) }}" class="btn btn-info btn-sm">Ver</a>
                                 <a href="{{ route('departments.edit', $department) }}"
                                     class="btn btn-primary btn-sm">Editar</a>
