@@ -12,6 +12,16 @@
                 Agregar un Docente <i class="bi bi-plus"></i>
             </a>
 
+            <nav aria-label="breadcrumb" class="ms-3 mt-3">
+                <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
+                    <li class="breadcrumb-item">
+                        <span class="text-muted">Gestión Académica</span>
+                    </li>
+                    <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Docentes</li>
+
+                </ol>
+            </nav>
+
             <!-- Barra de búsqueda -->
             <form action="{{ route('teachers.index') }}" method="GET" class="d-flex">
                 <input type="text" name="search" class="form-control" placeholder="Buscar docentes..."

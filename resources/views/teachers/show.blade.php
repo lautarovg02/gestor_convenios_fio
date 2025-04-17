@@ -5,9 +5,20 @@
     <!-- Page header -->
     <div class="page-header d-print-none">
         <div class="container-xl">
-            <div class="row g-2 align-items-center">
+            <div class="row g-2 ">
                 <!-- Page title actions -->
-                <div class="col-12 col-md-auto ms-auto d-print-none m-2 ">
+                <div class="col-12 align-items-center d-flex ms-auto justify-content-between d-print-none m-2 ">
+                    <nav aria-label="breadcrumb" class="ms-3 mt-3">
+                        <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
+                            <li class="breadcrumb-item">
+                                <span class="text-muted">Gestión Académica</span>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('teachers.index') }}">Docentes</a>
+                            </li>
+                            <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Crear</li>
+                        </ol>
+                    </nav>
                     <div class="btn-list">
                         <a href="{{ route('teachers.index') }}" class="btn btn-primary d-none d-sm-inline-block">
                             Regresar
@@ -68,7 +79,8 @@
                             </div>
                         </div>
                         <div class="card-footer text-center">
-                            <small class="text-muted fw-bold">Información actualizada al {{ now()->format('d/m/Y') }}</small>
+                            <small class="text-muted fw-bold">Información actualizada al
+                                {{ now()->format('d/m/Y') }}</small>
                         </div>
                     </div>
                 </div>
