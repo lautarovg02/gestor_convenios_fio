@@ -7,6 +7,9 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
                     <h3 class="card-title"> Detalles del docente</h3>
+
+
+
                     <a href="{{ route('teachers.index') }}" class="btn btn-secondary m-2">Volver</a>
                 </div>
                 <div>
@@ -120,6 +123,20 @@
                             @error('is_dean')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
+
+                        </div>
+                        <!-- Campo Rol -->
+                        <div class="form-group mb-3">
+
+                            <div class="alert alert-light   shadow-sm w-75 " role="alert">
+                                <strong>Campo Rol:</strong> Los roles de <strong>Director de Departamento</strong> y <strong>Coordinador de Carrera</strong>
+                                no se pueden modificar desde este formulario.
+                                <br>
+                                Estos roles se asignan automáticamente al editar un
+                                <a href="{{ route('departments.index') }}" class="text-decoration-underline">departamento</a> (para director)
+                                o una
+                                <a href="{{ route('careers.index') }}" class="text-decoration-underline">carrera</a> (para coordinador).
+                            </div>
                         </div>
 
                         <div class="form-footer">
