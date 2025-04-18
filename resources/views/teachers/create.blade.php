@@ -22,7 +22,7 @@
 
     </div>
 
-    <div class="row row-deck row-cards">
+    <div class="row row-deck row-cards content-with-footer-buffer">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">

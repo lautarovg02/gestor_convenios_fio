@@ -2,7 +2,7 @@
 <!-- @extends('layouts.app') -->
 
 @section('content')
-    <div class="row row-deck row-cards">
+    <div class="row row-deck row-cards content-with-footer-buffer">
         <div class="col-12 ">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">

@@ -2,26 +2,25 @@
 <!-- @extends('layouts.app') -->
 
 @section('content')
-    <div class="row">
-        <div class="row">
-            <div class="col-12 d-flex justify-content-between align-items-center ps-4 pe-4">
-                    <h4>Crear nueva carrera</h4>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
-                            <li class="breadcrumb-item"><span class="text-muted">Gestión Académica</span></li>
-                            <li class="breadcrumb-item"><a href="{{ route('careers.index') }}">Carreras</a></li>
-                            <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Crear Carrera</li>
-                        </ol>
-                    </nav>
-                    <a href="{{route('careers.index')}}" class="btn btn-outline-primary">← Volver</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="row row-deck row-cards">
+    <div class="row row-deck row-cards  content-with-footer-buffer"">
         <div class="col-12">
-            <div class="card">
 
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
+
+                    <div class="col-12 d-flex justify-content-between align-items-center ps-4 pe-4">
+                        <h4>Crear nueva carrera</h4>
+                        <nav aria-label="breadcrumb" class="ms-3 mt-3">
+                            <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
+                                <li class="breadcrumb-item"><span class="text-muted">Gestión Académica</span></li>
+                                <li class="breadcrumb-item"><a href="{{ route('careers.index') }}">Carreras</a></li>
+                                <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">
+                                    Crear Carrera</li>
+                            </ol>
+                        </nav>
+                        <a href="{{ route('careers.index') }}" class="btn btn-outline-primary">← Volver</a>
+                    </div>
+                </div>
                 <div class="card-body">
                     <form method="POST" action=" {{ route('careers.store') }} " id="" role="form">
                         @csrf
@@ -30,7 +29,8 @@
                                 <label for="name" class="required-file">Carrera</label>
                             </label>
                             <div>
-                                <input class="form-control" maxlength="255" placeholder="Carrera a ingresar..." name="name" type="text" id="name">
+                                <input class="form-control" maxlength="255" placeholder="Carrera a ingresar..."
+                                    name="name" type="text" id="name">
                                 <small class="form-hint">Carrera <b>nombre</b></small>
                                 @error('name')
                                     <div class="text-danger">{{ $message }}</div>
@@ -45,7 +45,8 @@
                                 <select class="form-control" name="coordinator_id" id="">
                                     <option value="">Seleccionar</option>
                                     @foreach ($coordinators as $coordinator)
-                                        <option value="{{ $coordinator->id }}">{{ $coordinator->name . " " . $coordinator->lastname }}</option>
+                                        <option value="{{ $coordinator->id }}">
+                                            {{ $coordinator->name . ' ' . $coordinator->lastname }}</option>
                                     @endforeach
                                 </select>
                                 <small class="form-hint">Seleccione el <b>coordinador</b> al cual pertenece la

@@ -2,7 +2,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="page-body">
+<div class="page-body  content-with-footer-buffer"">
     <div class="container-xl">
         <div class="row justify-content-between align-items-center mb-4">
             <div class="d-flex justify-content-between align-items-center">

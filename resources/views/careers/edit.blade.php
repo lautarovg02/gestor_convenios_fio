@@ -3,12 +3,12 @@
 
 @section('content')
 
-<div class="row row-deck row-cards justify-content-center">
+<div class="row row-deck row-cards justify-content-center  content-with-footer-buffer"">
     <div class="col-12 ">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
                 <h3 class="card-title"> Detalles de la carrera</h3>
-                <nav aria-label="breadcrumb">
+                <nav aria-label="breadcrumb" class="ms-3 mt-3">
                     <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
                         <li class="breadcrumb-item"><span class="text-muted">Gestión Académica</span></li>
                         <li class="breadcrumb-item"><a href="{{ route('careers.index') }}">Carreras</a></li>

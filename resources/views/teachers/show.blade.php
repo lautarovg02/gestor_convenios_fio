@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-xl mt-4">
+<div class="container-xl mt-4 content-with-footer-buffer">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
