@@ -16,7 +16,9 @@
 body, button, form, option,input{
     font-size: var(--min-font-size);
 }
-
+body{
+    overflow-x: hidden;
+}
 .btn{
     font-size: var(--min-font-size);
 
@@ -31,6 +33,14 @@ main {
     overflow-y: auto; /* Muestra scroll si el contenido excede la altura */
     max-width: 70%;
 }
+
+/* Contenedor principal del contenido */
+.main-content {
+    margin-left: 220px; /* Mismo ancho que tu sidebar */
+    padding: 1.5rem;
+    max-width: calc(100% - 220px);
+}
+
 .table .col-max-width {
     max-width: var(--max-column-width); /* 150px */
     white-space: nowrap;
@@ -196,4 +206,41 @@ td.text-truncate {
     top: 0;
     background-color: #f8f9fa;
     z-index: 1;
+}
+
+/* Sidebar fija mejorada */
+.sidebar {
+    position: fixed;
+    top: 70px; /* altura del header */
+    left: 0;
+    width: 220px;
+    height: calc(100vh - 70px);
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    overflow-y: auto;
+    padding-top: 1rem;
+    z-index: 1000;
+}
+
+/* Nav links dentro de la sidebar */
+.sidebar .nav-link {
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #343a40;
+    transition: all 0.2s;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active-nav-link {
+    background-color: #0d6efd;
+    color: #fff !important;
+}
+
+.sidebar .nav-link i {
+    margin-right: 6px;
+}
+
+/* Submenú */
+#academicoSubmenu .nav-link {
+    padding-left: 28px;
 }
