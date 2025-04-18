@@ -31,7 +31,12 @@ main {
     overflow-y: auto; /* Muestra scroll si el contenido excede la altura */
     max-width: 70%;
 }
-
+.table .col-max-width {
+    max-width: var(--max-column-width); /* 150px */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .bg-text-color {
     background-color: var(--main-bg-text-color);
@@ -63,10 +68,7 @@ main {
     background-color: var(--hover-inactive-nav-bg-color);
 }
 
-.col-max-width {
-    max-width: var(--max-column-width);
-    overflow-wrap: break-word;
-}
+
 
 td.text-truncate {
     white-space: normal;
