@@ -3,10 +3,10 @@
 @section('title', 'Empresas FIO')
 
 @section('content')
-    <div class="container mt-4">
+    <div class="container ">
 
         <!-- Encabezado + Botón -->
-        <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
                 <h4 class="fw-bold mb-1">Gestión de Empresas</h4>
                 <nav aria-label="breadcrumb">

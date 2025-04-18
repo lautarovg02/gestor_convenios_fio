@@ -3,8 +3,7 @@
 @section('title', 'Carreras FIO')
 
 @section('content')
-    <div class="container mt-4">
-
+<div class="container content-with-footer-buffer">
         <!-- Header con Título y Botón -->
         <div class="d-flex justify-content-between align-items-center mb-2">
             <div>
@@ -41,8 +40,8 @@
 
         @if (!$careers->isEmpty())
             <div class="card shadow-sm rounded">
-                <div class="table-responsive table-scrollable-container">
-                    <table class="table table-hover mb-0">
+                <div class="table-responsive rounded shadow-sm table-scrollable-container">
+                    <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
                                 <th>#</th>
