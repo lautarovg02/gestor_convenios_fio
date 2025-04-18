@@ -182,8 +182,8 @@ class CompanyController extends Controller
              }
              return redirect()->route('companies.index')->with('success', 'Empresa actualizada exitosamente.');
          } catch (Exception $e) {
-             return redirect()->route('companies.edit', $company->id)->withErrors(['error' => $e->getMessage()]);
-         }
+            return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
+        }
      }
 
     /**
