@@ -7,7 +7,7 @@
     <div class="container mt-1">
 
         <!-- Botón agregar -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-0git">
             <a href="{{ route('teachers.create') }}" class="btn btn-success" onclick="">
                 Agregar un Docente <i class="bi bi-plus"></i>
             </a>
@@ -24,7 +24,7 @@
 
             <!-- Barra de búsqueda -->
             <form action="{{ route('teachers.index') }}" method="GET" class="d-flex">
-                <input type="text" name="search" class="form-control" placeholder="Buscar docentes..."
+                <input type="text" name="search" class="form-control font-size" placeholder="Buscar docentes..."
                     value="{{ request()->input('search') }}" style="min-width: 400px;">
                 <button type="submit" class="btn btn-primary ms-2" data-bs-toggle="modal"
                     data-bs-target="#modal-loading">Buscar</button>

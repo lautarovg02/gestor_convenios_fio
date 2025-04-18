@@ -10,11 +10,19 @@
         <a href="{{ route('careers.create') }}" class="btn btn-success" onclick="">
             Agregar Carrera <i class="bi bi-plus"></i>
         </a>
+        <nav aria-label="breadcrumb" class="ms-3 mt-3">
+            <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
+                <li class="breadcrumb-item">
+                    <span class="text-muted">Gestión Académica</span>
+                </li>
+                <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Carreras</li>
 
+            </ol>
+        </nav>
         <!-- Barra de búsqueda -->
         <form action="{{ route('careers.index') }}" method="GET" class="d-flex">
-            <input type="text" name="search" class="form-control" placeholder="Buscar carreras..." value="{{ request()->input('search') }}" style="min-width: 400px;">
-            <button type="submit" class="btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#modal-loading">Buscar</button>
+            <input type="text" name="search" class="font-size form-control" placeholder="Buscar carreras..." value="{{ request()->input('search') }}" style="min-width: 400px;">
+            <button type="submit" class="btn font-size btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#modal-loading">Buscar</button>
         </form>
     </div>
 

@@ -12,6 +12,16 @@
             <a href="{{ route('departments.create') }}" class="btn btn-success" onclick="">
                 Agregar departamento <i class="bi bi-plus"></i>
             </a>
+
+            <nav aria-label="breadcrumb" class="ms-3 mt-3">
+                <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
+                    <li class="breadcrumb-item">
+                        <span class="text-muted">Gestión Académica</span>
+                    </li>
+                    <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Departamentos</li>
+
+                </ol>
+            </nav>
         </div>
 
         <!-- Mensajes de error o éxito al editar, eliminar o crear entidad -->

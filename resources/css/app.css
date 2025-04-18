@@ -11,11 +11,25 @@
     /* */
     --max-column-width: 150px;
     --min-column-width: 80px;
+    --min-font-size: small;
+}
+body, button, form, option,input{
+    font-size: var(--min-font-size);
+}
+
+.btn{
+    font-size: var(--min-font-size);
+
+}
+
+.font-size{
+    font-size: var(--min-font-size);
 }
 
 main {
     min-height: 500px; /* Altura máxima del main */
     overflow-y: auto; /* Muestra scroll si el contenido excede la altura */
+    max-width: 70%;
 }
 
 

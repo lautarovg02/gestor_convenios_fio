@@ -9,12 +9,12 @@
 
     <div class="container mt-1">
         <!-- Botón agregar -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-1">
             <a href="{{ route('companies.create') }}" class="btn btn-success" onclick="">
                 Agregar Empresa <i class="bi bi-plus"></i>
             </a>
 
-            <nav aria-label="breadcrumb" class="ms-3 mt-3">
+            <nav aria-label="breadcrumb" class="ms-3 mt-2">
                 <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
                     <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Empresas</li>
                 </ol>

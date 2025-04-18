@@ -12,7 +12,7 @@
                     </ol>
                 </nav>
                 <div class="col-auto">
-                    <a href="{{ route('teachers.index') }}" class="btn btn-outline-primary">← Volver</a>
+                    <a href="{{ route('companies.index') }}" class="btn btn-outline-primary">← Volver</a>
                 </div>
             </div>
             <div class="col">
