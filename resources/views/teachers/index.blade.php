@@ -40,7 +40,7 @@
 
         @if (!$teachers->isEmpty())
             <div class="card shadow-sm rounded">
-                <div class="table-responsive">
+                <div class="table-responsive rounded shadow-sm table-scrollable-container">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>

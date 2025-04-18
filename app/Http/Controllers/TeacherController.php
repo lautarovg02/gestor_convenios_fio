@@ -56,7 +56,7 @@ class TeacherController extends Controller
             }
 
             // Obtener los resultados paginados con los parámetros de búsqueda y filtros
-            $teachers = $query->paginate(9)->appends(['search' => $searchTerm]);
+            $teachers = $query->paginate(10)->appends(['search' => $searchTerm]);
 
             // Generar mensajes informativos si no hay resultados
             if ($teachers->isEmpty()) {

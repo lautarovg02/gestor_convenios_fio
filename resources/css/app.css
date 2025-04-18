@@ -42,6 +42,7 @@ main {
     background-color: var(--main-bg-text-color);
 }
 
+
 .message-box {
     max-width: 400px; /* Reducir ancho máximo */
     margin: 1rem auto; /* Margen superior e inferior */
@@ -183,4 +184,16 @@ td.text-truncate {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.table-scrollable-container {
+    max-height: 400px; /* o lo que consideres adecuado */
+    overflow-y: auto;
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 1;
 }

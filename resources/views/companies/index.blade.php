@@ -44,7 +44,7 @@
 
         <!-- Tabla de Empresas -->
         @unless ($companies->isEmpty())
-        <div class="table-responsive rounded shadow-sm">
+        <div class="table-responsive rounded shadow-sm table-scrollable-container">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
