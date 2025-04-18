@@ -5,6 +5,7 @@
     <div class="row">
         <div class="col-12 d-flex justify-content-between align-items-center ps-4 pe-4">
             <h4>Agregar nueva empresa</h4>
+
             <a href="{{ route('companies.index') }}" class="btn btn-secondary m-2">Volver</a>
         </div>
 
