@@ -16,9 +16,6 @@
 
             <nav aria-label="breadcrumb" class="ms-3 mt-3">
                 <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
-                    <li class="breadcrumb-item">
-                        <span class="text-muted">Gestión Académica</span>
-                    </li>
                     <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Empresas</li>
                 </ol>
             </nav>

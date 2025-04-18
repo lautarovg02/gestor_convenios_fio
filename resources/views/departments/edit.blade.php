@@ -4,11 +4,23 @@
 @section('content')
 
 <div class="row row-deck row-cards justify-content-center">
-    <div class="col-8 ">
+    <div class="col-12 ">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
                 <h3 class="card-title"> Detalles del departamento</h3>
-                <a href="{{route('departments.index')}}" class="btn btn-secondary m-2">Volver</a>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
+                        <li class="breadcrumb-item"><span class="text-muted">Gestión Académica</span></li>
+                        <li class="breadcrumb-item"><a href="{{ route('departments.index') }}">Departamentos</a></li>
+                        <li class="breadcrumb-item">
+                            <span class="text-muted">
+                                {{ $department->name }}
+                            </span>
+                        </li>
+                        <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Editar</li>
+                    </ol>
+                </nav>
+                <a href="{{route('departments.index')}}" class="btn btn-outline-primary">← Volver</a>
             </div>
             <div>
                 <!-- Mensajes flash de success-->

@@ -24,7 +24,7 @@
                             <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Editar</li>
                         </ol>
                     </nav>
-                    <a href="{{ route('teachers.index') }}" class="btn btn-secondary m-2">Volver</a>
+                    <a href="{{ route('teachers.index') }}" class="btn btn-outline-primary">← Volver</a>
                 </div>
                 <div>
                     <!-- Mensajes flash de success-->

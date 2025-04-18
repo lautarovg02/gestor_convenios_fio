@@ -7,7 +7,7 @@
             <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
                 <li class="breadcrumb-item"><span class="text-muted">Gestión Académica</span></li>
                 <li class="breadcrumb-item"><a href="{{ route('teachers.index') }}">Docentes</a></li>
-                <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Crear</li>
+                <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">{{ $teacher->name . ' ' . $teacher->lastname }}</li>
             </ol>
         </nav>
         <a href="{{ route('teachers.index') }}"  class="btn btn-outline-primary">← Volver</a>

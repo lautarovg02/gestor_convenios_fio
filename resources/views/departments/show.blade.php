@@ -5,11 +5,20 @@
 <div class="page-body">
     <div class="container-xl">
         <div class="row justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
+                        <li class="breadcrumb-item"><span class="text-muted">Gestión Académica</span></li>
+                        <li class="breadcrumb-item"><a href="{{ route('departments.index') }}">Departamentos</a></li>
+                        <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">{{$department->name }}</li>
+                    </ol>
+                </nav>
+                <div class="col-auto">
+                    <a href="{{ route('careers.index') }}" class="btn btn-outline-primary">← Volver</a>
+                </div>
+            </div>
             <div class="col">
                 <h2 class="page-title">Departamento: <span class="text-primary">{{ $department->name }}</span></h2>
-            </div>
-            <div class="col-auto">
-                <a href="{{ route('departments.index') }}" class="btn btn-outline-primary">← Volver</a>
             </div>
         </div>
 

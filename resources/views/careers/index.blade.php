@@ -4,6 +4,7 @@
 @section('title', 'Carreras FIO')
 
 @section('content')
+<div class="container mt-1">
     <!-- Boton Agregar carrera -->
     <div class="d-flex justify-content-between align-items-center mt-1 mb-3">
         <a href="{{ route('careers.create') }}" class="btn btn-success" onclick="">
@@ -94,7 +95,7 @@
     <!-- Modal -->
     @include('layouts/modals/modal-delete')
 </div>
-
+</div>
 <!--Linkeamos el .js del modal al template utilizando Vite-->
 @vite('resources/js/modals/modalDelete.js')
 
