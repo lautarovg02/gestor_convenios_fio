@@ -15,10 +15,10 @@
 
 <body>
     @include('layouts.header')
-    <div class="container-fluid">
-        <div class="row">
+    <div class="container-fluid flex-grow-1 d-flex flex-column">
+        <div class="row flex-grow-1">
             @include('layouts.sidebar')
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-2">
+            <main  class="main-content" style="margin-left: 220px; padding-top: 90px;">
                 @yield('content')
             </main>
         </div>

@@ -49,6 +49,15 @@ class Company extends Model
     }
 
     /**
+     Define la relacion uno a muchos con Company
+     Relacion: Esta relación es clave para poder acceder a todos los empleados asociados a una compañía desde el modelo Company
+    */
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
+
+    /**
      * Relación: una compañía tiene una entidad.
      */
     public function entity()

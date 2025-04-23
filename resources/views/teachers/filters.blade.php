@@ -1,30 +1,36 @@
-<form action="{{ route('teachers.index') }}" method="GET" class="row g-3 mb-4 mt-3 justify-content-end">
-    <div class=" d-flex col-md-6">
-        <div class="me-2 flex-grow-1">
-            <select class="form-select" id="career" name="career">
-                <option value="">Carrera</option>
-                <!-- Agregar opciones de Carreras dinámicamente -->
-                @foreach($careers as $career)
+<!-- Filtros y Búsqueda -->
+<div class="card shadow-sm rounded mb-4 p-3">
+    <form action="{{ route('teachers.index') }}" method="GET" class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label for="career" class="form-label">Carrera</label>
+            <select class="form-select" name="career" id="career">
+                <option value="">Todas</option>
+                @foreach ($careers as $career)
                     <option value="{{ $career->id }}" {{ request('career') == $career->id ? 'selected' : '' }}>
                         {{ $career->name }}
                     </option>
                 @endforeach
             </select>
         </div>
-        <div class="me-2 flex-grow-1">
-            <select class="form-select" id="role" name="role">
-                <option value="">Roles</option>
-                <!-- Agregar opciones de ciudades dinámicamente -->
-                @foreach($roles as $role)
-                    <option value="{{$role}}" {{ request('role') == $role ? 'selected' : '' }}>
+        <div class="col-md-4">
+            <label for="role" class="form-label">Rol</label>
+            <select class="form-select" name="role" id="role">
+                <option value="">Todos</option>
+                @foreach ($roles as $role)
+                    <option value="{{ $role }}" {{ request('role') == $role ? 'selected' : '' }}>
                         {{ $role }}
                     </option>
                 @endforeach
             </select>
         </div>
-    </div>
-    <div class="col-md-4 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary" data-bs-target="#modal-loading">Filtrar</button>
-        <a href="{{ route('teachers.index') }}" class="btn btn-secondary ms-2">Limpiar</a>
-    </div>
-</form>
+        <div class="col-md-4">
+            <label for="search" class="form-label">Buscar</label>
+            <div class="input-group">
+                <input type="text" name="search" id="search" class="form-control"
+                    placeholder="Buscar docentes..." value="{{ request('search') }}">
+                <button class="btn btn-primary" type="submit">Buscar</button>
+                <a href="{{ route('teachers.index') }}" class="btn btn-secondary">Limpiar</a>
+            </div>
+        </div>
+    </form>
+</div>
