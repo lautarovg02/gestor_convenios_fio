@@ -22,7 +22,7 @@ class DepartmentController extends Controller
 
         try{
 
-            $departments = Department::orderBy('name' , 'ASC')->paginate(9);
+            $departments = Department::orderBy('name' , 'ASC')->paginate(10);
 
             $noResults = $departments->isEmpty();
 

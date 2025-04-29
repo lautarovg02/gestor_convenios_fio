@@ -11,17 +11,53 @@
     /* */
     --max-column-width: 150px;
     --min-column-width: 80px;
+    --min-font-size: small;
+}
+body, button, form, option,input{
+    font-size: var(--min-font-size);
+}
+body{
+    overflow-x: hidden;
+}
+.btn{
+    font-size: var(--min-font-size);
+
+}
+
+.font-size{
+    font-size: var(--min-font-size);
+}
+
+
+.content-with-footer-buffer {
+    padding-bottom: 5rem;
 }
 
 main {
     min-height: 500px; /* Altura máxima del main */
     overflow-y: auto; /* Muestra scroll si el contenido excede la altura */
+    max-width: 70%;
+    padding-bottom: 100px; /* espacio para el footer */
 }
 
+/* Contenedor principal del contenido */
+.main-content {
+    margin-left: 220px; /* Mismo ancho que sidebar */
+    padding: 1.5rem;
+    max-width: calc(100% - 220px);
+}
+
+.table .col-max-width {
+    max-width: var(--max-column-width); /* 150px */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .bg-text-color {
     background-color: var(--main-bg-text-color);
 }
+
 
 .message-box {
     max-width: 400px; /* Reducir ancho máximo */
@@ -29,7 +65,7 @@ main {
     padding: 10px 15px; /* Espaciado interno */
     border-radius: 8px; /* Bordes redondeados */
     font-size: 14px; /* Tamaño de fuente más pequeño */
-    text-align: center; /* Opcional: Centra el texto */
+    text-align: center; /* Centra el texto */
 }
 
 .required-field::after {
@@ -49,10 +85,7 @@ main {
     background-color: var(--hover-inactive-nav-bg-color);
 }
 
-.col-max-width {
-    max-width: var(--max-column-width);
-    overflow-wrap: break-word;
-}
+
 
 td.text-truncate {
     white-space: normal;
@@ -69,7 +102,6 @@ td.text-truncate {
     background-color: transparent;
     color: inherit;
     cursor: default;
-    /* Opcional: cambia el cursor para que no parezca un enlace */
 }
 
 
@@ -96,17 +128,20 @@ td.text-truncate {
     }
 }
 .fixed-footer {
-    left: 0;
+    position: fixed;
     bottom: 0;
-    width: 100%;
-    height: 100px; /* Altura fija para el footer */
+    left: 220px; /* para que no se superponga con el sidebar */
+    width: calc(100% - 220px);
+    height: 80px;
+    background-color: #f8f9fa;
     display: flex;
-    align-items: center; /* Centra verticalmente */
-    justify-content: center; /* Centra horizontalmente */
-    padding: 0; /* Eliminar padding */
-    margin: 0; /* Eliminar margen */
-    background-color: #f8f9fa; /* Color de fondo */
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Sombra superior */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Arial', sans-serif;
+    border-top: 1px solid #dee2e6;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    z-index: 999; /* aseguramos visibilidad */
 }
 /*SIDEBAR*/
 .active-nav-link {
@@ -167,4 +202,53 @@ td.text-truncate {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.table-scrollable-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 1;
+}
+
+/* Sidebar fija mejorada */
+.sidebar {
+    position: fixed;
+    top: 70px; /* altura del header */
+    left: 0;
+    width: 220px;
+    height: calc(100vh - 70px);
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    overflow-y: auto;
+    padding-top: 1rem;
+    z-index: 1000;
+}
+
+/* Nav links dentro de la sidebar */
+.sidebar .nav-link {
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #343a40;
+    transition: all 0.2s;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active-nav-link {
+    background-color: #0d6efd;
+    color: #fff !important;
+}
+
+.sidebar .nav-link i {
+    margin-right: 6px;
+}
+
+/* Submenú */
+#academicoSubmenu .nav-link {
+    padding-left: 28px;
 }

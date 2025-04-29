@@ -1,10 +1,11 @@
-<!-- resources/views/companies/filters.blade.php -->
-<form action="{{ route('companies.index') }}" method="GET" class="row g-3 mb-4 mt-3 justify-content-end">
-    <div class=" d-flex col-md-6">
-        <div class="me-2 flex-grow-1">
-            <select class="form-select" id="city" name="city">
-                <option value="">Ciudad</option>
-                <!-- Agregar opciones de ciudades dinámicamente -->
+<form action="{{ route('companies.index') }}" method="GET" class="p-3 rounded border shadow-sm bg-white">
+    <div class="row g-3 align-items-end">
+
+        <!-- Ciudad -->
+        <div class="col-md-3">
+            <label for="city" class="form-label">Ciudad</label>
+            <select class="form-select font-size" id="city" name="city">
+                <option value="">Todas</option>
                 @foreach($cities as $city)
                     <option value="{{ $city->id }}" {{ request('city') == $city->id ? 'selected' : '' }}>
                         {{ $city->name }}
@@ -12,21 +13,25 @@
                 @endforeach
             </select>
         </div>
-        <div class="me-2 flex-grow-1">
-            <select class="form-select" id="sector" name="sector">
-                <option value="">Sector</option>
-                <!-- Agregar opciones de ciudades dinámicamente -->
+
+        <!-- Sector -->
+        <div class="col-md-3">
+            <label for="sector" class="form-label">Sector</label>
+            <select class="form-select font-size" id="sector" name="sector">
+                <option value="">Todos</option>
                 @foreach($sectors as $sector)
-                    <option value="{{ $sector}}" {{ request('sector') == $sector ? 'selected' : '' }}>
+                    <option value="{{ $sector }}" {{ request('sector') == $sector ? 'selected' : '' }}>
                         {{ $sector }}
                     </option>
                 @endforeach
             </select>
         </div>
-        <div class="me-2 flex-grow-1">
-            <select class="form-select" id="scope" name="scope">
-                <option value="">Ámbito</option>
-                <!-- Agregar opciones de ciudades dinámicamente -->
+
+        <!-- Ámbito -->
+        <div class="col-md-3">
+            <label for="scope" class="form-label">Ámbito</label>
+            <select class="form-select font-size" id="scope" name="scope">
+                <option value="">Todos</option>
                 @foreach($scopes as $scope)
                     <option value="{{ $scope }}" {{ request('scope') == $scope ? 'selected' : '' }}>
                         {{ $scope }}
@@ -34,9 +39,17 @@
                 @endforeach
             </select>
         </div>
-    </div>
-    <div class="col-md-4 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-loading">Filtrar</button>
-        <a href="{{ route('companies.index') }}" class="btn btn-secondary ms-2">Limpiar</a>
+
+        <!-- Buscador -->
+        <div class="col-md-3">
+            <label for="search" class="form-label">Buscar</label>
+            <div class="input-group">
+                <input type="text" id="search" name="search" class="font-size form-control"
+                       placeholder="Buscar" value="{{ request('search') }}">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+                <a href="{{ route('companies.index') }}" class="btn btn-secondary">Limpiar</a>
+            </div>
+        </div>
+
     </div>
 </form>
