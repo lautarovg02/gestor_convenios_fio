@@ -6,6 +6,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -26,6 +27,9 @@ Route::get('/', function () {
 
 // COMPANIES
 Route::resource('/companies' , CompanyController::class);
+
+// EMPLOYEES
+Route::resource('companies.employees', EmployeeController::class);
 
 //CITIES
 Route::get('/cities/create' , [CityController::class , 'create' ])->name('cities.create');

@@ -2,41 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company as CompanyModel;
+use App\Models\Company;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    public function index(Company $company)
     {
-        $searchTerm = $request->input('search'); // Obtiene el termino de búsqueda
-        $companies = collect(); // Inicializa una colección vacía
-        $errorMessage = null; // Variable para el mensaje de error
-        $loadingMessage = null; // Variable para el mensaje de carga
-
-        try {
-
-            // Mensaje que se muestra durante la carga
-            $loadingMessage = 'Cargando empresas...';
-
-            // Obtener todas las compañías usando el modelo Company y el scope de búsqueda
-            $companies = CompanyModel::search($searchTerm)->paginate(9);
-
-            } catch (\Exception $e) {
-                $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
-                // Opcional: Puedes registrar el error para fines de depuración.
-                \Log::error('Error al obtener las empresas: ' . $e->getMessage());
-            }
-
-            return view('companies.index', compact('companies', 'searchTerm', 'errorMessage'));
+        $employees = $company->employees()->with('phones')->get();
+        return view('employees.index', compact('company', 'employees'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
