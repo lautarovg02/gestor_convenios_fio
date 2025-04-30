@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Career;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -54,6 +55,12 @@ class Teacher extends Model
     {
         return $this->belongsToMany(Career::class, 'career_teacher');
     }
+
+     //Relación n:n con tabla Student
+     public function students(): BelongsToMany
+        {
+            return $this->belongsToMany(Student::class, 'teacher_tutor_student');
+        }
 
     /** Relación con Department (uno a uno)
      * Obtener el department del cual el teacher es director de departemento.
