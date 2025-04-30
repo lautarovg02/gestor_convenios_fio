@@ -15,6 +15,7 @@ use App\Models\SecretaryPhone;
 use App\Models\Teacher;
 use App\Models\Career;
 use App\Models\CompanyEntity;
+use App\Models\ContractStatus;
 use App\Models\TypeFrameworkAgreement;
 use Illuminate\Support\Str;
 
@@ -53,5 +54,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CareerTeacherSeeder::class);
 
         TypeFrameworkAgreement::factory()->count(3)->create();
+        ContractStatus::factory()->count(9)->create();
     }
 }
