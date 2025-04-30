@@ -15,6 +15,7 @@ use App\Models\SecretaryPhone;
 use App\Models\Teacher;
 use App\Models\Career;
 use App\Models\CompanyEntity;
+use App\Models\TypeFrameworkAgreement;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -30,7 +31,7 @@ class DatabaseSeeder extends Seeder
         CompanyEntity::factory()->count(6)->create();
 
         // Ruta del archivo CSV
-        $filePath = 'storage\app\csv\companyNames.csv'; // Cambia según la ubicación real del archivo
+        $filePath = 'database\seeders\csv\companyNames.csv'; // Cambia según la ubicación real del archivo
 
         // Obtener los nombres únicos de las compañías
         $companyNames = \Database\Factories\CompanyFactory::loadCompanyNamesFromCSV($filePath);
@@ -50,5 +51,7 @@ class DatabaseSeeder extends Seeder
         Department::factory(4)->create();
         Career::factory(9)->create();
         $this->call(CareerTeacherSeeder::class);
+
+        TypeFrameworkAgreement::factory()->count(3)->create();
     }
 }
