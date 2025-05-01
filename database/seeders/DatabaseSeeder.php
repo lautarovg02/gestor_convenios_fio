@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
         Career::factory(9)->create();
         $this->call(CareerTeacherSeeder::class);
 
-        TypeFrameworkAgreement::factory()->count(3)->create();
-        ContractStatus::factory()->count(9)->create();
+        TypeFrameworkAgreement::factory(3)->create();
+        ContractStatus::factory(10)->create();
     }
 }
