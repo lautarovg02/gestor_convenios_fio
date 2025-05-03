@@ -14,6 +14,7 @@ use App\Models\Secretary;
 use App\Models\SecretaryPhone;
 use App\Models\Teacher;
 use App\Models\Career;
+use App\Models\Type_Report;
 use App\Models\CompanyEntity;
 use Illuminate\Support\Str;
 
@@ -49,6 +50,7 @@ class DatabaseSeeder extends Seeder
         Teacher::factory(80)->create();
         Department::factory(4)->create();
         Career::factory(9)->create();
+        Type_Report::factory()->count(5)->create();
         $this->call(CareerTeacherSeeder::class);
     }
 }
