@@ -25,9 +25,8 @@ class CompanyFactory extends Factory
             'denomination' => 'Razón social nro: ' . $this->faker->randomNumber(2),
             'cuit' => $this->faker->unique()->numberBetween(20000000000, 90999999000),
             'company_name' => $companyName,
-
             'entity_id' => CompanyEntity::inRandomOrder()->first()->id ?? CompanyEntity::factory()->create()->id,            
-            'cit    y_id' => City::inRandomOrder()->first()->id,
+            'city_id' => City::inRandomOrder()->first()->id,
             'slug' => Str::slug($companyName . '-' . $this->faker->unique()->randomNumber(5)),
         ];
     }
