@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Str;
 
@@ -38,6 +39,13 @@ class Company extends Model
      * @var array
      */
     protected $fillable = ['denomination','cuit','company_name','sector','entity_id','company_category','scope','street','number','city_id', 'slug'];
+
+
+      //Relación 1:n atributo multivaluado en la tabla Contract
+      public function contracts(): HasMany
+      {
+          return $this->hasMany(Contract::class, 'company_id');
+      }
 
     /**
      * Relación 1:*
