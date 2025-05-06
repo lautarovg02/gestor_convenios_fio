@@ -37,13 +37,13 @@ return new class extends Migration
 
             $table->unsignedBigInteger('rector');
             $table->foreign('rector')->references('id')->on('teachers');
-
+/*
             $table->unsignedBigInteger('contract_status_id');
             $table->foreign('contract_status_id')->references('id')->on('contract_statuses');
 
             $table->unsignedBigInteger('type_framework_agreement_id');
             $table->foreign('type_framework_agreement_id')->references('id')->on('type_framework_agreements');
-
+*/
             $table->binary('file')->nullable(); // Esto es un campo tipo BLOB
 
 
