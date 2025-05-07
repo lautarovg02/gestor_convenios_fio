@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('last_name',40);
             $table->integer('dni')->unique();
             $table->bigInteger('cuil')->unique()->nullable();
-            $table->string('email');
+            $table->string('email')->unique();
             $table->bigInteger('phone_numb')->unique()->length(10);
             $table->string('career',250)->nullable();
             $table->timestamps();
