@@ -3,9 +3,11 @@
 namespace Database\Factories;
 
 use App\Models\Company;
+use App\Models\ContractStatus;
 use App\Models\Employee;
 use App\Models\Secretary;
 use App\Models\Teacher;
+use App\Models\TypeFrameworkAgreement;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +22,7 @@ class ContractFactory extends Factory
      */
     public function definition(): array
     {
-        //CONSULTAR SI NECESITO PROVIDERS!!
+        
         
         return [
             'signing_date' => $this->faker->date(),
@@ -34,8 +36,8 @@ class ContractFactory extends Factory
             'contact_employee_id' => Employee::inRandomOrder()->first()->id,
             'representative_employee_id' => Employee::inRandomOrder()->first()->id,
             'rector' => Teacher::inRandomOrder()->first()->id,
-            /*'contract_status_id' => ContractStatus::inRandomOrder()->first()->id,
-            'type_framework_agreement_id' => TypeFrameworkAgreement_id::inRandomOrder()->first()->id,*/
+            'contract_status_id' => ContractStatus::inRandomOrder()->first()->id,
+            'type_framework_agreement_id' => TypeFrameworkAgreement::inRandomOrder()->first()->id,
             'file' => random_bytes(256), // 256 bytes binarios aleatorios
         ];
     }

@@ -42,7 +42,6 @@ class Contract extends Model
         return $this->belongsTo(Teacher::class, 'rector');
     }
 
-    /* SE NECESITA QUE ESTE TESTEADA LA TASK 376 PARA TENER ESAS CLASES!!
 
      //Relación  1:n con ContractStatus
      public function status(): BelongsTo {
@@ -53,7 +52,7 @@ class Contract extends Model
      public function typeFrameworkAgreement(): BelongsTo {
         return $this->belongsTo(TypeFrameworkAgreement::class, 'type_framework_agreement_id');
     }
-    */
+    
 
 
 

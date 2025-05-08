@@ -52,10 +52,11 @@ class DatabaseSeeder extends Seeder
         Teacher::factory(80)->create();
         Department::factory(4)->create();
         Career::factory(9)->create();
+        TypeFrameworkAgreement::factory(3)->create();
+        ContractStatus::factory(10)->create();
         Contract::factory(2)->create();
         $this->call(CareerTeacherSeeder::class);
 
-        TypeFrameworkAgreement::factory(3)->create();
-        ContractStatus::factory(10)->create();
+        
     }
 }
