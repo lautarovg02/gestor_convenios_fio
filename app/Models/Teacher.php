@@ -43,6 +43,17 @@ class Teacher extends Model
         'is_dean',
     ];
 
+      //Relación 1:n atributo multivaluado en la tabla Contract
+      public function contracts(): HasMany
+      {
+          return $this->hasMany(Contract::class, 'teacher_id');
+      }
+
+      public function rectorContracts(): HasMany
+      {
+          return $this->hasMany(Contract::class, 'rector');
+      }
+
     //Relación 1:n atributo multivaluado en la tabla Teacher
     public function cathedras(): HasMany
     {
