@@ -35,7 +35,7 @@ class ContractFactory extends Factory
             'creation_date' =>$this->faker->date(),
             'contact_employee_id' => Employee::inRandomOrder()->first()->id,
             'representative_employee_id' => Employee::inRandomOrder()->first()->id,
-            'rector' => Teacher::inRandomOrder()->first()->id,
+            'rector' => Teacher::where('is_rector', true)->inRandomOrder()->first()->id, //Siempre debe ser true, para que no falle el trigger
             'contract_status_id' => ContractStatus::inRandomOrder()->first()->id,
             'type_framework_agreement_id' => TypeFrameworkAgreement::inRandomOrder()->first()->id,
             'file' => random_bytes(256), // 256 bytes binarios aleatorios

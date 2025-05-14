@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('lastname',40);
             $table->integer('dni')->unique();
             $table->bigInteger('cuil')->unique()->nullable();
-            $table->boolean('is_rector')->default(false);
+            $table->boolean('is_rector')->nullable();
             $table->boolean('is_dean')->nullable();
 
             $table->timestamps();

@@ -38,7 +38,7 @@ class Contract extends Model
     }
 
      //Relación  1:n con Teacher(rector)
-     public function rector(): BelongsTo {
+     public function rectorTeacher(): BelongsTo {
         return $this->belongsTo(Teacher::class, 'rector');
     }
 

@@ -110,8 +110,7 @@ class ContractTest extends TestCase
 
         $this->assertEquals($representativeEmployee->id, $contract->representativeEmployee->id);  // representative_employee_id
 
-       $this->assertEquals($rector->id, $contract->rector->id);  // rector - este test falla
-      //$this->assertEquals($rector->id, $contract->rectorTeacher->id);  // correcto
+       $this->assertEquals($rector->id, $contract->rectorTeacher->id);  // correcto
 
         $this->assertEquals($type->id, $contract->typeFrameworkAgreement->id);  // type_framework_agreement_id
 
