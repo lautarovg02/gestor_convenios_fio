@@ -23,6 +23,21 @@
                 <h4 class="fw-bold mb-1">Gestión de Empleados - {{ $company->company_name }}</h4>
             </div>
         </div>
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+        @if (session('success'))
+            <div id="flash-message" class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         @unless ($employees->isEmpty())
             <div class="w-75 table-responsive rounded shadow-sm table-scrollable-container">
                 <table class="table table-hover align-middle mb-0">
@@ -66,14 +81,15 @@
                                 <td class="col-max-width text-truncate">
                                     @if ($employee->phones->isNotEmpty())
                                         @foreach ($employee->phones as $phone)
-                                        <div title="{{ $phone->number }}">{{ $phone->number }}</div>
+                                            <div title="{{ $phone->number }}">{{ $phone->number }}</div>
                                         @endforeach
                                     @else
                                         <span class="text-muted">Sin número</span>
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-primary btn-sm">Editar</a>
+                                    <a href="{{ route('employees.edit', $employee) }}"
+                                        class="btn btn-primary btn-sm">Editar</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -85,4 +101,8 @@
         @endunless
 
     </div>
+@endsection
+
+@section('scripts')
+    @vite('resources/js/utils/flashMessage.js')
 @endsection
