@@ -18,7 +18,9 @@ use App\Models\CompanyEntity;
 use App\Models\Contract;
 use App\Models\ContractStatus;
 use App\Models\TypeFrameworkAgreement;
-
+use App\Models\Specific;
+use App\Models\SpecificResidenceAgreement;
+use App\Models\IndividualInternshipAgreement;
 use App\Models\Student;
 use Illuminate\Support\Str;
 
@@ -60,6 +62,11 @@ class DatabaseSeeder extends Seeder
         Contract::factory(2)->create();
 
         Student::factory(80)->create();
+
+        Specific::factory(6)->create();
+        SpecificResidenceAgreement::factory(4)->create();
+        IndividualInternshipAgreement::factory(5)->create();
+
 
         $this->call(CareerTeacherSeeder::class);
 
