@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('specifics', function (Blueprint $table) {
         $table->unsignedBigInteger('contract_id');
-        $table->foreign('contract_id')->references('id')->on('contracts')->onDelete('cascade');
-        
+        $table->foreign('contract_id')->references('id')->on('contracts');
+
         $table->date('signing_date')->nullable();
         $table->string('objective', 200);
         $table->text('commitment_parties');
         $table->string('responsable_control_company', 100)->nullable();
         $table->string('responsable_control_fio', 100)->nullable();
-        $table->binary('file');
+        $table->binary('file')->nullable();
 
         $table->timestamps();
 
