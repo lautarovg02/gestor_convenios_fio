@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('specifics', function (Blueprint $table) {
-        $table->unsignedBigInteger('contract_id');
+        $table->id();
         $table->foreign('contract_id')->references('id')->on('contracts');
-
         $table->date('signing_date')->nullable();
         $table->string('objective', 200);
         $table->text('commitment_parties');
