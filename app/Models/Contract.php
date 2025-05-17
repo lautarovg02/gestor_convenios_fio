@@ -53,9 +53,8 @@ class Contract extends Model
         return $this->belongsTo(TypeFrameworkAgreement::class, 'type_framework_agreement_id');
     }
     
-
-
-
-   
-
+    public function specifics()
+    {
+        return $this->hasMany(Specific::class);
+    }
 }
