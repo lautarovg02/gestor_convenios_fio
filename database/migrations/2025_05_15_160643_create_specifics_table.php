@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('specifics', function (Blueprint $table) {
         $table->id();
+        $table->unsignedBigInteger('contract_id');
         $table->foreign('contract_id')->references('id')->on('contracts');
         $table->date('signing_date')->nullable();
         $table->string('objective', 200);
