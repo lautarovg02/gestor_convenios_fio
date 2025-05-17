@@ -16,5 +16,12 @@ class Student extends Model
         {
             return $this->belongsToMany(Teacher::class, 'teacher_tutor_student');
         }
-
+    public function individualInternshipAgreements()
+    {
+        return $this->hasMany(IndividualInternshipAgreement::class);
+    }
+    public function specificResidenceAgreements()
+    {
+        return $this->hasMany(SpecificResidenceAgreement::class);
+    }
 }
