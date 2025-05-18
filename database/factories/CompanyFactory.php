@@ -25,8 +25,8 @@ class CompanyFactory extends Factory
             'denomination' => 'Razón social nro: ' . $this->faker->randomNumber(2),
             'cuit' => $this->faker->unique()->numberBetween(20000000000, 90999999000),
             'company_name' => $companyName,
-            'entity_id' => CompanyEntity::inRandomOrder()->first()->id ?? CompanyEntity::factory()->create()->id,            
-            'city_id' => City::inRandomOrder()->first()->id,
+            'entity_id' => CompanyEntity::inRandomOrder()->first()->id ?? CompanyEntity::factory()->create()->id,
+            'city_id' => City::inRandomOrder()->first()->id ?? City::factory()->create()->id,
             'slug' => Str::slug($companyName . '-' . $this->faker->unique()->randomNumber(5)),
         ];
     }
@@ -39,30 +39,29 @@ class CompanyFactory extends Factory
      * @return array
      */
     public static function loadCompanyNamesFromCSV(string $filePath): array
-{
-    if (!file_exists($filePath)) {
-        throw new \Exception("File not found: $filePath");
+    {
+        if (!file_exists($filePath)) {
+            throw new \Exception("File not found: $filePath");
+        }
+
+        $file = fopen($filePath, 'r');
+        $names = [];
+
+        // Leer la primera línea y eliminar el BOM si existe
+        $firstLine = fgets($file);
+        $firstLine = str_replace("\xEF\xBB\xBF", '', $firstLine); // Remover BOM UTF-8
+        $names[] = trim($firstLine);
+
+        // Continuar leyendo el resto del archivo
+        while (($line = fgetcsv($file)) !== false) {
+            $names[] = trim($line[0]); // Asume que el nombre está en la primera columna
+        }
+
+        fclose($file);
+
+        // Eliminar el encabezado y duplicados
+        return array_values(array_unique(array_filter($names, function ($name) {
+            return strtolower($name) !== 'companyname'; // Eliminar encabezado
+        })));
     }
-
-    $file = fopen($filePath, 'r');
-    $names = [];
-
-    // Leer la primera línea y eliminar el BOM si existe
-    $firstLine = fgets($file);
-    $firstLine = str_replace("\xEF\xBB\xBF", '', $firstLine); // Remover BOM UTF-8
-    $names[] = trim($firstLine);
-
-    // Continuar leyendo el resto del archivo
-    while (($line = fgetcsv($file)) !== false) {
-        $names[] = trim($line[0]); // Asume que el nombre está en la primera columna
-    }
-
-    fclose($file);
-
-    // Eliminar el encabezado y duplicados
-    return array_values(array_unique(array_filter($names, function ($name) {
-        return strtolower($name) !== 'companyname'; // Eliminar encabezado
-    })));
-}
-
 }

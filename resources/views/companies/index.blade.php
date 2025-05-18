@@ -25,8 +25,10 @@
             @include('companies.filters')
         </div>
         <!-- Mensajes -->
-        @if (Session::get('success'))
-            <div class="alert alert-success">{{ Session::get('success') }}</div>
+        @if (session('success'))
+            <div id="flash-message" class="alert alert-success">
+                {{ session('success') }}
+            </div>
         @elseif (Session::get('error'))
             <div class="alert alert-danger">{{ Session::get('error') }}</div>
         @endif
@@ -119,7 +121,7 @@
         <!-- Modales -->
         @include('layouts.modals.modal-delete')
         @include('layouts.modals.modal-loading')
-
+    @vite('resources/js/utils/flashMessage.js')
         @vite('resources/js/modals/modalDelete.js')
     </div>
 @endsection

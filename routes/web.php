@@ -29,7 +29,7 @@ Route::get('/', function () {
 Route::resource('/companies' , CompanyController::class);
 
 // EMPLOYEES
-Route::resource('companies.employees', EmployeeController::class);
+Route::resource('companies.employees', EmployeeController::class)->shallow();
 
 //CITIES
 Route::get('/cities/create' , [CityController::class , 'create' ])->name('cities.create');
