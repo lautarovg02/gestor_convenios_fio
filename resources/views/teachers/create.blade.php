@@ -5,12 +5,24 @@
     <div class="row">
         <div class="col-12 d-flex justify-content-between align-items-center ps-4 pe-4">
             <h4>Agregar nuevo Docente</h4>
-            <a href="{{ route('teachers.index') }}" class="btn btn-secondary m-2">Volver</a>
+            <!-- Breadcrumb de navegación -->
+            <nav aria-label="breadcrumb" class="ms-3 mt-3">
+                <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
+                    <li class="breadcrumb-item">
+                        <span class="text-muted">Gestión Académica</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('teachers.index') }}">Docentes</a>
+                    </li>
+                    <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Crear Docente</li>
+                </ol>
+            </nav>
+            <a href="{{ route('teachers.index') }}" class="btn btn-outline-primary">← Volver</a>
         </div>
 
     </div>
 
-    <div class="row row-deck row-cards">
+    <div class="row row-deck row-cards content-with-footer-buffer">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
@@ -36,11 +48,7 @@
                         @csrf
                         <!-- Campo nombre -->
                         <div class="form-group mb-3">
-<<<<<<< HEAD
-                            <label class="form-label required required-field " for="name">Nombre</label>
-=======
                             <label class="form-label required-field" for="name">Nombre</label>
->>>>>>> be47c07da9960a61b55880e88802b8929a9bd1be
                             <div>
                                 <input class="form-control" maxlength="40" name="name" id="name" type="text"
                                     value="{{ old('name') }}" placeholder="Ingrese el nombre" autocomplete="off">
@@ -52,11 +60,7 @@
 
                         <!-- Campo apellido -->
                         <div class="form-group mb-3">
-<<<<<<< HEAD
-                            <label class="form-label required required-field " for="lastname">Apellido</label>
-=======
                             <label class="form-label required-field" for="lastname">Apellido</label>
->>>>>>> be47c07da9960a61b55880e88802b8929a9bd1be
                             <div>
                                 <input class="form-control" maxlength="40" name="lastname" id="lastname" type="text"
                                     value="{{ old('lastname') }}" placeholder="Ingrese el apellido" autocomplete="off">
@@ -68,11 +72,7 @@
 
                         <!-- Campo dni -->
                         <div class="form-group mb-3">
-<<<<<<< HEAD
-                            <label class="form-label required required-field " for="dni">DNI</label>
-=======
                             <label class="form-label required-field" for="dni">DNI</label>
->>>>>>> be47c07da9960a61b55880e88802b8929a9bd1be
                             <div>
                                 <input class="form-control" name="dni" id="dni" type="number"
                                     value="{{ old('dni') }}" maxlength="8" placeholder="Ingrese el dni"

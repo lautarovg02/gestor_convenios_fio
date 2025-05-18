@@ -41,7 +41,7 @@ class CompanyController extends Controller
             $cities = City::orderBy('name', 'ASC')->get();
 
             // Obtener todas las compañías activas usando el modelo Company y el scope de búsqueda y filtro
-            $companies = Company::enabled()->search($searchTerm)->filter($filters)->paginate(9);
+            $companies = Company::enabled()->search($searchTerm)->filter($filters)->paginate(10);
 
             //Obtener todos los sectors y no solo los 9 que se obtienen de las compañias paginadas
             //Reemplaza en la colección de $sector, los sectores vacíos con N/A antes de enviarlos a la vista. map()
@@ -182,8 +182,8 @@ class CompanyController extends Controller
              }
              return redirect()->route('companies.index')->with('success', 'Empresa actualizada exitosamente.');
          } catch (Exception $e) {
-             return redirect()->route('companies.edit', $company->id)->withErrors(['error' => $e->getMessage()]);
-         }
+            return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
+        }
      }
 
     /**

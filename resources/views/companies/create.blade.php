@@ -2,20 +2,20 @@
 <!-- @extends('layouts.app') -->
 
 @section('content')
-    <div class="row">
-        <div class="col-12 d-flex justify-content-between align-items-center ps-4 pe-4">
-            <h4>Agregar nueva empresa</h4>
-            <a href="{{ route('companies.index') }}" class="btn btn-secondary m-2">Volver</a>
-        </div>
-
-    </div>
-
-    <div class="row row-deck row-cards">
+    <div class="row row-deck row-cards content-with-footer-buffer">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Detalles Empresas</h3>
-                </div>
+                    <div class="col-12 d-flex justify-content-between align-items-center ps-4 pe-4">
+                        <h3>Agregar nueva empresa</h3>
+                        <nav aria-label="breadcrumb" class="ms-3 mt-3">
+                            <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
+                                <li class="breadcrumb-item"><a href="{{ route('companies.index') }}">Empresas</a></li>
+                                <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Crear Empresa</li>
+                            </ol>
+                        </nav>
+                        <a href="{{ route('companies.index') }}" class="btn btn-outline-primary">← Volver</a>
+                    </div>                </div>
 
                 <!-- Mensajes flash de success-->
                 @if (Session::has('success'))

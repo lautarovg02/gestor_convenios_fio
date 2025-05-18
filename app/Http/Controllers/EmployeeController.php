@@ -2,41 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company as CompanyModel;
+use App\Http\Requests\StoreEmployee;
+use App\Models\Company;
+use App\Models\Employee;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class EmployeeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    public function index(Company $company)
     {
-        $searchTerm = $request->input('search'); // Obtiene el termino de búsqueda
-        $companies = collect(); // Inicializa una colección vacía
-        $errorMessage = null; // Variable para el mensaje de error
-        $loadingMessage = null; // Variable para el mensaje de carga
-
-        try {
-
-            // Mensaje que se muestra durante la carga
-            $loadingMessage = 'Cargando empresas...';
-
-            // Obtener todas las compañías usando el modelo Company y el scope de búsqueda
-            $companies = CompanyModel::search($searchTerm)->paginate(9);
-
-            } catch (\Exception $e) {
-                $errorMessage = 'No se pudo recuperar la información de empresas en este momento. Por favor, inténtelo más tarde.';
-                // Opcional: Puedes registrar el error para fines de depuración.
-                \Log::error('Error al obtener las empresas: ' . $e->getMessage());
-            }
-
-            return view('companies.index', compact('companies', 'searchTerm', 'errorMessage'));
+        $employees = $company->employees()->with('phones')->get();
+        return view('employees.index', compact('company', 'employees'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
@@ -61,17 +40,66 @@ class EmployeeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Employee $employee)
     {
-        //
+        return view('employees.edit', compact('employee'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreEmployee $request, Employee $employee)
     {
-        //
+
+        // Obtén los datos validados
+        $validated = $request->validated();
+
+        // Actualiza los datos básicos del empleado.
+        $employee->update([
+            'name'         => $validated['name'],
+            'lastname'     => $validated['lastname'],
+            'position'     => $validated['position'],
+            'dni'          => $validated['dni'],
+            'email'        => $request->input('email'),
+            'is_represent' => $request->input('is_represent'),
+        ]);
+
+
+        $deletePhoneIds = [];
+
+        if ($request->has('phones') && is_array($request->phones)) {
+            foreach ($request->phones as $key => $phoneData) {
+                // Si el teléfono está marcado como eliminado, lo agregamos al array
+                if (!empty($phoneData['delete']) && $phoneData['delete'] == "1") {
+                    $deletePhoneIds[] = $phoneData['id'];
+                    continue; // Saltamos el resto de la lógica para este teléfono
+                }
+
+                // Si no tiene ID, es un nuevo teléfono
+                if (!isset($phoneData['id']) || $key === 'new') {
+                    if (!empty(trim($phoneData['number']))) {
+                        $employee->phones()->create([
+                            'number'      => $phoneData['number'],
+                            'employee_id' => $employee->id,
+                        ]);
+                    }
+                } else {
+                    $existingPhone = $employee->phones()->find($phoneData['id']);
+                    if ($existingPhone) {
+                        $existingPhone->update([
+                            'number' => $phoneData['number'],
+                        ]);
+                    }
+                }
+            }
+        }
+
+        //Ejecutar la eliminación de los teléfonos marcados
+        if (!empty($deletePhoneIds) && $employee->phones()->count() - count($deletePhoneIds) > 0) {
+            $employee->phones()->whereIn('id', $deletePhoneIds)->delete();
+        }
+        return redirect()->route('companies.employees.index', ['company' => $employee->company_id])
+            ->with('success', 'Empleado actualizado correctamente.');
     }
 
     /**
