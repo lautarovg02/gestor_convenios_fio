@@ -22,6 +22,7 @@ use App\Models\TypeFrameworkAgreement;
 use App\Models\Specific;
 use App\Models\SpecificResidenceAgreement;
 use App\Models\IndividualInternshipAgreement;
+use App\Models\ReportSpecific;
 use App\Models\Student;
 use Illuminate\Support\Str;
 
@@ -69,6 +70,8 @@ class DatabaseSeeder extends Seeder
         Specific::factory(6)->create();
         SpecificResidenceAgreement::factory(4)->create();
         IndividualInternshipAgreement::factory(5)->create();
+
+        ReportSpecific::factory(4)->create();
 
         $this->call(CareerTeacherSeeder::class);
 
