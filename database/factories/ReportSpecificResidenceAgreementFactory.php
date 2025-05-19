@@ -19,7 +19,7 @@ class ReportSpecificResidenceAgreementFactory extends Factory
     public function definition(): array
     {
              return [
-            'specific_residence_agreement_id' => SpecificResidenceAgreement::inRandomOrder()->unique()->first()->id,
+            'specific_residence_agreement_id' => SpecificResidenceAgreement::inRandomOrder()->first()->id,
             'specific_residence_agreement_contract_id' => SpecificResidenceAgreement::inRandomOrder()->first()->id,
             'upload_date' => $this->faker->date(),
             'url_report' => $this->faker->url(),
