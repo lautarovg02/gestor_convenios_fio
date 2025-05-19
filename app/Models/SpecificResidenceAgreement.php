@@ -28,4 +28,16 @@ class SpecificResidenceAgreement extends Model
     {
         return $this->belongsTo(Student::class);
     }
+
+    public function SpecificResidenceAgreements()
+    {
+        return $this->belongsTo(ReportSpecificResidenceAgreement::class);
+    }
+
+      public function SpecificResidenceAgreementContracts()
+    {
+        return $this->belongsTo(ReportSpecificResidenceAgreement::class);
+    }
+
+    
 }
