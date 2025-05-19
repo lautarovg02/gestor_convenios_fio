@@ -128,10 +128,7 @@ td.text-truncate {
     }
 }
 .fixed-footer {
-    position: fixed;
-    bottom: 0;
-    left: 220px; /* para que no se superponga con el sidebar */
-    width: calc(100% - 220px);
+    padding-left: 17%;
     height: 80px;
     background-color: #f8f9fa;
     display: flex;

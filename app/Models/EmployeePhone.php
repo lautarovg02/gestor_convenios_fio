@@ -9,7 +9,7 @@ class EmployeePhone extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['phone_numb', 'employee_id'];
+    protected $fillable = ['number', 'employee_id'];
 
     // Define la relación inversa con Employee
     public function employee()

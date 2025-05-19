@@ -21,7 +21,7 @@ class TeacherFactory extends Factory
             'lastname' =>  $this->faker->lastName(),
             'dni' => $this->faker->numberBetween(10000000, 50000000),
             'is_dean' => false,
-            'is_rector' => false,
+            'is_rector' => $this->faker->boolean() //al azar true o false
         ];
     }
 }

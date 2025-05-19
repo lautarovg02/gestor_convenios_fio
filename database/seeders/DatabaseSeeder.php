@@ -16,6 +16,13 @@ use App\Models\Teacher;
 use App\Models\Career;
 use App\Models\Type_Report;
 use App\Models\CompanyEntity;
+use App\Models\Contract;
+use App\Models\ContractStatus;
+use App\Models\TypeFrameworkAgreement;
+use App\Models\Specific;
+use App\Models\SpecificResidenceAgreement;
+use App\Models\IndividualInternshipAgreement;
+use App\Models\Student;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -31,7 +38,7 @@ class DatabaseSeeder extends Seeder
         CompanyEntity::factory()->count(6)->create();
 
         // Ruta del archivo CSV
-        $filePath = 'storage\app\csv\companyNames.csv'; // Cambia según la ubicación real del archivo
+        $filePath = 'database\seeders\csv\companyNames.csv'; // Cambia según la ubicación real del archivo
 
         // Obtener los nombres únicos de las compañías
         $companyNames = \Database\Factories\CompanyFactory::loadCompanyNamesFromCSV($filePath);
@@ -50,7 +57,21 @@ class DatabaseSeeder extends Seeder
         Teacher::factory(80)->create();
         Department::factory(4)->create();
         Career::factory(9)->create();
+
         Type_Report::factory()->count(5)->create();
+
+        TypeFrameworkAgreement::factory(3)->create();
+        ContractStatus::factory(10)->create();
+        Contract::factory(2)->create();
+
+        Student::factory(80)->create();
+
+        Specific::factory(6)->create();
+        SpecificResidenceAgreement::factory(4)->create();
+        IndividualInternshipAgreement::factory(5)->create();
+
         $this->call(CareerTeacherSeeder::class);
+
+        
     }
 }

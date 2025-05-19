@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-xl mt-4 mb-5">
-        <div class="row justify-content-between align-items-center mb-4">
+    <div class=" d-flex flex-column container-xl mt-4 mb-5 justify-content-center align-items-center">
+        <div class=" w-75 row justify-content-between align-items-center mb-4">
             <div class="d-flex justify-content-between align-items-center">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
@@ -12,7 +12,7 @@
                     </ol>
                 </nav>
                 <div class="col-auto">
-                    <a href="{{ route('companies.index') }}" class="btn btn-outline-primary">← Volver</a>
+                    <a href="{{ route('companies.index') }}" class="btn btn-outline-primary me-3">← Volver</a>
                 </div>
             </div>
             <div class="col">
@@ -20,9 +20,10 @@
             </div>
         </div>
 
-        <div class="card shadow">
-            <div class="card-header bg-white">
+        <div class="card shadow w-75">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
                 <h3 class="card-title">Detalles de la Empresa</h3>
+                <a href="{{ route('companies.employees.index', $company) }}" class="btn btn-primary me-3">Ver empleados</a>
             </div>
             <div class="card-body row">
                 <div class="col-md-6 mb-3"><strong>Razón social:</strong> {{ $company->denomination }}</div>

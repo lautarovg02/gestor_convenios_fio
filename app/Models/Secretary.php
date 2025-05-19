@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Secretary extends Model
 {
@@ -15,5 +16,11 @@ class Secretary extends Model
     public function phones()
     {
         return $this->hasMany(SecretaryPhone::class);
+    }
+
+    //Relación 1:n atributo multivaluado en la tabla Contract
+    public function contracts(): HasMany
+    {
+        return $this->hasMany(Contract::class, 'secretary_id');
     }
 }
