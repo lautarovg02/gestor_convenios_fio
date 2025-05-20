@@ -11,9 +11,14 @@ class Type_Report extends Model
     use HasFactory;
     protected $fillable = ['type'];
 
-     //Relación 1:n atributo multivaluado en la tabla TypeReport
-      public function reportResidenceSpecifics(): HasMany
-      {
-          return $this->hasMany(ReportSpecificResidenceAgreement::class, 'type_report_id');
-      }
+    //Relación 1:n atributo multivaluado en la tabla TypeReport
+    public function reportResidenceSpecifics(): HasMany
+    {
+        return $this->hasMany(ReportSpecificResidenceAgreement::class, 'type_report_id');
+    }
+
+    public function reportIndividualInternship(): HasMany
+    {
+        return $this->hasMany(ReportIndividualInternshipAgreement::class, 'type_report_id');
+    }
 }

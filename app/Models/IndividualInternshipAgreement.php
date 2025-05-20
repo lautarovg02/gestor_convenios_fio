@@ -29,4 +29,15 @@ class IndividualInternshipAgreement extends Model
     {
         return $this->belongsTo(Student::class);
     }
+
+    public function individualInternshipAgreements()
+    {
+        return $this->belongsTo(ReportIndividualInternshipAgreement::class);
+    }
+
+      public function individualInternshipAgreementContracts()
+    {
+        return $this->belongsTo(ReportIndividualInternshipAgreement::class);
+    }
+
 }
