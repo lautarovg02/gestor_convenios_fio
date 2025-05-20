@@ -17,10 +17,11 @@ class ReportSpecificResidenceAgreementFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-    {
+    {   
+        $specific = SpecificResidenceAgreement::inRandomOrder()->first();
              return [
-            'specific_residence_agreement_id' => SpecificResidenceAgreement::inRandomOrder()->first()->id,
-            'specific_residence_agreement_contract_id' => SpecificResidenceAgreement::inRandomOrder()->first()->id,
+            'specific_residence_agreement_id' => $specific->id,
+            'specific_residence_agreement_contract_id' => $specific->contract_id,
             'upload_date' => $this->faker->date(),
             'url_report' => $this->faker->url(),
             'type_report_id' => Type_Report::inRandomOrder()->first()->id,
