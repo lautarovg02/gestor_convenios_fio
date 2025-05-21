@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\ReportSpecific;
 use App\Models\Specific;
 use App\Models\Type_Report;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,9 +19,12 @@ class ReportSpecificFactory extends Factory
      */
     public function definition(): array
     {
+
+        $specific = Specific::inRandomOrder()->first();
+        
           return [
-            'specific_id' => Specific::inRandomOrder()->first()->id,
-            'specific_contract_id' => Specific::inRandomOrder()->first()->id,
+            'specific_id' => $specific->id,
+            'specific_contract_id' => $specific->contract_id,
             'upload_date' => $this->faker->date(),
             'type' => $this->faker->randomDigit(),
             'url_report' => $this->faker->url(),

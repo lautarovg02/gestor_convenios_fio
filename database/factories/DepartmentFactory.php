@@ -19,11 +19,14 @@ class DepartmentFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+        public function definition(): array
     {
-        //Obtener un maestro aleatorio para asignarlo como coordinador
-        $teacher = Teacher::inRandomOrder()->first();
-
+        // Selecciona un docente que aún no sea director
+        $teacher = Teacher::whereDoesntHave('department')->inRandomOrder()->first();
+        // Si no hay docentes disponibles, creamos uno nuevo
+        if (!$teacher) {
+            $teacher = Teacher::factory()->create();
+        }
         return [
             'name' => $this->faker->unique()->randomElement([
                 'Ingeniería Civil y Agrimensura',
@@ -31,7 +34,7 @@ class DepartmentFactory extends Factory
                 'Ingeniería Electromecánica',
                 'Ingeniería en Seguridad e Higiene en el Trabajo',
             ]),
-            'director_id' => $teacher->id, // DEBEMOS AGRAGAR EN teacher is_department_director
+            'director_id' => $teacher->id,
         ];
     }
 }
