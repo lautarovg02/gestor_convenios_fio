@@ -14,6 +14,6 @@ class Type_Report extends Model
     //Relación 1:n atributo multivaluado en la tabla TypeReport
       public function reportTypes(): HasMany
       {
-          return $this->hasMany(report_specific::class, 'type_report_id');
+          return $this->hasMany(ReportSpecific::class, 'type_report_id');
       }
 }
