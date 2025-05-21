@@ -16,4 +16,13 @@ class Type_Report extends Model
       {
           return $this->hasMany(ReportSpecific::class, 'type_report_id');
       }
+    public function reportResidenceSpecifics(): HasMany
+    {
+        return $this->hasMany(ReportSpecificResidenceAgreement::class, 'type_report_id');
+    }
+
+    public function reportIndividualInternship(): HasMany
+    {
+        return $this->hasMany(ReportIndividualInternshipAgreement::class, 'type_report_id');
+    }
 }
