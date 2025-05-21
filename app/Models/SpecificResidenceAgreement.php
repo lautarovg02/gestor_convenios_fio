@@ -31,12 +31,12 @@ class SpecificResidenceAgreement extends Model
 
     public function SpecificResidenceAgreements()
     {
-        return $this->belongsTo(ReportSpecificResidenceAgreement::class);
+        return $this->hasMany(ReportSpecificResidenceAgreement::class);
     }
 
       public function SpecificResidenceAgreementContracts()
     {
-        return $this->belongsTo(ReportSpecificResidenceAgreement::class);
+        return $this->hasMany(ReportSpecificResidenceAgreement::class);
     }
 
     

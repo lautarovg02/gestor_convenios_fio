@@ -9,7 +9,6 @@ class ReportSpecificResidenceAgreement extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'id',
         'specific_residence_agreement_id',
         'specific_residence_agreement_contract_id',
         'upload_date',

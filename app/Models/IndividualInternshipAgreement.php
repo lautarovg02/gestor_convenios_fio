@@ -32,12 +32,12 @@ class IndividualInternshipAgreement extends Model
 
     public function individualInternshipAgreements()
     {
-        return $this->belongsTo(ReportIndividualInternshipAgreement::class);
+        return $this->hasMany(ReportIndividualInternshipAgreement::class);
     }
 
       public function individualInternshipAgreementContracts()
     {
-        return $this->belongsTo(ReportIndividualInternshipAgreement::class);
+        return $this->hasMany(ReportIndividualInternshipAgreement::class);
     }
 
 }
