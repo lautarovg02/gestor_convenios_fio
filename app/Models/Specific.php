@@ -28,12 +28,12 @@ class Specific extends Model
     //Relación 1:n atributo multivaluado en la tabla ReportType
       public function reports(): HasMany
       {
-          return $this->hasMany(report_specific::class, 'specific_id');
+          return $this->hasMany(ReportSpecific::class, 'specific_id');
       }
 
       //Relación 0:n atributo multivaluado en la tabla ReportType
       public function reportContracts(): HasMany
       {
-          return $this->hasMany(report_specific::class, 'specific_contract_id');
+          return $this->hasMany(ReportSpecific::class, 'specific_contract_id');
       }
 }
