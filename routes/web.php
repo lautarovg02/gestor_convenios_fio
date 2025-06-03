@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\AgreementController;
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CompanyController;
@@ -45,3 +45,5 @@ Route::resource('/careers' , CareerController::class);
 route::resource('/departments', DepartmentController::class);
 Route::delete('/departments/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 
+// AGREEMENTS
+Route::resource('/agreements', AgreementController::class);

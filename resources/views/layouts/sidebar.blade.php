@@ -3,11 +3,30 @@
         <ul class="nav flex-column">
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('COMPLETAR*') ? 'active-nav-link' : '' }}" href="#">
+                <a class="nav-link" data-bs-toggle="collapse" href="#convenioSubmenu" role="button" aria-expanded="{{ request()->is('agreements*') ? 'true' : 'false' }}" aria-controls="convenioSubmenu">
                     <i class="bi bi-file-earmark-text"></i>
-                    Todos los convenios
+                    Convenios
                 </a>
+                <ul id="convenioSubmenu" class="collapse nav flex-column ms-3 {{ request()->is('agreements*') ? 'show' : '' }}">
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('agreements') ? 'active-nav-link' : '' }}" href="{{ route('agreements.index') }}">
+                            <i class="bi bi-list-ul"></i>
+                            Todos los convenios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="#"
+                            data-bs-toggle="modal"
+                            data-bs-target="#crearConvenioModal"
+                            style="background-color: #b2f2bb; font-weight: 600; border: 2px solid #212529; border-radius: 6px;">
+                            <i class="bi bi-plus-circle"></i>
+                            Crear nuevo convenio
+                        </a>
+                    </li>
+                </ul>
             </li>
+
 
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('COMPLETAR*') ? 'active-nav-link' : '' }}" href="#">
