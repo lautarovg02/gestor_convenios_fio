@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\ConvenioMarcoRequest;
 use Illuminate\Http\Request;
 
-class AgreementController extends Controller
+class FrameworkAgreementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+       public function index()
     {
-        //
+        return view("frameworkAgreement.create"); 
     }
 
     /**
@@ -20,7 +17,10 @@ class AgreementController extends Controller
      */
     public function create(Request $request)
     {
-        //
+         $type = $request->query('type'); // lee ?type=marco
+
+        return view("frameworkAgreement.create_$type"); // ej: agreements.create_marco
+    
     }
 
     /**
@@ -29,7 +29,11 @@ class AgreementController extends Controller
 
 public function store(Request $request)
 {
-   //
+
+        $validated = app(ConvenioMarcoRequest::class)->validated();
+        // guardar usando $validated...
+
+
 }
 
 
