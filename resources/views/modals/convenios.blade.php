@@ -12,10 +12,10 @@
                     Convenio Marco
                 </a>
 
-                <a href="{{ route('agreements.create', ['type' => 'pasantia']) }}"
+                <a href="{{ route('frameworkInternshipAgreement.create', ['type' => 'pasantia']) }}"A
                     class="btn btn-outline-success"
                     style="font-weight: 600; border-width: 2px; padding: 10px 16px; font-size: 1rem;">
-                    Convenio de Pasantía
+                    Convenio de Marco de Pasantía
                 </a>
 
                 <a href="{{ route('agreements.create', ['type' => 'residencia']) }}"

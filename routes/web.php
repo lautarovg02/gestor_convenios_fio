@@ -7,6 +7,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\FrameworkInternshipAgreementController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -47,3 +48,5 @@ Route::delete('/departments/{department}', [DepartmentController::class, 'destro
 
 // AGREEMENTS
 Route::resource('/agreements', AgreementController::class);
+
+Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class);

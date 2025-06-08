@@ -1,0 +1,54 @@
+.container {
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #c0c0c047;
+    border-radius: 1%;
+    padding: 3%;
+}
+
+.containerSectionForm {
+    background-color: #ffffff96;
+    width: 40%;
+    padding: 1.5%;
+    margin: 0 2%;
+    box-shadow: rgb(87 94 101 / 68%) 0px 0px 17px 2px;
+}
+
+.textCampos {
+    width: 100%;
+    margin-bottom: 3px;
+}
+
+.titleSection {
+    border-bottom: 1px solid #0000002b;
+    padding-bottom: 4%;
+}
+
+.containerInputNameLastName {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.InputImportant {
+    color: red;
+}
+
+.containerButtons {
+    width: 100%;
+    margin: 2% 8%;
+}
+
+.btForm {
+    font-size: 131% !important;
+}
