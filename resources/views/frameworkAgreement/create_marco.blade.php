@@ -71,6 +71,14 @@
                 <label class="form-label fs-6 fw-bold">Rubro:</label>
                 <input type="text" name="rubro" class="form-control">
             </div>
+            <div class="mb-3">
+                <label class="form-label fs-6 fw-bold">Entidad:</label>
+                <input type="text" name="entidad" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fs-6 fw-bold">Dedicación:</label>
+                <input type="text" name="dedicacion" class="form-control">
+            </div>
 
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado:</label>

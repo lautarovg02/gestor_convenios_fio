@@ -11,7 +11,7 @@ class ConvenioMarcoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -30,6 +30,18 @@ class ConvenioMarcoRequest extends FormRequest
         'contact_empresa'  => 'required|string|max:255',
         'contact_cargo'    => 'nullable|string|max:255',
         
+        'razon_social'     => 'required|string|max:255',
+        'cuit'             => 'required|string|max:20',
+        'domicilio'        => 'required|string|max:255',
+        'localidad'        => 'required|string|max:255',
+        'provincia'        => 'required|string|max:255',
+        'firma_nombre'     => 'required|string|max:255',
+        'firma_apellido'   => 'required|string|max:255',
+        'firma_dni'        => 'required|string|max:20',
+        'firma_cargo'      => 'required|string|max:20',
+        'entidad'          => 'required|string|max:255',
+        'rubro'            => 'required|string|max:255',
+        'dedicacion'       => 'required|string|max:255',
     ];
 }
 
