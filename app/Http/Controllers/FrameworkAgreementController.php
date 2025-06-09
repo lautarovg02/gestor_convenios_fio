@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ConvenioMarcoRequest;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Storage;
+use Str;
 
 class FrameworkAgreementController extends Controller
 {
@@ -33,32 +35,45 @@ public function store(Request $request)
 
         $validated = app(ConvenioMarcoRequest::class)->validated();
         // guardar usando $validated...
+         function safe($value)
+        {
+            return $value ?? '______';
+        }
 
-         // 3. Cargar plantilla Word desde storage
+        // 3. Cargar plantilla Word desde storage
         $templatePath = storage_path('app/plantillas/Convenio Marco.docx');
         $templateProcessor = new TemplateProcessor($templatePath);
 
-        $templateProcessor->setValue('razon_social', $validated['razon_social']);
-        $templateProcessor->setValue('cuit', $validated['cuit']);
-        $templateProcessor->setValue('domicilio', $validated['domicilio']);
-        $templateProcessor->setValue('localidad', $validated['localidad']);
-        $templateProcessor->setValue('provincia', $validated['provincia']);
-        $templateProcessor->setValue('firma_nombre', $validated['firma_nombre']);
-        $templateProcessor->setValue('firma_apellido', $validated['firma_apellido']);
-        $templateProcessor->setValue('firma_dni', $validated['firma_dni']);
-        $templateProcessor->setValue('firma_cargo', $validated['firma_cargo']);
-        $templateProcessor->setValue('entidad', $validated['entidad']);
-        $templateProcessor->setValue('rubro', $validated['rubro']);
-        $templateProcessor->setValue('dedicacion', $validated['dedicacion']);
 
-         // 5. Guardar nuevo archivo Word en una carpeta
-        $razon_social = $validated['razon_social'];
-        $nombreArchivo = "convenio_marco_{$razon_social}.docx";
-        $rutaSalida = storage_path('app/convenios_generados/' . $nombreArchivo);
-        $templateProcessor->saveAs($rutaSalida);
 
-        return response()->download($rutaSalida);
+        // Seteo de valores en el template
+        $templateProcessor->setValue('razon_social', safe($validated['razon_social']));
+        $templateProcessor->setValue('calle', safe($validated['calle']));
+        $templateProcessor->setValue('nro_calle', safe($validated['nro_calle']));
+        $templateProcessor->setValue('ciudad', safe($validated['localidad']));
+        $templateProcessor->setValue('provincia', safe($validated['provincia']));
+        $templateProcessor->setValue('rubro', safe($validated['rubro']));
+        $templateProcessor->setValue('entidad', safe($validated['entidad']));
+        $templateProcessor->setValue('dedicacion', safe($validated['dedicacion']));
+        $templateProcessor->setValue('nombre_rep_contacto', safe($validated['contact_nombre']) . ' ' . safe($validated['contact_apellido']));
+        $templateProcessor->setValue('cargo_rep_contacto', safe($validated['contact_cargo']));
+        $templateProcessor->setValue('cuit', safe($validated['cuit_prefijo']) . '-' . safe($validated['cuit_dni']) . '-' . safe($validated['cuit_dv']));
+        $templateProcessor->setValue('nombre_rep_firma', safe($validated['firma_nombre']) . ' ' . safe($validated['firma_apellido']));
+        $templateProcessor->setValue('cargo_rep_firma', safe($validated['firma_cargo']));
+        $templateProcessor->setValue('firma_dni', safe($validated['firma_dni']));
+        $templateProcessor->setValue('rep_firma_empresa_razon_social', safe($validated['firma_empresa_razon_social']));
+        $templateProcessor->setValue('dia', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('d') : '____');
+        $templateProcessor->setValue('mes', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->translatedFormat('F') : '____');
 
+
+        $relativePath = 'convenios_generados/' . date('Y/m'); // Ej: 'convenios_generados/2025/06'
+        Storage::makeDirectory($relativePath); // Esto crea la carpeta si no existe
+
+        $nombreArchivo = 'convenio_marco_' . Str::slug($validated['razon_social']) . '.docx';
+        $fullPath = storage_path('app/' . $relativePath . '/' . $nombreArchivo);
+        $templateProcessor->saveAs($fullPath);
+
+        return response()->download($fullPath);
 }
 
 

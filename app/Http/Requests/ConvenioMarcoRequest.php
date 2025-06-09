@@ -22,26 +22,51 @@ class ConvenioMarcoRequest extends FormRequest
    public function rules(): array
 {
     return [
-        // Representante Contacto
-        'contact_nombre'   => 'required|string|max:255',
-        'contact_apellido' => 'required|string|max:255',
-        'contact_celular'  => 'required|string|max:30',
-        'contact_email'    => 'required|email|max:255',
-        'contact_empresa'  => 'required|string|max:255',
-        'contact_cargo'    => 'nullable|string|max:255',
-        
-        'razon_social'     => 'required|string|max:255',
-        'cuit'             => 'required|string|max:20',
-        'domicilio'        => 'required|string|max:255',
-        'localidad'        => 'required|string|max:255',
-        'provincia'        => 'required|string|max:255',
-        'firma_nombre'     => 'required|string|max:255',
-        'firma_apellido'   => 'required|string|max:255',
-        'firma_dni'        => 'required|string|max:20',
-        'firma_cargo'      => 'required|string|max:20',
-        'entidad'          => 'required|string|max:255',
-        'rubro'            => 'required|string|max:255',
-        'dedicacion'       => 'required|string|max:255',
+       // Representante contacto
+            'contact_nombre' => ['required', 'string', 'max:255'],
+            'contact_apellido' => ['required', 'string', 'max:255'],
+            'cuit_prefijo' => ['required', 'numeric'],
+            'cuit_dni' => ['required', 'numeric'],
+            'cuit_dv' => ['required', 'numeric'],
+            'contact_celular' => ['required', 'numeric'],
+            'contact_email' => ['required', 'email'],
+            'contact_empresa' => ['required', 'string'],
+            'contact_cargo' => ['nullable', 'string'],
+
+            // Contraparte
+            'razon_social' => ['string', 'nullable'],
+            'ambito' => ['in:nacional,internacional', 'nullable'],
+            'cuit' => ['nullable', 'numeric'],
+            'rubro' => ['nullable', 'string'],
+            'entidad' => ['nullable', 'string'],
+            'dedicacion' => ['nullable', 'string'],
+            'titular' => ['nullable', 'string'],
+            'confidencialidad' => ['nullable', 'in:si,no'],
+
+            // Dirección
+            'calle' => ['nullable', 'string', 'max:255'],
+            'nro_calle' => ['nullable', 'string', 'max:20'],
+            'codigo_postal' => ['nullable', 'numeric'],
+            'localidad' => ['nullable', 'string'],
+            'provincia' => ['nullable', 'string'],
+            'pais' => ['nullable', 'string'],
+
+            // Representante firma
+            'firma_nombre' => ['nullable', 'string'],
+            'firma_apellido' => ['nullable', 'string'],
+            'firma_dni' => ['nullable', 'numeric'],
+            'firma_cargo' => ['nullable', 'string'],
+            'firma_mail' => ['nullable', 'email'],
+            'firma_empresa_razon_social' => ['nullable', 'string'],
+
+            // Lugar y fecha
+            'lugar_firma' => ['nullable', 'string'],
+            'fecha_firma' => ['nullable', 'date'],
+
+            // Documentos
+            'doc_afip' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png'],
+            'doc_estatuto' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png'],
+            'doc_autoridades' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png'],
     ];
 }
 
