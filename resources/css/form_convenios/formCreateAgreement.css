@@ -52,3 +52,34 @@ form {
 .btForm {
     font-size: 131% !important;
 }
+
+.containerCheckBox{
+    font-size: 124%;
+    justify-content: flex-end;
+    align-items: center;
+    display: flex !important;
+    flex-direction: row;
+    width: 24%;
+    margin-top: 3%;
+}
+
+.inpCheck{
+    margin-right: 3%;
+}
+
+.containerCheckSameRepresentative{
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 9%;
+    margin-top: 6%;
+}
+
+#sameRepresentative{
+    width: 15px;
+    height: 15px;
+    margin-right: 10px;
+}

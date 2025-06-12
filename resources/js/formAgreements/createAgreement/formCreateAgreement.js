@@ -1,36 +1,89 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // Buscar todos los botones que controlan las secciones colapsables
-  const toggleButtons = document.querySelectorAll('.toggleSectionBtn');
+document.addEventListener("DOMContentLoaded", () => {
+    document
+        .getElementById("provincia")
+        .addEventListener("change", function () {
+            const provincia = this.value;
+            const ciudadSelect = document.getElementById("ciudad");
 
-  toggleButtons.forEach(btn => {
-    // Obtener el contenedor padre colapsable
-    const section = btn.closest('.collapse');
+            ciudadSelect.innerHTML = "<option>Cargando ciudades...</option>";
+            ciudadSelect.disabled = true;
 
-    // Inicializar texto según estado
-    if (section.classList.contains('show')) {
-      btn.textContent = btn.textContent.replace('Cargar', 'Ocultar');
-    } else {
-      btn.textContent = btn.textContent.replace('Ocultar', 'Cargar');
+            if (provincia) {
+                fetch(`/cities?provincia=${encodeURIComponent(provincia)}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        ciudadSelect.innerHTML =
+                            '<option value="">Seleccione una ciudad</option>';
+                        data.forEach((ciudad) => {
+                            ciudadSelect.innerHTML += `<option value="${ciudad.nombre}">${ciudad.nombre}</option>`;
+                        });
+                        ciudadSelect.disabled = false;
+                    })
+                    .catch((error) => {
+                        ciudadSelect.innerHTML =
+                            "<option>Error al cargar</option>";
+                        ciudadSelect.disabled = true;
+                        console.error(error);
+                    });
+            } else {
+                ciudadSelect.innerHTML =
+                    '<option value="">Seleccione una ciudad</option>';
+                ciudadSelect.disabled = true;
+            }
+        });
+
+    //------------------------------------------------auto completar datos de representante de firma-----------------------
+
+    function copyContactToSignature() {
+        document.getElementById("firma_nombre").value = document.getElementById("contact_nombre").value;
+        document.getElementById("firma_apellido").value = document.getElementById("contact_apellido").value;
+        document.getElementById("firma_dni").value = document.getElementById("contact_dni").value;
+        document.getElementById("firma_razon_social").value = document.getElementById("contact_empresa").value;
+        document.getElementById("firma_email").value = document.getElementById("contact_email").value;
+        document.getElementById("firma_cargo").value = document.getElementById("contact_cargo").value;
+
+        // Bloquear inputs
+        bloquearInputsFirma(true);
     }
 
-    btn.addEventListener('click', () => {
-      const bsCollapse = bootstrap.Collapse.getInstance(section);
+    function clearSignatureData() {
+        document.getElementById("firma_nombre").value = "";
+        document.getElementById("firma_apellido").value = "";
+        document.getElementById("firma_dni").value = "";
+        document.getElementById("firma_razon_social").value = "";
+        document.getElementById("firma_email").value = "";
+        document.getElementById("firma_cargo").value = "";
 
-      if (bsCollapse) {
-        bsCollapse.toggle();
-      } else {
-        new bootstrap.Collapse(section, { toggle: true });
-      }
-    });
+        // Desbloquear inputs
+        bloquearInputsFirma(false);
+    }
 
-    // Cambiar texto cuando se muestra la sección
-    section.addEventListener('shown.bs.collapse', () => {
-      btn.textContent = btn.textContent.replace('Cargar', 'Ocultar');
-    });
+    function bloquearInputsFirma(bloquear) {
+        const campos = [
+            "firma_nombre",
+            "firma_apellido",
+            "firma_dni",
+            "firma_razon_social",
+            "firma_email",
+            "firma_cargo",
+        ];
+        campos.forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.readOnly = bloquear;  // true bloquea, false desbloquea
+            }
+        });
+    }
 
-    // Cambiar texto cuando se oculta la sección
-    section.addEventListener('hidden.bs.collapse', () => {
-      btn.textContent = btn.textContent.replace('Ocultar', 'Cargar');
-    });
-  });
+    function toggleSignatureData() {
+        const checkbox = document.getElementById("sameRepresentative");
+        if (checkbox.checked) {
+            copyContactToSignature();
+        } else {
+            clearSignatureData();
+        }
+    }
+
+    document.getElementById("sameRepresentative").addEventListener("change", toggleSignatureData);
+
 });

@@ -12,6 +12,8 @@ use App\Models\Employee;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use App\Services\CompanyEntityService;
+use App\Services\CityService;
 
 /**
  * Class CompanyController
@@ -19,6 +21,7 @@ use Illuminate\Http\RedirectResponse;
  */
 class CompanyController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -153,38 +156,39 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
 
-     public function update(StoreCompanyRequest $request, Company $company): RedirectResponse
-     {
-         try {
-             // Validar CUIT único
-             $exists = Company::where('cuit', $request->cuit)
-                 ->where('id', '!=', $company->id)
-                 ->first();
-             if ($exists) {
-                 throw new Exception("El CUIT ingresado ya está registrado.");
-             }
+    public function update(StoreCompanyRequest $request, Company $company): RedirectResponse
+    {
+        try {
+            // Validar CUIT único
+            $exists = Company::where('cuit', $request->cuit)
+                ->where('id', '!=', $company->id)
+                ->first();
+            if ($exists) {
+                throw new Exception("El CUIT ingresado ya está registrado.");
+            }
 
-             // Manejar el campo entidad
-             $entitySelected = $request->entity === 'other' ? $request->other_entity_input : $request->entity;
-             $existsEntity = CompanyEntity::where('name', $entitySelected)->first();
-             if (!$existsEntity) {
-                 $newEntity = CompanyEntity::create(['name' => $entitySelected]);
-                 //Crear la empresa con el valor seleccionado de entidad
-                 $company->update(array_merge(
-                     $request->validated(),
-                     ['entity_id' => $newEntity->id]
-                 ));            } else {
-                 // Actualizar empresa
-                 $company->update(array_merge(
-                     $request->validated(),
-                     ['entity_id' => $existsEntity->id]
-                 ));
-             }
-             return redirect()->route('companies.index')->with('success', 'Empresa actualizada exitosamente.');
-         } catch (Exception $e) {
+            // Manejar el campo entidad
+            $entitySelected = $request->entity === 'other' ? $request->other_entity_input : $request->entity;
+            $existsEntity = CompanyEntity::where('name', $entitySelected)->first();
+            if (!$existsEntity) {
+                $newEntity = CompanyEntity::create(['name' => $entitySelected]);
+                //Crear la empresa con el valor seleccionado de entidad
+                $company->update(array_merge(
+                    $request->validated(),
+                    ['entity_id' => $newEntity->id]
+                ));
+            } else {
+                // Actualizar empresa
+                $company->update(array_merge(
+                    $request->validated(),
+                    ['entity_id' => $existsEntity->id]
+                ));
+            }
+            return redirect()->route('companies.index')->with('success', 'Empresa actualizada exitosamente.');
+        } catch (Exception $e) {
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
-     }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -217,4 +221,6 @@ class CompanyController extends Controller
             return redirect()->route('companies.index')->with('error', 'La empresa "<span class="fw-bold">' . $company->denomination . '</span>" tiene convenios activos y no puede ser deshabilitada.');
         }
     }
+
+
 }

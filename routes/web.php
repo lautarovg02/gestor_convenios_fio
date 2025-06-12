@@ -33,6 +33,8 @@ Route::resource('/companies' , CompanyController::class);
 Route::resource('companies.employees', EmployeeController::class)->shallow();
 
 //CITIES
+
+Route::get('/cities', [CityController::class, 'getCiudades'])->name('get.ciudades');
 Route::get('/cities/create' , [CityController::class , 'create' ])->name('cities.create');
 Route::post('/cities', [CityController::class, 'store'])->name('cities.store');
 
@@ -49,4 +51,11 @@ Route::delete('/departments/{department}', [DepartmentController::class, 'destro
 // AGREEMENTS
 Route::resource('/agreements', AgreementController::class);
 
+Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
+
 Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class);
+
+
+
+
+
