@@ -25,9 +25,10 @@ class ConvenioMarcoRequest extends FormRequest
        // Representante contacto
             'contact_nombre' => ['required', 'string', 'max:255'],
             'contact_apellido' => ['required', 'string', 'max:255'],
-            'cuit_prefijo' => ['required', 'numeric'],
-            'cuit_dni' => ['required', 'numeric'],
-            'cuit_dv' => ['required', 'numeric'],
+            'cuil_prefijo' => ['required', 'numeric'],
+            'cuil_dni' => ['required', 'numeric'],
+            'cuil_dv' => ['required', 'numeric'],
+            'contact_dni' => ['required', 'numeric'],
             'contact_celular' => ['required', 'numeric'],
             'contact_email' => ['required', 'email'],
             'contact_empresa' => ['required', 'string'],
@@ -36,7 +37,9 @@ class ConvenioMarcoRequest extends FormRequest
             // Contraparte
             'razon_social' => ['string', 'nullable'],
             'ambito' => ['in:nacional,internacional', 'nullable'],
-            'cuit' => ['nullable', 'numeric'],
+            'cuit_prefijo' => ['required', 'numeric'],
+            'cuit_dni' => ['required', 'numeric'],
+            'cuit_dv' => ['required', 'numeric'],
             'rubro' => ['nullable', 'string'],
             'entidad' => ['nullable', 'string'],
             'dedicacion' => ['nullable', 'string'],
@@ -56,7 +59,7 @@ class ConvenioMarcoRequest extends FormRequest
             'firma_apellido' => ['nullable', 'string'],
             'firma_dni' => ['nullable', 'numeric'],
             'firma_cargo' => ['nullable', 'string'],
-            'firma_mail' => ['nullable', 'email'],
+            'firma_email' => ['nullable', 'email'],
             'firma_empresa_razon_social' => ['nullable', 'string'],
 
             // Lugar y fecha

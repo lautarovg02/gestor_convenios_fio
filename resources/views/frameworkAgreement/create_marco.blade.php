@@ -3,7 +3,7 @@
 @vite('resources\css\form_convenios\formCreateAgreement.css')
 
 @section('content')
-    <div class="container mt-4" "> <!-- ancho máximo fijo -->
+    <div class="container mt-4"> <!-- ancho máximo fijo -->
                 <h2 class="mb-3 text-center">CREAR CONVENIO MARCO</h2>
                 <p class="textCampos"><span class="text-danger">*</span> Campos obligatorios</p>
 
@@ -30,16 +30,21 @@
     @enderror
                             </div>
                         </div>
+                         <div class="mb-3">
+                            <label class="form-label fs-6 fw-bold">DNI</label>
+                            <input type="number" name="contact_dni" placeholder="DNI" class="form-control">
+                            <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
+                        </div>
                         <div class="mb-3">
                             <label class="form-label fs-6 fw-bold">CUIL<span class="InputImportant">*</span></label>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="cuit_prefijo" placeholder="20" maxlength="2"
+                                <input type="text" class="form-control" name="cuil_prefijo" placeholder="20" maxlength="2"
                                     pattern="\d{2}" required>
                                 <span class="input-group-text">-</span>
-                                <input type="text" class="form-control" name="cuit_dni" placeholder="12345678" maxlength="8"
+                                <input type="text" class="form-control" name="cuil_dni" placeholder="12345678" maxlength="8"
                                     pattern="\d{7,8}" required>
                                 <span class="input-group-text">-</span>
-                                <input type="text" class="form-control" name="cuit_dv" placeholder="3" maxlength="1"
+                                <input type="text" class="form-control" name="cuil_dv" placeholder="3" maxlength="1"
                                     pattern="\d{1}" required>
                             </div>
                             <div class="form-text">Formato: XX-XXXXXXXX-X</div>
@@ -106,7 +111,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fs-6 fw-bold">Email</label>
-                            <input type="email" name="firma_mail" placeholder="Email" class="form-control">
+                            <input type="email" name="firma_email" placeholder="Email" class="form-control">
                         </div>
                     </div>
 
@@ -162,13 +167,15 @@
     @enderror
                         </div>
 
-                          <div class="mb-3">
-                            <label class="form-label fs-6 fw-bold">Entidad</label>
-                            <input type="text" placeholder="Tipo de entidad" name="entidad" class="form-control">
-                            @error('name')
-        <div class="text-danger">{{ $message }}</div>
-    @enderror
+                        <div class="form-group mb-3">
+                            <label for="entity" class="form-label fs-6">Entidad</label>
+                            <select name="entidad" id="entity" class="form-select">
+                                <option value="">Seleccionar</option>
+                                <option value="privada" {{ old('entity') == 'privada' ? 'selected' : '' }}>Privada</option>
+                                <option value="publica" {{ old('entity') == 'publica' ? 'selected' : '' }}>Pública</option>
+                            </select>
                         </div>
+
 
                           <div class="mb-3">
                             <label class="form-label fs-6 fw-bold">Dedicación</label>
