@@ -102,7 +102,8 @@ public function store(Request $request)
         Storage::makeDirectory($relativePath); // Esto crea la carpeta si no existe
 
         $nombreArchivo = 'convenio_marco_' . Str::slug($validated['razon_social']) . '.docx';
-        $fullPath = storage_path('app/' . $relativePath . '/' . $nombreArchivo);
+
+         $fullPath = storage_path('app/' . trim($relativePath, '/') . '/' . $nombreArchivo);
 
         $templateProcessor->saveAs($fullPath);
         /*GUARDAR CONVENIO MARCO EN LA BD*/ 
@@ -212,9 +213,27 @@ public function store(Request $request)
 
         $convenioMarco->save();
 
-        return response()->download($fullPath);
+        return view('frameworkAgreement.creationSuccessful', compact('relativePath', 'nombreArchivo')); 
+        //return response()->download($fullPath);
 }
 
+    public function download(Request $request)
+{
+    $path = $request->get('path');
+    $file = $request->get('file');
+
+    if (!$path || !$file) {
+        abort(400, 'Parámetros inválidos');
+    }
+
+    $fullPath = storage_path('app/' . ltrim($path, '/') . '/' . $file);
+
+    if (!file_exists($fullPath)) {
+        abort(404, 'Archivo no encontrado');
+    }
+
+    return response()->download($fullPath);
+}
     /**
      * Display the specified resource.
      */

@@ -49,4 +49,6 @@ Route::delete('/departments/{department}', [DepartmentController::class, 'destro
 // AGREEMENTS
 Route::resource('/agreements', AgreementController::class);
 
+Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
+
 Route::resource('/frameworkAgreement', FrameworkAgreementController::class);

@@ -1,0 +1,18 @@
+.containerTextAndButton{
+width: fit-content;
+}
+
+.container{
+    min-height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+p{
+        font-size: 17px;
+}
+
+.button{
+    font-size: 17px !important;
+}
