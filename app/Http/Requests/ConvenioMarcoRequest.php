@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ConvenioMarcoRequest extends FormRequest
 {
@@ -21,6 +22,9 @@ class ConvenioMarcoRequest extends FormRequest
      */
    public function rules(): array
 {
+        $contact_dni = $this->input('contact_dni');
+        $firma_dni = $this->input('firma_dni');
+
     return [
        // Representante contacto
             'contact_nombre' => ['required', 'string', 'max:255'],
@@ -30,12 +34,16 @@ class ConvenioMarcoRequest extends FormRequest
             'cuil_dv' => ['required', 'numeric'],
             'contact_dni' => ['required', 'numeric'],
             'contact_celular' => ['required', 'numeric'],
-            'contact_email' => ['required', 'email'],
+            'contact_email' => [
+                                'required',
+                                'email',
+                                Rule::unique('employees', 'email')->ignore($contact_dni, 'dni')
+                                ],  
             'contact_empresa' => ['required', 'string'],
             'contact_cargo' => ['nullable', 'string'],
 
             // Contraparte
-            'razon_social' => ['string', 'nullable'],
+            'razon_social' => ['required', 'string', 'max:255', 'unique:companies,company_name'],
             'ambito' => ['in:nacional,internacional', 'nullable'],
             'cuit_prefijo' => ['required', 'numeric'],
             'cuit_dni' => ['required', 'numeric'],
@@ -59,7 +67,11 @@ class ConvenioMarcoRequest extends FormRequest
             'firma_apellido' => ['nullable', 'string'],
             'firma_dni' => ['nullable', 'numeric'],
             'firma_cargo' => ['nullable', 'string'],
-            'firma_email' => ['nullable', 'email'],
+            'firma_email' => [
+                                'required',
+                                'email',
+                                Rule::unique('employees', 'email')->ignore($firma_dni, 'dni')
+                                ], 
             'firma_empresa_razon_social' => ['nullable', 'string'],
 
             // Lugar y fecha
@@ -73,4 +85,11 @@ class ConvenioMarcoRequest extends FormRequest
     ];
 }
 
+
+public function messages(): array
+{
+    return [
+        'razon_social.unique' => 'Ya existe una empresa con esa razón social. Por favor, ingresá una diferente.',
+    ];
+}
 }

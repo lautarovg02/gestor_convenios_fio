@@ -121,7 +121,10 @@
                         <h4 class="TitleSection">Contraparte</h4>
                         <div class="mb-3">
                             <label class="form-label fs-6 fw-bold">Razón Social</label>
-                            <input type="text" placeholder="Razón Social" name="razon_social" class="form-control">
+                               <input type="text" placeholder="Razón Social" name="razon_social" class="form-control">
+                                    @error('razon_social')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
                         </div>
 
                         <div class="mb-3">
