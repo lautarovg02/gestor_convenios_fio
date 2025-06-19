@@ -112,15 +112,16 @@ public function withValidator($validator)
         $empresaFormularioFirma = $this->input('firma_empresa_razon_social');
         $razonSocialFormulario = $this->input('razon_social');
 
-        // Validar que ambas empresas coincidan con la razón social de la contraparte
-        if ($empresaFormularioContacto !== $razonSocialFormulario) {
+        //
+        /* Validar que ambas empresas coincidan con la razón social de la contraparte
+        if (strcasecmp(trim($empresaFormularioContacto), trim($razonSocialFormulario)) !== 0) {
             $validator->errors()->add('contact_empresa', 'La empresa del representante de contacto debe coincidir con la razón social de la contraparte.');
         }
-
-        if ($empresaFormularioFirma !== $razonSocialFormulario) {
+        
+        if (strcasecmp(trim($empresaFormularioFirma), trim($razonSocialFormulario)) !== 0) {
             $validator->errors()->add('firma_empresa_razon_social', 'La empresa del representante firmante debe coincidir con la razón social de la contraparte.');
         }
-
+        */
         // Validar que el empleado de contacto no esté en otra empresa
         $empleadoContacto = Employee::where('dni', $dniContacto)->first();
 

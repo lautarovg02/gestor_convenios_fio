@@ -182,14 +182,18 @@ class FrameworkResidenceAgreementController extends Controller
         $templateProcessor->setValue('calle', $company->street);
         $templateProcessor->setValue('nro_calle', $company->number);
         $templateProcessor->setValue('ciudad', $companyCity->name);
+       
         $templateProcessor->setValue('nombre_rep_contacto', $contact_employee->name . ' ' . $contact_employee->lastname);
         $templateProcessor->setValue('cargo_rep_contacto', $contact_employee->position);
         $templateProcessor->setValue('cuil_rep_contacto', $contact_employee->cuil);
+       
         $templateProcessor->setValue('nombre_rep_firma', $representative_employee->name . ' ' . $representative_employee->lastname);
         $templateProcessor->setValue('cargo_rep_firma', $representative_employee->position);
         $templateProcessor->setValue('rep_firma_empresa_razon_social',  $companyRepresentativeEmployee->denomination);
+       
         $templateProcessor->setValue('dia', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('d') : '____');
         $templateProcessor->setValue('mes', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->translatedFormat('F') : '____');
+        $templateProcessor->setValue('anio', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('Y') : '____');
 
 
         $relativePath = 'convenios_generados/' . date('Y/m'); // Ej: 'convenios_generados/2025/06'
