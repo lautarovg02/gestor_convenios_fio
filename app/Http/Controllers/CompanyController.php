@@ -8,6 +8,7 @@ use App\Models\City;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\CompanyEntity;
+use App\Models\Contract;
 use App\Models\Employee;
 use Exception;
 use Illuminate\Contracts\View\View;
@@ -194,27 +195,27 @@ class CompanyController extends Controller
         // Encuentra la empresa por ID
         $company = Company::findOrFail($company->id);
 
-        //Verifica si hay empleados relacionados a la empresa
-        $employeesCount = Employee::where('company_id', $company->id)->count();
+        $hasEmployees = Employee::where('company_id', $company->id)->exists();
 
-        //!!!!NOTA!!!!: Las condición dentro de los operadores if son temporales hasta que la tabla 'contract' esta disponible.
-        if ($employeesCount == 0) {
-            // Si no hay empleados, procede con la eliminación
+        //Verifica si hay convenios relacionados a la empresa
+        $contractsCount = Contract::where('company_id', $company->id)->count();
+
+        //!!!!NOTA!!!!: Queda para proximo sprint deshabilitar empresa si tiene todos los convenios finalizados, ya que no se eliminan
+        if ($contractsCount == 0 && !$hasEmployees) {
+            // Si no hay convenios, procede con la eliminación
             $company->delete();
 
             // Redirecciona a la lista de empresas con un mensaje de éxito
-            return redirect()->route('companies.index')->with('success', 'La empresa "<span class="fw-bold">' . $company->denomination . '</span>" eliminada exitosamente!');
-        } else if ($employeesCount > 3) {   //Si la empresa solo tiene convenios finalizados, se deshabilita.
-            $company->is_enabled = false;
+            return redirect()->route('companies.index')->with('success', 'La empresa "' . $company->company_name . '" eliminada exitosamente!');
+        }else if($contractsCount >=1){
+            //Se redirecciona con mensaje de error.
+            return redirect()->route('companies.index')->with('error', 'La empresa "' . $company->company_name . '" tiene convenios activos y no puede ser eliminada.');
 
-            //Se actualiza a la empresa en la base de datos
-            $company->save();
-
-            //Se redirecciona con mensaje de success
-            return redirect()->route('companies.index')->with('success', 'La empresa "<span class="fw-bold">' . $company->denomination . '</span>" fue deshabilitada correctamente.');
-        } else if ($employeesCount <= 3) {   //Si la empresa tiene convenios en curso, no se puede ni eliminar ni deshabilitar.
-            //Se redirecciona con mensaje de error
-            return redirect()->route('companies.index')->with('error', 'La empresa "<span class="fw-bold">' . $company->denomination . '</span>" tiene convenios activos y no puede ser deshabilitada.');
+        } 
+        else if($hasEmployees){   
+            return redirect()->route('companies.index')->with('error', 'La empresa "' . $company->company_name . '" tiene empleados asociados y no puede ser eliminada.');
+         
         }
+       //NOTA!! SI TIENE CONTRACTS Y EMPLEADOS ASOCIADOS VA A ENTRAR EN EL PRIMER ELSE IF Y NO SE PUEDE ELIMINAR
     }
 }
