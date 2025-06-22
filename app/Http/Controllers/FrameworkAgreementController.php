@@ -128,7 +128,7 @@ public function store(Request $request)
         $newCompany = Company::create([
             'denomination' => $request->razon_social,
             'company_name' => $request->razon_social,
-            'cuit' => $request->cuit,
+            'cuit' => $cuit,
             'city_id' => $city->id,
             'entity_id' => $entity->id
         ]);

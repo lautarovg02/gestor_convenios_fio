@@ -20,13 +20,13 @@ class ConvenioMarcoRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-   public function rules(): array
-{
+    public function rules(): array
+    {
         $contact_dni = $this->input('contact_dni');
         $firma_dni = $this->input('firma_dni');
 
-    return [
-       // Representante contacto
+        return [
+            // Representante contacto
             'contact_nombre' => ['required', 'string', 'max:255'],
             'contact_apellido' => ['required', 'string', 'max:255'],
             'cuil_prefijo' => ['required', 'numeric'],
@@ -35,61 +35,79 @@ class ConvenioMarcoRequest extends FormRequest
             'contact_dni' => ['required', 'numeric'],
             'contact_celular' => ['required', 'numeric'],
             'contact_email' => [
-                                'required',
-                                'email',
-                                Rule::unique('employees', 'email')->ignore($contact_dni, 'dni')
-                                ],  
+                'required',
+                'email',
+                Rule::unique('employees', 'email')->ignore($contact_dni, 'dni')
+            ],
             'contact_empresa' => ['required', 'string'],
-            'contact_cargo' => ['nullable', 'string'],
+            'contact_cargo' => ['required', 'string'],
 
             // Contraparte
             'razon_social' => ['required', 'string', 'max:255', 'unique:companies,company_name'],
-            'ambito' => ['in:nacional,internacional', 'nullable'],
+            'ambito' => ['in:nacional,internacional', 'required'],
             'cuit_prefijo' => ['required', 'numeric'],
             'cuit_dni' => ['required', 'numeric'],
             'cuit_dv' => ['required', 'numeric'],
-            'rubro' => ['nullable', 'string'],
-            'entidad' => ['nullable', 'string'],
-            'dedicacion' => ['nullable', 'string'],
-            'titular' => ['nullable', 'string'],
-            'confidencialidad' => ['nullable', 'in:si,no'],
+            'rubro' => ['required', 'string'],
+            'entidad' => ['required', 'string'],
+            'dedicacion' => ['required', 'string'],
+            'titular' => ['required', 'string'],
+            'confidencialidad' => ['required', 'in:si,no'],
 
             // Dirección
-            'calle' => ['nullable', 'string', 'max:255'],
-            'nro_calle' => ['nullable', 'string', 'max:20'],
-            'codigo_postal' => ['nullable', 'numeric'],
-            'localidad' => ['nullable', 'string'],
-            'provincia' => ['nullable', 'string'],
-            'pais' => ['nullable', 'string'],
+            'calle' => ['required', 'string', 'max:255'],
+            'nro_calle' => ['required', 'string', 'max:20'],
+            'codigo_postal' => ['required', 'numeric'],
+            'localidad' => ['required', 'string'],
+            'provincia' => ['required', 'string'],
+            'pais' => ['required', 'string'],
 
             // Representante firma
-            'firma_nombre' => ['nullable', 'string'],
-            'firma_apellido' => ['nullable', 'string'],
-            'firma_dni' => ['nullable', 'numeric'],
-            'firma_cargo' => ['nullable', 'string'],
+            'firma_nombre' => ['required', 'string'],
+            'firma_apellido' => ['required', 'string'],
+            'firma_dni' => ['required', 'numeric'],
+            'firma_cargo' => ['required', 'string'],
             'firma_email' => [
-                                'required',
-                                'email',
-                                Rule::unique('employees', 'email')->ignore($firma_dni, 'dni')
-                                ], 
-            'firma_empresa_razon_social' => ['nullable', 'string'],
+                'required',
+                'email',
+                Rule::unique('employees', 'email')->ignore($firma_dni, 'dni')
+            ],
+            'firma_empresa_razon_social' => ['required', 'string'],
 
             // Lugar y fecha
-            'lugar_firma' => ['nullable', 'string'],
-            'fecha_firma' => ['nullable', 'date'],
+            'lugar_firma' => ['required', 'string'],
+            'fecha_firma' => ['required', 'date'],
 
             // Documentos
-            'doc_afip' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png'],
-            'doc_estatuto' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png'],
-            'doc_autoridades' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png'],
-    ];
-}
+            'doc_afip' => [
+                'nullable',
+                'file',
+                'mimes:pdf,jpg,jpeg,png',
+                'mimetypes:application/pdf,image/jpeg,image/png',
+                'max:2048'
+            ],
+            'doc_estatuto' => [
+                'nullable',
+                'file',
+                'mimes:pdf,jpg,jpeg,png',
+                'mimetypes:application/pdf,image/jpeg,image/png',
+                'max:2048'
+            ],
+            'doc_autoridades' => [
+                'nullable',
+                'file',
+                'mimes:pdf,jpg,jpeg,png',
+                'mimetypes:application/pdf,image/jpeg,image/png',
+                'max:2048'
+            ],
+        ];
+    }
 
 
-public function messages(): array
-{
-    return [
-                // Representante contacto
+    public function messages(): array
+    {
+        return [
+            // Representante contacto
             'contact_nombre.required' => 'El nombre del representante de contacto es obligatorio.',
             'contact_apellido.required' => 'El apellido del representante de contacto es obligatorio.',
             'contact_dni.required' => 'El DNI del contacto es obligatorio.',
@@ -113,6 +131,9 @@ public function messages(): array
             'contraparte_rubro.required' => 'El rubro es obligatorio.',
             'titular.required' => 'Este campo es obligatorio.',
             'confidencialidad.required' => 'Debe indicar si existe un acuerdo de confidencialidad.',
+            'dedicacion.required' => 'Debe indicar la dedicación',
+            'entidad.required' => 'Debe indicar tipo de entidad',
+            'rubro.required' => 'Debe indicar un rubro',
 
 
             // Dirección
@@ -135,7 +156,12 @@ public function messages(): array
             // Lugar y fecha
             'lugar_firma.required' => 'El lugar de la firma es obligatorio.',
             'fecha_firma.required' => 'La fecha de la firma es obligatoria.',
-            'fecha_firma.date' => 'La fecha de la firma no es válida.'
-    ];
-}
+            'fecha_firma.date' => 'La fecha de la firma no es válida.',
+
+            //Archivos
+            'doc_afip' => 'El archivo debe ser en formato pdf/jpg/jpeg/png',
+            'doc_estatuto' => 'El archivo debe ser en formato pdf/jpg/jpeg/png',
+            'doc_autoridades' => 'El archivo debe ser en formato pdf/jpg/jpeg/png',
+        ];
+    }
 }
