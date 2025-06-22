@@ -183,13 +183,13 @@
     <div class="mb-3">
         <label class="form-label fs-6 fw-bold">CUIT<span class="InputImportant">*</span></label>
         <div class="input-group">
-            <input type="number" class="form-control" name="cuit_prefijo" placeholder="23" maxlength="2"
+            <input type="text" class="form-control" name="cuit_prefijo" placeholder="23" maxlength="2"
                 pattern="\d{2}" value="{{ old('cuit_prefijo') }}">
             <span class="input-group-text">-</span>
-            <input type="number" class="form-control" name="cuit_dni" placeholder="12345678" maxlength="8"
+            <input type="text" class="form-control" name="cuit_dni" placeholder="12345678" maxlength="8"
                 pattern="\d{7,8}" value="{{ old('cuit_dni') }}">
             <span class="input-group-text">-</span>
-            <input type="number" class="form-control" name="cuit_dv" placeholder="9" maxlength="1"
+            <input type="text" class="form-control" name="cuit_dv" placeholder="9" maxlength="1"
                 pattern="\d{1}" value="{{ old('cuit_dv') }}">
         </div>
         <div class="form-text">Formato: XX-XXXXXXXX-X</div>
