@@ -9,6 +9,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FrameworkInternshipAgreementController;
 use App\Http\Controllers\FrameworkResidenceAgreementController;
+use App\Http\Controllers\SpecificAgreementController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -58,6 +59,7 @@ Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreeme
 Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class);
 Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class);
 
+Route::resource('specificAgreement', SpecificAgreementController::class);
 
 
 
