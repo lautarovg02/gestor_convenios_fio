@@ -6,9 +6,12 @@ use App\Http\Requests\StoreCityRequest;
 use App\Models\City;
 use App\Models\Province;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class CityController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      */
@@ -69,4 +72,22 @@ class CityController extends Controller
     {
         //
     }
+
+
+public function getCiudades(Request $request)
+{
+    $provincia = $request->input('provincia');
+
+    $response = Http::get('https://apis.datos.gob.ar/georef/api/localidades', [
+        'provincia' => $provincia,
+        'campos' => 'nombre',  // agrego código postal acá
+        'max' => 1000
+    ]);
+
+    $ciudades = $response->json()['localidades'] ?? [];
+
+    return response()->json($ciudades);
+}
+
+
 }

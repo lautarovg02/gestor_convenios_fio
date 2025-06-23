@@ -1,0 +1,225 @@
+<?php
+
+namespace App\Http\Requests;
+
+use App\Models\Company;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use App\Models\Employee;
+use App\Models\EmployeePhone;
+
+class StoreFrameworkResidenceAgreement extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    protected function prepareForValidation()
+{
+    $contactCuil = $this->input('contact_cuil_prefijo') .
+                   $this->input('contact_cuil_dni') .
+                   $this->input('contact_cuil_dv');
+
+    $contraparteCuit = $this->input('contraparte_cuit_prefijo') .
+                       $this->input('contraparte_cuit_dni') .
+                       $this->input('contraparte_cuit_dv');
+
+    $this->merge([
+        'contact_cuil' => $contactCuil,
+        'contraparte_cuit' => $contraparteCuit,
+    ]);
+
+    
+}
+
+    public function rules(): array
+    {
+
+        $contact_dni = $this->input('contact_dni');
+        $firma_dni = $this->input('firma_dni');
+
+        return [
+            // Representante contacto
+            'contact_nombre' => ['required', 'string', 'max:255'],
+            'contact_apellido' => ['required', 'string', 'max:255'],
+            'contact_dni' => ['required', 'numeric'],
+            'contact_cuil' => ['nullable', 'numeric', 'digits:11'],
+            'contact_celular' => ['required', 'numeric'],
+
+            'contact_email' => [
+                                'required',
+                                'email',
+                                Rule::unique('employees', 'email')->ignore($contact_dni, 'dni')
+                                ],                 
+            'contact_empresa' => ['required', 'string'],
+            'contact_cargo' => ['required', 'string'],
+            'contact_cuil_prefijo' => ['required', 'numeric'],
+            'contact_cuil_dni' => ['required', 'numeric'],
+            'contact_cuil_dv' => ['required', 'numeric'],
+            // Contraparte
+            'razon_social' => ['required', 'string'],
+            'ambito' => ['required', 'in:nacional,internacional'],
+            'contraparte_cuit' => ['nullable', 'numeric', 'digits:11'],
+            'contraparte_cuit_prefijo' => ['required', 'numeric'],
+            'contraparte_cuit_dni' => ['required', 'numeric'],
+            'contraparte_cuit_dv' => ['required', 'numeric'],
+            'contraparte_rubro' => ['required', 'string'],
+            'titular' => ['required', 'string'],
+            'confidencialidad' => ['required'],
+
+            // Dirección
+            'calle' => ['required', 'string', 'max:255'],
+            'nro_calle' => ['required', 'string', 'max:20'],
+            'codigo_postal' => ['required', 'numeric'],
+            'localidad' => ['required', 'string'],
+            'provincia' => ['required', 'string'],
+            'pais' => ['required', 'string'],
+
+            // Representante firma
+            'firma_nombre' => ['required', 'string'],
+            'firma_apellido' => ['required', 'string'],
+            'firma_dni' => ['required', 'numeric'],
+            'firma_cargo' => ['required', 'string'],
+            'firma_email' => [
+                                'required',
+                                'email',
+                                Rule::unique('employees', 'email')->ignore($firma_dni, 'dni')
+                                ], 
+
+            'firma_empresa_razon_social' => ['required', 'string'],
+
+            // Lugar y fecha
+            'lugar_firma' => ['required', 'string'],
+            'fecha_firma' => ['required', 'date'],
+
+/*          // Documentos
+            'doc_afip' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png'],
+            'doc_estatuto' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png'],
+            'doc_autoridades' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png'],
+*/
+
+        ];
+    }
+
+
+public function withValidator($validator)
+{
+    $validator->after(function ($validator) {
+        $dniContacto = $this->input('contact_dni');
+        $dniFirma = $this->input('firma_dni');
+        
+        $empresaFormularioContacto = $this->input('contact_empresa');
+        $empresaFormularioFirma = $this->input('firma_empresa_razon_social');
+        $razonSocialFormulario = $this->input('razon_social');
+
+        // Validar que ambas empresas coincidan con la razón social de la contraparte
+        if (strcasecmp(trim($empresaFormularioContacto), trim($razonSocialFormulario)) !== 0) {
+            $validator->errors()->add('contact_empresa', 'La empresa del representante de contacto debe coincidir con la razón social de la contraparte.');
+        }
+        
+        if (strcasecmp(trim($empresaFormularioFirma), trim($razonSocialFormulario)) !== 0) {
+            $validator->errors()->add('firma_empresa_razon_social', 'La empresa del representante firmante debe coincidir con la razón social de la contraparte.');
+        }
+        
+        // Validar que el empleado de contacto no esté en otra empresa
+        $empleadoContacto = Employee::where('dni', $dniContacto)->first();
+
+        if ($empleadoContacto) {
+            $empresaExistente = Company::find($empleadoContacto->company_id);
+
+            if ($empresaExistente && $empresaExistente->denomination !== $empresaFormularioContacto) {
+                $validator->errors()->add('contact_empresa', 'El empleado ya existe y está asignado a otra empresa.');
+            }
+        }
+
+        // Validar que el empleado firmante no esté en otra empresa
+        $empleadoFirma = Employee::where('dni', $dniFirma)->first();
+
+        if ($empleadoFirma) {
+            $empresaExistenteFirma = Company::find($empleadoFirma->company_id);
+
+            if ($empresaExistenteFirma && $empresaExistenteFirma->denomination !== $empresaFormularioFirma) {
+                $validator->errors()->add('firma_empresa_razon_social', 'El firmante ya existe y está asignado a otra empresa.');
+            }
+        }
+
+        //Validar número de celular del representante de contacto
+        $contactCelular = $this->input('contact_celular');
+        if ($contactCelular) {
+            $telefonoExistente = EmployeePhone::where('number', $contactCelular)
+                ->when($empleadoContacto, function ($query) use ($empleadoContacto) {
+                    $query->where('employee_id', '!=', $empleadoContacto->id);
+                })
+                ->exists();
+
+            if ($telefonoExistente) {
+                $validator->errors()->add('contact_celular', 'Este número ya está registrado por otro empleado.');
+            }
+        }
+    });
+}
+
+
+
+    public function messages(): array
+    {
+        return [
+            // Representante contacto
+            'contact_nombre.required' => 'El nombre del representante de contacto es obligatorio.',
+            'contact_apellido.required' => 'El apellido del representante de contacto es obligatorio.',
+            'contact_dni.required' => 'El DNI del contacto es obligatorio.',
+            'contact_dni.unique' => 'El DNI del contacto ya está registrado.',
+            'contact_cuil.digits' => 'El CUIL debe tener 11 dígitos.',
+            'contact_cuil.unique' => 'El CUIL ya está registrado.',
+            'contact_celular.required' => 'El número de celular del contacto es obligatorio.',
+            'contact_email.required' => 'El correo electrónico del contacto es obligatorio.',
+            'contact_email.email' => 'El correo electrónico del contacto no es válido.',
+            'contact_email.unique' => 'El correo electrónico del contacto ya existe en otro usuario.',
+            'contact_empresa.required' => 'La empresa del contacto es obligatoria.',
+            'contact_cargo.required' => 'El cargo del contacto es obligatorio.',
+
+            // Contraparte
+            'razon_social.required' => 'La razón social es obligatoria.',
+            'ambito.required' => 'El ámbito del convenio es obligatorio.',
+            'ambito.in' => 'El ámbito debe ser "nacional" o "internacional".',
+            'contraparte_cuit.digits' => 'El CUIT debe tener 11 dígitos.',
+            'contraparte_cuit.unique' => 'El CUIT ya está registrado.',
+            'contraparte_rubro.required' => 'El rubro es obligatorio.',
+            'titular.required' => 'Este campo es obligatorio.',
+            'confidencialidad.required' => 'Debe indicar si existe un acuerdo de confidencialidad.',
+
+
+            // Dirección
+            'calle.required' => 'La calle es obligatoria.',
+            'nro_calle.required' => 'El número de calle es obligatorio.',
+            'codigo_postal.required' => 'El código postal es obligatorio.',
+            'localidad.required' => 'La ciudad es obligatoria.',
+            'provincia.required' => 'La provincia es obligatoria.',
+            'pais.required' => 'El país es obligatorio.',
+
+            // Representante firma
+            'firma_nombre.required' => 'El nombre del firmante es obligatorio.',
+            'firma_apellido.required' => 'El apellido del firmante es obligatorio.',
+            'firma_dni.required' => 'El DNI del firmante es obligatorio.',
+            'firma_cargo.required' => 'El cargo del firmante es obligatorio.',
+            'firma_email.required' => 'El correo electrónico del firmante es obligatorio.',
+            'firma_email.unique' => 'El correo electrónico del firmante ya existe en otro usuario.',
+            'firma_empresa_razon_social.required' => 'La razón social de la empresa firmante es obligatoria.',
+
+            // Lugar y fecha
+            'lugar_firma.required' => 'El lugar de la firma es obligatorio.',
+            'fecha_firma.required' => 'La fecha de la firma es obligatoria.',
+            'fecha_firma.date' => 'La fecha de la firma no es válida.',
+/*
+            // Documentos
+            'doc_afip.required' => 'El certificado de la AFIP es obligatorio.',
+            'doc_afip.mimes' => 'El certificado de la AFIP debe ser un archivo PDF o imagen.',
+            'doc_estatuto.required' => 'El estatuto es obligatorio.',
+            'doc_estatuto.mimes' => 'El estatuto debe ser un archivo PDF o imagen.',
+            'doc_autoridades.required' => 'El documento de autoridades es obligatorio.',
+            'doc_autoridades.mimes' => 'El documento de autoridades debe ser un archivo PDF o imagen.',
+*/
+        ];
+    }
+}

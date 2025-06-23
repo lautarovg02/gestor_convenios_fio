@@ -8,7 +8,10 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FrameworkAgreementController;
+use App\Http\Controllers\FrameworkInternshipAgreementController;
+use App\Http\Controllers\FrameworkResidenceAgreementController;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -33,6 +36,8 @@ Route::resource('/companies' , CompanyController::class);
 Route::resource('companies.employees', EmployeeController::class)->shallow();
 
 //CITIES
+
+Route::get('/cities', [CityController::class, 'getCiudades'])->name('get.ciudades');
 Route::get('/cities/create' , [CityController::class , 'create' ])->name('cities.create');
 Route::post('/cities', [CityController::class, 'store'])->name('cities.store');
 
@@ -52,3 +57,12 @@ Route::resource('/agreements', AgreementController::class);
 Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
 
 Route::resource('/frameworkAgreement', FrameworkAgreementController::class);
+Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
+
+Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class);
+Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class);
+
+
+
+
+
