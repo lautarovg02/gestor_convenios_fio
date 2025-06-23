@@ -6,6 +6,7 @@ use App\Models\Company;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Models\Employee;
+use App\Models\EmployeePhone;
 
 class StoreFrameworkResidenceAgreement extends FormRequest
 {
@@ -44,7 +45,7 @@ class StoreFrameworkResidenceAgreement extends FormRequest
             'contact_apellido' => ['required', 'string', 'max:255'],
             'contact_dni' => ['required', 'numeric'],
             'contact_cuil' => ['nullable', 'numeric', 'digits:11'],
-            'contact_celular' => ['required', 'numeric', 'unique:employee_phones,number'],
+            'contact_celular' => ['required', 'numeric'],
 
             'contact_email' => [
                                 'required',
@@ -112,8 +113,7 @@ public function withValidator($validator)
         $empresaFormularioFirma = $this->input('firma_empresa_razon_social');
         $razonSocialFormulario = $this->input('razon_social');
 
-        //
-        /* Validar que ambas empresas coincidan con la razón social de la contraparte
+        // Validar que ambas empresas coincidan con la razón social de la contraparte
         if (strcasecmp(trim($empresaFormularioContacto), trim($razonSocialFormulario)) !== 0) {
             $validator->errors()->add('contact_empresa', 'La empresa del representante de contacto debe coincidir con la razón social de la contraparte.');
         }
@@ -121,7 +121,7 @@ public function withValidator($validator)
         if (strcasecmp(trim($empresaFormularioFirma), trim($razonSocialFormulario)) !== 0) {
             $validator->errors()->add('firma_empresa_razon_social', 'La empresa del representante firmante debe coincidir con la razón social de la contraparte.');
         }
-        */
+        
         // Validar que el empleado de contacto no esté en otra empresa
         $empleadoContacto = Employee::where('dni', $dniContacto)->first();
 
@@ -141,6 +141,20 @@ public function withValidator($validator)
 
             if ($empresaExistenteFirma && $empresaExistenteFirma->denomination !== $empresaFormularioFirma) {
                 $validator->errors()->add('firma_empresa_razon_social', 'El firmante ya existe y está asignado a otra empresa.');
+            }
+        }
+
+        //Validar número de celular del representante de contacto
+        $contactCelular = $this->input('contact_celular');
+        if ($contactCelular) {
+            $telefonoExistente = EmployeePhone::where('number', $contactCelular)
+                ->when($empleadoContacto, function ($query) use ($empleadoContacto) {
+                    $query->where('employee_id', '!=', $empleadoContacto->id);
+                })
+                ->exists();
+
+            if ($telefonoExistente) {
+                $validator->errors()->add('contact_celular', 'Este número ya está registrado por otro empleado.');
             }
         }
     });

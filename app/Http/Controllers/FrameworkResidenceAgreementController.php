@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFrameworkResidenceAgreement;
 use App\Models\Company;
 use App\Models\Contract;
+use App\Models\Province;
 use App\Services\CityService;
 use App\Services\CompanyService;
 use App\Services\ContractStatusService;
@@ -12,6 +13,7 @@ use App\Services\EmployeeService;
 use App\Services\SecretaryService;
 use App\Services\TeacherService;
 use App\Services\TypeFrameworkAgreementService;
+use App\Services\ProvinceService;
 use Carbon\Carbon;
 use Doctrine\DBAL\Types\Type;
 use Illuminate\Console\View\Components\Secret;
@@ -30,7 +32,7 @@ class FrameworkResidenceAgreementController extends Controller
     protected $contractStatusService;
     protected $typeFrameworkAgreementService;
     protected $cityService;
-
+    protected $provinceService;
 
     public function __construct(
         CityService $cityService,
@@ -39,9 +41,10 @@ class FrameworkResidenceAgreementController extends Controller
         TeacherService $teacherService,
         EmployeeService $employeeService,
         ContractStatusService $contractStatusService,
-        TypeFrameworkAgreementService $typeFrameworkAgreementService
+        TypeFrameworkAgreementService $typeFrameworkAgreementService,
+        ProvinceService $provinceService
     ) {
-
+        $this->provinceService = $provinceService;
         $this->cityService = $cityService;
         $this->companyService = $companyService;
         $this->secretaryService = $secretaryService;
@@ -168,8 +171,9 @@ class FrameworkResidenceAgreementController extends Controller
 
         //------------------------------------------------------GENERACION DE DOCUMENTO------------------------------------------------------------
 
-
+        
         $companyCity = $this->cityService->findCityById($company->city_id);
+        $companyProvince = $this->provinceService->getById($companyCity->province_id);
         $companyRepresentativeEmployee = $this->companyService->findCompanyById($representative_employee->company_id);
 
 
@@ -182,10 +186,12 @@ class FrameworkResidenceAgreementController extends Controller
         $templateProcessor->setValue('calle', $company->street);
         $templateProcessor->setValue('nro_calle', $company->number);
         $templateProcessor->setValue('ciudad', $companyCity->name);
+        $templateProcessor->setValue('provincia', $companyProvince->name);
+        $templateProcessor->setValue('cuit_empresa', $company->cuit);
        
         $templateProcessor->setValue('nombre_rep_contacto', $contact_employee->name . ' ' . $contact_employee->lastname);
         $templateProcessor->setValue('cargo_rep_contacto', $contact_employee->position);
-        $templateProcessor->setValue('cuil_rep_contacto', $contact_employee->cuil);
+        $templateProcessor->setValue('dni_rep_contacto', $contact_employee->dni);
        
         $templateProcessor->setValue('nombre_rep_firma', $representative_employee->name . ' ' . $representative_employee->lastname);
         $templateProcessor->setValue('cargo_rep_firma', $representative_employee->position);

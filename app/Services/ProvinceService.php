@@ -16,4 +16,9 @@ class ProvinceService
             ['name' => $name],
             ['name' => $name]);
     }
+
+    public function getById(int $id): ?Province
+    {
+        return Province::find($id);
+    }
 }
