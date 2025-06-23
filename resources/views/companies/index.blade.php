@@ -27,8 +27,9 @@
         <!-- Mensajes -->
         @if (session('success'))
             <div id="flash-message" class="alert alert-success">
-                {{ session('success') }}
+                 {!! session('success') !!}
             </div>
+
         @elseif (Session::get('error'))
             <div class="alert alert-danger">{{ Session::get('error') }}</div>
         @endif
