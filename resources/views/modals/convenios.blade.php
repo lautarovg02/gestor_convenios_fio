@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body d-flex flex-column gap-3">
-                <a href="{{ route('agreements.create', ['type' => 'marco']) }}"
+                <a href="{{ route('frameworkAgreement.create', ['type' => 'marco']) }}"
                     class="btn btn-outline-primary"
                     style="font-weight: 600; border-width: 2px; padding: 10px 16px; font-size: 1rem;">
                     Convenio Marco
