@@ -3,63 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Services\CompanyService;
+use App\Http\Requests\StoreSpecificResidenceAgreement;
+use App\Models\SpecificResidenceAgreement;
+use App\Services\StudentService;
+use Carbon\Carbon;
 
 class SpecificResidenceAgreementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    protected $companyService;
+    protected $studentService;
+    
+    
+    public function __construct(CompanyService $companyService, StudentService $studentService){
+        $this->companyService = $companyService;
+        $this->studentService = $studentService;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create(){
+
+        $companies = $this->companyService->getCompaniesByTypeFrameworkAgreement('Convenio Marco de Residencia');
+        
+        return view("specificResidenceAgreement.create", compact('companies'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function store(StoreSpecificResidenceAgreement  $request){
+        
+        $data = $request->validated();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $student = $this->studentService->findOrCreateByDni([
+            'name' => $data['studentName'],
+            'last_name' => $data['studentLastName'],
+            'email' => $data['studentEmail'],
+            'phone' => $data['studentCelular'],
+            'cuil' => $data['studentCuil'] ?? null,
+            'dni' => $data['dniStudent'],
+            'carrera' => $data['studentCarrer'],
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        $agreement = SpecificResidenceAgreement::create([
+            'title' => $data['agreementName'],
+            'task' => $data['tasks'],
+            'signing_date' => $data['fecha_firma'] ?? null,
+            'student_id' => $student->id,
+            'contract_id' => $data['contract_id'],
+            'file' => $data['file'] ?? null,
+            'internship_initial_date' => Carbon::now(),      //se establece cuando lo acepta secretaria
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        dd($agreement);
+    
     }
 }

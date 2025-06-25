@@ -10,6 +10,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FrameworkAgreementController;
 use App\Http\Controllers\FrameworkInternshipAgreementController;
 use App\Http\Controllers\FrameworkResidenceAgreementController;
+use App\Http\Controllers\SpecificResidenceAgreementController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -60,7 +61,12 @@ Route::resource('/frameworkAgreement', FrameworkAgreementController::class);
 Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
 
 Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class);
+
 Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class);
+
+Route::get('/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
+
+Route::resource('specificResidenceAgreement', SpecificResidenceAgreementController::class);
 
 
 

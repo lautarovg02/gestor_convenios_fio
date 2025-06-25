@@ -62,7 +62,7 @@ class FrameworkResidenceAgreementController extends Controller
         return view("frameworkResidenceAgreement.create", compact('provincias'));
     }
 
-    public function store( StoreFrameworkResidenceAgreement $request)
+    public function store(StoreFrameworkResidenceAgreement $request)
     {
 
         $faker = \Faker\Factory::create();
@@ -171,7 +171,7 @@ class FrameworkResidenceAgreementController extends Controller
 
         //------------------------------------------------------GENERACION DE DOCUMENTO------------------------------------------------------------
 
-        
+
         $companyCity = $this->cityService->findCityById($company->city_id);
         $companyProvince = $this->provinceService->getById($companyCity->province_id);
         $companyRepresentativeEmployee = $this->companyService->findCompanyById($representative_employee->company_id);
@@ -188,15 +188,15 @@ class FrameworkResidenceAgreementController extends Controller
         $templateProcessor->setValue('ciudad', $companyCity->name);
         $templateProcessor->setValue('provincia', $companyProvince->name);
         $templateProcessor->setValue('cuit_empresa', $company->cuit);
-       
+
         $templateProcessor->setValue('nombre_rep_contacto', $contact_employee->name . ' ' . $contact_employee->lastname);
         $templateProcessor->setValue('cargo_rep_contacto', $contact_employee->position);
         $templateProcessor->setValue('dni_rep_contacto', $contact_employee->dni);
-       
+
         $templateProcessor->setValue('nombre_rep_firma', $representative_employee->name . ' ' . $representative_employee->lastname);
         $templateProcessor->setValue('cargo_rep_firma', $representative_employee->position);
         $templateProcessor->setValue('rep_firma_empresa_razon_social',  $companyRepresentativeEmployee->denomination);
-       
+
         $templateProcessor->setValue('dia', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('d') : '____');
         $templateProcessor->setValue('mes', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->translatedFormat('F') : '____');
         $templateProcessor->setValue('anio', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('Y') : '____');
@@ -235,4 +235,43 @@ class FrameworkResidenceAgreementController extends Controller
 
         return response()->download($fullPath);
     }
+
+    
+
+public function searchAgreementByCompany($companyId)
+{
+    try {
+        $contract = Contract::with([
+            'company',
+            'secretary',
+            'teacher',
+            'contactEmployee',
+            'representativeEmployee',
+            'typeFrameworkAgreement'
+        ])
+        ->where('company_id', $companyId)
+        ->whereHas('typeFrameworkAgreement', function ($query) {
+            $query->where('type', 'Convenio Marco de Residencia');
+        })
+        ->first();
+
+        if ($contract) {
+            return response()->json([
+                'contract_id' => $contract->id,
+                'signing_date' => $contract->signing_date,
+                'company' => $contract->company,
+                'secretary' => $contract->secretary,
+                'teacher' => $contract->teacher,
+                'contact_employee' => $contract->contactEmployee,
+                'representative_employee' => $contract->representativeEmployee,
+                'type_framework_agreement' => $contract->typeFrameworkAgreement,
+            ]);
+        } else {
+            return response()->json(['message' => 'Contrato no encontrado'], 404);
+        }
+    } catch (\Exception $e) {
+        \Log::error('Error en searchAgreementByCompany: ' . $e->getMessage());
+        return response()->json(['error' => 'Error en el servidor'], 500);
+    }
+}
 }
