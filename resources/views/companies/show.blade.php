@@ -23,7 +23,10 @@
         <div class="card shadow w-75">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
                 <h3 class="card-title">Detalles de la Empresa</h3>
-                <a href="{{ route('companies.employees.index', $company) }}" class="btn btn-primary me-3">Ver empleados</a>
+                <div>
+                     <a href="{{ route('companies.employees.index', $company) }}" class="btn btn-primary me-3">Ver empleados</a>
+                    <a href="{{ route('companies.agreements.index', $company) }}" class="btn btn-primary me-3">Ver convenios</a>
+                </div>
             </div>
             <div class="card-body row">
                 <div class="col-md-6 mb-3"><strong>Razón social:</strong> {{ $company->denomination }}</div>
