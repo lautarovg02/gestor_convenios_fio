@@ -34,7 +34,7 @@ body{
 }
 
 main {
-    min-height: 500px; /* Altura máxima del main */
+    min-height: 612px; /* Altura máxima del main */
     overflow-y: auto; /* Muestra scroll si el contenido excede la altura */
     max-width: 70%;
     padding-bottom: 100px; /* espacio para el footer */

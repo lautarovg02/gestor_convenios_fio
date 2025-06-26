@@ -51,10 +51,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('contract_id_field').value = data.contract_id;
                 
                 // Insertar ddatos de la empresa en los campos del formulario
-                if (data.company) 
+                if (data.company){ 
                     $form.find('input[name="companyName"]').val(data.company.company_name);
-                
-
+                    document.getElementById('idCompany').value = data.company.id;
+                }
 
 
                 // Mostrar un mensaje de éxito al usuario

@@ -9,7 +9,8 @@
 
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">Empresa</label>
-            <input type="text" name="companyName" class="form-control" placeholder="Nombre" readonly>
+            <input type="text" name="companyName" value="{{ old('companyName') }}" class="form-control" placeholder="Nombre" readonly>
+            <input type="hidden" value="{{ old('contract_id') }}" name="contract_id" id="idCompany">
         </div>
 
         <div class="mb-3">
@@ -19,7 +20,7 @@
 
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">Tareas a realizar durante el acuerdo</label>
-            <textarea name="tasks" class="form-control"  value="{{ old('tasks') }}" placeholder="Tareas a realizar..."></textarea>
+            <textarea name="tasks" class="form-control" placeholder="Tareas a realizar...">{{ old('tasks') }}</textarea>
         </div>
 
         <div class="mb-3">
@@ -27,7 +28,7 @@
             <input type="date" name="fecha_firma" class="form-control" value="{{ old('fecha_firma') }}">
         </div>
 
-        <input type="hidden" name="contract_id" id="contract_id_field"> <!--este input esta oculto porque es el id del contract-->
+        <input type="hidden" value="{{ old('contract_id') }}" name="contract_id" id="contract_id_field"> <!--este input esta oculto porque es el id del contract-->
     
     </div>
 
