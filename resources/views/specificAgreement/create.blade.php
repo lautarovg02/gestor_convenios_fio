@@ -33,63 +33,126 @@
     <form id="formulario" action="{{ route('specificAgreement.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
-        {{-- Empresa --}}
+        {{-- Select convenio marco --}}
         <div class="mb-4 border rounded containerSectionForm">
-            <h4 class="TitleSection">Datos de la Empresa</h4>
+            <h4 class="TitleSection">Seleccionar Convenio Marco</h4>
+            <select class="form-select" id="convenioMarcoSelect">
+                <option value="">Seleccionar convenio marco...</option>
+                @foreach ($conveniosMarco as $convenio)
+                <option value="{{ $convenio->id }}">
+                    {{ $convenio->company->denomination }}
+                </option>
+                @endforeach
+            </select>
+        </div>
 
-            {{-- Razón Social --}}
+
+
+        {{-- Contraparte --}}
+        <div class=" mb-4 border rounded containerSectionForm">
+            <h4 class="TitleSection">Contraparte</h4>
+
             <div class="mb-3">
-                <label class="form-label fs-6 fw-bold">Razón Social de la Empresa <span class="text-danger">*</span></label>
-                <input type="text" name="empresa_razon_social" placeholder="Razón Social" class="form-control" value="{{ old('empresa_razon_social') }}" required>
-                @error('empresa_razon_social')
+                <label class="form-label fs-6 fw-bold">Razón Social</label>
+                <input type="text" placeholder="Razón Social" name="razon_social" class="form-control" value="{{ old('razon_social') }}">
+
+                {{-- Validación de errores --}}
+
+                @error('razon_social')
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
 
-            {{-- Nominación --}}
             <div class="mb-3">
-                <label class="form-label fs-6 fw-bold">Nominación</label>
-                <input type="text" name="empresa_nominacion" placeholder="Nombre comercial o institucional" class="form-control" value="{{ old('empresa_nominacion') }}">
-                @error('empresa_nominacion')
+                <label class="form-label d-block fs-6 fw-bold">Ámbito</label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="ambito" value="nacional"
+                        id="ambitoNacional" checked>
+                    <label class="form-check-label" for="ambitoNacional">Nacional</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="ambito" value="internacional"
+                        id="ambitoInternacional">
+                    <label class="form-check-label" for="ambitoInternacional">Internacional</label>
+                </div>
+                @error('ambito')
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
 
-            {{-- Domicilio legal (calle y número) --}}
-            <div class="containerInputNameLastName">
-                <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Calle</label>
-                    <input type="text" name="empresa_calle" placeholder="Calle" class="form-control" value="{{ old('empresa_calle') }}">
-                    @error('empresa_calle')
-                    <div class="text-danger">{{ $message }}</div>
-                    @enderror
+
+            <div class="mb-3">
+                <label class="form-label fs-6 fw-bold">CUIT</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" name="contraparte_cuit_prefijo" placeholder="23" maxlength="2"
+                        pattern="\d{2}" value="{{ old('contraparte_cuit_prefijo') }}">
+                    <span class="input-group-text">-</span>
+                    <input type="number" class="form-control" name="contraparte_cuit_dni" placeholder="12345678"
+                        maxlength="8" pattern="\d{7,8}" value="{{ old('contraparte_cuit_dni') }}">
+                    <span class="input-group-text">-</span>
+                    <input type="number" class="form-control" name="contraparte_cuit_dv" placeholder="9" maxlength="1"
+                        pattern="\d{1}" value="{{ old('contraparte_cuit_dv') }}">
+                </div>
+                <div class="form-text">Formato: XX-XXXXXXXX-X</div>
+
+                @error('contraparte_cuit_prefijo')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+
+                @error('contraparte_cuit_dni')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+
+                @error('contraparte_cuit_dv')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+
+                @error('contraparte_cuit')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label fs-6 fw-bold">Rubro</label>
+                <input type="text" placeholder="Rubro de la empresa" name="contraparte_rubro" class="form-control" value="{{ old('contraparte_rubro') }}">
+
+                {{-- Validación de errores --}}
+
+                @error('contraparte_rubro')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado</label>
+                <input type="text" placeholder="Titular / Representante Legal / Apoderado" name="titular"
+                    class="form-control" value="{{ old('titular') }}">
+                @error('titular')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label d-block fs-6 fw-bold">Cláusula de Confidencialidad</label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="confidencialidad" value="si"
+                        id="confSi" checked>
+                    <label class="form-check-label" for="confSi">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="confidencialidad" value="no"
+                        id="confNo">
+                    <label class="form-check-label" for="confNo">No</label>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Número</label>
-                    <input type="text" name="empresa_numero" placeholder="Nro" class="form-control" value="{{ old('empresa_numero') }}">
-                    @error('empresa_numero')
-                    <div class="text-danger">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-
-            {{-- Ciudad --}}
-            <div class="mb-3">
-                <label class="form-label fs-6 fw-bold">Ciudad</label>
-                <input type="text" name="empresa_ciudad" placeholder="Ciudad" class="form-control" value="{{ old('empresa_ciudad') }}">
-                @error('empresa_ciudad')
+                @error('confidencialidad')
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
-            </div>
 
-            {{-- Provincia --}}
-            <div class="mb-3">
-                <label class="form-label fs-6 fw-bold">Provincia</label>
-                <input type="text" name="empresa_provincia" placeholder="Provincia" class="form-control" value="{{ old('empresa_provincia') }}">
-                @error('empresa_provincia')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
             </div>
         </div>
 
@@ -135,7 +198,7 @@
             {{-- País --}}
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">País</label>
-                <input type="text" name="pais" class="form-control"  placeholder="País" value="{{ old('pais') }}" required>
+                <input type="text" name="pais" class="form-control" placeholder="País" value="{{ old('pais') }}" required>
             </div>
         </div>
 
@@ -315,30 +378,68 @@
 
         </div>
 
+        {{-- Compromiso por las partes --}}
+        <div class="mb-4 border rounded containerSectionForm">
+            <h4 class="TitleSection">Compromisos de las PARTES</h4>
 
+            <div class="mb-3">
+                <label class="form-label fs-6 fw-bold">Compromisos acordados</label>
+                <textarea name="compromisos" class="form-control" rows="4" placeholder="Describa los compromisos de cada parte">{{ old('compromisos') }}</textarea>
+                @error('compromisos')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+        {{-- Responsable de control y comunicación --}}
+        <div class="mb-4 border rounded containerSectionForm">
+            <h4 class="TitleSection">Responsable de Control y Comunicación</h4>
 
+            <div class="containerInputNameLastName">
+                <div class="mb-3">
+                    <label class="form-label fs-6 fw-bold">Nombre</label>
+                    <input type="text" name="responsable_nombre" class="form-control" value="{{ old('responsable_nombre') }}" placeholder="Nombre completo">
+                    @error('responsable_nombre')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6 fw-bold">Apellido</label>
+                    <input type="text" name="responsable_apellido" class="form-control" value="{{ old('responsable_apellido') }}" placeholder="Apellido">
+                    @error('responsable_apellido')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fs-6 fw-bold">Cargo</label>
+                <input type="text" name="responsable_cargo" class="form-control" value="{{ old('responsable_cargo') }}" placeholder="Cargo en la empresa o institución">
+                @error('responsable_cargo')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fs-6 fw-bold">Email</label>
+                <input type="email" name="responsable_email" class="form-control" value="{{ old('responsable_email') }}" placeholder="Correo electrónico">
+                @error('responsable_email')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
 
         {{-- OBJETIVOS --}}
         <div class="mb-4 border rounded containerSectionForm">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h4 class="TitleSection">Objetivo</h4>
 
+            <div class="mb-3">
+                <label class="form-label fs-6 fw-bold">Objetivos</label>
+                <textarea name="objetivo" class="form-control" rows="4" placeholder="Describa el objetivo ">{{ old('objetivo') }}</textarea>
+                @error('objetivos')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
-            <div class="input-group mb-3">
-                <input type="text" id="nuevoObjetivoInput" class="form-control" placeholder="Ingrese un objetivo">
-            </div>
-
-
-            <div class="input-group mb-3">
-                <input type="text" id="nuevaTareaInput" class="form-control" placeholder="Ingrese un Tarea">
-                <button type="button" class="btn btn-success" id="addTareaBtn">+</button>
-            </div>
-
-            <div id="tareasList"></div>
         </div>
-
-
-
 
 
 
