@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Services\CompanyService;
+use App\Services\CarrerService;
+use App\Services\DepartamentService;
 use App\Http\Requests\StoreSpecificResidenceAgreement;
 use App\Models\SpecificResidenceAgreement;
 use App\Services\StudentService;
@@ -18,20 +20,24 @@ class SpecificResidenceAgreementController extends Controller
 {
     protected $companyService;
     protected $studentService;
+    protected $carrerService;
+    protected $departamentService;
 
-
-    public function __construct(CompanyService $companyService, StudentService $studentService)
+    public function __construct(CompanyService $companyService, StudentService $studentService, CarrerService $carrerService, DepartamentService $departamentService)
     {
         $this->companyService = $companyService;
         $this->studentService = $studentService;
+        $this->carrerService = $carrerService;
+        $this->departamentService = $departamentService;
     }
 
     public function create()
     {
 
         $companies = $this->companyService->getCompaniesByTypeFrameworkAgreement('Convenio Marco de Residencia');
-
-        return view("specificResidenceAgreement.create", compact('companies'));
+        $carrers = $this->carrerService->getAllCareers();
+        $departaments = $this->departamentService->getAllDepartments();
+        return view("specificResidenceAgreement.create", compact('companies', 'carrers', 'departaments'));
     }
 
     public function store(StoreSpecificResidenceAgreement $request)
@@ -69,7 +75,7 @@ class SpecificResidenceAgreementController extends Controller
                 'student_id' => $student->id,
                 'contract_id' => $data['contract_id'],
                 'file' => $data['file'] ?? null,
-                'internship_initial_date' => Carbon::now(),
+                'internship_initial_date' => $data['fecha_inicio'],
             ]);
 
         } catch (ValidationException $e) {
@@ -82,36 +88,45 @@ class SpecificResidenceAgreementController extends Controller
 
     
         /*----------------------------------------------------crear documento----------------------------------------------------------*/
+        
+        function safe($value)
+        {
+            return $value ?? '__';
+        }
 
+        // 1. Obtener la empresa seleccionada
+        $company = $this->companyService->findCompanyById($data['companyId']);
+        Carbon::setLocale('es');
         // 3. Cargar plantilla Word desde storage
         $templatePath = storage_path('app/plantillas/Acuerdo_Específico_de_Residencia.docx');
         $templateProcessor = new TemplateProcessor($templatePath);
-/*
-        // Seteo de valores en el template
-        $templateProcessor->setValue('razon_social', $company->denomination);
-        $templateProcessor->setValue('calle', $company->street);
-        $templateProcessor->setValue('nro_calle', $company->number);
-        $templateProcessor->setValue('ciudad', $companyCity->name);
-        $templateProcessor->setValue('provincia', $companyProvince->name);
-        $templateProcessor->setValue('cuit_empresa', $company->cuit);
 
-        $templateProcessor->setValue('nombre_rep_contacto', $contact_employee->name . ' ' . $contact_employee->lastname);
-        $templateProcessor->setValue('cargo_rep_contacto', $contact_employee->position);
-        $templateProcessor->setValue('dni_rep_contacto', $contact_employee->dni);
+        $templateProcessor->setValue('nombreEmpresa', $company->company_name);
+        $templateProcessor->setValue('nombreAlumno', $student->name . ' ' . $student->last_name);
+        $templateProcessor->setValue('dniAlumno', $student->dni);
+        $templateProcessor->setValue('nombreCarrera', $data['studentCarrer']);
+        $templateProcessor->setValue('tituloResidencia', $data['agreementName']);
+        $templateProcessor->setValue('departamentoFacultad', $data['departament']);
+        $templateProcessor->setValue('tareasARealizar', $data['tasks']);
+        $templateProcessor->setValue('nombreTutorEmpresa', $data['tutorName'] . ' ' . $data['tutorLastName']);
+        $templateProcessor->setValue('dniTutorEmpresa', $data['tutorDni']);
+        $templateProcessor->setValue('nombreTutorFacu', $data['tutorFacuName'] . ' ' . $data['tutorFacuLastName']);
+        $templateProcessor->setValue('dniTutorFacu', $data['tutorFacuDni']);
+        $templateProcessor->setValue('diaComienzo', safe($data['fecha_inicio']) ? \Carbon\Carbon::parse($data['fecha_firma'])->format('d') : '____');
+        $templateProcessor->setValue('mesComienzo', safe($data['fecha_inicio']) ? \Carbon\Carbon::parse($data['fecha_firma'])->format('m') : '____');
+        $templateProcessor->setValue('anioComienzo', safe($data['fecha_inicio']) ? \Carbon\Carbon::parse($data['fecha_firma'])->format('Y') : '____');
+        $templateProcessor->setValue('diaFirma', safe($data['fecha_firma']) ? \Carbon\Carbon::parse($data['fecha_firma'])->translatedFormat('d') : '____');
+        $templateProcessor->setValue('mesFirma', safe($data['fecha_firma']) ? \Carbon\Carbon::parse($data['fecha_firma'])->translatedFormat('F') : '____');
+        $templateProcessor->setValue('anioFirmaEnTexto', safe($data['fecha_firma']) ? \Carbon\Carbon::parse($data['fecha_firma'])->translatedFormat('Y') : '____');
+        $templateProcessor->setValue('razonSocialEmpresa', safe($company->denomination));
+        $templateProcessor->setValue('repDeEmpresa', safe($data['companyRepresentative']));
+        
+        // 4. Guardar el documento generado en una carpeta específica
 
-        $templateProcessor->setValue('nombre_rep_firma', $representative_employee->name . ' ' . $representative_employee->lastname);
-        $templateProcessor->setValue('cargo_rep_firma', $representative_employee->position);
-        $templateProcessor->setValue('rep_firma_empresa_razon_social',  $companyRepresentativeEmployee->denomination);
-
-        $templateProcessor->setValue('dia', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('d') : '____');
-        $templateProcessor->setValue('mes', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->translatedFormat('F') : '____');
-        $templateProcessor->setValue('anio', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('Y') : '____');
-*/
-
-        $relativePath = 'convenios_generados/' . date('Y/m'); // Ej: 'convenios_generados/2025/06'
+        $relativePath = 'Acuerdos de residencia generados/' . date('Y/m'); // Ej: 'convenios_generados/2025/06'
         Storage::makeDirectory($relativePath); // Crea la carpeta si no existe
 
-        $nombreArchivo = 'Acuerdo_Específico_de_Residencia' . Str::slug($data['agreementName']) . '.docx';
+        $nombreArchivo = 'Acuerdo_Específico_de_Residencia_' . Str::slug($data['agreementName']) . '.docx';
 
         // Asegura que no haya barras duplicadas
         $fullPath = storage_path('app/' . trim($relativePath, '/') . '/' . $nombreArchivo);

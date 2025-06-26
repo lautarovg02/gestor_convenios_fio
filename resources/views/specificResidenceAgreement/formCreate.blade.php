@@ -2,20 +2,15 @@
 <form id="formulario" action="{{ route('specificResidenceAgreement.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
-<!-- dates of agreeement -->
+    <!-- dates of agreeement -->
     <div class="mb-4 border rounded containerSectionForm">
 
         <h4 class="TitleSection">Datos del acuerdo</h4>
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Empresa</label>
-            <input type="text" name="companyName" value="{{ old('companyName') }}" class="form-control" placeholder="Nombre" readonly>
-            <input type="hidden" value="{{ old('contract_id') }}" name="contract_id" id="idCompany">
-        </div>
-
-        <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">Nombre del acuerdo</label>
-            <input type="text" name="agreementName" class="form-control" value="{{ old('agreementName') }}" placeholder="Nombre del acuerdo" required>
+            <input type="text" name="agreementName" class="form-control" value="{{ old('agreementName') }}"
+                placeholder="Nombre del acuerdo" required>
         </div>
 
         <div class="mb-3">
@@ -28,8 +23,31 @@
             <input type="date" name="fecha_firma" class="form-control" value="{{ old('fecha_firma') }}">
         </div>
 
-        <input type="hidden" value="{{ old('contract_id') }}" name="contract_id" id="contract_id_field"> <!--este input esta oculto porque es el id del contract-->
-    
+                <div class="mb-3">
+            <label class="form-label fs-6 fw-bold">Fecha de inicio</label>
+            <input type="date" name="fecha_inicio" class="form-control" value="{{ old('fecha_inicio') }}" required>
+        </div>
+
+
+        <div class="DatesCompany">
+            <!--este input esta oculto porque es el id del contract-->
+            <input type="hidden" value="{{ old('contract_id') }}" name="contract_id" id="contract_id_field">
+
+            <div class="mb-3">
+                <label for="status" class="form-label fs-6 fw-bold">Empresa</label>
+                <input type="text" name="companyName" value="{{ old('companyName') }}" class="form-control"
+                    placeholder="Nombre" readonly>
+                <input type="hidden" value="{{ old('companyId') }}" name="companyId" id="companyId">
+            </div>
+
+            <div class="mb-3">
+                <label for="status" class="form-label fs-6 fw-bold">Apoderado de la empresa</label>
+                <input type="text" name="companyRepresentative" value="{{ old('companyRepresentative') }}"
+                    class="form-control" readonly>
+            </div>
+
+        </div>
+
     </div>
 
 
@@ -38,17 +56,20 @@
         <h4 class="TitleSection">Datos del estudiante</h4>
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">Nombre</label>
-            <input type="text" name="studentName" class="form-control" value="{{ old('studentName') }}" placeholder="Nombre" required>
+            <input type="text" name="studentName" class="form-control" value="{{ old('studentName') }}"
+                placeholder="Nombre" required>
         </div>
 
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">Apellido</label>
-            <input type="text" name="studentLastName" class="form-control" value="{{ old('studentLastName') }}" placeholder="Apellido" required>
+            <input type="text" name="studentLastName" class="form-control" value="{{ old('studentLastName') }}"
+                placeholder="Apellido" required>
         </div>
 
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">DNI</label>
-            <input type="number" name="dniStudent" class="form-control" placeholder="DNI" value="{{ old('dniStudent') }}" required>
+            <input type="number" name="dniStudent" class="form-control" placeholder="DNI"
+                value="{{ old('dniStudent') }}" required>
             <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
         </div>
 
@@ -82,11 +103,69 @@
 
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">Carrera</label>
-            <input type="text" name="studentCarrer" class="form-control" placeholder="Carrera del estudiante" value="{{ old('studentCarrer') }}" required>
+
+            <select name="studentCarrer" id="carrer" class="form-select" value="{{ old('studentCarrer') }}"
+                required>
+                <option value="" disabled selected>Seleccione una carrera</option>
+                @foreach ($carrers as $carrer)
+                    <option value="{{ $carrer->id }}">{{ $carrer->name }}</option>
+                @endforeach
+            </select>
+
         </div>
 
     </div>
 
+    <div class=" mb-4 border rounded containerSectionForm">
+        <h4 class="TitleSection">Datos del tutor de la empresa</h4>
+        <div class="mb-3">
+            <label for="status" class="form-label fs-6 fw-bold">Nombre</label>
+            <input type="text" name="tutorName" class="form-control" value="{{ old('tutorName') }}"
+                placeholder="Nombre" required>
+        </div>
+        <div class="mb-3">
+            <label for="status" class="form-label fs-6 fw-bold">Apellido</label>
+            <input type="text" name="tutorLastName" class="form-control" value="{{ old('tutorLastName') }}"
+                placeholder="Apellido" required>
+        </div>
+        <div class="mb-3">
+            <label for="status" class="form-label fs-6 fw-bold">DNI</label>
+            <input type="number" name="tutorDni" class="form-control" placeholder="DNI"
+                value="{{ old('tutorDni') }}" required>
+            <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
+        </div>
+    </div>
+
+    <div class=" mb-4 border rounded containerSectionForm">
+        <h4 class="TitleSection">Datos del tutor de la facultad</h4>
+        <div class="mb-3">
+            <label for="status" class="form-label fs-6 fw-bold">Nombre</label>
+            <input type="text" name="tutorFacuName" class="form-control" value="{{ old('tutorFacuName') }}"
+                placeholder="Nombre" required>
+        </div>
+        <div class="mb-3">
+            <label for="status" class="form-label fs-6 fw-bold">Apellido</label>
+            <input type="text" name="tutorFacuLastName" class="form-control"
+                value="{{ old('tutorFacuLastName') }}" placeholder="Apellido" required>
+        </div>
+        <div class="mb-3">
+            <label for="status" class="form-label fs-6 fw-bold">DNI</label>
+            <input type="number" name="tutorFacuDni" class="form-control" placeholder="DNI"
+                value="{{ old('tutorFacuDni') }}" required>
+            <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
+        </div>
+
+        <div class="mb-3">
+            <label for="status" class="form-label fs-6 fw-bold">Departamento del tutor</label>
+            <select name="departament" id="departament" class="form-select" value="{{ old('departament') }}"
+                required>
+                <option value="" disabled selected>Seleccione un departamento</option>
+                @foreach ($departaments as $departament)
+                    <option value="{{ $departament->id }}">{{ $departament->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
 
 
     <div>

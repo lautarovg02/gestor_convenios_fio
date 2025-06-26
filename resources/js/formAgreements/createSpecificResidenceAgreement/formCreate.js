@@ -47,13 +47,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 // Actualizar el campo de contrato_id si existe
-                if (data.contract_id) 
+                if (data.contract_id) {
                     document.getElementById('contract_id_field').value = data.contract_id;
-                
+                console.log('ID del contrato:', data.contract_id);
+                }
                 // Insertar ddatos de la empresa en los campos del formulario
                 if (data.company){ 
-                    $form.find('input[name="companyName"]').val(data.company.company_name);
-                    document.getElementById('idCompany').value = data.company.id;
+                    $form.find('input[name="companyName"]').val(data.company.denomination);
+                    document.getElementById('companyId').value = data.company.id;
+                    
+                }
+
+                if (data.representative_employee) {
+                    const representativeName = data.representative_employee.name + ' ' + data.representative_employee.lastname;
+                    $form.find('input[name="companyRepresentative"]').val(representativeName);
+                }
+
+                if (data.teacher) {
+                    $form.find('input[name="tutorFacuName"]').val(data.teacher.name);
+                    $form.find('input[name="tutorFacuLastName"]').val(data.teacher.lastname);
+                    $form.find('input[name="tutorFacuDni"]').val(data.teacher.dni);
                 }
 
 
@@ -76,5 +89,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+
+
+
 
 });

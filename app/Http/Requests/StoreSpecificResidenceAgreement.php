@@ -38,11 +38,14 @@ class StoreSpecificResidenceAgreement extends FormRequest
         $studentDni = $this->input('dniStudent');
         return [
             'companyName' => 'required|string|max:255',
+            'companyRepresentative' => 'required|string|max:255',
             'contract_id' => 'required',
+            'companyId' => 'required',
             'agreementName' => 'required|string|max:255',
             'contract_id' => 'required',
             'tasks' => 'required|string',
             'fecha_firma' => 'nullable|date',
+            'fecha_inicio' => 'nullable|date',
             'studentName' => 'required|string|max:255',
             'studentLastName' => 'required|string|max:255',
             'dniStudent' => [
@@ -54,6 +57,16 @@ class StoreSpecificResidenceAgreement extends FormRequest
             'studentEmail' => ['required', 'email'],
             'studentCelular' => ['required', 'string'],
             'studentCarrer' => 'required|string|max:255',
+
+
+            'tutorName' => 'required|string|max:255',
+            'tutorLastName' => 'required|string|max:255',
+            'tutorDni' => 'required|numeric',
+
+            'tutorFacuName' => 'required|string|max:255',
+            'tutorFacuLastName' => 'required|string|max:255',
+            'tutorFacuDni' => 'required|numeric',
+            'departament' => 'required',
         ];
     }
 
@@ -120,6 +133,12 @@ class StoreSpecificResidenceAgreement extends FormRequest
             'studentCelular.required' => 'El celular es obligatorio.',
             'studentCelular.unique' => 'El número de celular ya está registrado en otro estudiante.',
             'studentCarrer.required' => 'La carrera es obligatoria.',
+            'tutorName.required' => 'El nombre del tutor es obligatorio.',
+            'tutorLastName.required' => 'El apellido del tutor es obligatorio.',
+            'tutorDni.required' => 'El DNI del tutor es obligatorio.',
+            'tutorFacuName.required' => 'El nombre del tutor de facultad es obligatorio.',
+            'tutorFacuLastName.required' => 'El apellido del tutor de facultad es obligatorio.',
+            'tutorFacuDni.required' => 'El DNI del tutor de facultad es obligatorio.',
         ];
     }
 }

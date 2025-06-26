@@ -31,4 +31,9 @@ class StudentService {
             ]
         );
     }
+
+    public function findStudentByDni(int $dni): ?Student
+    {
+        return Student::find($dni);
+    }
 }
