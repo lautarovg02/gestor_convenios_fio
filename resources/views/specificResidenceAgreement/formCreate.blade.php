@@ -69,7 +69,7 @@
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">DNI</label>
             <input type="number" name="dniStudent" class="form-control" placeholder="DNI"
-                value="{{ old('dniStudent') }}" required>
+                value="{{ old('dniStudent') }}" maxlength="8" oninput="validarDigitos(this)" required>
             <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
         </div>
 
@@ -81,7 +81,7 @@
                     pattern="\d{2}" value="{{ old('student_cuil_prefijo') }}">
                 <span class="input-group-text">-</span>
                 <input type="number" class="form-control" name="student_cuil_dni" placeholder="12345678" maxlength="8"
-                    pattern="\d{7,8}" value="{{ old('student_cuil_dni') }}">
+                    pattern="\d{7,8}" oninput="validarDigitos(this)" value="{{ old('student_cuil_dni') }}">
                 <span class="input-group-text">-</span>
                 <input type="number" class="form-control" name="student_cuil_dv" placeholder="3" maxlength="1"
                     pattern="\d{1}" value="{{ old('student_cuil_dv') }}">
@@ -130,7 +130,7 @@
         </div>
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">DNI</label>
-            <input type="number" name="tutorDni" class="form-control" placeholder="DNI"
+            <input type="number" name="tutorDni" maxlength="8" oninput="validarDigitos(this)" class="form-control" placeholder="DNI"
                 value="{{ old('tutorDni') }}" required>
             <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
         </div>
@@ -151,7 +151,7 @@
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">DNI</label>
             <input type="number" name="tutorFacuDni" class="form-control" placeholder="DNI"
-                value="{{ old('tutorFacuDni') }}" required>
+                value="{{ old('tutorFacuDni') }}" maxlength="9" oninput="validarDigitos(this)" required>
             <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
         </div>
 

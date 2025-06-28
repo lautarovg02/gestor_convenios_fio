@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+
+window.validarDigitos = function(input) {
+    input.value = input.value.replace(/\D/g, '').slice(0, 8);
+};
+
     // Obtener los elementos necesarios del DOM
     const companySelect = document.getElementById('companySelect');
     const confirmCompanyBtn = document.getElementById('confirmCompanyBtn');
