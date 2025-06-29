@@ -18,10 +18,10 @@
                     Convenio de Marco de Pasantía
                 </a>
 
-                <a href="{{ route('agreements.create', ['type' => 'residencia']) }}"
+                <a href="{{ route('specificResidenceAgreement.create', ['type' => 'especifico_residencia']) }}"
                     class="btn btn-outline-warning"
                     style="font-weight: 600; border-width: 2px; padding: 10px 16px; font-size: 1rem;">
-                    Convenio de Residencia
+                    Acuerdo Individual de Residencia
                 </a>
 
                 <a href="{{ route('specificAgreement.create', ['type' => 'especifico']) }}"

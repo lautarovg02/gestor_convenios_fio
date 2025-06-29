@@ -7,10 +7,11 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\FrameworkInternshipAgreementController;
-use App\Http\Controllers\FrameworkResidenceAgreementController;
 use App\Http\Controllers\SpecificAgreementController;
 use App\Http\Controllers\FrameworkAgreementController;
+use App\Http\Controllers\FrameworkInternshipAgreementController;
+use App\Http\Controllers\FrameworkResidenceAgreementController;
+use App\Http\Controllers\SpecificResidenceAgreementController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -60,7 +61,6 @@ Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreeme
 Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class);
 Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class);
 
-Route::resource('specificAgreement', SpecificAgreementController::class);
 
 
 
@@ -68,3 +68,25 @@ Route::resource('specificAgreement', SpecificAgreementController::class);
 Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
 
 Route::resource('/frameworkAgreement', FrameworkAgreementController::class);
+Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
+
+Route::resource('/frameworkAgreement', FrameworkAgreementController::class);
+Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
+
+Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class);
+
+Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class);
+
+Route::get('/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
+
+Route::resource('specificResidenceAgreement', SpecificResidenceAgreementController::class);
+
+
+Route::resource('specificAgreement', SpecificAgreementController::class);
+Route::get('/specificAgreement/getFrameworkData/{id}', [SpecificAgreementController::class, 'getFrameworkAgreementData']);
+
+
+
+
+
+

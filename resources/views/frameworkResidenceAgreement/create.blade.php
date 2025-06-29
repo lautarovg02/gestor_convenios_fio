@@ -253,13 +253,13 @@
                 <label class="form-label fs-6 fw-bold">CUIT</label>
                 <div class="input-group">
                     <input type="number" class="form-control" name="contraparte_cuit_prefijo" placeholder="23" maxlength="2"
-                        pattern="\d{2}" value="{{ old('contraparte_cuit_prefijo') }}">
+                        pattern="\d{2}" value="{{ old('contraparte_cuit_prefijo') }}" required>
                     <span class="input-group-text">-</span>
                     <input type="number" class="form-control" name="contraparte_cuit_dni" placeholder="12345678"
-                        maxlength="8" pattern="\d{7,8}" value="{{ old('contraparte_cuit_dni') }}">
+                        maxlength="8" pattern="\d{7,8}" value="{{ old('contraparte_cuit_dni') }}" required>
                     <span class="input-group-text">-</span>
                     <input type="number" class="form-control" name="contraparte_cuit_dv" placeholder="9" maxlength="1"
-                        pattern="\d{1}" value="{{ old('contraparte_cuit_dv') }}">
+                        pattern="\d{1}" value="{{ old('contraparte_cuit_dv') }}" required>
                 </div>
                 <div class="form-text">Formato: XX-XXXXXXXX-X</div>
 

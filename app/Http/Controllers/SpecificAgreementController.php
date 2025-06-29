@@ -2,32 +2,252 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreSpecificAgreementRequest; // Asegúrate de que este sea el nombre correcto de tu request
+use App\Http\Controllers\Controller;
+use App\Models\Company;
+use App\Models\Contract;
+use App\Models\ContractStatus;
+use App\Models\FrameworkAgreement;
+use App\Models\Specific;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreSpecificAgreementRequest;
+use PhpOffice\PhpWord\TemplateProcessor;
+use App\Models\SpecificAgreement; // o el nombre de tu modelo
+use App\Models\Student;
+use App\Services\CompanyService;
+use App\Services\ContractService;
+use Carbon\Carbon;
 
 class SpecificAgreementController extends Controller
 {
-    // Mostrar el formulario
+
+    protected $companyService;
+    protected $contractService;
+
+    public function __construct(ContractService $contractService, CompanyService $companyService)
+    {
+        $this->companyService = $companyService;
+        // Inyectar el servicio de contratos
+        $this->contractService = $contractService;
+    }
+
+
+
     public function create()
     {
-        //$provincias = $this->getProvinciasDesdeAPI();
-        return view('specificAgreement.create');
+        $companies = Company::with(['contracts.typeFrameworkAgreement' => function ($query) {
+            $query->where('type', 'Convenio Marco');
+        }])->whereHas('contracts.typeFrameworkAgreement', function ($query) {
+            $query->where('type', 'Convenio Marco');
+        })->get(['id', 'denomination', 'company_name', 'cuit']);
+
+        $students = Student::all();
+        return view('specificAgreement.create', compact('companies', 'students'));
     }
 
-    // Guardar los datos del formulario
-    public function store()
+
+
+
+    public function getFrameworkAgreementData($contractId)
     {
-/*        $validated = $request->validated();
+        $contract = Contract::with([
+            'company.city',
+            'company.entity',
+            'contactEmployee.phones',
+            'representativeEmployee.phones'
 
-        // Aquí iría tu lógica para guardar el convenio, generar Word, etc.
-        // Por ahora, simplemente mostramos los datos para verificar
+        ])->findOrFail($contractId);
 
-        return back()->with('success', 'Convenio Específico creado correctamente.');*/
+
+
+
+
+
+        return response()->json([
+            // Contraparte
+            'razon_social'      => $contract->company->denomination ?? '',
+            'ambito'            => $contract->company->scope ?? '',
+            'cuit'              => $contract->company->cuit ?? '',
+            'rubro'             => $contract->company->entity->name ?? '',
+            'titular'           => $contract->company->holder ?? '', // Usar lógica si existe el campo, sino valor dummy
+            'confidencialidad'  => $contract->confidentiality ?? false,
+
+            // Dirección
+            'direccion' => [
+                'calle'         => $contract->company->street ?? '',
+                'numero'        => $contract->company->number ?? '',
+                //'codigo_postal' => $contract->company->postal_code ?? '',
+                'ciudad'        => $contract->company->city->name ?? '',
+                'provincia'     => $contract->company->city->province->name ?? '',
+                'pais'          => $contract->company->country ?? '',
+            ],
+
+            // Contacto
+            'contacto' => [
+                'nombre'    => $contract->contactEmployee->name ?? '',
+                'apellido'  => $contract->contactEmployee->lastname ?? '',
+                'cargo'     => $contract->contactEmployee->position ?? '',
+                'dni'       => $contract->contactEmployee->dni ?? '',
+                'celular'   => $contract->contactEmployee->phone_number ?? '',
+                'email'     => $contract->contactEmployee->email ?? '',
+            ],
+
+            // Firma
+            'firma' => [
+                'nombre'    => $contract->representativeEmployee->name ?? '',
+                'apellido'  => $contract->representativeEmployee->lastname ?? '',
+                'dni'       => $contract->representativeEmployee->dni ?? '',
+                'email'     => $contract->representativeEmployee->email ?? '',
+                'celular' => $contract->representativeEmployee->phones->first()->phone_number ?? '',
+                'cargo'     => $contract->representativeEmployee->position ?? '',
+            ],
+
+
+
+            // Lugar y Fecha
+            'lugar' => $contract->company->city->name ?? '',
+            'fecha' => $contract->signing_date
+                ? \Carbon\Carbon::parse($contract->signing_date)->format('Y-m-d')
+                : now()->format('Y-m-d'),
+        ]);
     }
 
-    private function getProvinciasDesdeAPI()
+
+
+
+
+
+
+
+    public function index()
     {
-       /* $response = \Http::get('https://apis.datos.gob.ar/georef/api/provincias');
-        return $response->json()['provincias'] ?? [];*/
+        //
+    }
+
+
+
+
+    public function store(StoreSpecificAgreementRequest $request)
+    {
+        // Validar los datos requeridos
+        $validated =  $request->validated();
+
+        // Crear convenio específico en la base de datos
+        $convenio = Specific::create([
+            'contract_id' => $validated['contract_id'],
+            'signing_date' => $validated['fecha_firma'],
+            'objective' => $validated['objetivo'],
+            'commitment_parties' => $validated['compromisos'],
+            'responsable_control_company' => $validated['responsable_control_fio'] ?? null,
+            'responsable_control_fio' => $validated['responsable_control_company'] ?? null,
+        ]);
+
+
+        // Guardar en tabla intermedia
+        $convenio->students()->attach($request->student_id, [
+            'specific_contract_id' => $convenio->contract_id
+        ]);
+
+        $contract = Contract::find($validated['contract_id']);
+        if ($contract) {
+            $status = ContractStatus::firstOrCreate(
+                ['status' => 'En Departamento'],
+                ['time_limit' => null] // o lo que corresponda
+            );
+
+            $contract->contract_status_id = $status->id;
+            $contract->save();
+        }
+
+
+
+
+        // Crear archivo Word
+        $template = new TemplateProcessor(storage_path('app/plantillas/convenio_especifico.docx'));
+
+        /* ${}  */
+        $template->setValue('razon_social', $validated['razon_social']);
+        $template->setValue('nominacion', $validated['razon_social']); // mismo valor
+
+        $template->setValue('calle', $validated['calle'] ?? 'falsa  ');
+        $template->setValue('nro', $validated['numero'] ?? '123 ');
+        $template->setValue('ciudad', $validated['ciudad'] ?? 'Olavarria');
+        $template->setValue('provincia', $validated['provincia'] ?? 'Buenos Aires');
+
+        $template->setValue('nombre_rep_firma', ($validated['firma_nombre'] ?? '') . ' ' . ($validated['firma_apellido'] ?? ''));
+        $template->setValue('dni_rep_firma', $validated['firma_dni'] ?? '________');
+        $template->setValue('email_rep_firma', $validated['firma_email'] ?? '________');
+        $template->setValue('cargo_rep_firma', $validated['firma_cargo'] ?? '________');
+
+        $template->setValue('lugar_firma', $validated['lugar_firma']);
+        $template->setValue('dia_firma', \Carbon\Carbon::parse($validated['fecha_firma'])->format('d'));
+        $template->setValue('mes_firma', \Carbon\Carbon::parse($validated['fecha_firma'])->translatedFormat('F'));
+        $template->setValue('anio_firma', \Carbon\Carbon::parse($validated['fecha_firma'])->format('Y'));
+
+
+        /*Agregar Becario*/
+        $template->setValue('becario', $validated['becario'] ?? '________');
+
+
+        $template->setValue('objetivo', $validated['objetivo'] ?? '________');
+        $template->setValue('compromisos', $validated['compromisos'] ?? '________');
+
+        // Combina nombre + apellido del responsable empresa si no tenés el campo unificado
+        $template->setValue('responsable_empresa', $validated['responsable_control_company'] ?? '________');
+
+        // Campo directo desde el form
+        $template->setValue('responsable_fio', $validated['responsable_control_fio'] ?? '________');
+
+        // Si el campo "becario" existe, se usa. Si no, pone '________'
+        $template->setValue('becario', $validated['becario'] ?? '________');
+
+        // Guardar archivo generado
+        $fileName = 'convenio_especifico_' . $convenio->id . '.docx';
+        $savePath = storage_path("app/convenios_generados/$fileName");
+        $template->saveAs($savePath);
+
+
+        // Establecer estado "En Departamento" (si tenés un modelo de estados)
+        //  $convenio->status = 'en_departamento';
+        $convenio->save();
+
+        // Opción de descargar
+        return response()->download($savePath);
+
+
+        // Redirigir al main
+        return view('frameworkInternshipAgreement.creationSuccessful', compact('relativePath', 'nombreArchivo'));
+    }
+
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
     }
 }
