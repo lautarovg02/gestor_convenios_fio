@@ -394,8 +394,8 @@
         </div>
 
         {{--Becario--}}
-        <div class="mb-3">
-            <label class="form-label">Seleccionar estudiante</label>
+        <div class="mb-4 border rounded containerSectionForm">
+            <h4 class="TitleSection">Seleccionar estudiante</h4>
             <select name="student_id" id="student_id" class="form-select" required>
                 <option value="">-- Seleccioná un estudiante --</option>
                 @foreach ($students as $student)
