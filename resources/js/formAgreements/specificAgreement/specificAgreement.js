@@ -44,19 +44,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 // 7. Calle
-                document.getElementById('domicilio_legal_calle').value = data.direccion?.calle || "calle falsa";
+                document.getElementById('domicilio_legal_calle').value = data.direccion?.empresa_calle || "";
 
                 // 8. Número
-                document.getElementById('domicilio_legal_numero').value = data.direccion?.numero || "321";
+                document.getElementById('domicilio_legal_numero').value = data.direccion?.empresa_numero || "321";
 
                 // 9. Código Postal
                 document.getElementById('codigo_postal').value = /*data.direccion?.codigo_postal ||*/ "7400";
 
                 // 10. Ciudad
-                document.getElementById('localidad').value = data.direccion?.ciudad || "";
+                document.getElementById('localidad').value = data.direccion?.empresa_ciudad || "";
 
                 // 11. Provincia
-                document.getElementById('provincia').value = data.direccion?.provincia || "Buenos Aires";
+                document.getElementById('provincia').value = data.direccion?.empresa_provincia || "Buenos Aires";
 
                 // 12. País
                 document.getElementById('pais').value = /*data.direccion?.pais ||*/ "Argentina";

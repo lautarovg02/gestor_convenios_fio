@@ -73,11 +73,11 @@ class SpecificAgreementController extends Controller
 
             // Dirección
             'direccion' => [
-                'calle'         => $contract->company->street ?? '',
-                'numero'        => $contract->company->number ?? '',
+                'empresa_calle'         => $contract->company->street ?? '',
+                'empresa_numero'        => $contract->company->number ?? '',
                 //'codigo_postal' => $contract->company->postal_code ?? '',
-                'ciudad'        => $contract->company->city->name ?? '',
-                'provincia'     => $contract->company->city->province->name ?? '',
+                'empresa_ciudad'        => $contract->company->city->name ?? '',
+                'empresa_provincia'     => $contract->company->city->province->name ?? '',
                 'pais'          => $contract->company->country ?? '',
             ],
 
@@ -87,7 +87,7 @@ class SpecificAgreementController extends Controller
                 'apellido'  => $contract->contactEmployee->lastname ?? '',
                 'cargo'     => $contract->contactEmployee->position ?? '',
                 'dni'       => $contract->contactEmployee->dni ?? '',
-                'celular'   => $contract->contactEmployee->phone_number ?? '',
+                'celular'   => $contract->contactEmployee->phones->first()->number ?? '',
                 'email'     => $contract->contactEmployee->email ?? '',
             ],
 
@@ -131,6 +131,12 @@ class SpecificAgreementController extends Controller
         // Validar los datos requeridos
         $validated =  $request->validated();
 
+
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('specific_files', 'public');
+            $validated['file'] = $filePath;
+        }
+
         // Crear convenio específico en la base de datos
         $convenio = Specific::create([
             'contract_id' => $validated['contract_id'],
@@ -139,6 +145,8 @@ class SpecificAgreementController extends Controller
             'commitment_parties' => $validated['compromisos'],
             'responsable_control_company' => $validated['responsable_control_fio'] ?? null,
             'responsable_control_fio' => $validated['responsable_control_company'] ?? null,
+            //file
+            'file' => $validated['file'] ?? null,
         ]);
 
 
@@ -168,10 +176,10 @@ class SpecificAgreementController extends Controller
         $template->setValue('razon_social', $validated['razon_social']);
         $template->setValue('nominacion', $validated['razon_social']); // mismo valor
 
-        $template->setValue('calle', $validated['calle'] ?? 'falsa  ');
-        $template->setValue('nro', $validated['numero'] ?? '123 ');
-        $template->setValue('ciudad', $validated['ciudad'] ?? 'Olavarria');
-        $template->setValue('provincia', $validated['provincia'] ?? 'Buenos Aires');
+        $template->setValue('calle', $validated['empresa_calle'] ?? 'falsa  ');
+        $template->setValue('nro', $validated['empresa_numero'] ?? '123 ');
+        $template->setValue('ciudad', $validated['empresa_ciudad'] ?? 'Olavarria');
+        $template->setValue('provincia', $validated['empresa_provincia'] ?? 'Buenos Aires');
 
         $template->setValue('nombre_rep_firma', ($validated['firma_nombre'] ?? '') . ' ' . ($validated['firma_apellido'] ?? ''));
         $template->setValue('dni_rep_firma', $validated['firma_dni'] ?? '________');

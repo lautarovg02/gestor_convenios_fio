@@ -177,7 +177,7 @@
             <div class="containerInputNameLastName">
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Calle</label>
-                    <input type="text" id="domicilio_legal_calle" name="empresa_calle" class="form-control" placeholder="Calle" value="{{ old('domicilio_legal_calle') }}" readonly>
+                    <input type="text" id="domicilio_legal_calle" name="empresa_calle" class="form-control" placeholder="Calle" value="{{ old('domicilio_legal_calle') ?? $empresa_calle ?? ''  }}" readonly>
                 </div>
 
                 <div class="mb-3">
@@ -440,6 +440,19 @@
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+        </div>
+
+        <div class="mb-4 border rounded containerSectionForm">
+
+
+            <div class="mb-3">
+                <label for="file" class="form-label">Adjuntar archivo (opcional)</label>
+                <input class="form-control" type="file" id="file" name="file">
+                @error('file')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
         </div>
 
 

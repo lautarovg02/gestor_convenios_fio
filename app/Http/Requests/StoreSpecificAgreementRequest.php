@@ -63,6 +63,9 @@ class StoreSpecificAgreementRequest extends FormRequest
             'responsable_nombre' => 'nullable|string|max:255',
             'responsable_apellido' => 'nullable|string|max:255',
             'responsable_cargo' => 'nullable|string|max:255',
+
+            'file' => 'nullable|file|max:10240', // máx. 10 MB
+
         ];
     }
 }
