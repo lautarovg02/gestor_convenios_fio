@@ -54,7 +54,7 @@
 
         </div>
 
-
+        <div class="d-flex flex-wrap justify-content-center">
 
         {{-- Contraparte --}}
         <div class=" mb-4 border rounded containerSectionForm">
@@ -455,7 +455,7 @@
 
         </div>
 
-
+</div>
 
         <div>
             <span class="fw-bold">Una vez enviado el formulario podra descargarlo*</span>

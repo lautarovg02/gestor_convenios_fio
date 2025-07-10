@@ -16,6 +16,8 @@ use App\Models\Student;
 use App\Services\CompanyService;
 use App\Services\ContractService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SpecificAgreementController extends Controller
 {
@@ -208,18 +210,20 @@ class SpecificAgreementController extends Controller
         // Si el campo "becario" existe, se usa. Si no, pone '________'
         $template->setValue('becario', $validated['becario'] ?? '________');
 
-        // Guardar archivo generado
-        $fileName = 'convenio_especifico_' . $convenio->id . '.docx';
-        $savePath = storage_path("app/convenios_generados/$fileName");
-        $template->saveAs($savePath);
 
+        
+        $relativePath = 'convenios_generados/' . date('Y/m'); // Ej: 'convenios_generados/2025/06'
+        Storage::makeDirectory($relativePath); // Crea la carpeta si no existe
 
-        // Establecer estado "En Departamento" (si tenés un modelo de estados)
-        //  $convenio->status = 'en_departamento';
+        $nombreArchivo = 'convenio_especifico_' . Str::slug($validated['razon_social']) . '.docx';
+
+        // Asegura que no haya barras duplicadas
+        $fullPath = storage_path('app/' . trim($relativePath, '/') . '/' . $nombreArchivo);
+
+        $template->saveAs($fullPath);
         $convenio->save();
 
         // Opción de descargar
-        return response()->download($savePath);
 
 
         // Redirigir al main
