@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Company;
 use App\Services\CityService;
 use App\Services\CompanyEntityService;
+use Illuminate\Support\Collection;
 
 class CompanyService
 {
@@ -56,5 +57,12 @@ class CompanyService
         return Company::where('cuit', $cuit)->first();
     }
 
-
+    public function getCompaniesByTypeFrameworkAgreement(string $type): Collection
+    {
+        return Company::select('id', 'denomination', 'cuit')->whereHas('contracts', function ($query) use ($type) {
+            $query->whereHas('typeFrameworkAgreement', function ($subQuery) use ($type) {
+                $subQuery->where('type', $type);
+            });
+        })->get();
+    }
 }

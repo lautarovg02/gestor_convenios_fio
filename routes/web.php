@@ -11,7 +11,7 @@ use App\Http\Controllers\FrameworkAgreementController;
 use App\Http\Controllers\FrameworkInternshipAgreementController;
 use App\Http\Controllers\FrameworkResidenceAgreementController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\IndividualInternshipAgreementController;
 
 
 /*
@@ -30,7 +30,7 @@ Route::get('/', function () {
 });
 
 // COMPANIES
-Route::resource('/companies' , CompanyController::class);
+Route::resource('/companies', CompanyController::class);
 
 // EMPLOYEES
 Route::resource('companies.employees', EmployeeController::class)->shallow();
@@ -38,14 +38,14 @@ Route::resource('companies.employees', EmployeeController::class)->shallow();
 //CITIES
 
 Route::get('/cities', [CityController::class, 'getCiudades'])->name('get.ciudades');
-Route::get('/cities/create' , [CityController::class , 'create' ])->name('cities.create');
+Route::get('/cities/create', [CityController::class, 'create'])->name('cities.create');
 Route::post('/cities', [CityController::class, 'store'])->name('cities.store');
 
 //TEACHERS
 Route::resource('/teachers', TeacherController::class);
 
 //CAREERS
-Route::resource('/careers' , CareerController::class);
+Route::resource('/careers', CareerController::class);
 
 //DEPARTMENTS
 route::resource('/departments', DepartmentController::class);
@@ -64,5 +64,23 @@ Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementContro
 
 
 
+// Mostrar listado de empresas para seleccionar
+Route::get('/convenio-individual-pasantia/create', [IndividualInternshipAgreementController::class, 'create'])
+    ->name('individualInternshipAgreement.create');
+
+// Guardar convenio individual (POST)
+Route::post('/convenio-individual-pasantia/store', [IndividualInternshipAgreementController::class, 'store'])
+    ->name('individualInternshipAgreement.store');
 
 
+
+// Procesar selección de empresa (POST)
+Route::post('/convenio-individual-pasantia/seleccionar', [IndividualInternshipAgreementController::class, 'seleccionarEmpresa'])
+    ->name('empresa.seleccionar');
+// Vista éxito
+Route::get('/individual-internship-agreement/success/{id}', [IndividualInternshipAgreementController::class, 'success'])
+    ->name('individualInternshipAgreement.success');
+
+// Ruta para descargar el archivo (ajustar según cómo generes o guardes el PDF)
+Route::get('/convenios-individuales/{id}/descargar', [IndividualInternshipAgreementController::class, 
+'download'])->name('individualInternshipAgreement.download');
