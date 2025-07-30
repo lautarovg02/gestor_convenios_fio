@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contract;
+use App\Models\ContractStatus;
+use App\Models\TypeFrameworkAgreement;
 use Illuminate\Http\Request;
 
 class AgreementController extends Controller
@@ -12,7 +15,17 @@ class AgreementController extends Controller
      */
     public function index()
     {
-        //
+        try{
+            $agreements = Contract::where('contract_status_id','!=',10)->orderBy('creation_date', 'desc')->paginate(10);
+            $typeFrameworkAgreement = TypeFrameworkAgreement::orderBy('type', 'ASC')->get();
+            $statuses = ContractStatus::where('id','!=',10)->orderBy('status', 'ASC')->get();
+            if ($agreements->isEmpty()) {
+                return view('agreements.index')->with(['agreements' => $agreements, 'noResults' => true]);
+            }
+            return view('agreements.index', compact('agreements', 'typeFrameworkAgreement','statuses'));
+        }catch(\Exception $e) {
+            return redirect()->route('agreements.index')->with(['error' => 'Error al cargar los acuerdos. Inténtalo nuevamente.']);
+        }
     }
 
     /**
