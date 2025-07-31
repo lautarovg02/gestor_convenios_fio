@@ -7,6 +7,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\SpecificAgreementController;
 use App\Http\Controllers\FrameworkAgreementController;
 use App\Http\Controllers\FrameworkInternshipAgreementController;
 use App\Http\Controllers\FrameworkResidenceAgreementController;
@@ -55,6 +56,22 @@ Route::delete('/departments/{department}', [DepartmentController::class, 'destro
 // AGREEMENTS
 Route::resource('/agreements', AgreementController::class);
 
+Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
+
+Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class);
+
+Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class);
+
+Route::get('/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
+
+Route::resource('specificResidenceAgreement', SpecificResidenceAgreementController::class);
+
+
+
+
+Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
+
+Route::resource('/frameworkAgreement', FrameworkAgreementController::class);
 Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
 
 Route::resource('/frameworkAgreement', FrameworkAgreementController::class);
@@ -67,6 +84,11 @@ Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementContro
 Route::get('/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
 
 Route::resource('specificResidenceAgreement', SpecificResidenceAgreementController::class);
+
+
+Route::resource('specificAgreement', SpecificAgreementController::class);
+Route::get('/specificAgreement/getFrameworkData/{id}', [SpecificAgreementController::class, 'getFrameworkAgreementData']);
+
 
 
 
