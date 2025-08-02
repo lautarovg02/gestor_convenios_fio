@@ -223,5 +223,29 @@ class CompanyController extends Controller
        //NOTA!! SI TIENE CONTRACTS Y EMPLEADOS ASOCIADOS VA A ENTRAR EN EL PRIMER ELSE IF Y NO SE PUEDE ELIMINAR
     }
 
+    /**
+     * Get company by ID for AJAX requests.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCompanyById(int $id) {
+        $company = Company::find($id);
 
+        if (!$company) {
+            return response()->json(['error' => 'Company not found'], 404);
+        }
+        return response()->json([
+            'id' => $company->id,
+            'denomination' => $company->denomination,
+            'cuit' => $company->cuit,
+            'company_name' => $company->company_name,
+            'sector' => $company->sector,
+            'scope' => $company->scope,
+            'street' => $company->street,
+            'number' => $company->number,
+            'city_id' => $company->city_id,
+            'entity_id' => $company->entity_id
+        ]);
+    }
 }

@@ -7,13 +7,18 @@
 
         <div class="containerTextAndButton">
             <h1>¡Convenio generado con éxito!</h1>
-            <p>Podés descargar el documento generado a continuación:</p>
 
-            <a href="{{ route('agreement.download', ['path' => $relativePath, 'file' => $nombreArchivo]) }}"
-                class="button btn btn-primary">
-                Descargar Convenio
-            </a>
+            <div class="mt-4 flex-row align-items-center justify-content-center">
+                <a href="{{ route('agreement.download', ['path' => $relativePath, 'file' => $nombreArchivo]) }}"
+                    class="button btn btn-primary">
+                    Descargar Convenio
+                </a>
 
+                <a href="{{ route('agreements.index') }}" class="button btn btn-primary">
+                    Ver Convenios
+                </a>
+
+            </div>
         </div>
     </div>
 @endsection

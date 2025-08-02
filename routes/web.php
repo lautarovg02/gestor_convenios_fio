@@ -54,7 +54,7 @@ route::resource('/departments', DepartmentController::class);
 Route::delete('/departments/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 
 // AGREEMENTS
-Route::resource('/agreements', AgreementController::class);
+Route::resource('/agreements', AgreementController::class)->name('index', 'agreements.index');
 
 Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
 
@@ -90,7 +90,7 @@ Route::resource('specificAgreement', SpecificAgreementController::class);
 Route::get('/specificAgreement/getFrameworkData/{id}', [SpecificAgreementController::class, 'getFrameworkAgreementData']);
 
 
-
-
-
-
+// AJAX Routes
+Route::get('/api/company/{id}', [CompanyController::class, 'getCompanyById']);
+Route::get('/api/employees/{companyId}', [EmployeeController::class, 'getEmployeesByCompany']);
+Route::get('/api/employee/{id}', [EmployeeController::class, 'getEmployeeById']);

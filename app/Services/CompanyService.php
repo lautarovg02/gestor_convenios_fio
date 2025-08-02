@@ -23,8 +23,6 @@ class CompanyService
         $city = $this->cityService->getOrCreateByNameAndProvince($data['localidad'], $data['provincia']);
         $entity = $this->companyEntityService->getOrCreateByName($data['razon_social']);
 
-        $cuitCompleto = $data['contraparte_cuit_prefijo'] . $data['contraparte_cuit_dni'] . $data['contraparte_cuit_dv'];
-
         // Buscar primero por company_name
         $existingCompany = Company::where('company_name', $data['razon_social'])->first();
 
@@ -35,7 +33,7 @@ class CompanyService
         // Si no existe, creamos
         return Company::create([
             'denomination' => $data['razon_social'],
-            'cuit' => $cuitCompleto,
+            'cuit' => $data['contraparte_cuit'] ?? null,
             'company_name' => $data['razon_social'] ?? null,
             'sector' => $data['contraparte_rubro'] ?? null,
             'company_category' => $data['category'] ?? null,
@@ -64,5 +62,10 @@ class CompanyService
                 $subQuery->where('type', $type);
             });
         })->get();
+    }
+
+    public function getAllCompanies(): Collection
+    {
+        return Company::select('id', 'denomination', 'cuit')->get();    
     }
 }

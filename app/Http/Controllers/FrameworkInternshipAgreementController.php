@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use App\Models\Contract;
 use App\Services\CityService;
 use App\Services\CompanyService;
+use App\Services\ContractService;
 use App\Services\SecretaryService;
 use App\Services\TeacherService;
 use App\Services\EmployeeService;
@@ -29,9 +30,11 @@ class FrameworkInternshipAgreementController extends Controller
     protected $contractStatusService;
     protected $typeFrameworkAgreementService;
     protected $cityService;
+    protected $contractService;
 
     public function __construct(
 
+        ContractService $contractService,
         CityService $cityService,
         CompanyService $companyService,
         SecretaryService $secretaryService,
@@ -40,6 +43,7 @@ class FrameworkInternshipAgreementController extends Controller
         ContractStatusService $contractStatusService,
         TypeFrameworkAgreementService $typeFrameworkAgreementService
     ) {
+        $this->contractService = $contractService;
         $this->typeFrameworkAgreementService = $typeFrameworkAgreementService;
         $this->contractStatusService = $contractStatusService;
         $this->employeeService = $employeeService;
@@ -63,14 +67,15 @@ class FrameworkInternshipAgreementController extends Controller
     {
         $response = Http::get('https://apis.datos.gob.ar/georef/api/provincias');
         $provincias = $response->json()['provincias'];
-    
-            return view("frameworkInternshipAgreement.create", compact('provincias'));
+        $companies = $this->companyService->getAllCompanies();
+        return view("frameworkInternshipAgreement.create", compact('provincias', 'companies'));
     }
 
 
 
     public function store(StoreFrameworkInternshipAgreement $request)
     {
+
         
         $faker = \Faker\Factory::create();
         $validated = $request->validated();
@@ -78,7 +83,12 @@ class FrameworkInternshipAgreementController extends Controller
 
         //------------------------------------ logica para crear convenio --------------------------------------------------------------
 
+        $existsContract = $this->contractService->getFrameworkAgreementsByCompany($validated['company_id'], 3); //el 3 es el id del tipo de convenio marco de pasantía
 
+        if ($existsContract->isNotEmpty()) {
+            return redirect()->back()->withErrors(['errorExistsContract' => 'Ya existe un convenio marco de pasantía para esta empresa.']);
+        }
+        
         // Crear o obtener la empresa
         $company = $this->companyService->getOrCreateCompany($validated);
 

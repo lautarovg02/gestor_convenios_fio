@@ -14,23 +14,7 @@ class StoreFrameworkInternshipAgreement extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation()
-{
-    $contactCuil = $this->input('contact_cuil_prefijo') .
-                   $this->input('contact_cuil_dni') .
-                   $this->input('contact_cuil_dv');
 
-    $contraparteCuit = $this->input('contraparte_cuit_prefijo') .
-                       $this->input('contraparte_cuit_dni') .
-                       $this->input('contraparte_cuit_dv');
-
-    $this->merge([
-        'contact_cuil' => $contactCuil,
-        'contraparte_cuit' => $contraparteCuit,
-    ]);
-
-    
-}
 
     public function rules(): array
     {
@@ -44,7 +28,7 @@ class StoreFrameworkInternshipAgreement extends FormRequest
             'contact_apellido' => ['required', 'string', 'max:255'],
             'contact_dni' => ['required', 'numeric'],
             'contact_cuil' => ['nullable', 'numeric', 'digits:11'],
-            'contact_celular' => ['required', 'numeric', 'unique:employee_phones,number'],
+            'contact_celular' => ['required', 'numeric'],
 
             'contact_email' => [
                                 'required',
@@ -53,19 +37,15 @@ class StoreFrameworkInternshipAgreement extends FormRequest
                                 ],                 
             'contact_empresa' => ['required', 'string'],
             'contact_cargo' => ['required', 'string'],
-            'contact_cuil_prefijo' => ['required', 'numeric'],
-            'contact_cuil_dni' => ['required', 'numeric'],
-            'contact_cuil_dv' => ['required', 'numeric'],
+            'contact_cuil' => ['required', 'numeric'],
             // Contraparte
             'razon_social' => ['required', 'string'],
             'ambito' => ['required', 'in:nacional,internacional'],
-            'contraparte_cuit' => ['nullable', 'numeric', 'digits:11'],
-            'contraparte_cuit_prefijo' => ['required', 'numeric'],
-            'contraparte_cuit_dni' => ['required', 'numeric'],
-            'contraparte_cuit_dv' => ['required', 'numeric'],
+            'contraparte_cuit' => ['required', 'nullable', 'numeric', 'digits:11'],
             'contraparte_rubro' => ['required', 'string'],
             'titular' => ['required', 'string'],
             'confidencialidad' => ['required'],
+            'company_id' => ['required', 'exists:companies,id'],
 
             // Dirección
             'calle' => ['required', 'string', 'max:255'],
@@ -157,6 +137,7 @@ public function withValidator($validator)
             'contact_dni.unique' => 'El DNI del contacto ya está registrado.',
             'contact_cuil.digits' => 'El CUIL debe tener 11 dígitos.',
             'contact_cuil.unique' => 'El CUIL ya está registrado.',
+            'contact_cuil.required' => 'El CUIL del contacto es obligatorio.',
             'contact_celular.required' => 'El número de celular del contacto es obligatorio.',
             'contact_email.required' => 'El correo electrónico del contacto es obligatorio.',
             'contact_email.email' => 'El correo electrónico del contacto no es válido.',
@@ -170,6 +151,7 @@ public function withValidator($validator)
             'ambito.in' => 'El ámbito debe ser "nacional" o "internacional".',
             'contraparte_cuit.digits' => 'El CUIT debe tener 11 dígitos.',
             'contraparte_cuit.unique' => 'El CUIT ya está registrado.',
+            'contraparte_cuit.required' => 'El CUIT de la contraparte es obligatorio.',
             'contraparte_rubro.required' => 'El rubro es obligatorio.',
             'titular.required' => 'Este campo es obligatorio.',
             'confidencialidad.required' => 'Debe indicar si existe un acuerdo de confidencialidad.',
