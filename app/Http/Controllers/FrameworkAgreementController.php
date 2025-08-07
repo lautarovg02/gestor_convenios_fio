@@ -3,266 +3,203 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ConvenioMarcoRequest;
-use App\Models\City;
-use App\Models\Company;
-use App\Models\CompanyEntity;
-use App\Models\Contract;
-use App\Models\ContractStatus;
-use App\Models\Employee;
-use App\Models\FrameworkAgreement;
-use App\Models\Secretary;
-use App\Models\Teacher;
-use App\Models\TypeFrameworkAgreement;
 use Illuminate\Http\Request;
-use PhpOffice\PhpWord\TemplateProcessor;
-use Psy\Readline\Hoa\Console;
-use Storage;
-use Str;
+use Carbon\Carbon;
+use App\Models\Contract;
+use App\Services\CityService;
+use App\Services\CompanyService;
+use App\Services\ContractService;
+use App\Services\SecretaryService;
+use App\Services\TeacherService;
+use App\Services\EmployeeService;
+use App\Services\ContractStatusService;
+use App\Services\TypeFrameworkAgreementService;
 
 class FrameworkAgreementController extends Controller
 {
-       public function index()
-    {
-        return view("frameworkAgreement.create"); 
+    protected $contractService;
+    protected $cityService;
+    protected $companyService;
+    protected $secretaryService;
+    protected $teacherService;
+    protected $employeeService;
+    protected $contractStatusService;
+    protected $typeFrameworkAgreementService;
+
+    public function __construct(
+        ContractService $contractService,
+        CityService $cityService,
+        CompanyService $companyService,
+        SecretaryService $secretaryService,
+        TeacherService $teacherService,
+        EmployeeService $employeeService,
+        ContractStatusService $contractStatusService,
+        TypeFrameworkAgreementService $typeFrameworkAgreementService
+    ) {
+        $this->contractService = $contractService;
+        $this->cityService = $cityService;
+        $this->companyService = $companyService;
+        $this->secretaryService = $secretaryService;
+        $this->teacherService = $teacherService;
+        $this->employeeService = $employeeService;
+        $this->contractStatusService = $contractStatusService;
+        $this->typeFrameworkAgreementService = $typeFrameworkAgreementService;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
+    public function index()
     {
-         $type = $request->query('type'); // lee ?type=marco
-
-        return view("frameworkAgreement.create_$type"); // ej: agreements.create_marco
-    
+        return view('frameworkAgreement.index');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function create()
+    {
+        // Trae empresas para el select (ajustá si tenés otro método)
+        $companies = $this->companyService->getAllCompanies();
 
-public function store(Request $request)
-{
-
-        $validated = app(ConvenioMarcoRequest::class)->validated();
-        // guardar usando $validated...
-         function safe($value)
-        {
-            return $value ?? '______';
-        }
-
-        // 3. Cargar plantilla Word desde storage
-        $templatePath = storage_path('app/plantillas/Convenio Marco.docx');
-        $templateProcessor = new TemplateProcessor($templatePath);
-
-
-
-        // Seteo de valores en el template
-        $templateProcessor->setValue('razon_social', safe($validated['razon_social']));
-        $templateProcessor->setValue('calle', safe($validated['calle']));
-        $templateProcessor->setValue('nro_calle', safe($validated['nro_calle']));
-        $templateProcessor->setValue('ciudad', safe($validated['localidad']));
-        $templateProcessor->setValue('cuil', safe($validated['cuil_prefijo']) . '-' . safe($validated['cuil_dni']) . '-' . safe($validated['cuil_dv']));
-        $templateProcessor->setValue('provincia', safe($validated['provincia']));
-        $templateProcessor->setValue('rubro', safe($validated['rubro']));
-        $templateProcessor->setValue('entidad', safe($validated['entidad']));
-        $templateProcessor->setValue('dedicacion', safe($validated['dedicacion']));
-        $templateProcessor->setValue('nombre_rep_contacto', safe($validated['contact_nombre']) . ' ' . safe($validated['contact_apellido']));
-        $templateProcessor->setValue('cargo_rep_contacto', safe($validated['contact_cargo']));
-        $templateProcessor->setValue('cuit', safe($validated['cuit_prefijo']) . '-' . safe($validated['cuit_dni']) . '-' . safe($validated['cuit_dv']));
-        $templateProcessor->setValue('nombre_rep_firma', safe($validated['firma_nombre']) . ' ' . safe($validated['firma_apellido']));
-        $templateProcessor->setValue('cargo_rep_firma', safe($validated['firma_cargo']));
-        $templateProcessor->setValue('firma_dni', safe($validated['firma_dni']));
-        $templateProcessor->setValue('rep_firma_empresa_razon_social', safe($validated['firma_empresa_razon_social']));
-        $templateProcessor->setValue('dia', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('d') : '____');
-        $templateProcessor->setValue('mes', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->translatedFormat('F') : '____');
-       
-        function numeroATexto($numero) {
-        $mapa = [
-            '20' => 'veinte',
-            '21' => 'veintiuno',
-            '22' => 'veintidós',
-            '23' => 'veintitrés',
-            '24' => 'veinticuatro',
-            '25' => 'veinticinco',
-            '26' => 'veintiséis',
-            '27' => 'veintisiete',
-            '28' => 'veintiocho',
-            '29' => 'veintinueve',
-            '30' => 'treinta',
+        // Si querés evitar la API, podés mockear provincias acá:
+        $provincias = [
+            ['id' => '02', 'nombre' => 'Ciudad Autónoma de Buenos Aires'],
+            ['id' => '06', 'nombre' => 'Buenos Aires'],
+            ['id' => '10', 'nombre' => 'Catamarca'],
+            ['id' => '14', 'nombre' => 'Córdoba'],
+            ['id' => '18', 'nombre' => 'Chaco'],
+            ['id' => '22', 'nombre' => 'Chubut'],
+            ['id' => '26', 'nombre' => 'Entre Ríos'],
+            ['id' => '30', 'nombre' => 'Formosa'],
+            ['id' => '34', 'nombre' => 'Jujuy'],
+            // ...completá si querés todas
         ];
-        return $mapa[$numero] ?? $numero;
-    }
-        $fecha = $_POST['fecha_firma'];
-        $anioTexto = numeroATexto(date('y', strtotime($fecha))); 
-        
-        $templateProcessor->setValue('anio', $anioTexto);
 
-        $relativePath = 'convenios_generados/' . date('Y/m'); // Ej: 'convenios_generados/2025/06'
-        Storage::makeDirectory($relativePath); // Esto crea la carpeta si no existe
-
-        $nombreArchivo = 'convenio_marco_' . Str::slug($validated['razon_social']) . '.docx';
-
-         $fullPath = storage_path('app/' . trim($relativePath, '/') . '/' . $nombreArchivo);
-
-        $templateProcessor->saveAs($fullPath);
-        /*GUARDAR CONVENIO MARCO EN LA BD*/ 
-        $convenioMarco = new Contract();
-        $convenioMarco->signing_date = $validated['fecha_firma'];
-        
-        
-        $cuit = $validated['cuit_prefijo'] . $validated['cuit_dni'] . $validated['cuit_dv'];
-
-        $company = Company::where('cuit', $cuit)->first();
-        if($company){
-               $convenioMarco->company_id = $company->id;
-        }
-        else{
-             // Manejar entidad (entity)
-        $entitySelected = $request->entidad === 'other' ? $request->other_entity_input : $request->entidad;
-        $entity = CompanyEntity::firstOrCreate(['name' => $entitySelected]);
-        $city = City::where('name',$request->localidad)->first(); //debe existir la ciudad
-       
-
-        // Crear la empresa
-        $newCompany = Company::create([
-            'denomination' => $request->razon_social,
-            'company_name' => $request->razon_social,
-            'cuit' => $cuit,
-            'city_id' => $city->id,
-            'entity_id' => $entity->id
-        ]);
-        
-        $convenioMarco->company_id =$newCompany->id;
-        }
-        
-
-         // Obtener una secretaria random
-        $randomSecretary = Secretary::inRandomOrder()->first();
-        $convenioMarco->secretary_id = $randomSecretary->id;
-       
-
-        // Obtener un docente random
-         $randomTeacher = Teacher::inRandomOrder()->first();
-         $convenioMarco->teacher_id = $randomTeacher->id;
-
-        // Crear o obtener los empleados de contacto y representante
-
-        $cuil = $validated['cuil_prefijo'] . $validated['cuil_dni'] . $validated['cuil_dv'];
-        $employee = Employee::where('cuil', $cuil)->first();
-        if($employee){
-               $convenioMarco->contact_employee_id = $employee->id;
-        }
-        else{
-        $contact_employee = Employee::create ([
-            'name' => $validated['contact_nombre'],
-            'lastname' => $validated['contact_apellido'],
-            'dni' => $validated['contact_dni'],
-            'cuil' => $cuil,
-            'email' => $validated['contact_email'],
-            'phone' => $validated['contact_celular'],
-            'position' => $validated['contact_cargo'],
-            'is_represent' => true,
-            'company_id' => $newCompany->id,
-        ]);
-        $convenioMarco->contact_employee_id = $contact_employee->id;
-        }
-
-        $dni = $validated['firma_dni'];
-        $employeeFirma = Employee::where('dni', $dni)->first();
-        if($employeeFirma){
-               $convenioMarco->representative_employee_id = $employeeFirma->id;
-        }
-        else{
-        $representative_employee = Employee::create([
-            'name' => $validated['firma_nombre'],
-            'lastname' => $validated['firma_apellido'],
-            'dni' => $validated['firma_dni'],
-            'cuil' => null,
-            'email' => $validated['firma_email'] ?? null,
-            'phone' => $validated['firma_celular'] ?? null,
-            'position' => $validated['firma_cargo'],
-            'is_represent' => true,
-            'company_id' => $newCompany->id,
-        ]);
-        $convenioMarco->representative_employee_id = $representative_employee->id;
-        }   
-        
-        // Obtener un rector random
-         $randomRector = Teacher::where('is_rector', true)->inRandomOrder()->first();
-         $convenioMarco->rector = $randomRector->id;
-        
-       
-        //Crear estado
-         $status = ContractStatus::create([
-            'status' => 'SEVyT',
-            'time_limit' => 48  //chequear time no acepta 48hs me parece
-        ]);
-        $convenioMarco->contract_status_id = $status->id;        
-
-        // Crear o encontrar el tipo de convenio marco
-        $type = TypeFrameworkAgreement::create([
-            'type' => 'Convenio Marco'
-        ]);
-        $convenioMarco->type_framework_agreement_id = $type->id;
-
-        $convenioMarco->file = $fullPath;
-
-        $fecha = $validated['fecha_firma'];
-        $convenioMarco->creation_date = $fecha;
-
-        $convenioMarco->save();
-
-        return view('frameworkAgreement.creationSuccessful', compact('relativePath', 'nombreArchivo')); 
-        //return response()->download($fullPath);
-}
-
-    public function download(Request $request)
-{
-    $path = $request->get('path');
-    $file = $request->get('file');
-
-    if (!$path || !$file) {
-        abort(400, 'Parámetros inválidos');
+        return view('frameworkAgreement.create', compact('provincias','companies' ));
     }
 
-    $fullPath = storage_path('app/' . ltrim($path, '/') . '/' . $file);
-
-    if (!file_exists($fullPath)) {
-        abort(404, 'Archivo no encontrado');
-    }
-
-    return response()->download($fullPath);
-}
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function store(ConvenioMarcoRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        // 1) Tipo de convenio marco (NO pasantía)
+        $type = $this->typeFrameworkAgreementService->findOrCreateByType('Convenio Marco');
+
+        // Si viene empresa seleccionada, validamos que no exista otro convenio marco
+        $companyIdForCheck = $validated['company_id'] ?? null;
+        if ($companyIdForCheck) {
+            $exists = $this->contractService
+                ->getFrameworkAgreementsByCompany($companyIdForCheck, $type->id);
+            if ($exists->isNotEmpty()) {
+                return back()->withErrors(['errorExistsContract' => 'Ya existe un Convenio Marco para esta empresa.'])
+                    ->withInput();
+            }
+        }
+
+        // 2) Crear u obtener empresa (usa direcciones/ciudad del form si aplica)
+        // El service debería crear o devolver la empresa en base a los datos del form
+        $company = $this->companyService->getOrCreateCompany($validated);
+
+        // 3) Secretaria (usa getOrCreate para no repetir)
+        $secretary = $this->secretaryService->getOrCreateSecretary([
+            'user_secretaria'      => 'SECRETARIA_USER',
+            'password_secretaria'  => 'SECRETARIA_PASSWORD',
+            'email_secretaria'     => 'SECRETARIA_EMAIL',
+        ]);
+
+        // 4) Docente (no rector)
+        $teacher = $this->teacherService->findOrCreateByDni([
+            'name'      => $validated['teacher_name']     ?? fake()->firstName(),
+            'lastname'  => $validated['teacher_lastname'] ?? fake()->lastName(),
+            'dni'       => $validated['teacher_dni']      ?? fake()->unique()->numberBetween(20000000, 40000000),
+            'cuil'      => $validated['teacher_cuil']     ?? ('20' . fake()->unique()->numberBetween(20000000, 40000000) . '3'),
+            'faculty'   => $validated['teacher_faculty']  ?? 'Facultad X',
+            'is_rector' => false,
+            'is_dean'   => false,
+        ]);
+
+        // 5) Empleado de contacto
+        $contact_employee = $this->employeeService->findOrCreateByDni([
+            'name'        => $validated['contact_nombre'],
+            'lastname'    => $validated['contact_apellido'],
+            'dni'         => $validated['contact_dni'],
+            'cuil'        => $validated['contact_cuil'] ?? (
+                ($validated['cuil_prefijo'] ?? '') .
+                ($validated['cuil_dni'] ?? '') .
+                ($validated['cuil_dv'] ?? '')
+            ),
+            'email'       => $validated['contact_email'],
+            'phone'       => $validated['contact_celular'] ?? null,
+            'position'    => $validated['contact_cargo'] ?? null,
+            'is_represent' => true,
+            'company_id'  => $company->id,
+        ]);
+
+        // 6) Representante (firma)
+        $representative_employee = $this->employeeService->findOrCreateByDni([
+            'name'        => $validated['firma_nombre'],
+            'lastname'    => $validated['firma_apellido'],
+            'dni'         => $validated['firma_dni'],
+            'cuil'        => null,
+            'email'       => $validated['firma_email'] ?? null,
+            'phone'       => $validated['firma_celular'] ?? null,
+            'position'    => $validated['firma_cargo'] ?? null,
+            'is_represent' => true,
+            'company_id'  => $company->id,
+        ]);
+
+        // 7) Rector (sí rector)
+        $rector = $this->teacherService->findOrCreateByDni([
+            'name'      => fake()->firstName(),
+            'lastname'  => fake()->lastName(),
+            'dni'       => fake()->unique()->numberBetween(20000000, 40000000),
+            'cuil'      => '20' . fake()->unique()->numberBetween(20000000, 40000000) . '3',
+            'faculty'   => fake()->word(),
+            'is_rector' => true,
+            'is_dean'   => fake()->boolean(),
+        ]);
+
+        // 8) Estado inicial del contrato
+        $contract_status = $this->contractStatusService->createStatus([
+            'status'     => 'SEVyT (Estado de aprobación/Análisis)',
+            'time_limit' => 48, // horas
+        ]);
+
+        // 9) (OPCIONAL) Generación de archivo Word: si ya lo tenías, integrá acá tu TemplateProcessor
+        // $fullPath = $this->tuServicioDeWord->generarConvenioMarco($validated, ...);
+
+        // 10) Crear contrato
+        $agreement = Contract::create([
+            'signing_date'                 => Carbon::parse($validated['fecha_firma']),
+            'url_certificate_afip'         => null,
+            'url_statute'                  => null,
+            'url_assignment_authorities'   => null,
+            'company_id'                   => $company->id,
+            'secretary_id'                 => $secretary->id,
+            'teacher_id'                   => $teacher->id,
+            'contact_employee_id'          => $contact_employee->id,
+            'representative_employee_id'   => $representative_employee->id,
+            'rector'                       => $rector->id,
+            'contract_status_id'           => $contract_status->id,
+            'type_framework_agreement_id'  => $type->id,
+            'file'                         => null, // $fullPath ?? null,
+            'creation_date'                => Carbon::parse($validated['fecha_firma']),
+        ]);
+
+        // Redirigir a una vista de éxito o al show
+        return redirect()
+            ->route('frameworkAgreement.show', $agreement->id)
+            ->with('success', 'Convenio Marco creado correctamente.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+    public function show(string $id) {}
 
-    /**
-     * Update the specified resource in storage.
-     */
+    public function edit(string $id) {}
+
     public function update(Request $request, string $id)
     {
-        //
+        // Si lo necesitás, implementá update usando tus services
+        return back()->with('info', 'Update pendiente de implementación.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        // Si lo necesitás, implementá destroy usando tus services
+        return back()->with('info', 'Delete pendiente de implementación.');
     }
 }

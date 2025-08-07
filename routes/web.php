@@ -74,7 +74,6 @@ Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class,
 Route::resource('/frameworkAgreement', FrameworkAgreementController::class);
 Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
 
-Route::resource('/frameworkAgreement', FrameworkAgreementController::class);
 Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
 
 Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class);
