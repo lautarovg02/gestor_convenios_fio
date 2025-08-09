@@ -58,9 +58,15 @@ class DatabaseSeeder extends Seeder
         Secretary::factory()->count(10)->create();
         SecretaryPhone::factory()->count(10)->create();
         Teacher::factory(80)->create();
-        Department::factory(4)->create();
-        Career::factory(9)->create();
 
+        // Crear departamentos asignando un docente único a cada uno
+        $teachersForDepartments = Teacher::inRandomOrder()->take(4)->get();
+
+        foreach ($teachersForDepartments as $teacher) {
+            Department::factory()->create(['director_id' => $teacher->id]);
+        }
+
+        Career::factory(9)->create();
         Type_Report::factory()->count(5)->create();
 
         TypeFrameworkAgreement::factory(3)->create();
@@ -77,8 +83,7 @@ class DatabaseSeeder extends Seeder
 
         ReportSpecificResidenceAgreement::factory(4)->create();
         ReportIndividualInternshipAgreement::factory(4)->create();
-        $this->call(CareerTeacherSeeder::class);
 
-        
+        $this->call(CareerTeacherSeeder::class);
     }
 }

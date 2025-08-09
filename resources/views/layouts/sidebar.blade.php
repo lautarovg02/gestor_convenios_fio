@@ -76,12 +76,14 @@
                 </a>
             </li>
 
+           
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('COMPLETAR*') ? 'active-nav-link' : '' }}" href="#">
-                    <i class="bi bi-mortarboard"></i>
-                    Alumnos
-                </a>
-            </li>
+    <a class="nav-link {{ request()->is('students*') ? 'active-nav-link' : '' }}" href="{{ route('students.index') }}">
+        <i class="bi bi-mortarboard"></i>
+        Alumnos
+    </a>
+</li>
+
         </ul>
     </div>
 </nav>

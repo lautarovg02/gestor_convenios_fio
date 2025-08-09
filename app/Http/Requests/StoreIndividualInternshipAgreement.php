@@ -17,37 +17,30 @@ class StoreIndividualInternshipAgreement extends FormRequest
             // --- Contrato ---
             'contract_id' => 'required|exists:contracts,id',
 
-// --- Empresa (precargada, solo lectura) ---
-'company_denomination'       => 'nullable|string|max:255',
-'company_cuit'               => 'nullable|string|max:20',
-'company_sector'             => 'nullable|string|max:255',
-'company_street'             => 'nullable|string|max:255',
-'company_number'             => 'nullable|string|max:10',
-'company_city'               => 'nullable|string|max:100',
-'company_representante'      => 'nullable|string|max:255',
-'company_representante_cuit' => 'nullable|string|max:20',
+            // --- Empresa (solo para mostrar, no es obligatorio validar) ---
+            'company_denomination'       => 'nullable|string|max:255',
+            'company_cuit'               => 'nullable|string|max:20',
+            'company_sector'             => 'nullable|string|max:255',
+            'company_street'             => 'nullable|string|max:255',
+            'company_number'             => 'nullable|string|max:10',
+            'company_city'               => 'nullable|string|max:100',
+            'company_representante'      => 'nullable|string|max:255',
+            'company_representante_cuit' => 'nullable|string|max:20',
 
-            // --- Pasante ---
-            'student_name' => 'required|string|max:40',
-            'student_last_name' => 'required|string|max:40',
-            // DNI, único en students:
-            'student_dni' => 'required|digits_between:7,8|unique:students,dni',
-            // CUIL dividido en 3 inputs, combinados no únicos pero cada parte validada:
-            'student_cuil_prefijo' => 'required|digits:2',
-            'student_cuil_dni'     => 'required|digits_between:7,8',
-            'student_cuil_dv'      => 'required|digits:1',
-                        // Email único:
-            'student_email' => 'required|email|unique:students,email',
-            // Teléfono único, longitud variable pero entre 7 y 15 dígitos:
-            'student_phone' => 'required|digits_between:7,15|unique:students,phone_numb',
-            'student_ciudad' => 'required|string|max:40',
-            // Carrera:
-            'student_career' => 'required|string|max:250',
-
-            // Domicilio, ciudad
-            'student_domicilio_calle' => 'required|string|max:255',
-            'student_domicilio_numero' => 'required|digits_between:1,7',
-
+             // --- Alumno ---
+        'student_id'           => 'required|exists:students,id',
+        'student_name'         => 'required|string|max:255',
+        'student_last_name'    => 'required|string|max:255',
+        'student_dni'          => 'required|digits_between:7,8',
+        'student_cuil_prefijo' => 'required|digits:2',
+        'student_cuil_dni'     => 'required|digits_between:7,8',
+        'student_cuil_dv'      => 'required|digits:1',
+        'student_email'        => 'required|email|max:255',
+        'student_phone'        => 'required|numeric',
+        'student_career'       => 'required|string|max:255',
+        'student_domicilio_calle'  => 'required|string|max:255',
+        'student_domicilio_numero' => 'required|string|max:20',
+        'student_ciudad'           => 'required|string|max:100',
             // --- Datos de la pasantía ---
             'fecha_firma_marco' => 'required|date',
             'area_pasantia'     => 'required|string|max:255',
@@ -89,6 +82,7 @@ class StoreIndividualInternshipAgreement extends FormRequest
             'max' => 'El valor máximo permitido es :max.',
             'unique' => 'El valor ya está registrado en el sistema.',
             'email' => 'Debe ingresar un email válido.',
+            'exists' => 'El valor seleccionado no es válido.',
         ];
     }
 }

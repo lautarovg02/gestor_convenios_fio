@@ -35,7 +35,10 @@ class CompanyController extends Controller
         $errorMessage = null; // Variable para el mensaje de error
         $loadingMessage = null; // Variable para el mensaje de carga
         $filters = $request->only(['city', 'scope', 'sector']); //Varialbes para filtrar empresas
-
+ // 🔴 Definir vacías ANTES del try
+    $cities = collect();
+    $sectors = collect();
+    $scopes = collect();
         try {
 
             // Mensaje que se muestra durante la carga

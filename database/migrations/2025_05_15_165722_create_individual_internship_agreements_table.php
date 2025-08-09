@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('area',100);
             $table->date('signing_date')->nullable();
 
-            $table->unsignedBigInteger('contract_id');
+           $table->unsignedBigInteger('contract_id')->unique();
+
             $table->foreign('contract_id')->references('id')->on('contracts');
 
             $table->unsignedBigInteger('student_id');

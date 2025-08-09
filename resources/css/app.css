@@ -249,3 +249,20 @@ td.text-truncate {
 #academicoSubmenu .nav-link {
     padding-left: 28px;
 }
+/* Seleccion de convenios */
+.btn-outline-primary {
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background-color: #0d6efd;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+}
+
+.btn-outline-primary:focus {
+    outline: 3px solid #80bdff;
+    outline-offset: 2px;
+}

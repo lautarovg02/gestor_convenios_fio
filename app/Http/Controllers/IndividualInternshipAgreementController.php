@@ -31,55 +31,61 @@ class IndividualInternshipAgreementController extends Controller
     }
 
     // 2. Procesar empresa seleccionada y mostrar formulario con datos precargados
-    public function seleccionarEmpresa(Request $request)
+    public function selectCompany(Request $request)
     {
-        // Buscar la empresa con contrato y empleado relacionados
-        $company = Company::with(['contracts.contactEmployee'])->findOrFail($request->company_id);
+      // ✅ Guardamos los datos que necesitamos pasar
+    $company_id = $request->company_id;
+    $student_id = $request->student_id;
 
-        // Traemos el contrato
-        $contract = $company->contracts->first();
-        $empleado = $contract->contactEmployee;
-        $city = City::find($company->city_id)?->name ?? '';
-        $company->city = $city;
-
-        $representante = [
-            'name' => $empleado->name,
-            'cuit' => $empleado->cuil,
-        ];
-
-    
-        return view('individualInternshipAgreement.formularioEmpresa', compact('company', 'representante','contract'));
+    // 🔄 Redirigimos a una ruta GET
+    return redirect()->route('individual-internship-agreements.fill-form', [
+        'company_id' => $company_id,
+        'student_id' => $student_id,
+    ]);
     }
+
+    public function fillForm(Request $request)
+{
+    // ✅ Recuperamos empresa y contrato
+    $company = Company::with(['contracts.contactEmployee'])->findOrFail($request->company_id);
+    $contract = $company->contracts->first();
+    $empleado = $contract->contactEmployee;
+    $city = City::find($company->city_id)?->name ?? '';
+    $company->city = $city;
+
+    $representante = [
+        'name' => $empleado->name,
+        'cuit' => $empleado->cuil,
+    ];
+
+    // ✅ Recuperamos alumno (si se pasó)
+    $student = null;
+    if ($request->filled('student_id')) {
+        $student = Student::findOrFail($request->student_id);
+    }
+
+    // ✅ Ahora sí devolvemos la vista limpia
+    return view('individualInternshipAgreement.formularioEmpresa', compact('company', 'representante', 'contract', 'student'));
+}
 
 
 
     // Guardar convenio individual
-    public function store(StoreIndividualInternshipAgreement $request)
-    {
+
+public function store(StoreIndividualInternshipAgreement $request)
+{
+    try {
         $data = $request->validated();
 
-        // --- Buscar o crear estudiante ---
-        $cuil = $data['student_cuil_prefijo'] . $data['student_cuil_dni'] . $data['student_cuil_dv'];
-
-        $student = Student::where('dni', $data['student_dni'])
-            ->orWhere('email', $data['student_email'])
-            ->orWhere('phone_numb', $data['student_phone'])
-            ->orWhere('cuil', $cuil)
-            ->first();
-
-        if (!$student) {
-            $student = Student::create([
-                'name'       => $data['student_name'],
-                'last_name'  => $data['student_last_name'],
-                'dni'        => $data['student_dni'],
-                'cuil'       => $cuil,
-                'email'      => $data['student_email'],
-                'phone_numb' => $data['student_phone'],
-                'career'     => $data['student_career'],
-            ]);
+        // 🔹 Validar si ya existe un convenio para ese contrato
+        if (IndividualInternshipAgreement::where('contract_id', $data['contract_id'])->exists()) {
+            return back()
+                ->withErrors(['contract_id' => 'Ya existe un convenio individual para este contrato.'])
+                ->withInput();
         }
 
-        // --- Guardar convenio ---
+        $student_id = $data['student_id'];
+
         $agreement = IndividualInternshipAgreement::create([
             'contract_id' => $data['contract_id'],
             'area' => $data['area_pasantia'],
@@ -88,22 +94,19 @@ class IndividualInternshipAgreementController extends Controller
             'months_quantity' => $data['periodo_meses'],
             'internship_initial_date' => $data['fecha_inicio'],
             'signing_date' => $data['fecha_convenio'],
-            'student_id' => $student->id,
+            'student_id' => $student_id,
         ]);
-              
 
-
-        // dd($request->all());
-        // --- Generar documento Word ---
         $filePath = $this->generateAgreementDocument($agreement, $data);
-
-        // --- Guardar archivo en la BD en el campo file del contrato---
         $agreement->file = $filePath;
         $agreement->save();
 
-        return redirect()->route('individualInternshipAgreement.success', ['id' => $agreement->id]);
-    }
+        return redirect()->route('individual-internship-agreements.show', $agreement->id);
 
+    } catch (\Throwable $e) {
+        dd($e->getMessage(), $e->getTraceAsString());
+    }
+}
 
 
     public function success($id)
@@ -111,6 +114,13 @@ class IndividualInternshipAgreementController extends Controller
         $agreement = IndividualInternshipAgreement::findOrFail($id);
         return view('individualInternshipAgreement.success', compact('agreement'));
     }
+
+    public function show($id)
+{
+    $agreement = IndividualInternshipAgreement::findOrFail($id);
+    return view('individualInternshipAgreement.show', compact('agreement'));
+}
+
 
 
     private function generateAgreementDocument($agreement, $data)
