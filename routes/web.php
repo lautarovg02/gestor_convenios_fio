@@ -13,6 +13,9 @@ use App\Http\Controllers\FrameworkInternshipAgreementController;
 use App\Http\Controllers\FrameworkResidenceAgreementController;
 use App\Http\Controllers\SpecificResidenceAgreementController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\IndividualInternshipAgreementController;
+use App\Http\Controllers\StudentController;
+
 
 
 
@@ -90,7 +93,24 @@ Route::resource('specificAgreement', SpecificAgreementController::class);
 Route::get('/specificAgreement/getFrameworkData/{id}', [SpecificAgreementController::class, 'getFrameworkAgreementData']);
 
 
+// CONVENIOS DE PASANTIA INDIVIDUALES
+// Acción extra para seleccionar empresa y alumno (POST)
+Route::post('individual-internship-agreements/select-company', [IndividualInternshipAgreementController::class, 'selectCompany'])
+    ->name('individual-internship-agreements.select-company');
 
+    Route::get('individual-internship-agreements/fill-form', [IndividualInternshipAgreementController::class, 'fillForm'])
+    ->name('individual-internship-agreements.fill-form');
+
+// Descargar archivo del convenio
+Route::get('individual-internship-agreements/{id}/download', [IndividualInternshipAgreementController::class, 'download'])
+    ->name('individual-internship-agreements.download');
+
+Route::resource('individual-internship-agreements', IndividualInternshipAgreementController::class);
+
+// Buscar alumnos (para AJAX)
+Route::get('/students/search', [StudentController::class, 'search'])->name('students.search');
+//Ruta alumnos
+Route::resource('students', StudentController::class);
 
 
 
