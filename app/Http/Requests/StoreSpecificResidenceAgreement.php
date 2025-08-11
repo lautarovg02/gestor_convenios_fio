@@ -20,17 +20,6 @@ class StoreSpecificResidenceAgreement extends FormRequest
      * Get the validation rules that apply to the request.
      */
 
-    protected function prepareForValidation()
-    {
-        $studentCuil = $this->input('student_cuil_prefijo') .
-            $this->input('student_cuil_dni') .
-            $this->input('student_cuil_dv');
-
-        $this->merge([
-            'studentCuil' => $studentCuil
-        ]);
-    }
-
 
     public function rules(): array
     {

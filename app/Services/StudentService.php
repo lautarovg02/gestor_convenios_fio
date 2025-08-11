@@ -34,6 +34,11 @@ class StudentService {
 
     public function findStudentByDni(int $dni): ?Student
     {
-        return Student::find($dni);
+        return Student::where('dni', $dni)->first();
+    }
+
+    public function getAllStudents()
+    {
+        return Student::orderBy('last_name')->get();
     }
 }

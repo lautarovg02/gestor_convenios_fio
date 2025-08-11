@@ -4,18 +4,15 @@
 
 
     <div class="mb-4 border rounded containerSectionForm selectCompanySection">
-        <h4 class="TitleSection">Seleccionar empresa</h4>
-        <p class="textCampos
-
-    <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Empresa</label>
-    <select id="selectCompany" name="company_id" class="form-select">
-        <option value="">Seleccione una empresa</option>
-        @foreach ($companies as $company)
-            <option value="{{ $company->id }}">
-                {{ $company->denomination }} - {{ $company->cuit }}
-            </option>
-        @endforeach
-    </select>
+        <h4 class="TitleSection">Seleccionar empresa</h4>  
+    <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Empresa</label><span class="text-danger"> *</span>
+            <select id="selectCompany" name="company_id" class="form-select">
+                <option value="">Seleccione una empresa</option>
+                @foreach ($companies as $company)
+                    <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>
+                        {{ $company->denomination }} - {{ $company->cuit }}</option>
+                @endforeach
+            </select>
 
     </div>
 
@@ -26,109 +23,166 @@
         <h4 class="TitleSection">Datos del acuerdo</h4>
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Nombre del acuerdo</label>
+            <label for="status" class="form-label fs-6 fw-bold">Nombre del acuerdo</label><span class="text-danger">
+                *</span>
             <input type="text" name="agreementName" class="form-control" value="{{ old('agreementName') }}"
                 placeholder="Nombre del acuerdo" required>
+
+            @error('agreementName')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+
         </div>
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Tareas a realizar durante el acuerdo</label>
+            <label for="status" class="form-label fs-6 fw-bold">Tareas a realizar durante el acuerdo</label><span
+                class="text-danger"> *</span>
             <textarea name="tasks" class="form-control" placeholder="Tareas a realizar...">{{ old('tasks') }}</textarea>
+
+            @error('tasks')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+
+        </div>
+
+
+        <div class="mb-3">
+            <label class="form-label fs-6 fw-bold">Fecha de firma</label><span class="text-danger"> *</span>
+            <input type="date" name="fecha_firma" class="form-control" value="{{ old('fecha_firma') }}" required>
+
+            @error('fecha_firma')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
-            <label class="form-label fs-6 fw-bold">Fecha de firma</label>
-            <input type="date" name="fecha_firma" class="form-control" value="{{ old('fecha_firma') }}">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label fs-6 fw-bold">Fecha de inicio</label>
+            <label class="form-label fs-6 fw-bold">Fecha de inicio</label><span class="text-danger"> *</span>
             <input type="date" name="fecha_inicio" class="form-control" value="{{ old('fecha_inicio') }}" required>
-        </div>
 
+
+            @error('fecha_inicio')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
 
         <div class="DatesCompany">
             <!--este input esta oculto porque es el id del contract-->
             <input type="hidden" value="{{ old('contract_id') }}" name="contract_id" id="contract_id_field">
 
             <div class="mb-3">
-                <label for="status" class="form-label fs-6 fw-bold">Empresa</label>
+                <label for="status" class="form-label fs-6 fw-bold">Empresa</label><span class="text-danger"> *</span>
                 <input type="text" name="companyName" value="{{ old('companyName') }}" class="form-control"
                     placeholder="Nombre" readonly>
                 <input type="hidden" value="{{ old('companyId') }}" name="companyId" id="companyId">
+
+
+                @error('companyName')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
-                <label for="status" class="form-label fs-6 fw-bold">Apoderado de la empresa</label>
+                <label for="status" class="form-label fs-6 fw-bold">Apoderado de la empresa</label><span
+                    class="text-danger"> *</span>
                 <input type="text" name="companyRepresentative" value="{{ old('companyRepresentative') }}"
-                    class="form-control" readonly>
+                    placeholder="Apoderado de la empresa" class="form-control" readonly>
             </div>
 
+            @error('companyRepresentative')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
-
     </div>
+
 
 
     <!-- dates of student -->
     <div class=" mb-4 border rounded containerSectionForm">
         <h4 class="TitleSection">Datos del estudiante</h4>
 
-        
-        <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccione el estudiante</label>
+
+        <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccione el estudiante</label><span
+            class="text-danger"> *</span>
         <select id="selectStudent" name="id_student" class="form-select">
+
             <option value="">Seleccionar estudiante</option>
+            @foreach ($students as $student)
+                <option value="{{ $student->dni }}">{{ $student->last_name }} {{ $student->name }} -
+                    {{ $student->dni }}</option>
+            @endforeach
         </select>
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Nombre</label>
-            <input type="text" name="studentName" class="form-control" value="{{ old('studentName') }}"
+            <label for="status" class="form-label fs-6 fw-bold">Nombre</label><span class="text-danger"> *</span>
+            <input type="text" name="studentName" class="form-control" value="{{ old('studentName') }}" readonly
                 placeholder="Nombre" required>
-        </div>
 
+
+            @error('studentName')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Apellido</label>
+            <label for="status" class="form-label fs-6 fw-bold">Apellido</label><span class="text-danger"> *</span>
             <input type="text" name="studentLastName" class="form-control" value="{{ old('studentLastName') }}"
-                placeholder="Apellido" required>
+                readonly placeholder="Apellido" required>
+
+
+            @error('studentLastName')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">DNI</label>
-            <input type="number" name="dniStudent" class="form-control" placeholder="DNI"
+            <label for="status" class="form-label fs-6 fw-bold">DNI</label><span class="text-danger"> *</span>
+            <input type="number" name="dniStudent" class="form-control" placeholder="DNI" readonly
                 value="{{ old('dniStudent') }}" maxlength="8" oninput="validarDigitos(this)" required>
             <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
+
+
+            @error('dniStudent')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
 
-
         <div class="mb-3">
-            <label class="form-label fs-6 fw-bold">CUIL</label>
+            <label class="form-label fs-6 fw-bold">CUIL</label><span class="text-danger"> *</span>
             <div class="input-group">
-                <input type="number" class="form-control" name="student_cuil_prefijo" placeholder="20" maxlength="2"
-                    pattern="\d{2}" value="{{ old('student_cuil_prefijo') }}">
-                <span class="input-group-text">-</span>
-                <input type="number" class="form-control" name="student_cuil_dni" placeholder="12345678"
-                    maxlength="8" pattern="\d{7,8}" oninput="validarDigitos(this)"
-                    value="{{ old('student_cuil_dni') }}">
-                <span class="input-group-text">-</span>
-                <input type="number" class="form-control" name="student_cuil_dv" placeholder="3" maxlength="1"
-                    pattern="\d{1}" value="{{ old('student_cuil_dv') }}">
+                <input type="number" class="form-control" name="studentCuil" placeholder="20456278932"
+                    maxlength="11" readonly value="{{ old('studentCuil') }}" required>
+
             </div>
+
+
+            @error('studentCuil')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
 
-
         <div class="mb-3">
-            <label class="form-label fs-6 fw-bold">Email</label>
+            <label class="form-label fs-6 fw-bold">Email</label><span class="text-danger"> *</span>
             <input id="student_email" type="email" placeholder="Email" name="studentEmail" class="form-control"
-                value="{{ old('studentEmail') }}" required>
+                readonly value="{{ old('studentEmail') }}" required>
+
+
+            @error('studentEmail')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
-            <label class="form-label fs-6 fw-bold">Celular</label>
-            <input type="number" placeholder="Celular" name="studentCelular" class="form-control"
+            <label class="form-label fs-6 fw-bold">Celular</label><span class="text-danger"> *</span>
+            <input type="number" placeholder="Celular" name="studentCelular" class="form-control" readonly
                 value="{{ old('studentCelular') }}" required>
+
+
+            @error('studentCelular')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Carrera</label>
+            <label for="status" class="form-label fs-6 fw-bold">Carrera</label><span class="text-danger"> *</span>
 
             <select name="studentCarrer" id="carrer" class="form-select" value="{{ old('studentCarrer') }}"
                 required>
@@ -138,61 +192,103 @@
                 @endforeach
             </select>
 
+
+
+            @error('studentCarrer')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
 
     </div>
 
 
-<!-- Datos del tutor -->
+    <!-- Datos del tutor -->
 
     <div class=" mb-4 border rounded containerSectionForm">
         <h4 class="TitleSection">Datos del tutor de la empresa</h4>
 
-        <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Tutor responsable</label>
-                <select id="selectEmployee" name="id_employee" class="form-select">
-                    <option value="">Seleccionar tutor de la empresa</option>
-                </select>
+        <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Tutor responsable</label><span
+            class="text-danger"> *</span>
+        <select id="selectEmployee" name="id_employee" class="form-select">
+            <option value="">Seleccionar tutor de la empresa</option>
+        </select>
 
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Nombre</label>
+            <label for="status" class="form-label fs-6 fw-bold">Nombre</label><span class="text-danger"> *</span>
             <input type="text" name="tutorName" class="form-control" value="{{ old('tutorName') }}"
                 placeholder="Nombre" required readonly>
+
+
+            @error('tutorName')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
+
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Apellido</label>
+            <label for="status" class="form-label fs-6 fw-bold">Apellido</label><span class="text-danger"> *</span>
             <input type="text" name="tutorLastName" class="form-control" value="{{ old('tutorLastName') }}"
                 placeholder="Apellido" required readonly>
+
+
+            @error('tutorLastName')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
+
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">DNI</label>
+            <label for="status" class="form-label fs-6 fw-bold">DNI</label><span class="text-danger"> *</span>
             <input type="number" name="tutorDni" maxlength="8" oninput="validarDigitos(this)"
                 class="form-control" placeholder="DNI" value="{{ old('tutorDni') }}" required readonly>
             <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
+
+            @error('tutorDni')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
+
+
     </div>
 
     <div class=" mb-4 border rounded containerSectionForm">
         <h4 class="TitleSection">Datos del tutor de la facultad</h4>
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Nombre</label>
+            <label for="status" class="form-label fs-6 fw-bold">Nombre</label><span class="text-danger"> *</span>
             <input type="text" name="tutorFacuName" class="form-control" value="{{ old('tutorFacuName') }}"
-                placeholder="Nombre" required>
-        </div>
-        <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Apellido</label>
-            <input type="text" name="tutorFacuLastName" class="form-control"
-                value="{{ old('tutorFacuLastName') }}" placeholder="Apellido" required>
-        </div>
-        <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">DNI</label>
-            <input type="number" name="tutorFacuDni" class="form-control" placeholder="DNI"
-                value="{{ old('tutorFacuDni') }}" maxlength="9" oninput="validarDigitos(this)" required>
-            <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
+                placeholder="Nombre" required readonly>
+
+
+            @error('tutorFacuName')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Departamento del tutor</label>
+            <label for="status" class="form-label fs-6 fw-bold">Apellido</label><span class="text-danger"> *</span>
+            <input type="text" name="tutorFacuLastName" class="form-control"
+                value="{{ old('tutorFacuLastName') }}" placeholder="Apellido" required readonly>
+
+
+            @error('tutorFacuLastName')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="status" class="form-label fs-6 fw-bold">DNI</label><span class="text-danger"> *</span>
+            <input type="number" name="tutorFacuDni" class="form-control" placeholder="DNI" readonly
+                value="{{ old('tutorFacuDni') }}" maxlength="9" oninput="validarDigitos(this)" required>
+            <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
+
+
+            @error('tutorFacuDni')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="status" class="form-label fs-6 fw-bold">Departamento del tutor</label><span
+                class="text-danger"> *</span>
             <select name="departament" id="departament" class="form-select" value="{{ old('departament') }}"
                 required>
                 <option value="" disabled selected>Seleccione un departamento</option>
@@ -200,7 +296,13 @@
                     <option value="{{ $departament->id }}">{{ $departament->name }}</option>
                 @endforeach
             </select>
+
+
+            @error('departament')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
+
     </div>
 
 
@@ -218,4 +320,4 @@
 
 @vite('resources/js/formAgreements/createSpecificResidenceAgreement/formCreate.js')
 @vite('resources/js/formAgreements/createSpecificResidenceAgreement/selectEmployee.js')
-
+@vite('resources/js/formAgreements/createSpecificResidenceAgreement/SelectStudent.js')

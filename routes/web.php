@@ -12,6 +12,7 @@ use App\Http\Controllers\FrameworkAgreementController;
 use App\Http\Controllers\FrameworkInternshipAgreementController;
 use App\Http\Controllers\FrameworkResidenceAgreementController;
 use App\Http\Controllers\SpecificResidenceAgreementController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -96,5 +97,5 @@ Route::get('/api/employees/{companyId}', [EmployeeController::class, 'getEmploye
 
 Route::get('/api/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
 Route::get('/api/employee/{id}', [EmployeeController::class, 'getEmployeeById']);
-
+Route::get('/api/student/{dni}', [StudentController::class, 'getStudentByDni']);
 

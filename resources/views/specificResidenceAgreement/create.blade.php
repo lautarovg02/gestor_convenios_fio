@@ -16,6 +16,12 @@
             </div>
         @endif
 
+        @if (!session('empresaSeleccionada') && session('existeAcuerdoConEmpresa'))
+            <div class="alert alert-warning">
+                <span>La empresa selecionada ya tiene un acuerdo individual de residencia creado</span>
+            </div>
+        @endif
+
         <!-- Incluir el formulario -->
         <div id="formEmpresaSeleccionada">
             @include('specificResidenceAgreement.formCreate')

@@ -37,7 +37,8 @@ class SpecificResidenceAgreementController extends Controller
         $companies = $this->companyService->getCompaniesByTypeFrameworkAgreement('Convenio Marco de Residencia');
         $carrers = $this->carrerService->getAllCareers();
         $departaments = $this->departamentService->getAllDepartments();
-        return view("specificResidenceAgreement.create", compact('companies', 'carrers', 'departaments'));
+        $students = $this->studentService->getAllStudents();
+        return view("specificResidenceAgreement.create", compact('companies', 'carrers', 'departaments', 'students'));
     }
 
     public function store(StoreSpecificResidenceAgreement $request)
@@ -50,7 +51,7 @@ class SpecificResidenceAgreementController extends Controller
             return redirect()->back()
                 ->withInput()
                 ->with('empresaSeleccionada', false)
-                ->with('existeAcuerdo', true);
+                ->with('existeAcuerdoConEmpresa', true);
         }
 
         try {
