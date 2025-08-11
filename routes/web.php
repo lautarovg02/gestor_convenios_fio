@@ -62,7 +62,7 @@ Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementCont
 
 Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class);
 
-Route::get('/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
+
 
 Route::resource('specificResidenceAgreement', SpecificResidenceAgreementController::class);
 
@@ -91,6 +91,10 @@ Route::get('/specificAgreement/getFrameworkData/{id}', [SpecificAgreementControl
 
 
 
+Route::get('/api/employees/{companyId}', [EmployeeController::class, 'getEmployeesByCompany']);
 
+
+Route::get('/api/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
+Route::get('/api/employee/{id}', [EmployeeController::class, 'getEmployeeById']);
 
 

@@ -55,6 +55,12 @@ form {
     padding: 3%;
 }
 
+.selectCompanySection{
+        height: 10pc !important;
+    margin: 0% 30% !important;
+    width: fit-content !important;
+}
+
 .containerSectionForm {
     background-color: #ffffff96;
     width: 40%;

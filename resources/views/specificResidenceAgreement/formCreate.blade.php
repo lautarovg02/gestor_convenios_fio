@@ -2,6 +2,24 @@
 <form id="formulario" action="{{ route('specificResidenceAgreement.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
+
+    <div class="mb-4 border rounded containerSectionForm selectCompanySection">
+        <h4 class="TitleSection">Seleccionar empresa</h4>
+        <p class="textCampos
+
+    <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Empresa</label>
+    <select id="selectCompany" name="company_id" class="form-select">
+        <option value="">Seleccione una empresa</option>
+        @foreach ($companies as $company)
+            <option value="{{ $company->id }}">
+                {{ $company->denomination }} - {{ $company->cuit }}
+            </option>
+        @endforeach
+    </select>
+
+    </div>
+
+
     <!-- dates of agreeement -->
     <div class="mb-4 border rounded containerSectionForm">
 
@@ -23,7 +41,7 @@
             <input type="date" name="fecha_firma" class="form-control" value="{{ old('fecha_firma') }}">
         </div>
 
-                <div class="mb-3">
+        <div class="mb-3">
             <label class="form-label fs-6 fw-bold">Fecha de inicio</label>
             <input type="date" name="fecha_inicio" class="form-control" value="{{ old('fecha_inicio') }}" required>
         </div>
@@ -54,6 +72,13 @@
     <!-- dates of student -->
     <div class=" mb-4 border rounded containerSectionForm">
         <h4 class="TitleSection">Datos del estudiante</h4>
+
+        
+        <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccione el estudiante</label>
+        <select id="selectStudent" name="id_student" class="form-select">
+            <option value="">Seleccionar estudiante</option>
+        </select>
+
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">Nombre</label>
             <input type="text" name="studentName" class="form-control" value="{{ old('studentName') }}"
@@ -80,8 +105,9 @@
                 <input type="number" class="form-control" name="student_cuil_prefijo" placeholder="20" maxlength="2"
                     pattern="\d{2}" value="{{ old('student_cuil_prefijo') }}">
                 <span class="input-group-text">-</span>
-                <input type="number" class="form-control" name="student_cuil_dni" placeholder="12345678" maxlength="8"
-                    pattern="\d{7,8}" oninput="validarDigitos(this)" value="{{ old('student_cuil_dni') }}">
+                <input type="number" class="form-control" name="student_cuil_dni" placeholder="12345678"
+                    maxlength="8" pattern="\d{7,8}" oninput="validarDigitos(this)"
+                    value="{{ old('student_cuil_dni') }}">
                 <span class="input-group-text">-</span>
                 <input type="number" class="form-control" name="student_cuil_dv" placeholder="3" maxlength="1"
                     pattern="\d{1}" value="{{ old('student_cuil_dv') }}">
@@ -116,22 +142,32 @@
 
     </div>
 
+
+<!-- Datos del tutor -->
+
     <div class=" mb-4 border rounded containerSectionForm">
         <h4 class="TitleSection">Datos del tutor de la empresa</h4>
+
+        <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Tutor responsable</label>
+                <select id="selectEmployee" name="id_employee" class="form-select">
+                    <option value="">Seleccionar tutor de la empresa</option>
+                </select>
+
+
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">Nombre</label>
             <input type="text" name="tutorName" class="form-control" value="{{ old('tutorName') }}"
-                placeholder="Nombre" required>
+                placeholder="Nombre" required readonly>
         </div>
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">Apellido</label>
             <input type="text" name="tutorLastName" class="form-control" value="{{ old('tutorLastName') }}"
-                placeholder="Apellido" required>
+                placeholder="Apellido" required readonly>
         </div>
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">DNI</label>
-            <input type="number" name="tutorDni" maxlength="8" oninput="validarDigitos(this)" class="form-control" placeholder="DNI"
-                value="{{ old('tutorDni') }}" required>
+            <input type="number" name="tutorDni" maxlength="8" oninput="validarDigitos(this)"
+                class="form-control" placeholder="DNI" value="{{ old('tutorDni') }}" required readonly>
             <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
         </div>
     </div>
@@ -181,3 +217,5 @@
 
 
 @vite('resources/js/formAgreements/createSpecificResidenceAgreement/formCreate.js')
+@vite('resources/js/formAgreements/createSpecificResidenceAgreement/selectEmployee.js')
+
