@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class EmployeePhone extends Model
 {
     use HasFactory;
+    protected $table = 'employee_phones';
+    public $timestamps = false;
 
     protected $fillable = ['number', 'employee_id'];
 

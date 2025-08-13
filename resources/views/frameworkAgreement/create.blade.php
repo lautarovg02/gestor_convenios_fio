@@ -26,7 +26,7 @@
 
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Razón Social<span class="InputImportant">*</span></label>
-                <input type="text" placeholder="Razón Social" name="razon_social" class="form-control" value="{{ old('razon_social') }}">
+                <input type="text" placeholder="Razón Social" name="razon_social" id="razon_social" class="form-control" value="{{ old('razon_social') }}">
                 @error('razon_social')
                 <small class="text-danger">{{ $message }}</small>
                 @enderror
@@ -69,23 +69,27 @@
 
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Rubro</label>
-                <input type="text" placeholder="Rubro de la empresa" name="rubro" class="form-control" value="{{ old('rubro') }}">
-                @error('rubro')
+                <input type="text" placeholder="Rubro de la empresa" id="contraparte_rubro" name="contraparte_rubro" class="form-control" value="{{ old('contraparte_rubro') }}" readonly>
+
+                {{-- Validación de errores --}}
+
+                @error('contraparte_rubro')
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
+
             </div>
 
-            <div class="form-group mb-3">
-                <label for="entity" class="form-label fs-6">Entidad<span class="InputImportant">*</span></label>
-                <select name="entidad" id="entity" class="form-select">
-                    <option value="">Seleccionar</option>
-                    <option value="privada" {{ old('entidad') == 'privada' ? 'selected' : '' }}>Privada</option>
-                    <option value="publica" {{ old('entidad') == 'publica' ? 'selected' : '' }}>Pública</option>
-                </select>
+
+
+            <div class="mb-3">
+                <label for="entity" class="form-label fs-6 fw-bold">Entidad<span class="InputImportant">*</span></label>
+                <input type="text" placeholder="Entidad de la empresa" name="entidad" id="entidad" class="form-control" value="{{ old('entidad') }}">
                 @error('entidad')
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+
+            <!-- ESta de mas 
 
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Dedicación<span class="InputImportant">*</span></label>
@@ -94,7 +98,7 @@
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
-
+-->
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado<span class="InputImportant">*</span></label>
                 <input type="text" placeholder="Titular / Representante Legal / Apoderado" name="titular" class="form-control" value="{{ old('titular') }}">
@@ -194,10 +198,12 @@
             <h4 class="TitleSection">Representante de contacto</h4>
             {{-- Cada campo en bloque separado y ancho completo --}}
             <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label>
-            <select id="selectEmployeeContact" name="id_employee" class="form-select">
-                <option value="">Seleccionar representante de contacto</option>
+            <select id="selectEmployeeContact"
+                name="id_employee"
+                class="form-select"
+                data-preselected="{{ old('id_employee', $preselectedEmployeeId ?? '') }}">
+                <option value="">Seleccione un representante</option>
             </select>
-
             <div class="containerInputNameLastName">
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Nombre(s)<span class="InputImportant">*</span></label>
@@ -288,10 +294,6 @@
             </div>
 
 
-            <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label>
-            <select id="selectEmployeeContact" name="id_employee" class="form-select">
-                <option value="">Seleccionar representante de contacto</option>
-            </select>
             <div class="containerInputNameLastName">
 
                 <div class="mb-3">
@@ -406,4 +408,5 @@
 @vite('resources/js/formAgreements/frameworkAgreement/getCitiesAndProvinces.js')
 @vite('resources/js/formAgreements/frameworkAgreement/getCompany.js')
 @vite('resources/js/formAgreements/frameworkAgreement/selectEmployee.js')
+
 @endsection

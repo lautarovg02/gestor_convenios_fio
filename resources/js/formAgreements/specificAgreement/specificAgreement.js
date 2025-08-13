@@ -11,9 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
                 console.log("Datos recibidos:", data);
-                console.log("Email contacto:", data.contacto?.email);
-                console.log("Email contacto:", data.contacto?.celular);
-
+              
                 // 1. Razón social
                 document.getElementById('razon_social').value = data.razon_social || "";
 

@@ -16,7 +16,7 @@ class City extends Model
     // ✅ Relación correcta: una ciudad pertenece a una provincia
     public function province(): BelongsTo
     {
-        return $this->belongsTo(Province::class);
+        return $this->belongsTo(Province::class, 'province_id' );
     }
 
     // ✅ (Opcional) Relación inversa: una ciudad puede tener muchas empresas

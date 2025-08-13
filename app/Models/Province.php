@@ -8,5 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Province extends Model
 {
     use HasFactory;
+    protected $table = 'provinces'; // o 'provinces' si es plural
+
     protected $fillable = ['name'];
 }
