@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
             $table->date('signing_date')->nullable();
-            $table->string('url_certificate_afip',200)->nullable();
-            $table->string('url_statute',200)->nullable();
-            $table->string('url_assignment_authorities',200)->nullable();
+            $table->binary('url_certificate_afip')->nullable();
+            $table->binary('url_statute')->nullable();
+            $table->binary('url_assignment_authorities')->nullable();
 
             $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
@@ -46,6 +46,7 @@ return new class extends Migration
 
             $table->binary('file')->nullable(); // Esto es un campo tipo BLOB
 
+            $table->date('fecha_fin')->nullable();
 
 
             $table->timestamps();
