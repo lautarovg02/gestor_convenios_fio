@@ -22,12 +22,12 @@ class StudentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
- 
+
     public function create()
-{
-    $careers = Career::orderBy('name')->get(['id', 'name']);
-    return view('students.create', compact('careers'));
-}
+    {
+        $careers = Career::orderBy('name')->get(['id', 'name']);
+        return view('students.create', compact('careers'));
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,23 +35,23 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         // Valida los datos
-      $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'last_name' => 'required|string|max:255',
-        'dni' => 'required|numeric|digits_between:7,8',
-        'cuil' => 'required|string|max:15',  // 🔥 Ahora obligatorio
-        'email' => 'required|email|unique:students,email',
-        'phone_numb' => 'nullable|numeric',
-        'career' => 'required|string',
-        'street' => 'required|string|max:255', // 🔥 Obligatorio
-        'number' => 'required|numeric',        // 🔥 Obligatorio
-        'city' => 'required|string|max:100',   // 🔥 Obligatorio
-    ]);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'dni' => 'required|numeric|digits_between:7,8',
+            'cuil' => 'required|string|max:15',  // 🔥 Ahora obligatorio
+            'email' => 'required|email|unique:students,email',
+            'phone_numb' => 'nullable|numeric',
+            'career' => 'required|string',
+            'street' => 'required|string|max:255', // 🔥 Obligatorio
+            'number' => 'required|numeric',        // 🔥 Obligatorio
+            'city' => 'required|string|max:100',   // 🔥 Obligatorio
+        ]);
         // Crea el alumno
         Student::create($request->all());
 
         return redirect()->route('students.index')
-                         ->with('success', 'Alumno creado correctamente.');
+            ->with('success', 'Alumno creado correctamente.');
     }
 
     /**
@@ -80,7 +80,7 @@ class StudentController extends Controller
         // Valida los datos
         $request->validate([
             'name' => 'required|string|max:255',
-            'dni' => 'required|numeric|unique:students,dni,'.$student->id,
+            'dni' => 'required|numeric|unique:students,dni,' . $student->id,
             'email' => 'nullable|email',
             'phone' => 'nullable|string|max:20',
         ]);
@@ -89,37 +89,39 @@ class StudentController extends Controller
         $student->update($request->all());
 
         return redirect()->route('students.index')
-                         ->with('success', 'Alumno actualizado correctamente.');
+            ->with('success', 'Alumno actualizado correctamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Student $student)
+    public function destroy(\App\Models\Student $student)
     {
-        $student->delete();
+        try {
+            // Si tenés relaciones en pivotes, desvinculá acá (no rompe si no existen)
+            if (method_exists($student, 'specifics')) {
+                $student->specifics()->detach();
+            }
+            $student->delete();
 
-        return redirect()->route('students.index')
-                         ->with('success', 'Alumno eliminado correctamente.');
+            return redirect()->route('students.index')
+                ->with('status', 'Estudiante eliminado');
+        } catch (\Throwable $e) {
+            return back()->withErrors('No se pudo eliminar el estudiante.');
+        }
     }
 
     //Busqueda de alumnos para el form del convenio indivual de pasantia u otros.
-public function search(Request $request)
-{
-    $query = $request->q;
+    public function search(Request $request)
+    {
+        $query = $request->q;
 
-    $students = Student::where('dni', 'like', "%{$query}%")
-        ->orWhere('name', 'like', "%{$query}%")
-        ->orWhere('last_name', 'like', "%{$query}%")
-        ->limit(10)
-        ->get();
+        $students = Student::where('dni', 'like', "%{$query}%")
+            ->orWhere('name', 'like', "%{$query}%")
+            ->orWhere('last_name', 'like', "%{$query}%")
+            ->limit(10)
+            ->get();
 
-    return response()->json($students);
-}
-
-
-
+        return response()->json($students);
     }
-
-
-    
+}

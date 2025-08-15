@@ -122,7 +122,7 @@
         <!-- Modales -->
         @include('layouts.modals.modal-delete')
         @include('layouts.modals.modal-loading')
-    @vite('resources/js/utils/flashMessage.js')
+        @vite('resources/js/utils/flashMessage.js')
         @vite('resources/js/modals/modalDelete.js')
     </div>
 @endsection
