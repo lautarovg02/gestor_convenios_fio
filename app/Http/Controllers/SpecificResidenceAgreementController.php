@@ -45,13 +45,10 @@ class SpecificResidenceAgreementController extends Controller
     {
         $data = $request->validated();
 
-        $exists = SpecificResidenceAgreement::where('contract_id', $data['contract_id'])->exists();
+        $exists = $this->studentService->existStudentInAgreement($data['studentIdHidden']);
 
         if ($exists) {
-            return redirect()->back()
-                ->withInput()
-                ->with('empresaSeleccionada', false)
-                ->with('existeAcuerdoConEmpresa', true);
+            return redirect()->back()->withInput()->with('StudentWithAgreement', true);
         }
 
         try {

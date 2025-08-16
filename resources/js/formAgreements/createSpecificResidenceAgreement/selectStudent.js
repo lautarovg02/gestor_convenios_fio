@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     student.email || "";
                     document.querySelector('input[name="studentCelular"]').value =
                     student.phone_numb || "";
+                    document.querySelector('input[name="studentIdHidden"]').value = student.id || "";
             })
             .catch((error) => {
                 console.error(

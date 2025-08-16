@@ -103,13 +103,15 @@
 
         <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccione el estudiante</label><span
             class="text-danger"> *</span>
-        <select id="selectStudent" name="id_student" class="form-select">
-
+        <select id="selectStudent" name="select_id_student" class="form-select" required>
+        
             <option value="">Seleccionar estudiante</option>
             @foreach ($students as $student)
                 <option value="{{ $student->dni }}">{{ $student->last_name }} {{ $student->name }} -
                     {{ $student->dni }}</option>
             @endforeach
+
+            <input type="hidden" value="{{ old('studentIdHidden') }}" name="studentIdHidden" id="studentIdHidden">
         </select>
 
         <div class="mb-3">
@@ -209,7 +211,7 @@
 
         <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Tutor responsable</label><span
             class="text-danger"> *</span>
-        <select id="selectEmployee" name="id_employee" class="form-select">
+        <select id="selectEmployee" name="id_employee" class="form-select" required>
             <option value="">Seleccionar tutor de la empresa</option>
         </select>
 

@@ -16,9 +16,9 @@
             </div>
         @endif
 
-        @if (!session('empresaSeleccionada') && session('existeAcuerdoConEmpresa'))
+        @if (session('StudentWithAgreement'))
             <div class="alert alert-warning">
-                <span>La empresa selecionada ya tiene un acuerdo individual de residencia creado</span>
+                <span>El alumno seleccionado ya forma parte de un acuerdo</span>
             </div>
         @endif
 
