@@ -8,6 +8,7 @@ use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
+
 class EmployeeController extends Controller
 {
     public function index(Company $company)
@@ -16,18 +17,49 @@ class EmployeeController extends Controller
         return view('employees.index', compact('company', 'employees'));
     }
 
-    public function create()
+   public function create(Company $company)
     {
-        //
+        return view('employees.create', compact('company'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+
+
+public function store(StoreEmployee $request, Company $company)
+{
+    // Recuperamos los datos validados directamente
+    $validated = $request->validated();
+
+    // Creamos el empleado
+    $employee = new Employee([
+        'name'         => $validated['name'],
+        'lastname'     => $validated['lastname'],
+        'dni'          => $validated['dni'],
+        'cuil'         => $validated['cuil'] ?? null,
+        'position'     => $validated['position'],
+        'email'        => $validated['email'] ?? null,
+        'is_represent' => $request->has('is_represent') ? 1 : 0,
+    ]);
+
+    $employee->company_id = $company->id;
+    $employee->save();
+
+    // Guardar teléfonos (si se enviaron)
+    if ($request->has('phones')) {
+        foreach ($validated['phones'] as $phone) {
+            $employee->phones()->create([
+                'number' => $phone['number'],
+            ]);
+        }
     }
+
+    return redirect()
+        ->route('companies.employees.index', $company->id)
+        ->with('success', 'Empleado agregado correctamente.');
+}
+
 
     /**
      * Display the specified resource.

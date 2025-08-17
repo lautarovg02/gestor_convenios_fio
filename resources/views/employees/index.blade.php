@@ -21,7 +21,12 @@
             </div>
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="fw-bold mb-1">Gestión de Empleados - {{ $company->company_name }}</h4>
+                 <div>
+            <a href="{{ route('companies.employees.create', $company->id) }}" 
+   class="btn btn-success bi bi-plus-lg me-1">Agregar Empleado</a>
+       </div>
             </div>
+               
         </div>
         @if ($errors->any())
     <div class="alert alert-danger">
@@ -37,6 +42,8 @@
                 {{ session('success') }}
             </div>
         @endif
+
+
 
         @unless ($employees->isEmpty())
             <div class="w-75 table-responsive rounded shadow-sm table-scrollable-container">
