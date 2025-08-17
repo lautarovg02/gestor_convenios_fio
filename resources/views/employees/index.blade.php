@@ -53,6 +53,7 @@
                             <th class="col-max-width">Nombre</th>
                             <th class="col-max-width">Apellido</th>
                             <th class="col-max-width">DNI</th>
+                            <th class="col-max-width">CUIL</th>
                             <th class="col-max-width">Cargo</th>
                             <th class="col-max-width">Email</th>
                             <th class="col-max-width">Representante</th>
@@ -70,6 +71,9 @@
                                     {{ $employee->lastname }}
                                 </td>
                                 <td class="col-max-width text-truncate" title="{{ $employee->dni }}">
+                                    {{ $employee->dni }}
+                                </td>
+                                 <td class="col-max-width text-truncate" title="{{ $employee->cuil git }}">
                                     {{ $employee->dni }}
                                 </td>
                                 <td class="col-max-width text-truncate" title="{{ $employee->position }}">
@@ -97,7 +101,13 @@
                                 <td class="text-center">
                                     <a href="{{ route('employees.edit', $employee) }}"
                                         class="btn btn-primary btn-sm">Editar</a>
+                                     <form action="{{ route('employees.destroy', $employee) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de eliminar este empleado?');">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+    </form>
                                 </td>
+                                
                             </tr>
                         @endforeach
                     </tbody>

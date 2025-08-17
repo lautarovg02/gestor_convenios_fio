@@ -137,8 +137,25 @@ public function store(StoreEmployee $request, Company $company)
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+public function destroy(Employee $employee)
+{
+    try {
+        // Eliminar los teléfonos asociados si los hay
+        if ($employee->phones()->exists()) {
+            $employee->phones()->delete();
+        }
+
+        // Eliminar el empleado
+        $employee->delete();
+
+        return redirect()
+            ->route('companies.employees.index', $employee->company_id)
+            ->with('success', 'Empleado eliminado correctamente.');
+    } catch (\Exception $e) {
+        return redirect()
+            ->route('companies.employees.index', $employee->company_id)
+            ->with('error', 'No se pudo eliminar el empleado: ' . $e->getMessage());
     }
+}
+
 }
