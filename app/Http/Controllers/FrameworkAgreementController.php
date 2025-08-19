@@ -101,7 +101,7 @@ class FrameworkAgreementController extends Controller
 
         // Dirección de la empresa
         $template->setValue('calle',     $validated['empresa_calle']    ?? '________');
-        $template->setValue('nro',       $validated['empresa_numero']   ?? '________');
+        $template->setValue('nro_calle',       $validated['empresa_numero']   ?? '________');
         $template->setValue('ciudad',    $validated['empresa_ciudad']   ?? '________');
 
         // CUIL/CUIT
@@ -442,23 +442,21 @@ class FrameworkAgreementController extends Controller
 
     }
 */
-    public function download(Request $request)
-    {
-        $file = $request->query('file'); // convenio_marco_xxx.docx
-        $path = storage_path('app/convenios_generados/' . $file);
+public function download(Request $request)
+{
+    $path = $request->get('path');
+    $file = $request->get('file');
 
-        if (empty($file)) {
-            abort(400, 'Falta el parámetro file.');
-        }
-
-
-        if (!file_exists($path)) {
-            abort(404, 'Archivo no encontrado.');
-        }
-
-        return response()->download($path, $file);
+    if (!$path || !$file) {
+        abort(400, 'Parámetros inválidos');
     }
 
+    $fullPath = storage_path('app/' . ltrim($path, '/') . '/' . $file);
+
+    if (!file_exists($fullPath)) {
+        abort(404, 'Archivo no encontrado');
+    }
+}
 
 
     public function show(string $id) {}

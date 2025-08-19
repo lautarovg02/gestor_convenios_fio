@@ -178,7 +178,7 @@
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Ciudad</label><span class="text-danger"> *</span>
 
-                <select id="ciudad" name="localidad" class="form-select" disabled value="{{ old('ciudad') }}">
+                <select id="ciudad" name="localidad" class="form-select" disabled value="{{ old('localidad') }}">
                     <option value="">Seleccione una ciudad</option>
                 </select>
 
