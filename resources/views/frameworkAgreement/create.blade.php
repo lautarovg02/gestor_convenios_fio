@@ -3,6 +3,29 @@
 @vite('resources\css\form_convenios\formCreateAgreement.css')
 
 @section('content')
+
+@if (session('success'))
+  <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
+@if ($errors->any())
+  <div class="alert alert-danger">
+    <strong>Revisá estos errores:</strong>
+    <ul class="mb-0">
+      @foreach ($errors->all() as $e)
+        <li>{{ $e }}</li>
+      @endforeach
+    </ul>
+  </div>
+@endif
+
+@if ($errors->has('general'))
+  <div class="alert alert-danger">
+    {{ $errors->first('general') }}
+  </div>
+@endif
+
+
 <div class="container mt-4"> <!-- ancho máximo fijo -->
     <h2 class="mb-3 text-center">CREAR CONVENIO MARCO</h2>
     <p class="textCampos mb-1 text-center"><span class="text-danger">*</span> Campos obligatorios</p>
@@ -339,6 +362,17 @@
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+
+            <div class="mb-3">
+                <label class="form-label fs-6 fw-bold">Celular<span class="InputImportant">*</span></label>
+                <input type="number" placeholder="Celular" name="firma_celular" class="form-control" required
+                    value="{{ old('firma_celular') }}">
+                @error('firma_celular')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Email<span class="InputImportant">*</span></label>
                 <input type="email" name="firma_email" placeholder="Email" class="form-control"

@@ -33,7 +33,7 @@ class ConvenioMarcoRequest extends FormRequest
             'cuil_dni' => ['required', 'numeric'],
             'cuil_dv' => ['required', 'numeric'],
             'contact_dni' => ['required', 'numeric'],
-            'contact_celular' => ['required', 'numeric'],
+            // 'contact_celular' => ['required', 'numeric'],
             'contact_email' => [
                 'required',
                 'email',
@@ -48,9 +48,9 @@ class ConvenioMarcoRequest extends FormRequest
             'cuit_prefijo' => ['required', 'numeric'],
             'cuit_dni' => ['required', 'numeric'],
             'cuit_dv' => ['required', 'numeric'],
-            'rubro' => ['required', 'string'],
+            'contraparte_rubro' => ['sometimes', 'nullable', 'string', 'max:255'],
             'entidad' => ['required', 'string'],
-            'dedicacion' => ['required', 'string'],
+            // 'dedicacion' => ['required', 'string'],
             'titular' => ['required', 'string'],
             'confidencialidad' => ['required', 'in:si,no'],
 

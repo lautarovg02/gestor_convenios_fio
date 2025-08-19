@@ -32,7 +32,7 @@ Route::get('/', function () {
 });
 
 // COMPANIES
-Route::resource('/companies' , CompanyController::class);
+Route::resource('/companies', CompanyController::class);
 
 // EMPLOYEES
 Route::resource('companies.employees', EmployeeController::class)->shallow();
@@ -40,14 +40,14 @@ Route::resource('companies.employees', EmployeeController::class)->shallow();
 //CITIES
 
 Route::get('/cities', [CityController::class, 'getCiudades'])->name('get.ciudades');
-Route::get('/cities/create' , [CityController::class , 'create' ])->name('cities.create');
+Route::get('/cities/create', [CityController::class, 'create'])->name('cities.create');
 Route::post('/cities', [CityController::class, 'store'])->name('cities.store');
 
 //TEACHERS
 Route::resource('/teachers', TeacherController::class);
 
 //CAREERS
-Route::resource('/careers' , CareerController::class);
+Route::resource('/careers', CareerController::class);
 
 //DEPARTMENTS
 route::resource('/departments', DepartmentController::class);
@@ -68,11 +68,9 @@ Route::resource('specificResidenceAgreement', SpecificResidenceAgreementControll
 
 
 
-
-Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
-
-Route::resource('/frameworkAgreement', FrameworkAgreementController::class);
-Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
+Route::resource('frameworkAgreement', FrameworkAgreementController::class);
+Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])
+    ->name('agreement.download');
 
 Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
 
