@@ -33,8 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 // 4. Rubro
                 document.getElementById('contraparte_rubro').value = data.rubro || "";
 
-                // 5. Titular
-                document.getElementById('titular').value = /*data.titular ||*/ "Representante Legal";
 
                 // 6. Confidencialidad
                 if (data.confidencialidad === true) {

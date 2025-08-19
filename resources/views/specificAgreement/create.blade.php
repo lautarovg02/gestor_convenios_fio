@@ -35,9 +35,9 @@
 
         {{-- Select convenio marco --}}
         <div class="mb-4 border rounded containerSectionForm">
-            <h4 class="TitleSection">Seleccionar Convenio Marco</h4>
-            <select id="convenioMarcoSelect" name="contract_id" class="form-select">
-                <option value="">Seleccione un convenio marco</option>
+            <h4 class="TitleSection">Seleccionar Empresa</h4>
+            <select id="convenioMarcoSelect" name="contract_id" class="form-select" required>
+                <option value="">Seleccionar</option>
                 @foreach ($companies as $company)
                 @foreach ($company->contracts as $contract)
                 @if ($contract->typeFrameworkAgreement )
@@ -137,7 +137,7 @@
 
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado</label>
-                <input type="text" id="titular" s placeholder="Titular " name="titular"
+                <input type="text" id="titular" placeholder="Representante de la contraparte" name="titular"
                     class="form-control" value="{{ old('titular') }}">
                 @error('titular')
                 <div class="text-danger">{{ $message }}</div>
@@ -221,7 +221,7 @@
             <div class="containerInputNameLastName">
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Nombre(s)</label>
-                    <input id="contact_nombre" type="text" name="contact_nombre" placeholder="Nombre" class="form-control" value="{{ old('contact_nombre') }}" required>
+                    <input readonly id="contact_nombre" type="text" name="contact_nombre" placeholder="Nombre" class="form-control" value="{{ old('contact_nombre') }}" required>
 
                     @error('contact_nombre')
                     <div class="text-danger">{{ $message }}</div>
@@ -231,7 +231,7 @@
 
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Apellido(s)</label>
-                    <input id="contact_apellido" type="text" placeholder="Apellido" name="contact_apellido" class="form-control" value="{{ old('contact_apellido') }}" required>
+                    <input readonly id="contact_apellido" type="text" placeholder="Apellido" name="contact_apellido" class="form-control" value="{{ old('contact_apellido') }}" required>
 
                     @error('contact_apellido')
                     <div class="text-danger">{{ $message }}</div>
@@ -242,7 +242,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Cargo</label>
-                <input id="contact_cargo" type="text" placeholder="Cargo en empresa" name="contact_cargo" class="form-control" value="{{ old('contact_cargo') }}" required">
+                <input readonly id="contact_cargo" type="text" placeholder="Cargo en empresa" name="contact_cargo" class="form-control" value="{{ old('contact_cargo') }}" required">
 
                 @error('contact_cargo')
                 <div class="text-danger">{{ $message }}</div>
@@ -251,13 +251,9 @@
             </div>
 
 
-
-
-
-
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Celular</label>
-                <input id="contact_celular" type="text" placeholder="Celular" name="contact_celular" class="form-control" value="{{ old('contact_celular') }}" required>
+                <input readonly id="contact_celular" type="text" placeholder="Celular" name="contact_celular" class="form-control" value="{{ old('contact_celular') }}" required>
 
                 @error('contact_celular')
                 <div class="text-danger">{{ $message }}</div>
@@ -267,7 +263,7 @@
 
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Email</label>
-                <input id="contEmail" type="text" placeholder="Email" name="contact_email" class="form-control" value="{{ old('contact_email') }}" required>
+                <input readonly id="contEmail" type="text" placeholder="Email" name="contact_email" class="form-control" value="{{ old('contact_email') }}" required>
 
                 @error('contact_email')
                 <div class="text-danger">{{ $message }}</div>
@@ -288,7 +284,7 @@
 
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Nombre(s)</label>
-                    <input id="firma_nombre" type="text" name="firma_nombre" placeholder="Nombre" class="form-control" value="{{ old('firma_nombre') }}">
+                    <input readonly id="firma_nombre" type="text" name="firma_nombre" placeholder="Nombre" class="form-control" value="{{ old('firma_nombre') }}">
 
                     @error('firma_nombre')
                     <div class="text-danger">{{ $message }}</div>
@@ -298,7 +294,7 @@
 
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Apellido(s)</label>
-                    <input id="firma_apellido" type="text" name="firma_apellido" placeholder="Apellido" class="form-control" value="{{ old('firma_apellido') }}">
+                    <input readonly id="firma_apellido" type="text" name="firma_apellido" placeholder="Apellido" class="form-control" value="{{ old('firma_apellido') }}">
 
                     {{-- Validación de errores --}}
 
@@ -311,7 +307,7 @@
 
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">DNI</label>
-                <input id="firma_dni" type="number" name="firma_dni" placeholder="DNI" class="form-control" value="{{ old('firma_dni') }}">
+                <input readonly id="firma_dni" type="number" name="firma_dni" placeholder="DNI" class="form-control" value="{{ old('firma_dni') }}">
                 <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
 
                 @error('firma_dni')
@@ -321,7 +317,7 @@
 
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Email</label>
-                <input id="firma_email" type="email" name="firma_email" placeholder="Email" class="form-control" value="{{ old('firma_email') }}">
+                <input readonly id="firma_email" type="email" name="firma_email" placeholder="Email" class="form-control" value="{{ old('firma_email') }}">
 
                 {{-- Validación de errores --}}
 
@@ -332,7 +328,7 @@
 
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Cargo</label>
-                <input id="firma_cargo" type="text" name="firma_cargo" placeholder="Cargo en empresa" class="form-control" value="{{ old('firma_cargo') }}">
+                <input readonly id="firma_cargo" type="text" name="firma_cargo" placeholder="Cargo en empresa" class="form-control" value="{{ old('firma_cargo') }}">
 
                 {{-- Validación de errores --}}
 
@@ -420,12 +416,12 @@
             <h4 class="TitleSection">Responsable de Control y Comunicación</h4>
             <div class="mb-3">
                 <label class="form-label">Responsable Control FIO</label>
-                <input type="text" name="responsable_control_fio" class="form-control" value="{{ old('responsable_control_fio') }}">
+                <input type="text" name="responsable_control_fio" class="form-control" value="{{ old('responsable_control_fio') }}" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Responsable Control Empresa</label>
-                <input type="text" name="responsable_control_company" class="form-control" value="{{ old('responsable_control_company') }}">
+                <input type="text" name="responsable_control_company" class="form-control" value="{{ old('responsable_control_company') }}" required>
             </div>
 
         </div>
@@ -435,8 +431,8 @@
 
             <div class="mb-3">
                 <label class="form-label fs-6 fw-bold">Objetivos</label>
-                <textarea name="objetivo" class="form-control" rows="4" placeholder="Describa el objetivo ">{{ old('objetivo') }}</textarea>
-                @error('objetivos')
+                <textarea name="objetivo" class="form-control" rows="4" placeholder="Describa el objetivo del convenio">{{ old('objetivo') }}</textarea>
+                @error('objetivo')
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
