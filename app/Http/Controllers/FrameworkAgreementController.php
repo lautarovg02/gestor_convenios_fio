@@ -102,7 +102,7 @@ class FrameworkAgreementController extends Controller
         // Dirección de la empresa
         $template->setValue('calle',     $validated['empresa_calle']    ?? '________');
         $template->setValue('nro_calle',       $validated['empresa_numero']   ?? '________');
-        $template->setValue('ciudad',    $validated['empresa_ciudad']   ?? '________');
+        $template->setValue('ciudad',    $validated['localidad']   ?? '________');
 
         // CUIL/CUIT
         $template->setValue(
