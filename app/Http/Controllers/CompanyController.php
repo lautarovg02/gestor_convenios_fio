@@ -244,8 +244,11 @@ class CompanyController extends Controller
             'scope' => $company->scope,
             'street' => $company->street,
             'number' => $company->number,
-            'city_id' => $company->city_id,
-            'entity_id' => $company->entity_id
+            'city' => $company->city->name,
+            'provincia' => $company->city->province->name,
+            'entity_id' => $company->entity_id,
+
         ]);
     }
+
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFrameworkInternshipAgreement;
-use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
@@ -243,6 +242,7 @@ public function download(Request $request)
 
     return response()->download($fullPath);
 }
+
 
 
     /**

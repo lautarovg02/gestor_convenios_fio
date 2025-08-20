@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch(`/api/company/${companyId}`)
             .then((res) => res.json())
             .then((company) => {
+
+                console.log(company);
                 // Razón Social
                 document.querySelector('input[name="razon_social"]').value =
                     company.denomination || "";
@@ -45,6 +47,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 document.querySelector('input[name="firma_empresa_razon_social"]').value =
                     company.denomination || "";
+
+                document.querySelector('input[name="pais"]').value = "Argentina";
+                document.getElementById("provincia").value = company.provincia || "";
+                document.getElementById("provincia").dispatchEvent(new Event("change"));
+
+                setTimeout(() => {
+                    document.getElementById("ciudad").value = company.city || "";
+                }, 5000); // pequeño delay para esperar a que se carguen las ciudades
+
+                document.querySelector('input[name="calle"]').value = company.street || "";
+                document.querySelector('input[name="nro_calle"]').value = company.number || "";
 
                 fetch(`/api/employees/${companyId}`)
                     .then((res) => res.json())
