@@ -116,11 +116,17 @@ class EmployeeController extends Controller
             ->with('phones')
             ->get();
 
+        // Retornar los empleados en formato JSON
+        if ($employees->isEmpty()) {
+            return response()->json(['message' => 'No se encontraron empleados para esta empresa.'],
+                404);
+        }   
+
         return response()->json($employees);
 
     }
 
-    public function getEmployeeById(int $id)
+        public function getEmployeeById(int $id)
     {
         $employee = Employee::with('phones')->find($id);
         return response()->json($employee);

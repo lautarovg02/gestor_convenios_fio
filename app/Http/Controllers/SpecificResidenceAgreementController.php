@@ -37,20 +37,18 @@ class SpecificResidenceAgreementController extends Controller
         $companies = $this->companyService->getCompaniesByTypeFrameworkAgreement('Convenio Marco de Residencia');
         $carrers = $this->carrerService->getAllCareers();
         $departaments = $this->departamentService->getAllDepartments();
-        return view("specificResidenceAgreement.create", compact('companies', 'carrers', 'departaments'));
+        $students = $this->studentService->getAllStudents();
+        return view("specificResidenceAgreement.create", compact('companies', 'carrers', 'departaments', 'students'));
     }
 
     public function store(StoreSpecificResidenceAgreement $request)
     {
         $data = $request->validated();
 
-        $exists = SpecificResidenceAgreement::where('contract_id', $data['contract_id'])->exists();
+        $exists = $this->studentService->existStudentInAgreement($data['studentIdHidden']);
 
         if ($exists) {
-            return redirect()->back()
-                ->withInput()
-                ->with('empresaSeleccionada', false)
-                ->with('existeAcuerdo', true);
+            return redirect()->back()->withInput()->with('StudentWithAgreement', true);
         }
 
         try {

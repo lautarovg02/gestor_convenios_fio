@@ -20,17 +20,6 @@ class StoreSpecificResidenceAgreement extends FormRequest
      * Get the validation rules that apply to the request.
      */
 
-    protected function prepareForValidation()
-    {
-        $studentCuil = $this->input('student_cuil_prefijo') .
-            $this->input('student_cuil_dni') .
-            $this->input('student_cuil_dv');
-
-        $this->merge([
-            'studentCuil' => $studentCuil
-        ]);
-    }
-
 
     public function rules(): array
     {
@@ -57,6 +46,7 @@ class StoreSpecificResidenceAgreement extends FormRequest
             'studentEmail' => ['required', 'email'],
             'studentCelular' => ['required', 'string'],
             'studentCarrer' => 'required|string|max:255',
+            'studentIdHidden' => 'required|numeric',
 
 
             'tutorName' => 'required|string|max:255',
@@ -121,6 +111,7 @@ class StoreSpecificResidenceAgreement extends FormRequest
             'agreementName.required' => 'El nombre del acuerdo es obligatorio.',
             'tasks.required' => 'Deben existir tareas.',
             'fecha_firma.date' => 'La fecha de firma no tiene un formato válido.',
+            'fecha_inicio.date' => 'La fecha de inicio no tiene un formato válido.',
             'studentName.required' => 'El nombre del estudiante es obligatorio.',
             'studentLastName.required' => 'El apellido" del estudiante es obligatorio.',
             'dniStudent.required' => 'El campo DNI del estudiante es obligatorio.',

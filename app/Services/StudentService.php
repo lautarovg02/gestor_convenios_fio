@@ -3,6 +3,10 @@
 namespace App\Services;
 
 use App\Models\Student;
+use App\Models\SpecificResidenceAgreement;
+use App\Models\IndividualAgreement;
+use App\Models\IndividualInternshipAgreement;
+use App\Models\Specific;
 
 class StudentService {
 
@@ -34,6 +38,28 @@ class StudentService {
 
     public function findStudentByDni(int $dni): ?Student
     {
-        return Student::find($dni);
+        return Student::where('dni', $dni)->first();
     }
+
+    public function getAllStudents()
+    {
+        return Student::orderBy('last_name')->get();
+    }
+
+    public function existStudentInAgreement(int $idStudent): bool{
+
+        $existsInSpecificAgreement = Specific::whereHas('students', function ($query) use ($idStudent) {
+    $query->where('student_id', $idStudent);
+})->exists();
+
+
+        $existsInSpecificResidenceAgreement = SpecificResidenceAgreement::where('student_id', $idStudent)->exists();
+        $existsInIndividualAgreement = IndividualInternshipAgreement::where('student_id', $idStudent)->exists();
+
+        return $existsInSpecificAgreement || $existsInSpecificResidenceAgreement || $existsInIndividualAgreement;
+    }
+
+
+
+
 }

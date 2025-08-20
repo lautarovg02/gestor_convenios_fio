@@ -58,8 +58,8 @@ class FrameworkResidenceAgreementController extends Controller
     {
         $response = Http::get('https://apis.datos.gob.ar/georef/api/provincias');
         $provincias = $response->json()['provincias'];
-
-        return view("frameworkResidenceAgreement.create", compact('provincias'));
+        $companies = $this->companyService->getCompaniesByTypeFrameworkAgreement('Convenio Marco de Residencia');
+        return view("frameworkResidenceAgreement.create", compact('provincias', 'companies'));
     }
 
     public function store(StoreFrameworkResidenceAgreement $request)
@@ -236,7 +236,17 @@ class FrameworkResidenceAgreementController extends Controller
         return response()->download($fullPath);
     }
 
-    
+
+    public function getCompaniesByFrameworkResidenceAgreement()
+    {
+        try {
+            $companies = $this->companyService->getCompaniesByTypeFrameworkAgreement('Convenio Marco de Residencia');
+            return response()->json($companies);
+        } catch (\Exception $e) {
+            \Log::error('Error al obtener empresas que tengan un convenio marco de residencia' . $e->getMessage());
+            return response()->json(['error' => 'Error en el servidor'], 500);
+        }
+    }
 
 public function searchAgreementByCompany($companyId)
 {

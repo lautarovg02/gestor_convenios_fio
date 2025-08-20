@@ -12,6 +12,7 @@ use App\Http\Controllers\FrameworkAgreementController;
 use App\Http\Controllers\FrameworkInternshipAgreementController;
 use App\Http\Controllers\FrameworkResidenceAgreementController;
 use App\Http\Controllers\SpecificResidenceAgreementController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -62,7 +63,7 @@ Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementCont
 
 Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class);
 
-Route::get('/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
+
 
 Route::resource('specificResidenceAgreement', SpecificResidenceAgreementController::class);
 
@@ -93,4 +94,9 @@ Route::get('/specificAgreement/getFrameworkData/{id}', [SpecificAgreementControl
 // AJAX Routes
 Route::get('/api/company/{id}', [CompanyController::class, 'getCompanyById']);
 Route::get('/api/employees/{companyId}', [EmployeeController::class, 'getEmployeesByCompany']);
+
+
+Route::get('/api/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
 Route::get('/api/employee/{id}', [EmployeeController::class, 'getEmployeeById']);
+Route::get('/api/student/{dni}', [StudentController::class, 'getStudentByDni']);
+
