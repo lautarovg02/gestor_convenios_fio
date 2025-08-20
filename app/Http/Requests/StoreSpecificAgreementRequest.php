@@ -44,7 +44,7 @@ class StoreSpecificAgreementRequest extends FormRequest
             'becario' => ['required', 'string'],
 
             'objetivo' => 'required|string',
-            'compromisos' => 'string | required',
+            'compromisos' => 'required|string|max:255',
 
             'titular' => 'nullable|string|max:255',
             'confidencialidad' => 'nullable|in:si,no',
