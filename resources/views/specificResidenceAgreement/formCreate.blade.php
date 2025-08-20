@@ -10,7 +10,7 @@
                 <option value="">Seleccione una empresa</option>
                 @foreach ($companies as $company)
                     <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>
-                        {{ $company->denomination }} - {{ $company->cuit }}</option>
+                        {{ $company->denomination }} - (CUIT: {{ $company->cuit }})</option>
                 @endforeach
             </select>
 
@@ -108,7 +108,7 @@
             <option value="">Seleccionar estudiante</option>
             @foreach ($students as $student)
                 <option value="{{ $student->dni }}">{{ $student->last_name }} {{ $student->name }} -
-                    {{ $student->dni }}</option>
+                    (DNI: {{ $student->dni }})</option>
             @endforeach
 
             <input type="hidden" value="{{ old('studentIdHidden') }}" name="studentIdHidden" id="studentIdHidden">

@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         employees.forEach((employee) => {
                             selectEmployee.innerHTML += `
                                 <option value="${employee.id}">
-                                    ${employee.name} ${employee.lastname} - ${employee.dni}
+                                    ${employee.name} ${employee.lastname} - (DNI: ${employee.dni})
                                 </option>
                             `;
                         });
