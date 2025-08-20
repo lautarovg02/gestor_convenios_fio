@@ -86,7 +86,7 @@ class FrameworkInternshipAgreementController extends Controller
         $existsContract = $this->contractService->getFrameworkAgreementsByCompany($validated['company_id'], 3); //el 3 es el id del tipo de convenio marco de pasantía
 
         if ($existsContract->isNotEmpty()) {
-            return redirect()->back()->withErrors(['errorExistsContract' => 'Ya existe un convenio marco de pasantía para esta empresa.']);
+            return redirect()->back()->withErrors(['errorExistsContract' => 'Ya existe un convenio marco de pasantía para la empresa ' . $validated['razon_social']]);
         }
         
         // Crear o obtener la empresa

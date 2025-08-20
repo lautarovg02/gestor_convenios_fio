@@ -26,20 +26,20 @@
 
             <div class="mb-4 border rounded containerSectionForm">
                 <h4 class="TitleSection">Datos de la contraparte</h4>
-                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Empresa</label>
-                <select id="selectCompany" name="company_id" class="form-select">
+                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Empresa</label><span class="text-danger"> *</span>
+                <select id="selectCompany" name="company_id" class="form-select mb-3" required>
                     <option value="">Seleccione una empresa</option>
                     @foreach ($companies as $company)
                         <option value="{{ $company->id }}">
-                            {{ $company->denomination }} - {{ $company->cuit }}
+                            {{ $company->denomination }} - (CUIT: {{ $company->cuit }})
                         </option>
                     @endforeach
                 </select>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Razón Social</label>
+                    <label class="form-label fs-6 fw-bold">Razón Social</label><span class="text-danger"> *</span>
                     <input type="text" placeholder="Razón Social" name="razon_social" class="form-control"
-                        value="{{ old('razon_social') }}" readonly>
+                        value="{{ old('razon_social') }}" required readonly>
 
                     {{-- Validación de errores --}}
 
@@ -49,10 +49,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label d-block fs-6 fw-bold">Ámbito</label>
+                    <label class="form-label d-block fs-6 fw-bold">Ámbito <span class="text-danger"> *</span></label>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="ambito" value="nacional" id="ambitoNacional"
-                            checked readonly>
+                            checked required>
                         <label class="form-check-label" for="ambitoNacional">Nacional</label>
                     </div>
                     <div class="form-check form-check-inline">
@@ -67,10 +67,10 @@
 
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">CUIT</label>
+                    <label class="form-label fs-6 fw-bold">CUIT</label><span class="text-danger"> *</span>
                     <div class="input-group">
                         <input type="number" class="form-control" name="contraparte_cuit" placeholder="CUIT"
-                            value="{{ old('contraparte_cuit') }}" readonly>
+                            value="{{ old('contraparte_cuit') }}" required readonly>
 
                     </div>
 
@@ -82,9 +82,9 @@
 
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Rubro</label>
+                    <label class="form-label fs-6 fw-bold">Rubro</label><span class="text-danger"> *</span>
                     <input type="text" placeholder="Rubro de la empresa" name="contraparte_rubro" class="form-control"
-                        value="{{ old('contraparte_rubro') }}" readonly>
+                        value="{{ old('contraparte_rubro') }}" required readonly>
 
                     {{-- Validación de errores --}}
 
@@ -95,7 +95,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado</label> <span class="text-danger">*</span>
+                    <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado</label> <span class="text-danger"> *</span>
                     <input type="text" placeholder="Titular / Representante Legal / Apoderado" name="titular"
                         class="form-control" value="{{ old('titular') }}">
                     @error('titular')
@@ -105,10 +105,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label d-block fs-6 fw-bold">Cláusula de Confidencialidad</label>
+                    <label class="form-label d-block fs-6 fw-bold">Cláusula de Confidencialidad</label><span class="text-danger"> *</span>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="confidencialidad" value="si" id="confSi"
-                            checked>
+                            checked required>
                         <label class="form-check-label" for="confSi">Sí</label>
                     </div>
                     <div class="form-check form-check-inline">
@@ -134,7 +134,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">País</label><span class="text-danger"> *</span>
                     <input type="text" name="pais" placeholder="País" class="form-control"
-                        value="{{ old('pais') }}">
+                        value="{{ old('pais') }}" required>
 
                     {{-- Validación de errores --}}
 
@@ -148,7 +148,7 @@
                 <div class="mb-3">
 
                     <label class="form-label fs-6 fw-bold">Provincia</label><span class="text-danger"> *</span>
-                    <select id="provincia" name="provincia" class="form-select">
+                    <select id="provincia" name="provincia" class="form-select" required>
                         <option value="">Seleccione una provincia</option>
                         @foreach ($provincias as $provincia)
                             <option value="{{ $provincia['nombre'] }}">{{ $provincia['nombre'] }}</option>
@@ -166,7 +166,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Ciudad</label><span class="text-danger"> *</span>
 
-                    <select id="ciudad" name="localidad" class="form-select" disabled value="{{ old('ciudad') }}">
+                    <select id="ciudad" name="localidad" class="form-select" disabled value="{{ old('ciudad') }}" required>
                         <option value="">Seleccione una ciudad</option>
                     </select>
 
@@ -181,7 +181,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Código Postal</label><span class="text-danger"> *</span>
                     <input type="number" name="codigo_postal" placeholder="Codigo postal" class="form-control"
-                        value="{{ old('codigo_postal') }}">
+                        value="{{ old('codigo_postal') }}" required>
 
                     {{-- Validación de errores --}}
 
@@ -194,7 +194,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Calle</label><span class="text-danger"> *</span>
                     <input type="text" name="calle" placeholder="Calle" class="form-control"
-                        value="{{ old('calle') }}">
+                        value="{{ old('calle') }}" required>
 
                     {{-- Validación de errores --}}
 
@@ -207,7 +207,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Numero</label><span class="text-danger"> *</span>
                     <input type="number" name="nro_calle" placeholder="Nro. de calle" class="form-control"
-                        value="{{ old('nro_calle') }}">
+                        value="{{ old('nro_calle') }}" required>
 
                     {{-- Validación de errores --}}
 
@@ -220,25 +220,19 @@
             </div>
 
 
-
-
-
-
-
-
             {{-- Representante Contacto --}}
             <div id="contactRepresentativeCard" class="mb-4 border rounded containerSectionForm">
                 <h4 class="TitleSection">Representante de contacto</h4>
                 {{-- Cada campo en bloque separado y ancho completo --}}
 
-                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label>
-                <select id="selectEmployeeContact" name="id_employee" class="form-select">
+                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label><span class="text-danger"> *</span>
+                <select id="selectEmployeeContact" name="id_employee" class="form-select mb-3" required>
                     <option value="">Seleccionar representante de contacto</option>
                 </select>
 
                 <div class="containerInputNameLastName">
                     <div class="mb-3">
-                        <label class="form-label fs-6 fw-bold">Nombre(s)</label>
+                        <label class="form-label fs-6 fw-bold">Nombre(s)</label><span class="text-danger"> *</span>
                         <input id="contact_nombre" type="text" name="contact_nombre" placeholder="Nombre"
                             class="form-control" value="{{ old('contact_nombre') }}" required readonly>
 
@@ -249,7 +243,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fs-6 fw-bold">Apellido(s)</label>
+                        <label class="form-label fs-6 fw-bold">Apellido(s)</label><span class="text-danger"> *</span>
                         <input id="contact_apellido" type="text" placeholder="Apellido" name="contact_apellido"
                             class="form-control" value="{{ old('contact_apellido') }}" required readonly>
 
@@ -262,9 +256,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">DNI</label>
+                    <label class="form-label fs-6 fw-bold">DNI</label><span class="text-danger"> *</span>
                     <input id="contact_dni" type="number" name="contact_dni" placeholder="DNI" class="form-control"
-                        value="{{ old('contact_dni') }}" readonly>
+                        value="{{ old('contact_dni') }}" required readonly>
                     <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
 
                     @error('contact_dni')
@@ -273,10 +267,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">CUIL</label>
+                    <label class="form-label fs-6 fw-bold">CUIL</label><span class="text-danger"> *</span>
 
                     <input type="number" id="contact_cuil" class="form-control" name="contact_cuil" placeholder="CUIL"
-                        value="{{ old('contraparte_cuit') }}" readonly>
+                        value="{{ old('contraparte_cuit') }}" required readonly>
 
 
                     @error('contact_cuil')
@@ -288,7 +282,7 @@
 
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Celular</label>
+                    <label class="form-label fs-6 fw-bold">Celular</label><span class="text-danger"> *</span>
                     <input type="number" id="contact_celular" name="contact_celular" class="form-control"
                         value="{{ old('contact_celular') }}" placeholder="Numero de celular" required readonly>
 
@@ -299,7 +293,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Email</label>
+                    <label class="form-label fs-6 fw-bold">Email</label><span class="text-danger"> *</span>
                     <input id="contact_email" type="email" placeholder="Email" name="contact_email"
                         class="form-control" value="{{ old('contact_email') }}" required readonly>
 
@@ -310,7 +304,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Empresa</label>
+                    <label class="form-label fs-6 fw-bold">Empresa</label><span class="text-danger"> *</span>
                     <input id="contact_empresa" type="text" placeholder="Empresa" name="contact_empresa"
                         class="form-control" value="{{ old('contact_empresa') }}" required readonly>
 
@@ -321,7 +315,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Cargo</label>
+                    <label class="form-label fs-6 fw-bold">Cargo</label><span class="text-danger"> *</span>
                     <input id="contact_cargo" type="text" placeholder="Cargo en empresa" name="contact_cargo"
                         class="form-control" value="{{ old('contact_cargo') }}" required" readonly>
 
@@ -342,17 +336,17 @@
                     <input type="checkbox" id="sameRepresentative"> El representante de contacto es también el de firma
                 </div>
 
-                                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label>
-                <select id="selectEmployeeFirma" name="id_employee_firma" class="form-select">
+                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label><span class="text-danger"> *</span>
+                <select id="selectEmployeeFirma" name="id_employee_firma" class="form-select mb-3">
                     <option value="">Seleccionar representante de firma</option>
                 </select>
 
                 <div class="containerInputNameLastName">
 
                     <div class="mb-3">
-                        <label class="form-label fs-6 fw-bold">Nombre(s)</label>
+                        <label class="form-label fs-6 fw-bold">Nombre(s)</label><span class="text-danger"> *</span>
                         <input id="firma_nombre" type="text" name="firma_nombre" placeholder="Nombre"
-                            class="form-control" value="{{ old('firma_nombre') }}" readonly>
+                            class="form-control" value="{{ old('firma_nombre') }}" required readonly>
 
                         @error('firma_nombre')
                             <div class="text-danger">{{ $message }}</div>
@@ -361,9 +355,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fs-6 fw-bold">Apellido(s)</label>
+                        <label class="form-label fs-6 fw-bold">Apellido(s)</label><span class="text-danger"> *</span>
                         <input id="firma_apellido" type="text" name="firma_apellido" placeholder="Apellido"
-                            class="form-control" value="{{ old('firma_apellido') }}" readonly>
+                            class="form-control" value="{{ old('firma_apellido') }}" required readonly>
 
                         {{-- Validación de errores --}}
 
@@ -375,9 +369,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">DNI</label>
+                    <label class="form-label fs-6 fw-bold">DNI</label><span class="text-danger"> *</span>
                     <input id="firma_dni" type="number" name="firma_dni" placeholder="DNI" class="form-control"
-                        value="{{ old('firma_dni') }}" readonly>
+                        value="{{ old('firma_dni') }}" readonly required>
                     <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
 
                     @error('firma_dni')
@@ -386,10 +380,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Razon Social de Empresa</label>
+                    <label class="form-label fs-6 fw-bold">Razon Social de Empresa</label><span class="text-danger"> *</span>
                     <input id="firma_razon_social" type="text" placeholder="Razon social"
                         name="firma_empresa_razon_social" class="form-control"
-                        value="{{ old('firma_empresa_razon_social') }}" readonly>
+                        value="{{ old('firma_empresa_razon_social') }}" readonly required>
 
                     {{-- Validación de errores --}}
 
@@ -400,9 +394,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Cargo</label>
+                    <label class="form-label fs-6 fw-bold">Cargo</label><span class="text-danger"> *</span>
                     <input id="firma_cargo" type="text" name="firma_cargo" placeholder="Cargo en empresa"
-                        class="form-control" value="{{ old('firma_cargo') }}" readonly>
+                        class="form-control" value="{{ old('firma_cargo') }}" readonly required>
 
                     {{-- Validación de errores --}}
 
@@ -412,9 +406,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Email</label>
+                    <label class="form-label fs-6 fw-bold">Email</label><span class="text-danger"> *</span>
                     <input id="firma_email" type="email" name="firma_email" placeholder="Email" class="form-control"
-                        value="{{ old('firma_email') }}" readonly>
+                        value="{{ old('firma_email') }}" readonly required>
 
                     {{-- Validación de errores --}}
 
@@ -437,7 +431,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Lugar</label><span class="text-danger"> *</span>
                     <input type="text" name="lugar_firma" placeholder="Lugar" class="form-control"
-                        value="{{ old('lugar_firma') }}">
+                        value="{{ old('lugar_firma') }}" required>
 
                     {{-- Validación de errores --}}
 
@@ -449,7 +443,7 @@
 
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Fecha</label><span class="text-danger"> *</span>
-                    <input type="date" name="fecha_firma" class="form-control" value="{{ old('fecha_firma') }}">
+                    <input type="date" name="fecha_firma" class="form-control" value="{{ old('fecha_firma') }}" required>
 
                     {{-- Validación de errores --}}
 
