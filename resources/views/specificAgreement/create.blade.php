@@ -16,17 +16,6 @@
             </div>
         @endif
 
-        <!--
-                    ORDEN
-                    1.-EMPRESA
-                    2.-REPRESENTANTE DE CONTACTO
-                    3.-REPRESENTANTE DE FIRMA
-
-
-                    PREGUNTAS:
-                    - CUIT de la empresa
-
-                -->
 
         <p class="textCampos"><span class="text-danger">*</span> Campos obligatorios</p>
 
@@ -42,7 +31,7 @@
                         @foreach ($company->contracts as $contract)
                             @if ($contract->typeFrameworkAgreement)
                                 <option value="{{ $contract->id }}">
-                                    {{ $company->denomination }} - {{ $company->company_name ?? 'Sin nombre' }}
+                                    {{ $company->denomination }} - (CUIT: {{ $company->cuit }})
                                 </option>
                             @endif
                         @endforeach
@@ -421,11 +410,11 @@
                 <div class="mb-4 border rounded containerSectionForm">
                     <h4 class="TitleSection">Seleccionar estudiante <span class="text-danger"> *</span></h4>
                     <select name="student_id" id="student_id" class="form-select mb-3   " required>
-                        <option value="">-- Seleccioná un estudiante --</option>
+                        <option value="">Seleccione un estudiante</option>
                         @foreach ($students as $student)
                             <option value="{{ $student->id }}" data-nombre="{{ $student->name }}"
                                 data-apellido="{{ $student->last_name }}" data-dni="{{ $student->dni }}">
-                                {{ $student->name }} {{ $student->last_name }} -- {{ $student->dni }}
+                                {{ $student->name }} {{ $student->last_name }} - (DNI: {{ $student->dni }})
                             </option>
                         @endforeach
                     </select>
