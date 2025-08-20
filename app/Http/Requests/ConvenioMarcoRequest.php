@@ -33,7 +33,7 @@ class ConvenioMarcoRequest extends FormRequest
             'cuil_dni' => ['required', 'numeric'],
             'cuil_dv' => ['required', 'numeric'],
             'contact_dni' => ['required', 'numeric'],
-            // 'contact_celular' => ['required', 'numeric'],
+            'contact_celular' => ['required', 'numeric'],
             'contact_email' => [
                 'required',
                 'email',
@@ -43,17 +43,17 @@ class ConvenioMarcoRequest extends FormRequest
             'contact_cargo' => ['required', 'string'],
 
             // Contraparte
-            'razon_social' => ['required', 'string', 'max:255', 'unique:companies,company_name'],
+            'razon_social' => ['required', 'string', 'max:255'],
             'ambito' => ['in:nacional,internacional', 'required'],
             'cuit_prefijo' => ['required', 'numeric'],
             'cuit_dni' => ['required', 'numeric'],
             'cuit_dv' => ['required', 'numeric'],
             'contraparte_rubro' => ['sometimes', 'nullable', 'string', 'max:255'],
             'entidad' => ['required', 'string'],
-            // 'dedicacion' => ['required', 'string'],
             'titular' => ['required', 'string'],
             'confidencialidad' => ['required', 'in:si,no'],
-
+            'company_id' => ['required'],
+            
             // Dirección
             'calle' => ['required', 'string', 'max:255'],
             'nro_calle' => ['required', 'string', 'max:20'],

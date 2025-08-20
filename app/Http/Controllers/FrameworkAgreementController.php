@@ -18,6 +18,8 @@ use App\Services\TypeFrameworkAgreementService;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Storage;
 use Str;
+use Faker\Factory;
+use Illuminate\Support\Facades\Http;
 
 class FrameworkAgreementController extends Controller
 {
@@ -59,20 +61,8 @@ class FrameworkAgreementController extends Controller
     {
         // Trae empresas para el select (ajustá si tenés otro método)
         $companies = $this->companyService->getAllCompanies();
-
-        // Si querés evitar la API, podés mockear provincias acá:
-        $provincias = [
-            ['id' => '02', 'nombre' => 'Ciudad Autónoma de Buenos Aires'],
-            ['id' => '06', 'nombre' => 'Buenos Aires'],
-            ['id' => '10', 'nombre' => 'Catamarca'],
-            ['id' => '14', 'nombre' => 'Córdoba'],
-            ['id' => '18', 'nombre' => 'Chaco'],
-            ['id' => '22', 'nombre' => 'Chubut'],
-            ['id' => '26', 'nombre' => 'Entre Ríos'],
-            ['id' => '30', 'nombre' => 'Formosa'],
-            ['id' => '34', 'nombre' => 'Jujuy'],
-            // ...completá si querés todas
-        ];
+        $response = Http::get('https://apis.datos.gob.ar/georef/api/provincias');
+        $provincias = $response->json()['provincias'];
 
         return view('frameworkAgreement.create', compact('provincias', 'companies'));
     }
@@ -82,113 +72,20 @@ class FrameworkAgreementController extends Controller
     {
         $validated = $request->validated();
 
-        // 1) Tipo de convenio marco (NO pasantía)
+        // 1) Tipo de convenio marco
         $type = $this->typeFrameworkAgreementService->findOrCreateByType('Convenio Marco');
 
 
-        function safe($value)
-        {
-            return $value ?? '______';
-        }
-
-        $template = new TemplateProcessor(
-            storage_path('app/plantillas/convenio_marco.docx') // <- tu plantilla de marco
-        );
-
-        // Ejemplos de setValue (ajustá SOLO las keys de plantilla a las que ya uses en marco)
-        $template->setValue('razon_social', $validated['razon_social'] ?? '________');
-        //            $template->setValue('nominacion',   $validated['razon_social'] ?? '________'); // NO VA 
-
-        // Dirección de la empresa
-        $template->setValue('calle',     $validated['empresa_calle']    ?? '________');
-        $template->setValue('nro_calle',       $validated['empresa_numero']   ?? '________');
-        $template->setValue('ciudad',    $validated['localidad']   ?? '________');
-
-        // CUIL/CUIT
-        $template->setValue(
-            'cuil',
-            safe($validated['cuil_prefijo']) . '-' . safe($validated['cuil_dni']) . '-' . safe($validated['cuil_dv'])
-        );
-        $template->setValue(
-            'cuit',
-            safe($validated['cuit_prefijo']) . '-' . safe($validated['cuit_dni']) . '-' . safe($validated['cuit_dv'])
-        );
-
-
-        // rubro, entidad
-        $template->setValue('rubro', safe($validated['contraparte_rubro'] ?? null));
-        $template->setValue('entidad', safe($validated['entidad']));
-        //$templateProcessor->setValue('dedicacion', safe($validated['dedicacion']));
-
-        // Representante de contacto
-        $template->setValue(
-            'nombre_rep_contacto',
-            safe($validated['contact_nombre']) . ' ' . safe($validated['contact_apellido'])
-        );
-        $template->setValue('cargo_rep_contacto', safe($validated['contact_cargo']));
-
-
-        // Representante de firma
-        $template->setValue(
-            'nombre_rep_firma',
-            safe($validated['firma_nombre']) . ' ' . safe($validated['firma_apellido'])
-        );
-        $template->setValue('cargo_rep_firma', safe($validated['firma_cargo']));
-        $template->setValue('firma_dni', safe($validated['firma_dni']));
-        $template->setValue(
-            'rep_firma_empresa_razon_social',
-            safe($validated['firma_empresa_razon_social'])
-        );
-
-        $template->setValue(
-            'dia',
-            !empty($validated['fecha_firma'])
-                ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('d')
-                : '____'
-        );
-
-        $template->setValue(
-            'mes',
-            !empty($validated['fecha_firma'])
-                ? \Carbon\Carbon::parse($validated['fecha_firma'])->translatedFormat('F')
-                : '____'
-        );
-
-        // Año (numérico completo, ej: 2025)
-        $template->setValue(
-            'anio',
-            !empty($validated['fecha_firma'])
-                ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('Y')
-                : '____'
-        );
-
-
-
         // Si viene empresa seleccionada, validamos que no exista otro convenio marco
-        $companyIdForCheck = $validated['company_id'] ?? null;
-        if ($companyIdForCheck) {
-            $exists = $this->contractService
-                ->getFrameworkAgreementsByCompany($companyIdForCheck, $type->id);
-            if ($exists->isNotEmpty()) {
-                return back()->withErrors(['errorExistsContract' => 'Ya existe un Convenio Marco para esta empresa.'])
-                    ->withInput();
-            }
+        $existsContract = $this->contractService->getFrameworkAgreementsByCompany($validated['company_id'], 1);
+        if ($existsContract->isNotEmpty()) {
+            return redirect()->back()->withErrors([
+                'error' => 'Ya existe un convenio marco de pasantía para la empresa ' . $validated['razon_social']
+            ])->withInput();
         }
-
-        $relativePath = 'convenios_generados/' . date('Y/m'); // p.ej. 2025/08
-        Storage::makeDirectory($relativePath);
-
-        $nombreArchivo = 'convenio_marco_' . Str::slug($validated['razon_social'] ?? 'sin-razon-social') . '.docx';
-
-
-        $fullPath = storage_path('app/' . trim($relativePath, '/') . '/' . $nombreArchivo);
-        $template->saveAs($fullPath);
-
-
-        // 2) Crear u obtener empresa (usa direcciones/ciudad del form si aplica)
-        // El service debería crear o devolver la empresa en base a los datos del form
+        
+        //obtener empresa
         $company = $this->companyService->getOrCreateCompany($validated);
-
 
 
         // 5) Empleado de contacto
@@ -196,19 +93,13 @@ class FrameworkAgreementController extends Controller
             'name'        => $validated['contact_nombre'],
             'lastname'    => $validated['contact_apellido'],
             'dni'         => $validated['contact_dni'],
-            'cuil'        => $validated['contact_cuil'] ?? (
-                ($validated['cuil_prefijo'] ?? '') .
-                ($validated['cuil_dni'] ?? '') .
-                ($validated['cuil_dv'] ?? '')
-            ),
+            'cuil'        => $validated['contact_cuil'] ?? (($validated['cuil_prefijo'] ?? '') .($validated['cuil_dni'] ?? '') .($validated['cuil_dv'] ?? '')),
             'email'       => $validated['contact_email'],
             'phone'        => $validated['contact_celular'] ?? null,
             'position'    => $validated['contact_cargo'] ?? null,
             'is_represent' => true,
             'company_id'  => $company->id,
         ]);
-
-
 
 
         // 6) Representante (firma)
@@ -225,17 +116,42 @@ class FrameworkAgreementController extends Controller
         ]);
 
 
-
-
-
         // 8) Estado inicial del contrato
         $contract_status = $this->contractStatusService->createStatus([
             'status'     => 'SEVyT (Estado de aprobación/Análisis)',
             'time_limit' => 48, // horas
         ]);
 
-        // 9) (OPCIONAL) Generación de archivo Word: si ya lo tenías, integrá acá tu TemplateProcessor
-        // $fullPath = $this->tuServicioDeWord->generarConvenioMarco($validated, ...);
+        //instancia para generar randoms
+        $faker = Factory::create();
+
+            $rector = $this->teacherService->findOrCreateByDni([
+            'name' => $faker->firstName,
+            'lastname' => $faker->lastName,
+            'dni' => $faker->unique()->numberBetween(20000000, 40000000),
+            'cuil' => '20' . $faker->unique()->numberBetween(20000000, 40000000) . '3',
+            'faculty' => $faker->word,
+            'is_rector' => true,
+            'is_dean' => $faker->boolean,
+        ]);
+
+            $teacher = $this->teacherService->findOrCreateByDni([
+            'name' => $faker->firstName,
+            'lastname' => $faker->lastName,
+            'dni' => $faker->unique()->numberBetween(20000000, 40000000),
+            'cuil' => '20' . $faker->unique()->numberBetween(20000000, 40000000) . '3',
+            'faculty' => $faker->word,
+            'is_rector' => false,
+            'is_dean' => $faker->boolean,
+        ]);
+
+        // Crear o obtener la secretaria
+        $secretary = $this->secretaryService->getOrCreateSecretary([
+            'user_secretaria' => 'SECRETARIA_USER',
+            'password_secretaria' => 'SECRETARIA_PASSWORD',
+            'email_secretaria' => 'SECRETARIA_EMAIL',
+        ]);
+
 
         // 10) Crear contrato
         $agreement = Contract::create([
@@ -244,18 +160,58 @@ class FrameworkAgreementController extends Controller
             'url_statute'                  => null,
             'url_assignment_authorities'   => null,
             'company_id'                   => $company->id,
-            'secretary_id'                 => 10,
-            'teacher_id'                   => 58,
+            'secretary_id'                 => $secretary->id,
+            'teacher_id'                   => $teacher->id,
             'creation_date'                => Carbon::parse($validated['fecha_firma']),
             'contact_employee_id'          => $contact_employee->id,
             'representative_employee_id'   => $representative_employee->id,
-            'rector'                       => 54,
+            'rector'                       => $rector->id,
             'contract_status_id'           => $contract_status->id,
             'type_framework_agreement_id'  => $type->id,
             'file'                         => null // $fullPath ?? null,
         ]);
 
+        
+
+
+ //------------------------------------------------------GENERACION DE DOCUMENTO------------------------------------------------------------
+
+    function safe($value) {
+        return $value ?? '______';
+    }
+
+        $template = new TemplateProcessor(storage_path('app/plantillas/convenio_marco.docx'));
+
+        $template->setValue('razon_social', $validated['razon_social'] ?? '________');
+        $template->setValue('calle', $validated['calle'] ?? '________');
+        $template->setValue('nro_calle', $validated['nro_calle'] ?? '________');
+        $template->setValue('ciudad', $validated['localidad'] ?? '________');
+        $template->setValue('provincia', safe($validated['provincia']));
+        $template->setValue('cuil', safe($validated['cuil_prefijo']) . '-' . safe($validated['cuil_dni']) . '-' . safe($validated['cuil_dv']));
+        $template->setValue('cuit', safe($validated['cuit_prefijo']) . '-' . safe($validated['cuit_dni']) . '-' . safe($validated['cuit_dv']));
+        $template->setValue('rubro', safe($validated['contraparte_rubro'] ?? null));
+        $template->setValue('entidad', safe($validated['entidad']));
+        $template->setValue('nombre_rep_contacto',safe($validated['contact_nombre']) . ' ' . safe($validated['contact_apellido']));
+        $template->setValue('cargo_rep_contacto', safe($validated['contact_cargo']));
+        $template->setValue('nombre_rep_firma', safe($validated['firma_nombre']) . ' ' . safe($validated['firma_apellido']));
+        $template->setValue('cargo_rep_firma', safe($validated['firma_cargo']));
+        $template->setValue('firma_dni', safe($validated['firma_dni']));
+        $template->setValue('rep_firma_empresa_razon_social', safe($validated['firma_empresa_razon_social']));
+        $template->setValue('dia', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('d') : '____');
+        $template->setValue('mes', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->translatedFormat('F') : '____');
+        $template->setValue('anio', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('Y') : '____');
+
+        $relativePath = 'convenios_generados/convenios_marcos/' . date('Y/m'); // p.ej. 2025/08
+        Storage::makeDirectory($relativePath);
+
+        $nombreArchivo = 'convenio_marco_' . Str::slug($validated['razon_social'] ?? 'sin-razon-social') . '.docx';
+
+
+        $fullPath = storage_path('app/' . trim($relativePath, '/') . '/' . $nombreArchivo);
+        $template->saveAs($fullPath);
+
         return view('frameworkAgreement.creationSuccessful', compact('relativePath', 'nombreArchivo'));
+
     }
 
 

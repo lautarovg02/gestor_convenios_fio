@@ -55,6 +55,9 @@ Route::delete('/departments/{department}', [DepartmentController::class, 'destro
 
 // AGREEMENTS
 Route::resource('/agreements', AgreementController::class)->name('index', 'agreements.index');
+Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
+
+Route::resource('frameworkAgreement', FrameworkAgreementController::class);
 
 Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
 
@@ -68,10 +71,6 @@ Route::resource('specificResidenceAgreement', SpecificResidenceAgreementControll
 
 
 
-Route::resource('frameworkAgreement', FrameworkAgreementController::class);
-Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
-
-Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
 
 Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class);
 
