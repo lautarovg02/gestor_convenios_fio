@@ -7,11 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Contract;
 use App\Models\ContractStatus;
-use App\Models\FrameworkAgreement;
 use App\Models\Specific;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
-use App\Models\SpecificAgreement; // o el nombre de tu modelo
 use App\Models\Student;
 use App\Services\CompanyService;
 use App\Services\ContractService;
@@ -60,24 +58,18 @@ class SpecificAgreementController extends Controller
         ])->findOrFail($contractId);
 
 
-
-
-
-
         return response()->json([
             // Contraparte
             'razon_social'      => $contract->company->denomination ?? '',
             'ambito'            => $contract->company->scope ?? '',
             'cuit'              => $contract->company->cuit ?? '',
-            'rubro'             => $contract->company->entity->name ?? '',
-            'titular'           => $contract->company->holder ?? '', // Usar lógica si existe el campo, sino valor dummy
+            'rubro'             => $contract->company->sector ?? '',
             'confidencialidad'  => $contract->confidentiality ?? false,
 
             // Dirección
             'direccion' => [
                 'empresa_calle'         => $contract->company->street ?? '',
                 'empresa_numero'        => $contract->company->number ?? '',
-                //'codigo_postal' => $contract->company->postal_code ?? '',
                 'empresa_ciudad'        => $contract->company->city->name ?? '',
                 'empresa_provincia'     => $contract->company->city->province->name ?? '',
                 'pais'          => $contract->company->country ?? '',
@@ -112,11 +104,6 @@ class SpecificAgreementController extends Controller
                 : now()->format('Y-m-d'),
         ]);
     }
-
-
-
-
-
 
 
 
@@ -174,7 +161,6 @@ class SpecificAgreementController extends Controller
         // Crear archivo Word
         $template = new TemplateProcessor(storage_path('app/plantillas/convenio_especifico.docx'));
 
-        /* ${}  */
         $template->setValue('razon_social', $validated['razon_social']);
         $template->setValue('nominacion', $validated['razon_social']); // mismo valor
 
@@ -211,8 +197,8 @@ class SpecificAgreementController extends Controller
         $template->setValue('becario', $validated['becario'] ?? '________');
 
 
-        
-        $relativePath = 'convenios_generados/' . date('Y/m'); // Ej: 'convenios_generados/2025/06'
+
+        $relativePath = 'convenios_generados/Convenio_especifico/' . date('Y/m'); // Ej: 'convenios_generados/2025/06'
         Storage::makeDirectory($relativePath); // Crea la carpeta si no existe
 
         $nombreArchivo = 'convenio_especifico_' . Str::slug($validated['razon_social']) . '.docx';

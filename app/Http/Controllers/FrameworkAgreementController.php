@@ -52,7 +52,7 @@ public function store(Request $request)
         }
 
         // 3. Cargar plantilla Word desde storage
-        $templatePath = storage_path('app/plantillas/Convenio Marco.docx');
+        $templatePath = storage_path('app/plantillas/convenio_marco.docx');
         $templateProcessor = new TemplateProcessor($templatePath);
 
 
