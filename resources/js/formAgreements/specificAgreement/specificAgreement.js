@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(`/specificAgreement/getFrameworkData/${contractId}`)
             .then(response => response.json())
             .then(data => {
-
                 // 1. Razón social
                 document.getElementById('razon_social').value = data.razon_social || "";
 

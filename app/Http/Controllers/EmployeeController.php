@@ -110,25 +110,54 @@ class EmployeeController extends Controller
         //
     }
 
-    public function getEmployeesByCompany(int $companyId)
+    public function getEmployeesByCompany($companyId, Request $request)
     {
-        $employees = Employee::where('company_id', $companyId)
-            ->with('phones')
-            ->get();
-
-        // Retornar los empleados en formato JSON
-        if ($employees->isEmpty()) {
-            return response()->json(['message' => 'No se encontraron empleados para esta empresa.'],
-                404);
-        }   
-
-        return response()->json($employees);
-
+        $query = Employee::query()
+            ->where('company_id', $companyId)
+            // ATENCIÓN: usa el nombre REAL de tu columna:
+            ->where('is_represent', true); // o ->where('is_representative', true)
+    
+        // (Opcional) Si más adelante agregás un tipo: contact | signature
+        // if ($request->query('type') === 'contact') {
+        //     $query->where('representative_type', 'contact');
+        // }
+    
+        $employees = $query->orderBy('lastname')
+            ->orderBy('name')
+            ->get(['id','name','lastname','position']);
+    
+        // Lo formateo como { id, text } para que sea plug&play con el select
+        return response()->json(
+            $employees->map(fn ($e) => [
+                'id'   => $e->id,
+                'text' => trim("{$e->lastname}, {$e->name}") . ($e->position ? " — {$e->position}" : ''),
+            ])
+        );
     }
 
-        public function getEmployeeById(int $id)
+    public function getEmployeeById($id)
     {
-        $employee = Employee::with('phones')->find($id);
-        return response()->json($employee);
+        $emp = Employee::with([
+                'company:id,denomination,company_name',
+                'phones:id,number,employee_id'
+            ])
+            ->findOrFail($id, ['id','name','lastname','dni','email','cuil','position','company_id']);
+    
+        return response()->json([
+            'id'       => $emp->id,
+            'name'     => $emp->name,
+            'lastname' => $emp->lastname,
+            'dni'      => $emp->dni,
+            'email'    => $emp->email,
+            'cuil'     => $emp->cuil,
+            'position' => $emp->position,
+            'company'  => [
+                'denomination' => $emp->company?->denomination,
+                'company_name' => $emp->company?->company_name,
+            ],
+            // 👉 array de números
+            'phones'   => $emp->phones->pluck('number')->values(),
+        ]);
     }
+    
 }

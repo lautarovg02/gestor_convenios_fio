@@ -70,7 +70,7 @@ class Company extends Model
      */
     public function entity()
     {
-        return $this->belongsTo(CompanyEntity::class);
+        return $this->belongsTo(CompanyEntity::class, 'entity_id');  
     }
 
     // Scope para la búsqueda

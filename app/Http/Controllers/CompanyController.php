@@ -235,11 +235,17 @@ class CompanyController extends Controller
         if (!$company) {
             return response()->json(['error' => 'Company not found'], 404);
         }
+
+        //busco el name de la entity relacionada a company
+        $eName =  $company->entity_id = CompanyEntity::find($company->entity_id);
+
+    
         return response()->json([
             'id' => $company->id,
             'denomination' => $company->denomination,
             'cuit' => $company->cuit,
             'company_name' => $company->company_name,
+            'company_category' => $company->company_category,
             'sector' => $company->sector,
             'scope' => $company->scope,
             'street' => $company->street,
@@ -247,6 +253,9 @@ class CompanyController extends Controller
             'city' => $company->city->name,
             'provincia' => $company->city->province->name,
             'entity_id' => $company->entity_id,
+            'city_id' => $company->city_id,
+            'city_name'        => $company->city?->name,
+            'entity_name' => $company->entity_id->name ?? null,
 
         ]);
     }
