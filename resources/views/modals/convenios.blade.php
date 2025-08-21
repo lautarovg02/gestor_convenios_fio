@@ -30,11 +30,12 @@
                     Convenio Específico
                 </a>
 
-                <a href="{{ route('agreements.create', ['type' => 'indPasantia']) }}"
+                  <a href="{{ route('individual-internship-agreements.create')}}" 
                     class="btn btn-outline-info"
                     style="font-weight: 600; border-width: 2px; padding: 10px 16px; font-size: 1rem;">
                     Convenio Individual de Pasantía
                 </a>
+         
 
                 <a href="{{ route('frameworkResidenceAgreement.create', ['type' => 'espPasantia']) }}"
                     class="btn btn-outline-danger"
