@@ -104,7 +104,9 @@ public function store(StoreIndividualInternshipAgreement $request)
         return redirect()->route('individual-internship-agreements.show', $agreement->id);
 
     } catch (\Throwable $e) {
-        dd($e->getMessage(), $e->getTraceAsString());
+        return back()
+            ->withErrors(['general' => 'Ocurrió un error al guardar el convenio.'])
+            ->withInput();
     }
 }
 
