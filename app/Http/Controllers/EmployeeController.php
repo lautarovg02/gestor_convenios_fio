@@ -34,6 +34,7 @@ public function store(StoreEmployee $request, Company $company)
 
     // Creamos el empleado
     $employee = new Employee([
+        'company_id'   => $company->id,
         'name'         => $validated['name'],
         'lastname'     => $validated['lastname'],
         'dni'          => $validated['dni'],
@@ -43,16 +44,15 @@ public function store(StoreEmployee $request, Company $company)
         'is_represent' => $request->has('is_represent') ? 1 : 0,
     ]);
 
-    $employee->company_id = $company->id;
+//    $employee->company_id = $company->id;
     $employee->save();
 
-    // Guardar teléfonos (si se enviaron)
-    if ($request->has('phones')) {
-        foreach ($validated['phones'] as $phone) {
-            $employee->phones()->create([
-                'number' => $phone['number'],
-            ]);
-        }
+     // ✅ Guardar UN teléfono si vino
+    if (!empty($validated['phone'])) {
+        $employee->phones()->create([
+            'number' => $validated['phone'],
+            'is_primary' => true,
+        ]);
     }
 
     return redirect()
@@ -90,11 +90,13 @@ public function store(StoreEmployee $request, Company $company)
         $employee->update([
             'name'         => $validated['name'],
             'lastname'     => $validated['lastname'],
-            'position'     => $validated['position'],
             'dni'          => $validated['dni'],
+            'cuil'         => $validated['cuil'] ?? null,
+            'position'     => $validated['position'],
             'email'        => $request->input('email'),
             'is_represent' => $request->input('is_represent'),
         ]);
+
 
 
         $deletePhoneIds = [];

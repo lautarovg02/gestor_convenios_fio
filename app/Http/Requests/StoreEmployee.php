@@ -25,12 +25,16 @@ class StoreEmployee extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
+            'dni'        => ['required', 'string', 'max:20'],
+            'cuil' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
             'position' => 'required|string|max:255',
-            'dni' => $employeeId
-                ? 'required|numeric|digits:8|unique:employees,dni,' . $employeeId . ',id'
-                : 'required|numeric|digits:8|unique:employees,dni',
-'phones.*.number' => 'required|string|max:20',
+            'is_represent' => 'nullable|boolean',
+            'phone'      => ['nullable', 'string', 'max:30'],
         ];
+        /*            'dni' => $employeeId
+                                            ? 'required|numeric|digits:8|unique:employees,dni,' . $employeeId . ',id'
+                                            : 'required|numeric|digits:8|unique:employees,dni',*/
     }
 
 

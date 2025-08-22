@@ -74,7 +74,7 @@
                                     {{ $employee->dni }}
                                 </td>
                                  <td class="col-max-width text-truncate" title="{{ $employee->cuil}}">
-                                    {{ $employee->dni }}
+                                    {{ $employee->cuil }}
                                 </td>
                                 <td class="col-max-width text-truncate" title="{{ $employee->position }}">
                                     {{ $employee->position }}
