@@ -186,13 +186,14 @@
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">Carrera</label><span class="text-danger"> *</span>
 
-            <select name="studentCarrer" id="carrer" class="form-select" value="{{ old('studentCarrer') }}"
-                required>
-                <option value="" disabled selected>Seleccione una carrera</option>
-                @foreach ($carrers as $carrer)
-                    <option value="{{ $carrer->id }}">{{ $carrer->name }}</option>
-                @endforeach
-            </select>
+          <select name="studentCarrer" id="carrer" class="form-select" required>
+    <option value="" disabled selected>Seleccione una carrera</option>
+    @foreach ($carrers as $carrer)
+    <option value="{{ $carrer->id }}" {{ old('studentCarrer') == $carrer->id ? 'selected' : '' }}>
+        {{ $carrer->name }}
+    </option>
+    @endforeach
+</select>
 
 
 
@@ -291,14 +292,14 @@
         <div class="mb-3">
             <label for="status" class="form-label fs-6 fw-bold">Departamento del tutor</label><span
                 class="text-danger"> *</span>
-            <select name="departament" id="departament" class="form-select" value="{{ old('departament') }}"
-                required>
-                <option value="" disabled selected>Seleccione un departamento</option>
-                @foreach ($departaments as $departament)
-                    <option value="{{ $departament->id }}">{{ $departament->name }}</option>
-                @endforeach
-            </select>
-
+         <select name="departament" id="departament" class="form-select" required>
+    <option value="" disabled selected>Seleccione un departamento</option>
+    @foreach ($departaments as $departament)
+    <option value="{{ $departament->id }}" {{ old('departament') == $departament->id ? 'selected' : '' }}>
+        {{ $departament->name }}
+    </option>
+    @endforeach
+</select>
 
             @error('departament')
                 <div class="text-danger">{{ $message }}</div>

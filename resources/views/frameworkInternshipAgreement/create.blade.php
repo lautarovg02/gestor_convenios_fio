@@ -148,12 +148,15 @@
                 <div class="mb-3">
 
                     <label class="form-label fs-6 fw-bold">Provincia</label><span class="text-danger"> *</span>
-                    <select id="provincia" name="provincia" class="form-select" required>
-                        <option value="">Seleccione una provincia</option>
-                        @foreach ($provincias as $provincia)
-                            <option value="{{ $provincia['nombre'] }}">{{ $provincia['nombre'] }}</option>
-                        @endforeach
-                    </select>
+<select id="provincia" name="provincia" class="form-select" required>
+    <option value="">Seleccione una provincia</option>
+    @foreach ($provincias as $provincia)
+        <option value="{{ $provincia['nombre'] }}" {{ old('provincia') == $provincia['nombre'] ? 'selected' : '' }}>
+            {{ $provincia['nombre'] }}
+        </option>
+    @endforeach
+</select>
+                    
 
                     {{-- Validación de errores --}}
 

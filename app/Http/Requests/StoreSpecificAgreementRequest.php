@@ -41,7 +41,7 @@ class StoreSpecificAgreementRequest extends FormRequest
             'responsable_control_company' => 'nullable|string|max:255',
 
             'student_id' => ['required', 'exists:students,id'],
-            'becario' => ['required', 'string'],
+           
 
             'objetivo' => 'required|string',
             'compromisos' => 'required|string|max:255',
@@ -92,7 +92,7 @@ class StoreSpecificAgreementRequest extends FormRequest
             'student_id.required' => 'El estudiante es obligatorio.',
             'student_id.exists' => 'El estudiante seleccionado no es válido.',
 
-            'becario.required' => 'El nombre del becario es obligatorio.',
+            
 
             'objetivo.required' => 'El objetivo es obligatorio.',
 

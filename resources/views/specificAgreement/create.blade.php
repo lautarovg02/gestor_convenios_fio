@@ -25,14 +25,14 @@
             {{-- Select convenio marco --}}
             <div class="mb-4 border rounded containerSectionForm">
                 <h4 class="TitleSection">Seleccionar Empresa <span class="text-danger">*</span></h4>
-                <select id="convenioMarcoSelect" name="contract_id" class="form-select" required>
+                <select id="convenioMarcoSelect" name="contract_id" class="form-select" >
                     <option value="">Seleccionar</option>
                     @foreach ($companies as $company)
                         @foreach ($company->contracts as $contract)
                             @if ($contract->typeFrameworkAgreement)
-                                <option value="{{ $contract->id }}">
-                                    {{ $company->denomination }} - (CUIT: {{ $company->cuit }})
-                                </option>
+                                <option value="{{ $contract->id }}" {{ old('contract_id') == $contract->id ? 'selected' : '' }}>
+                    {{ $company->denomination }} - (CUIT: {{ $company->cuit }})
+                </option>
                             @endif
                         @endforeach
                     @endforeach
@@ -406,17 +406,20 @@
                     </div>
                 </div>
 
-                {{-- Becario --}}
+               {{-- Becario --}}
                 <div class="mb-4 border rounded containerSectionForm">
                     <h4 class="TitleSection">Seleccionar estudiante <span class="text-danger"> *</span></h4>
                     <select name="student_id" id="student_id" class="form-select mb-3   " required>
                         <option value="">Seleccione un estudiante</option>
                         @foreach ($students as $student)
-                            <option value="{{ $student->id }}" data-nombre="{{ $student->name }}"
-                                data-apellido="{{ $student->last_name }}" data-dni="{{ $student->dni }}">
-                                {{ $student->name }} {{ $student->last_name }} - (DNI: {{ $student->dni }})
-                            </option>
-                        @endforeach
+            <option value="{{ $student->id }}" 
+                data-nombre="{{ $student->name }}"
+                data-apellido="{{ $student->last_name }}" 
+                data-dni="{{ $student->dni }}"
+                {{ old('student_id') == $student->id ? 'selected' : '' }}>
+                {{ $student->name }} {{ $student->last_name }} - (DNI: {{ $student->dni }})
+            </option>
+        @endforeach
                     </select>
 
                     <div class="containerInputNameLastName">
@@ -424,14 +427,16 @@
                             <label class="form-label fs-6 fw-bold" for="Nombre">Nombre</label><span
                                 class="text-danger"> *</span>
                             <input type="text" id="becario_nombre" name="becario_nombre" class="form-control"
-                                placeholder="Nombre del estudiante" readonly>
+                                placeholder="Nombre del estudiante" value="{{ old('becario_nombre') }}" readonly>
+                             
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fs-6 fw-bold" for="Apellido">Apellido</label><span
                                 class="text-danger"> *</span>
-                            <input type="text" id="becario_apellido" value="" name="becario_apellido"
-                                class="form-control" placeholder="Apellido del estudiante" readonly>
+                            <input type="text" id="becario_apellido" name="becario_apellido"
+                                class="form-control" placeholder="Apellido del estudiante" value="{{ old('becario_apellido') }}" readonly>
+                           
                         </div>
                     </div>
 
@@ -439,13 +444,13 @@
                         <label class="form-label fs-6 fw-bold" for="DNI">DNI</label><span class="text-danger">
                             *</span>
                         <input type="text" id="becario_dni" name="becario_dni" class="form-control"
-                            placeholder="DNI del estudiante" readonly>
+                            placeholder="DNI del estudiante" value="{{ old('becario_dni') }}" readonly>
+               
                     </div>
 
                     <!-- fuera del select -->
                     <input type="hidden" name="becario" id="becario" value="">
                 </div>
-
 
 
                 {{-- Responsable de control y comunicación --}}

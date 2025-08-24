@@ -179,9 +179,9 @@ class SpecificAgreementController extends Controller
         $template->setValue('mes_firma', \Carbon\Carbon::parse($validated['fecha_firma'])->translatedFormat('F'));
         $template->setValue('anio_firma', \Carbon\Carbon::parse($validated['fecha_firma'])->format('Y'));
 
+        $student = Student::findOrFail($validated['student_id']);
+        $template->setValue('becario', $student->name . ' ' . $student->last_name . ' (DNI: ' . $student->dni . ')');
 
-        /*Agregar Becario*/
-        $template->setValue('becario', $validated['becario'] ?? '________');
 
 
         $template->setValue('objetivo', $validated['objetivo'] ?? '________');
@@ -193,11 +193,7 @@ class SpecificAgreementController extends Controller
         // Campo directo desde el form
         $template->setValue('responsable_fio', $validated['responsable_control_fio'] ?? '________');
 
-        // Si el campo "becario" existe, se usa. Si no, pone '________'
-        $template->setValue('becario', $validated['becario'] ?? '________');
-
-
-
+      
         $relativePath = 'convenios_generados/Convenio_especifico/' . date('Y/m'); // Ej: 'convenios_generados/2025/06'
         Storage::makeDirectory($relativePath); // Crea la carpeta si no existe
 

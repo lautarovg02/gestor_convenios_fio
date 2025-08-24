@@ -346,12 +346,15 @@
 
 
                 <label class="form-label fs-6 fw-bold">Provincia</label>
-                <select id="provincia" name="provincia" class="form-select">
-                    <option value="">Seleccione una provincia</option>
-                    @foreach($provincias as $provincia)
-                    <option value="{{ $provincia['nombre'] }}">{{ $provincia['nombre'] }}</option>
-                    @endforeach
-                </select>
+
+               <select id="provincia" name="provincia" class="form-select" required>
+    <option value="">Seleccione una provincia</option>
+    @foreach ($provincias as $provincia)
+        <option value="{{ $provincia['nombre'] }}" {{ old('provincia') == $provincia['nombre'] ? 'selected' : '' }}>
+            {{ $provincia['nombre'] }}
+        </option>
+    @endforeach
+</select>
 
                 {{-- Validación de errores --}}
 

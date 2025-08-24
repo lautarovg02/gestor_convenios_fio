@@ -16,13 +16,13 @@
             <div class="col-md-6">
                 <div class="card shadow-sm h-100">
                     <div class="card-body">
-                        <h4 class="card-title mb-3">🏢 Empresa</h4>
+                        <h4 class="card-title mb-3">Seleccionar Empresa</h4>
                         <p class="card-text text-muted">Seleccioná la empresa con convenio marco de pasantía.</p>
 
                         <div class="mb-3">
                             <label for="companySelect" class="form-label fw-semibold">Empresa</label>
                             <select id="companySelect" name="company_id" class="form-select" required>
-                                <option value="">-- Seleccionar empresa --</option>
+                                <option value="">Seleccionar</option>
                                 @foreach ($companies as $company)
                                     <option value="{{ $company->id }}">
                                         {{ $company->denomination }} (CUIT: {{ $company->cuit }})
@@ -38,7 +38,7 @@
             <div class="col-md-6">
                 <div class="card shadow-sm h-100">
                     <div class="card-body">
-                        <h4 class="card-title mb-3">🎓 Alumno</h4>
+                        <h4 class="card-title mb-3">Seleccionar Estudiante</h4>
                         <p class="card-text text-muted">Buscá y seleccioná el alumno que formará parte de este convenio.</p>
 
                         {{-- 🔍 Input búsqueda --}}
