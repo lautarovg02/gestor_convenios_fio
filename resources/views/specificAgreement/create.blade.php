@@ -456,6 +456,9 @@
                             FIO</label><span class="text-danger"> *</span>
                         <input type="text" name="responsable_control_fio" class="form-control"
                             value="{{ old('responsable_control_fio') }}" required>
+                               @error('responsable_control_fio')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
                     </div>
 
                     <div class="mb-3">
@@ -463,6 +466,9 @@
                             Empresa</label><span class="text-danger"> *</span>
                         <input type="text" name="responsable_control_company" class="form-control"
                             value="{{ old('responsable_control_company') }}" required>
+                            @error('responsable_control_company')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
                     </div>
 
                 </div>

@@ -31,7 +31,6 @@ class StoreSpecificResidenceAgreement extends FormRequest
             'contract_id' => 'required',
             'companyId' => 'required',
             'agreementName' => 'required|string|max:255',
-            'contract_id' => 'required',
             'tasks' => 'required|string',
             'fecha_firma' => 'nullable|date',
             'fecha_inicio' => 'nullable|date',
@@ -130,6 +129,10 @@ class StoreSpecificResidenceAgreement extends FormRequest
             'tutorFacuName.required' => 'El nombre del tutor de facultad es obligatorio.',
             'tutorFacuLastName.required' => 'El apellido del tutor de facultad es obligatorio.',
             'tutorFacuDni.required' => 'El DNI del tutor de facultad es obligatorio.',
+            //Se agregan mensajes para los nuevos campos
+            'companyRepresentative.required' => 'El representante de la empresa es obligatorio.',
+            'departament.required' => 'El departamento es obligatorio.',
+
         ];
     }
 }

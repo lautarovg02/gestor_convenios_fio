@@ -91,6 +91,8 @@ class StoreSpecificAgreementRequest extends FormRequest
 
             'student_id.required' => 'El estudiante es obligatorio.',
             'student_id.exists' => 'El estudiante seleccionado no es válido.',
+            'responsable_control_fio.required' => 'El nombre del responsable de control de la FIO es obligatorio.',
+            'responsable_control_company.required' => 'El nombre del responsable de control de la empresa es obligatorio.',
 
             'becario.required' => 'El nombre del becario es obligatorio.',
 

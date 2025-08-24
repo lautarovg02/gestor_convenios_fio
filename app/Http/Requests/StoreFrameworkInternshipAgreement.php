@@ -41,7 +41,7 @@ class StoreFrameworkInternshipAgreement extends FormRequest
             // Contraparte
             'razon_social' => ['required', 'string'],
             'ambito' => ['required', 'in:nacional,internacional'],
-            'contraparte_cuit' => ['required', 'nullable', 'numeric', 'digits:11'],
+            'contraparte_cuit' => ['required', 'numeric', 'digits:11'],//Es requerido.
             'contraparte_rubro' => ['required', 'string'],
             'titular' => ['required', 'string'],
             'confidencialidad' => ['required'],
@@ -178,6 +178,9 @@ public function withValidator($validator)
             'lugar_firma.required' => 'El lugar de la firma es obligatorio.',
             'fecha_firma.required' => 'La fecha de la firma es obligatoria.',
             'fecha_firma.date' => 'La fecha de la firma no es válida.',
+
+            'firma_email.email' => 'El correo electrónico del firmante no es válido.',
+
 /*
             // Documentos
             'doc_afip.required' => 'El certificado de la AFIP es obligatorio.',

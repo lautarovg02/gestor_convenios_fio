@@ -211,6 +211,34 @@ public function withValidator($validator)
             'lugar_firma.required' => 'El lugar de la firma es obligatorio.',
             'fecha_firma.required' => 'La fecha de la firma es obligatoria.',
             'fecha_firma.date' => 'La fecha de la firma no es válida.',
+            // Se agregan mensajes de error para los campos
+    // Representante contacto
+'contact_cuil_prefijo.required' => 'El prefijo del CUIL del contacto es obligatorio.',
+'contact_cuil_dni.required' => 'La parte del DNI en el CUIL del contacto es obligatoria.',
+'contact_cuil_dv.required' => 'El dígito verificador del CUIL del contacto es obligatorio.',
+'contact_cuil_prefijo.numeric' => 'El prefijo del CUIL del contacto debe ser numérico.',
+'contact_cuil_dni.numeric' => 'La parte del DNI en el CUIL del contacto debe ser numérica.',
+'contact_cuil_dv.numeric' => 'El dígito verificador del CUIL del contacto debe ser numérico.',
+'contact_celular.numeric' => 'El número de celular del contacto debe ser numérico.',
+
+// Contraparte
+'contraparte_cuit_prefijo.required' => 'El prefijo del CUIT de la contraparte es obligatorio.',
+'contraparte_cuit_dni.required' => 'La parte del DNI en el CUIT de la contraparte es obligatoria.',
+'contraparte_cuit_dv.required' => 'El dígito verificador del CUIT de la contraparte es obligatorio.',
+'contraparte_cuit_prefijo.numeric' => 'El prefijo del CUIT de la contraparte debe ser numérico.',
+'contraparte_cuit_dni.numeric' => 'La parte del DNI en el CUIT de la contraparte debe ser numérica.',
+'contraparte_cuit_dv.numeric' => 'El dígito verificador del CUIT de la contraparte debe ser numérico.',
+
+// Dirección
+'calle.max' => 'La calle no puede superar los 255 caracteres.',
+'nro_calle.max' => 'El número de calle no puede superar los 20 caracteres.',
+'codigo_postal.numeric' => 'El código postal debe ser numérico.',
+
+// Representante firma
+'firma_email.email' => 'El correo electrónico del firmante no es válido.',
+'firma_dni.numeric' => 'El DNI del firmante debe ser numérico.',
+
+
 /*
             // Documentos
             'doc_afip.required' => 'El certificado de la AFIP es obligatorio.',
