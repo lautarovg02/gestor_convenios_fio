@@ -23,7 +23,7 @@ class ContractStatusFactory extends Factory
             'status'=>$this->faker->unique()->randomElement(['En Departamento', 'En Coordinación', 'SEVyT', 'SEVyT-Firma',
                                                              'Contraparte', 'SEVyT-Enviar a CA', 'En CA', 'En Ejecución',
                                                              'Deshabilitado','Finalizado']),
-            'time_limit'=>$this->faker->optional()->time('H:i:s')
+            'time_limit' => $this->faker->optional()->numberBetween(1, 200), // horas como número entero
         ];
     }
 }
