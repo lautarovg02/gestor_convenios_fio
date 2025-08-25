@@ -82,6 +82,10 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="col">
+                            <label class="form-label required-field fs-6 fw-bold">CUIL</label>
+                            <input type="number" name="cuil" value="{{ old('cuil', $employee->cuil) }}" class="form-control" required>
+                        </div>
 
                         <!-- POSITION -->
                         <div class="form-group mb-3">
