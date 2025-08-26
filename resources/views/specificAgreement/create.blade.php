@@ -23,7 +23,7 @@
             @csrf
 
             {{-- Select convenio marco --}}
-            <div class="mb-4 border rounded containerSectionForm">
+            <div class="mb-4 border rounded containerSectionForm selectCompanySection">
                 <h4 class="TitleSection">Seleccionar Empresa <span class="text-danger">*</span></h4>
                 <select id="convenioMarcoSelect" name="contract_id" class="form-select" required>
                     <option value="">Seleccionar</option>

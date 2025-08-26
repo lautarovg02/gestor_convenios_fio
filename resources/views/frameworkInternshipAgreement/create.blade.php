@@ -4,17 +4,17 @@
 
 @section('content')
     <div class="container mt-4" "> <!-- ancho máximo fijo -->
-        <h2 class="mb-3 text-center">CREAR CONVENIO MARCO DE PASANTIA</h2>
+            <h2 class="mb-3 text-center">CREAR CONVENIO MARCO DE PASANTIA</h2>
 
-@if ($errors->has('errorExistsContract'))
-    <div class="alert alert-danger">
-        <span>{{ $errors->first('errorExistsContract') }}</span>
-    </div>
-@elseif ($errors->has('error'))
-    <div class="alert alert-danger">
-        <span>Error al enviar el formulario</span>
-    </div>
-@endif
+     @if ($errors->has('errorExistsContract'))
+        <div class="alert alert-danger">
+            <span>{{ $errors->first('errorExistsContract') }}</span>
+        </div>
+    @elseif ($errors->has('error'))
+        <div class="alert alert-danger">
+            <span>Error al enviar el formulario</span>
+        </div>
+        @endif
 
 
         <p class="textCampos"><span class="text-danger">*</span> Campos obligatorios</p>
@@ -23,18 +23,24 @@
             enctype="multipart/form-data">
             @csrf
 
+            <div class="mb-4 border rounded containerSectionForm selectCompanySection">
+                <h4 class="TitleSection">Seleccionar empresa</h4>
+                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Empresa</label><span
+                    class="text-danger"> *</span>
+                <select id="selectCompany" name="company_id" class="form-select">
+                    <option value="">Seleccione una empresa</option>
+                    @foreach ($companies as $company)
+                        <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>
+                            {{ $company->denomination }} - (CUIT: {{ $company->cuit }})</option>
+                    @endforeach
+                </select>
+
+            </div>
+
 
             <div class="mb-4 border rounded containerSectionForm">
                 <h4 class="TitleSection">Datos de la contraparte</h4>
-                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Empresa</label><span class="text-danger"> *</span>
-                <select id="selectCompany" name="company_id" class="form-select mb-3" required>
-                    <option value="">Seleccione una empresa</option>
-                    @foreach ($companies as $company)
-                        <option value="{{ $company->id }}">
-                            {{ $company->denomination }} - (CUIT: {{ $company->cuit }})
-                        </option>
-                    @endforeach
-                </select>
+
 
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Razón Social</label><span class="text-danger"> *</span>
@@ -95,7 +101,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado</label> <span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado</label> <span
+                        class="text-danger"> *</span>
                     <input type="text" placeholder="Titular / Representante Legal / Apoderado" name="titular"
                         class="form-control" value="{{ old('titular') }}">
                     @error('titular')
@@ -105,7 +112,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label d-block fs-6 fw-bold">Cláusula de Confidencialidad</label><span class="text-danger"> *</span>
+                    <label class="form-label d-block fs-6 fw-bold">Cláusula de Confidencialidad</label><span
+                        class="text-danger"> *</span>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="confidencialidad" value="si" id="confSi"
                             checked required>
@@ -166,7 +174,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Ciudad</label><span class="text-danger"> *</span>
 
-                    <select id="ciudad" name="localidad" class="form-select"  value="{{ old('ciudad') }}" required>
+                    <select id="ciudad" name="localidad" class="form-select" value="{{ old('ciudad') }}" required>
                         <option value="">Seleccione una ciudad</option>
                     </select>
 
@@ -225,7 +233,8 @@
                 <h4 class="TitleSection">Representante de contacto</h4>
                 {{-- Cada campo en bloque separado y ancho completo --}}
 
-                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label><span class="text-danger"> *</span>
+                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label><span
+                    class="text-danger"> *</span>
                 <select id="selectEmployeeContact" name="id_employee" class="form-select mb-3" required>
                     <option value="">Seleccionar representante de contacto</option>
                 </select>
@@ -336,7 +345,8 @@
                     <input type="checkbox" id="sameRepresentative"> El representante de contacto es también el de firma
                 </div>
 
-                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label><span class="text-danger"> *</span>
+                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label><span
+                    class="text-danger"> *</span>
                 <select id="selectEmployeeFirma" name="id_employee_firma" class="form-select mb-3">
                     <option value="">Seleccionar representante de firma</option>
                 </select>
@@ -380,7 +390,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Razon Social de Empresa</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Razon Social de Empresa</label><span class="text-danger">
+                        *</span>
                     <input id="firma_razon_social" type="text" placeholder="Razon social"
                         name="firma_empresa_razon_social" class="form-control"
                         value="{{ old('firma_empresa_razon_social') }}" readonly required>
@@ -443,7 +454,8 @@
 
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Fecha</label><span class="text-danger"> *</span>
-                    <input type="date" name="fecha_firma" class="form-control" value="{{ old('fecha_firma') }}" required>
+                    <input type="date" name="fecha_firma" class="form-control" value="{{ old('fecha_firma') }}"
+                        required>
 
                     {{-- Validación de errores --}}
 

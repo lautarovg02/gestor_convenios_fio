@@ -53,6 +53,12 @@ form {
     font-size: 131% !important;
 }
 
+.selectCompanySection{
+        height: 10pc !important;
+    margin: 0% 30% !important;
+    width: fit-content !important;
+}
+
 .containerCheckBox{
     font-size: 124%;
     justify-content: flex-end;

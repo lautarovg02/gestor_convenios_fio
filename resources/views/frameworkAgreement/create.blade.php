@@ -33,22 +33,23 @@
         <form action="{{ route('frameworkAgreement.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
+            <div class="mb-4 border rounded containerSectionForm selectCompanySection">
+                <h4 class="TitleSection">Seleccionar empresa</h4>
+                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Empresa</label><span
+                    class="text-danger"> *</span>
+                <select id="selectCompany" name="company_id" class="form-select">
+                    <option value="">Seleccione una empresa</option>
+                    @foreach ($companies as $company)
+                        <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>
+                            {{ $company->denomination }} - (CUIT: {{ $company->cuit }})</option>
+                    @endforeach
+                </select>
+
+            </div>
 
             {{-- Contraparte --}}
             <div class=" mb-4 border rounded containerSectionForm">
                 <h4 class="TitleSection">Datos de contraparte</h4>
-                
-                <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Empresa</label><span class="text-danger"> *</span>
-                    <select id="selectCompany" name="company_id" class="form-select" required>
-                        <option value="">Seleccione una empresa</option>
-                        @foreach ($companies as $company)
-                            <option value="{{ $company->id }}">
-                                {{ $company->denomination }} - {{ $company->cuit }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
 
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Razón Social</label><span class="text-danger"> *</span>
@@ -110,7 +111,8 @@
 
 
                 <div class="mb-3">
-                    <label for="entity" class="form-label fs-6 fw-bold">Entidad</label><span class="text-danger"> *</span>
+                    <label for="entity" class="form-label fs-6 fw-bold">Entidad</label><span class="text-danger">
+                        *</span>
                     <input type="text" placeholder="Entidad de la empresa" name="entidad" id="entidad"
                         class="form-control" value="{{ old('entidad') }}">
                     @error('entidad')
@@ -119,7 +121,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado</label><span
+                        class="text-danger"> *</span>
                     <input type="text" placeholder="Titular / Representante Legal / Apoderado" name="titular"
                         class="form-control" value="{{ old('titular') }}" required>
                     @error('titular')
@@ -128,7 +131,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label d-block fs-6 fw-bold">Cláusula de Confidencialidad<span class="text-danger"> *</span></label>
+                    <label class="form-label d-block fs-6 fw-bold">Cláusula de Confidencialidad<span class="text-danger">
+                            *</span></label>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="confidencialidad" value="si"
                             id="confSi" {{ old('confidencialidad') == 'si' ? 'checked' : '' }} required>
@@ -176,8 +180,8 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Ciudad</label><span class="text-danger"> *</span>
 
-                    <select id="ciudad" name="localidad" class="form-select" disabled
-                        value="{{ old('localidad') }}" required>
+                    <select id="ciudad" name="localidad" class="form-select" disabled value="{{ old('localidad') }}"
+                        required>
                         <option value="">Seleccione una ciudad</option>
                     </select>
 
@@ -198,8 +202,9 @@
 
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Calle</label><span class="text-danger"> *</span>
-                    <input type="text" name="calle" placeholder="Calle" class="form-control" value="{{ old('calle') }}">
-                    
+                    <input type="text" name="calle" placeholder="Calle" class="form-control"
+                        value="{{ old('calle') }}">
+
                     @error('calle')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
@@ -207,8 +212,9 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Numero</label><span class="text-danger"> *</span>
-                    <input type="text" name="nro_calle" placeholder="Nro. de calle" class="form-control" value="{{ old('nro_calle') }}">
-                    
+                    <input type="text" name="nro_calle" placeholder="Nro. de calle" class="form-control"
+                        value="{{ old('nro_calle') }}">
+
                     @error('nro_calle')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
@@ -224,11 +230,12 @@
 
                 <div class="mb-3">
 
-                    <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label><span class="text-danger"> *</span>
-                <select id="selectEmployeeContact" name="id_employee" class="form-select"
-                    data-preselected="{{ old('id_employee', $preselectedEmployeeId ?? '') }}" required>
-                    <option value="">Seleccione un representante</option>
-                </select>
+                    <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label><span
+                        class="text-danger"> *</span>
+                    <select id="selectEmployeeContact" name="id_employee" class="form-select"
+                        data-preselected="{{ old('id_employee', $preselectedEmployeeId ?? '') }}" required>
+                        <option value="">Seleccione un representante</option>
+                    </select>
                 </div>
 
                 <div class="containerInputNameLastName">
@@ -236,7 +243,7 @@
                         <label class="form-label fs-6 fw-bold">Nombre(s)</label><span class="text-danger"> *</span>
                         <input type="text" name="contact_nombre" placeholder="Nombre" class="form-control" required
                             value="{{ old('contact_nombre') }}">
-                        
+
                         @error('contact_nombre')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -246,7 +253,7 @@
                         <label class="form-label fs-6 fw-bold">Apellido(s)</label><span class="text-danger"> *</span>
                         <input type="text" placeholder="Apellido" name="contact_apellido" class="form-control"
                             required value="{{ old('contact_apellido') }}">
-                        
+
                         @error('contact_apellido')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -262,7 +269,7 @@
                     @error('contact_dni')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
-                    
+
                 </div>
 
                 <div class="mb-3">
@@ -280,7 +287,7 @@
                     @error('contact_cuil')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
-                   <div class="form-text">Formato: XX-XXXXXXXX-X</div>
+                    <div class="form-text">Formato: XX-XXXXXXXX-X</div>
 
                 </div>
 
@@ -373,7 +380,8 @@
 
                 </div>
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Razon Social de Empresa</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Razon Social de Empresa</label><span class="text-danger">
+                        *</span>
                     <input type="text" placeholder="Razon social" name="firma_empresa_razon_social"
                         class="form-control" value="{{ old('firma_empresa_razon_social') }}">
 
@@ -472,7 +480,7 @@
                     @enderror
 
                 </div>
-                
+
             </div>
 
             {{-- Botones --}}

@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 fetch(`/api/employees/${companyId}`)
                     .then((res) => res.json())
                     .then((employees) => {
-                        
+                        console.log(employees);
                         selectEmployeeContact.innerHTML =
                             '<option value="">Seleccione un representante de contacto</option>';
 
@@ -72,10 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
                             employees.forEach((employee) => {
                             
                             selectEmployeeContact.innerHTML += `
-                            <option value="${employee.id}">${employee.name} ${employee.lastname} - (DNI: ${employee.dni})</option>`;
+                            <option value="${employee.id}">${employee.lastname}, ${employee.name} - (DNI: ${employee.dni})</option>`;
 
                             selectEmployeeFirma.innerHTML += `
-                            <option value="${employee.id}">${employee.name} ${employee.lastname} - (DNI: ${employee.dni})</option>`;
+                            <option value="${employee.id}">${employee.lastname}, ${employee.name} - (DNI: ${employee.dni})</option>`;
                         });
 
                     })

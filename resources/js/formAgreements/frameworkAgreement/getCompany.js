@@ -169,9 +169,9 @@ async function loadEmployees(companyId) {
             if (e.text) return e.text;
             const ape = e.lastname ?? "";
             const nom = e.name ?? "";
-            const cargo = e.position ? ` — ${e.position}` : "";
-            const dni = e.dni ? ` — DNI ${e.dni}` : "";
-            return `${ape}, ${nom}${cargo}${dni}`.trim();
+            const cargo = e.position ? ` - ${e.position}` : "";
+            const dni = e.dni ? ` - (DNI: ${e.dni})` : "";
+            return `${ape}, ${nom}${dni}`.trim();
         };
 
         if (selectEmployeeContact) {

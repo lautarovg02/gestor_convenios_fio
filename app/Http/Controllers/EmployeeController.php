@@ -163,29 +163,14 @@ class EmployeeController extends Controller
             ->with('success', 'Empleado eliminado correctamente.');
     }
 
-    public function getEmployeesByCompany($companyId, Request $request)
+     public function getEmployeesByCompany(int $companyId)
     {
-        $query = Employee::query()
-            ->where('company_id', $companyId)
-            // ATENCIÓN: usa el nombre REAL de tu columna:
-            ->where('is_represent', true); // o ->where('is_representative', true)
-    
-        // (Opcional) Si más adelante agregás un tipo: contact | signature
-        // if ($request->query('type') === 'contact') {
-        //     $query->where('representative_type', 'contact');
-        // }
-    
-        $employees = $query->orderBy('lastname')
-            ->orderBy('name')
-            ->get(['id','name','lastname','position']);
-    
-        // Lo formateo como { id, text } para que sea plug&play con el select
-        return response()->json(
-            $employees->map(fn ($e) => [
-                'id'   => $e->id,
-                'text' => trim("{$e->lastname}, {$e->name}") . ($e->position ? " — {$e->position}" : ''),
-            ])
-        );
+        $employees = Employee::where('company_id', $companyId)
+            ->with('phones')
+            ->get();
+
+        return response()->json($employees);
+
     }
 
     public function getEmployeeById($id)
