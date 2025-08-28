@@ -18,4 +18,10 @@ class TypeFrameworkAgreementService
             ['type' => $type],
             ['type' => $type]);
     }
+
+    public function getIdByType(string $type): ?int
+    {
+        $typeAgreement = TypeFrameworkAgreement::where('type', $type)->first();
+        return $typeAgreement ? $typeAgreement->id : null;
+    }
 }

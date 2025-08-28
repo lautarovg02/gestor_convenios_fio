@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch(`/api/employee/${selectedOption}`)
             .then((response) => response.json())
             .then((employee) => {
-
                 document.querySelector('input[name="contact_nombre"]').value =
                     employee.name || "";
                 document.querySelector('input[name="contact_apellido"]').value =
@@ -21,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.querySelector('input[name="contact_email"]').value =
                     employee.email || "";
                 document.querySelector('input[name="contact_celular"]').value =
-                    employee.phones[0]?.number || "";
+                    employee.phones[0] || "";
                 document.querySelector('input[name="contact_cargo"]').value =
                     employee.position || "";
                 document.querySelector('input[name="contact_cuil"]').value =
@@ -50,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.querySelector('input[name="firma_email"]').value =
                     employee.email || "";
                 document.querySelector('input[name="firma_celular"]').value =
-                    employee.phones[0]?.number || "";
+                    employee.phones[0] || "";
                 document.querySelector('input[name="firma_cargo"]').value =
                     employee.position || "";
                 document.querySelector('input[name="firma_cuil"]').value =
