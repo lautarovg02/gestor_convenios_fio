@@ -26,6 +26,7 @@ use App\Models\ReportSpecific;
 use App\Models\ReportIndividualInternshipAgreement;
 use App\Models\ReportSpecificResidenceAgreement;
 use App\Models\Student;
+use App\Models\Country;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -36,6 +37,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Otras seeders
+        Country::factory()->count(3)->create();
         Province::factory()->count(23)->create();
         City::factory()->count(70)->create();
         CompanyEntity::factory()->count(6)->create();

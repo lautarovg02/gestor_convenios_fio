@@ -15,6 +15,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Services\CompanyEntityService;
 use App\Services\CityService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str; 
+use App\Http\Requests\UpdateCompanyRequest;
+
 
 /**
  * Class CompanyController
@@ -95,32 +100,59 @@ class CompanyController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCompanyRequest $request): RedirectResponse
-    {
-        try {
-            // Verificar si el CUIT ya existe
-            $exists = Company::where('cuit', $request->cuit)->first();
-            if ($exists) throw new Exception("Cuit duplicado");
+public function store(StoreCompanyRequest $request): RedirectResponse
+{
+    DB::beginTransaction();
 
-            //Si se seleccionó other_entity se reemplaza el valor de entity por other_entity
-            $entitySelected = $request->entity === 'other' ? $request->other_entity_input : $request->entity;
-            $existsEntity = CompanyEntity::where('name', $entitySelected)->first();
-            if (!$existsEntity) {
-                $newEntity = CompanyEntity::create(['name' => $entitySelected]);
-                //Crear la empresa con el valor seleccionado de entidad
-                Company::create(array_merge($request->validated(), ['entity_id' => $newEntity->id]));
-            } else Company::create(array_merge($request->validated(), ['entity_id' => $existsEntity->id]));
+    try {
+        $validatedData = $request->validated();
+        
+        // 1. Manejar el campo booleano de la cláusula de confidencialidad
+        $validatedData['has_confidentiality_clause'] = $request->filled('has_confidentiality_clause');
+        
+        // 2. Preparar el nombre de la carpeta para los archivos
+        $companySlug = Str::slug($validatedData['denomination']);
+        $basePath = "documentacion/{$companySlug}";
 
+        // 3. Subir y guardar las rutas de los archivos
+        $handleFileUpload = function ($fileInputName, $fileNamePrefix) use ($request, $basePath, $companySlug) {
+            if ($request->hasFile($fileInputName)) {
+                $file = $request->file($fileInputName);
+                $originalExtension = $file->getClientOriginalExtension();
+                $fileName = "{$fileNamePrefix}_{$companySlug}.{$originalExtension}";
+                return $file->storeAs($basePath, $fileName, 'local');
+            }
+            return null;
+        };
 
-            return  redirect()->route('companies.index')
-                ->with('success', 'Empresa ingresada exitosamente.');
-        } catch (Exception $e) {
-            \Log::error('Error al crear la empresa: ' . $e->getMessage());
+        $validatedData['url_certificate_afip'] = $handleFileUpload('afip_certificate', 'certificado_afip');
+        $validatedData['url_statute'] = $handleFileUpload('statute_confirmation', 'estatuto');
+        $validatedData['url_assignment_authorities'] = $handleFileUpload('authorities_assignment', 'designacion_autoridades');
+        $validatedData['url_confidentiality_clause_file'] = $handleFileUpload('confidentiality_clause_file', 'clausula_confidencialidad');
 
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
+        // 4. Limpiar los datos del formulario antes de guardar en la BD
+        unset(
+            $validatedData['afip_certificate'],
+            $validatedData['statute_confirmation'],
+            $validatedData['authorities_assignment'],
+            $validatedData['confidentiality_clause_file']
+        );
+        
+        // 5. Crear la empresa
+        Company::create($validatedData);
+
+        DB::commit();
+
+        return redirect()->route('companies.index')
+            ->with('success', 'Empresa ingresada exitosamente.');
+
+    } catch (Exception $e) {
+        DB::rollBack();
+        \Log::error('Error al crear la empresa: ' . $e->getMessage());
+
+        return redirect()->back()->withInput()->with('error', 'Error al crear la empresa: ' . $e->getMessage());
     }
-
+}
 
     /**
      * Display the specified resource.
@@ -157,40 +189,76 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
 
-    public function update(StoreCompanyRequest $request, Company $company): RedirectResponse
-    {
-        try {
-            // Validar CUIT único
-            $exists = Company::where('cuit', $request->cuit)
-                ->where('id', '!=', $company->id)
-                ->first();
-            if ($exists) {
-                throw new Exception("El CUIT ingresado ya está registrado.");
-            }
 
-            // Manejar el campo entidad
-            $entitySelected = $request->entity === 'other' ? $request->other_entity_input : $request->entity;
-            $existsEntity = CompanyEntity::where('name', $entitySelected)->first();
-            if (!$existsEntity) {
-                $newEntity = CompanyEntity::create(['name' => $entitySelected]);
-                //Crear la empresa con el valor seleccionado de entidad
-                $company->update(array_merge(
-                    $request->validated(),
-                    ['entity_id' => $newEntity->id]
-                ));
-            } else {
-                // Actualizar empresa
-                $company->update(array_merge(
-                    $request->validated(),
-                    ['entity_id' => $existsEntity->id]
-                ));
+
+public function update(UpdateCompanyRequest $request, Company $company): RedirectResponse
+{
+    DB::beginTransaction();
+
+    try {
+        $validatedData = $request->validated();
+        
+        // Handle the boolean checkbox field
+        $validatedData['has_confidentiality_clause'] = $request->filled('has_confidentiality_clause');
+        
+        // Prepare the base path for document storage
+        $companySlug = Str::slug($company->denomination);
+        $basePath = "documentacion/{$companySlug}";
+
+        // Function to handle file uploads and deletions
+        $handleFileUpdate = function ($fileInputName, $columnName, $fileNamePrefix) use ($request, $company, $basePath, $companySlug) {
+            // Check if a new file was uploaded
+            if ($request->hasFile($fileInputName)) {
+                $file = $request->file($fileInputName);
+                
+                // Get the old file path from the database
+                $oldFilePath = $company->{$columnName};
+
+                // Delete the old file from storage if it exists
+                if ($oldFilePath && Storage::disk('local')->exists($oldFilePath)) {
+                    Storage::disk('local')->delete($oldFilePath);
+                }
+                
+                // Store the new file with a consistent name
+                $originalExtension = $file->getClientOriginalExtension();
+                $fileName = "{$fileNamePrefix}_{$companySlug}.{$originalExtension}";
+                
+                return $file->storeAs($basePath, $fileName, 'local');
             }
-            return redirect()->route('companies.index')->with('success', 'Empresa actualizada exitosamente.');
-        } catch (Exception $e) {
-            return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
-        }
+            
+            // If no new file, keep the existing path
+            return $company->{$columnName};
+        };
+
+        // Process each document field
+        $validatedData['url_certificate_afip'] = $handleFileUpdate('afip_certificate', 'url_certificate_afip', 'certificado_afip');
+        $validatedData['url_statute'] = $handleFileUpdate('statute_confirmation', 'url_statute', 'estatuto');
+        $validatedData['url_assignment_authorities'] = $handleFileUpdate('authorities_assignment', 'url_assignment_authorities', 'designacion_autoridades');
+        $validatedData['url_confidentiality_clause_file'] = $handleFileUpdate('confidentiality_clause_file', 'url_confidentiality_clause_file', 'clausula_confidencialidad');
+
+        // Remove the temporary file keys from the validated data array
+        unset(
+            $validatedData['afip_certificate'],
+            $validatedData['statute_confirmation'],
+            $validatedData['authorities_assignment'],
+            $validatedData['confidentiality_clause_file']
+        );
+        
+        // Update the company record with the new data
+        $company->update($validatedData);
+
+        DB::commit();
+
+        return redirect()->route('companies.show', $company)
+            ->with('success', 'Empresa actualizada exitosamente.');
+
+    } catch (Exception $e) {
+        DB::rollBack();
+        \Log::error('Error al actualizar la empresa: ' . $e->getMessage());
+
+        return redirect()->back()->withInput()->with('error', 'Error al actualizar la empresa: ' . $e->getMessage());
     }
-
+}
     /**
      * Remove the specified resource from storage.
      */
@@ -259,5 +327,41 @@ class CompanyController extends Controller
 
         ]);
     }
+ public function showContracts(Company $company)
+    {
+        // Esto accede a la relación 'contracts'
+        $contracts = $company->contracts; 
+        
+        // Retorna la vista y le pasa los contratos y la empresa
+       return view('companies.contractCompany', compact('company', 'contracts'));
+    }
+
+public function downloadDocument(string $slug, string $documentType)
+{
+    // 1. Encontrar la empresa por su 'slug'
+    $company = Company::where('slug', $slug)->firstOrFail();
+
+    // 2. Determinar la columna de la base de datos según el tipo de documento
+    $columnName = 'url_' . $documentType;
+    $filePath = $company->{$columnName} ?? null;
+
+    // 3. Verificar si el archivo existe
+    if (!$filePath || !Storage::disk('local')->exists($filePath)) {
+        return redirect()->back()->with('error', 'El archivo solicitado no está disponible.');
+    }
+
+    // 4. Determinar el nombre del archivo para la descarga
+    $fileName = Str::slug($company->denomination) . '_' . $documentType . '.' . pathinfo($filePath, PATHINFO_EXTENSION);
+    
+    // 5. Devolver el archivo para su descarga
+    return Storage::disk('local')->download($filePath, $fileName);
+}
+
+
+
+
+
+
+
 
 }

@@ -23,8 +23,16 @@ use Str;
  * @property $number
  * @property $city_id
  * @property $created_at
- * @property $updated_at
- *
+ * @property $updated_at    
+ * @property $slug
+ * @property $afip_certificate
+ * @property $statute_confirmation
+ * @property $authorities_assignment
+ * @property $has_confidentiality_clause
+ * @property $confidentiality_clause_file
+ * @property CompanyEntity $entity
+ * @property Employee[] $employees
+ * @property Contract[] $contracts
  * @property City $city
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -38,7 +46,13 @@ class Company extends Model
      *
      * @var array
      */
-    protected $fillable = ['denomination','cuit','company_name','sector','entity_id','company_category','scope','street','number','city_id', 'slug'];
+    protected $fillable = ['denomination','cuit','company_name','sector','entity_id','company_category','scope','street','number','city_id', 'slug',
+     'url_certificate_afip',
+        'url_statute',
+        'url_assignment_authorities',
+        'has_confidentiality_clause',
+        'url_confidentiality_clause_file',
+    ];
 
 
       //Relación 1:n atributo multivaluado en la tabla Contract

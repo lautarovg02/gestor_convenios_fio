@@ -2,15 +2,13 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\EntityType;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rule;
 
-class StoreCompanyRequest extends FormRequest
+class UpdateCompanyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * @dairagalceran
      */
     public function authorize(): bool
     {
@@ -24,35 +22,42 @@ class StoreCompanyRequest extends FormRequest
      */
     public function rules(): array
     {
-                        return [
+        
+        $companyId = $this->route('company')->id;
+
+        return [
             'denomination' => 'required|string|max:40',
-            'cuit' => 'required|string|digits:11|unique:companies,cuit',
+            'cuit' => ['required', 'string', 'digits:11', Rule::unique('companies', 'cuit')->ignore($companyId)],
             'city_id' => 'required|exists:cities,id',
             'company_name' => 'nullable|string|max:100',
-            'sector' => 'required|string|max:40', // Changed to required
-            'entity_id' => 'required|exists:company_entities,id', // 'entity_id' from the select field
-            'company_category' => 'required|string|max:20', // Changed to required
-            'scope' => 'required|string', // Changed to required
-            'street' => 'required|string|max:40', // Changed to required
-            'number' => 'required|integer', // Changed to required
-            'afip_certificate' => 'nullable|file|mimes:pdf|max:2048', // 2MB max
+            'sector' => 'required|string|max:40',
+            'entity_id' => 'required|exists:company_entities,id',
+            'company_category' => 'required|string|max:20',
+            'scope' => 'required|string',
+            'street' => 'required|string|max:40',
+            'number' => 'required|integer',
+            
+            
+            'afip_certificate' => 'nullable|file|mimes:pdf|max:2048', 
             'statute_confirmation' => 'nullable|file|mimes:pdf|max:2048',
             'authorities_assignment' => 'nullable|file|mimes:pdf|max:2048',
             'has_confidentiality_clause' => 'nullable|boolean',
-            'confidentiality_clause_file' => 'required_if:has_confidentiality_clause,1|nullable|file|mimes:pdf|max:2048',
+           'confidentiality_clause_file' => 'nullable|file|mimes:pdf|max:2048',
         ];
-        
     }
-
+    
+    /**
+     * Get the validation messages that apply to the request.
+     */
     public function messages(): array
     {
         return [
-            'denomination.required' => 'La razón social es  un campo obligatorio.',
+            'denomination.required' => 'La razón social es un campo obligatorio.',
             'denomination.max' => 'La cantidad máxima de caracteres es de :max',
             'cuit.required' => 'El CUIT es un campo obligatorio.',
             'cuit.digits' => 'El CUIT debe tener exactamente 11 dígitos.',
             'cuit.unique' => 'El cuit ya existe en la base de datos.',
-            'city_id.required' => 'La ciudad  es  un campo obligatorio.',
+            'city_id.required' => 'La ciudad es un campo obligatorio.',
             'city_id.exists' => 'La ciudad seleccionada no es válida.',
             'company_name.string' => 'El nombre de la empresa debe ser una cadena de texto.',
             'company_name.max' => 'La cantidad máxima de caracteres es de :max',
@@ -75,7 +80,10 @@ class StoreCompanyRequest extends FormRequest
             'statute_confirmation.max' => 'El tamaño máximo de la confirmación de estatutos es de :max kilobytes.',
             'authorities_assignment.file' => 'La designación de autoridades debe ser un archivo.',
             'authorities_assignment.mimes' => 'La designación de autoridades debe ser un archivo PDF.',
-            'authorities_assignment.max' => 'El tamaño máximo de la designación de autoridades es de :max kilobytes.',  
+            'authorities_assignment.max' => 'El tamaño máximo de la designación de autoridades es de :max kilobytes.',
+            'confidentiality_clause_file.file' => 'El archivo de la cláusula de confidencialidad debe ser un archivo.',
+            'confidentiality_clause_file.mimes' => 'El archivo de la cláusula de confidencialidad debe ser un archivo PDF.',
+            'confidentiality_clause_file.max' => 'El tamaño máximo del archivo de la cláusula de confidencialidad es de :max kilobytes.',
         ];
     }
 }

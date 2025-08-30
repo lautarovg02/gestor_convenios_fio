@@ -18,6 +18,7 @@ class CityFactory extends Factory
     {
         return [
             'name' => $this->faker->city(),
+            'postal_code' => $this->faker->numberBetween(1000, 9999),
             'province_id' => Province::inRandomOrder()->first()->id
                 ?? Province::factory()->create()->id,       
         ];

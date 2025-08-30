@@ -1,6 +1,8 @@
 <?php
 
 namespace Database\Factories;
+use App\Models\Country;
+use App\Models\Province;    
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -42,6 +44,8 @@ class ProvinceFactory extends Factory
                 'Tierra del Fuego',
                 'Tucumán',
             ]),
+             // Agrego país
+            'country_id' => Country::factory(),
         ];
     }
 }

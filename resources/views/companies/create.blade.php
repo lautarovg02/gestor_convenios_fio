@@ -1,192 +1,223 @@
 <!-- resources/views/companies/create.blade.php -->
 <!-- @extends('layouts.app') -->
-
 @section('content')
-    <div class="row row-deck row-cards content-with-footer-buffer">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="col-12 d-flex justify-content-between align-items-center ps-4 pe-4">
-                        <h3>Agregar nueva empresa</h3>
-                        <nav aria-label="breadcrumb" class="ms-3 mt-3">
-                            <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
-                                <li class="breadcrumb-item"><a href="{{ route('companies.index') }}">Empresas</a></li>
-                                <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Crear Empresa</li>
-                            </ol>
-                        </nav>
-                        <a href="{{ route('companies.index') }}" class="btn btn-outline-primary">← Volver</a>
-                    </div>                </div>
+<div class="row row-deck row-cards">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0">Agregar nueva empresa</h3>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-light p-2 rounded shadow-sm mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('companies.index') }}">Empresas</a>
+                        </li>
+                        <li class="breadcrumb-item active fw-bold" aria-current="page">Crear Empresa</li>
+                    </ol>
+                </nav>
+                <a href="{{ route('companies.index') }}" class="btn btn-outline-primary">
+                    ← Volver
+                </a>
+            </div>
 
-                <!-- Mensajes flash de success-->
+            <div class="card-body">
                 @if (Session::has('success'))
-                    <div class="alert alert-success">
-                        {{ Session::get('success') }}
-                    </div>
+                    <div class="alert alert-success">{{ Session::get('success') }}</div>
+                @endif
+                @if (Session::has('error'))
+                    <div class="alert alert-danger">{{ Session::get('error') }}</div>
                 @endif
 
-                <!-- Mensajes flash de error-->
-                @if ($errors->has('error'))
-                    <div class="alert alert-danger">
-                        {{ $errors->first('error') }}
-                    </div>
-                @endif
+                <form method="POST" action="{{ route('companies.store') }}" role="form" enctype="multipart/form-data">
+                    @csrf
 
-                <div class="card-body">
-                    <form method="POST" action=" {{ route('companies.store') }} " id="" role="form">
-                        @csrf
-                        <!-- Campo Razón social -->
-                        <div class="form-group mb-3">
-                            <label class="form-label">
-                                <label for="denomination" class="required-field fs-6">Razón social</label>
-                            </label>
-                            <div>
-                                <input class="form-control fs-6" maxlength="40" placeholder="Razón social"
-                                    name="denomination" type="text" id="denomination" value="{{ old('denomination') }}">
-                            </div>
+                    {{-- Sección: Datos Generales --}}
+                    <h4 class="mb-3 border-bottom pb-2">Datos Generales</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field" for="denomination">Razón social</label>
+                            <input class="form-control" name="denomination" id="denomination" type="text"
+                                value="{{ old('denomination') }}" placeholder="Ingrese la razón social" autocomplete="off">
                             @error('denomination')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                        <!-- Campo cuit -->
-                        <div class="form-group mb-3">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <label class="form-label fs-6 required-field">
-                                    <label for="cuit">CUIT</label>
-                                </label>
-                                <a href="https://seti.afip.gob.ar/padron-puc-constancia-internet/ConsultaConstanciaAction.do"
-                                    target="_blank" class="text-info text-decoration-underline fs-6">
-                                    Validar CUIT
-                                </a>
-                            </div>
-                            <div>
-                                <input class="form-control fs-6" maxlength="11" placeholder="CUIT" name="cuit"
-                                    type="number" id="cuit" value="{{ old('cuit') }}"
-                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                                <small class="form-hint">Ingresar <b>CUIT</b> sin guiones.</small>
-                                @error('cuit')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field" for="cuit">CUIT</label>
+                            <input class="form-control" name="cuit" id="cuit" type="number"
+                                value="{{ old('cuit') }}" placeholder="Ingrese el CUIT sin guiones" autocomplete="off">
+                            <small class="form-hint">Ingresar <b>CUIT</b> sin guiones.</small>
+                            @error('cuit')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <!-- Campo nombre de la empresa -->
-                        <div class="form-group mb-3">
-                            <label class="form-label fs-6">
-                                <label for="company_name">Nombre de fantasía</label>
-                            </label>
-                            <div>
-                                <input class="form-control" maxlength="100" placeholder="Nombre de fantasía"
-                                    name="company_name" type="text" id="company_name">
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="company_name">Nombre de fantasía</label>
+                            <input class="form-control" name="company_name" id="company_name" type="text"
+                                value="{{ old('company_name') }}" placeholder="Ingrese el nombre de fantasía" autocomplete="off">
+                            @error('company_name')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="form-group mb-3">
-                            <label class="form-label fs-6">
-                                <label for="sector">Sector</label>
-                            </label>
-                            <div>
-                                <input class="form-control" maxlength="40" placeholder="Sector" name="sector"
-                                    type="text" id="sector" value="{{ old('sector') }}">
-                            </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field" for="sector">Sector</label>
+                            <input class="form-control" name="sector" id="sector" type="text"
+                                value="{{ old('sector') }}" placeholder="Ingrese el sector" autocomplete="off">
+                            @error('sector')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <!-- Selector de entidad con opción "Otros" -->
-                        <div class="form-group mb-3">
-                            <label class="form-label fs-6">
-                                <label for="entity">Entidad</label>
-                            </label>
-                            <select name="entity" id="entity" class="form-select">
-                                <option value="">Seleccionar</option>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field" for="entity_id">Entidad</label>
+                            <select name="entity_id" id="entity_id" class="form-select">
+                                <option value="" disabled selected>Seleccionar</option>
                                 @foreach ($entityTypes as $type)
-                                    <option value="{{ $type->name }}"
-                                        {{ old('entity_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                                    <option value="{{ $type->id }}" {{ old('entity_id') == $type->id ? 'selected' : '' }}>
+                                        {{ $type->name }}
+                                    </option>
                                 @endforeach
-                                <option value="other">Otro tipo</option>
                             </select>
-                            <!-- Campo de texto oculto para ingresar otra opción -->
-                            <div id="otherEntityInputWrapper" class="mt-2" style="display:none">
-                                <label for="other_entity_input">Especificar otra opción:</label>
-                                <input type="text" id="other_entity_input" name="other_entity_input" style="display:none"
-                                    placeholder="Nueva entidad">
-                                <input type="hidden" name="other_entity" id="other_entity">
-                            </div>
+                            @error('entity_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <!-- Campo rubro -->
-                        <div class="form-group mb-3">
-                            <label class="form-label fs-6"> <label for="company_category">Categoría</label></label>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field" for="company_category">Rubro</label>
+                            <input class="form-control" name="company_category" id="company_category" type="text"
+                                value="{{ old('company_category') }}" placeholder="Ingrese el rubro" autocomplete="off">
+                            @error('company_category')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Ámbito</label>
                             <div>
-                                <input class="form-control" maxlength="20" placeholder="Categoría" name="company_category"
-                                    type="text" id="company_category" value="{{ old('company_category') }}">
-                            </div>
-                        </div>
-                        <!-- Campo Ámbito con varias opciones -->
-                        <div class="form-group mb-3">
-                            <label class="form-label fs-6" for="scope">Ámbito</label>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <div>
-                                    <input class="form-check-input" type="radio" id="scope_1" name="scope"
-                                        value="Nacional" {{ old('scope', 'NACIONAL') == 'NACIONAL' ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="scope_1">
-                                        Nacional
-                                    </label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="scope" id="scope_nacional"
+                                        value="NACIONAL" {{ old('scope') == 'NACIONAL' || old('scope') == null ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="scope_nacional">Nacional</label>
                                 </div>
-                                <div>
-                                    <input class="form-check-input" type="radio" id="scope_2" name="scope"
-                                        value="Internacional" {{ old('scope') == 'INTERNACIONAL' ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="scope_2">
-                                        Internacional
-                                    </label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="scope" id="scope_internacional"
+                                        value="INTERNACIONAL" {{ old('scope') == 'INTERNACIONAL' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="scope_internacional">Internacional</label>
                                 </div>
                             </div>
+                            @error('scope')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    {{-- Sección: Dirección --}}
+                    <h4 class="mb-3 border-bottom pb-2">Dirección</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field" for="street">Calle</label>
+                            <input class="form-control" name="street" id="street" type="text"
+                                value="{{ old('street') }}" placeholder="Ingrese la calle" autocomplete="off">
+                            @error('street')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <h6>Dirección:</h6>
-                        <div class="row align-items-end">
-                            <!-- Campo nombre de la calle -->
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fs-6" for="street">Calle</label>
-                                <input class="form-control" maxlength="100" placeholder="Calle" name="street"
-                                    type="text" id="street" value="{{ old('street') }}">
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field" for="number">Número</label>
+                            <input class="form-control" name="number" id="number" type="text"
+                                value="{{ old('number') }}" placeholder="Ingrese el número" autocomplete="off">
+                            @error('number')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                            <!-- Campo número -->
-                            <div class="col-md-2 mb-3">
-                                <label class="form-label fs-6" for="number">Número</label>
-                                <input class="form-control" placeholder="Número" name="number" type="number"
-                                    id="number" value="{{ old('number') }}">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field" for="city_id">Ciudad</label>
+                            <select name="city_id" id="city_id" class="form-select">
+                                <option value="" disabled selected>Seleccionar</option>
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city->id }}" {{ old('city_id') == $city->id ? 'selected' : '' }}>
+                                        {{ $city->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                             <small class="form-hint">Si no encuentra la <b>ciudad</b> en la lista, puede agregarla en la sección <a href="{{ route('cities.create') }}">Agregar Ciudad.</a></small>
+                            @error('city_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    {{-- Sección: Documentación --}}
+                    <h4 class="mb-3 border-bottom pb-2">Documentación</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="afip_certificate">Certificado AFIP</label>
+                            <input type="file" name="afip_certificate" class="form-control">
+                            @error('afip_certificate')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="statute_confirmation">Estatuto</label>
+                            <input type="file" name="statute_confirmation" class="form-control">
+                            @error('statute_confirmation')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="authorities_assignment">Designación de autoridades</label>
+                            <input type="file" name="authorities_assignment" class="form-control">
+                            @error('authorities_assignment')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" role="switch" id="has_confidentiality_clause" name="has_confidentiality_clause" value="1" {{ old('has_confidentiality_clause') ? 'checked' : '' }}>
+                                <label class="form-check-label" for="has_confidentiality_clause">La empresa tiene una cláusula de confidencialidad</label>
                             </div>
-
-                            <!-- Campo nombre de la ciudad -->
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label fs-6 required-field" for="city_id">Ciudad</label>
-                                <select class="form-control" name="city_id" id="city_id">
-                                    <option value="">Seleccionar</option>
-                                    @foreach ($cities as $city)
-                                        <option value="{{ $city->id }}">{{ $city->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('city_id')
+                            <div id="confidentialityFileSection" style="display: {{ old('has_confidentiality_clause') ? 'block' : 'none' }};">
+                                <label class="form-label" for="confidentiality_clause_file">Archivo de cláusula</label>
+                                <input type="file" name="confidentiality_clause_file" id="confidentiality_clause_file" class="form-control">
+                                @error('confidentiality_clause_file')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <small class="form-hint text-end d-block">
-                                Si no encuentra la <b>ciudad</b> en la lista, ingresarla en
-                                <a href="{{ route('cities.create') }}">Agregar Ciudad.</a>
-                            </small>
                         </div>
+                    </div>
 
-                        <!-- Botones -->
-                        <div class="form-footer">
-                            <div class="text-end">
-                                <div class="d-flex">
-                                    <a href="{{ route('companies.index') }}" class="btn btn-danger m-2">Cancelar</a>
-                                    <div>
-                                        <button type="submit" class="btn btn-success ms-auto m-2">Crear</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    <div class="card-footer text-end border-0">
+                        <a href="{{ route('companies.index') }}" class="btn btn-outline-secondary me-2">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Crear Empresa</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
+<script>
+    // Script para mostrar/ocultar el campo de archivo de confidencialidad
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkbox = document.getElementById('has_confidentiality_clause');
+        const fileSection = document.getElementById('confidentialityFileSection');
+
+        checkbox.addEventListener('change', function () {
+            if (this.checked) {
+                fileSection.style.display = 'block';
+            } else {
+                fileSection.style.display = 'none';
+            }
+        });
+    });
+</script>
 @endsection

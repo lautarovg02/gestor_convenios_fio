@@ -15,6 +15,7 @@ use App\Http\Controllers\SpecificResidenceAgreementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndividualInternshipAgreementController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ContractController;
 
 
 
@@ -36,9 +37,13 @@ Route::get('/', function () {
 
 // COMPANIES
 Route::resource('/companies', CompanyController::class);
+Route::get('/companies/{slug}/download/{documentType}', [CompanyController::class, 'downloadDocument'])->name('companies.download');
 
 // EMPLOYEES
 Route::resource('companies.employees', EmployeeController::class)->shallow();
+// CONTRACTS
+Route::resource('contracts', ContractController::class);
+Route::get('companies/{company}/contracts-list', [ContractController::class, 'showContracts'])->name('contracts.show_for_company');
 
 //CITIES
 
