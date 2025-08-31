@@ -22,6 +22,7 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use Storage;
 use Str;
 use Http;
+use App\Services\ContractService;
 
 class FrameworkResidenceAgreementController extends Controller
 {
@@ -33,6 +34,7 @@ class FrameworkResidenceAgreementController extends Controller
     protected $typeFrameworkAgreementService;
     protected $cityService;
     protected $provinceService;
+    protected $contractService;
 
     public function __construct(
         CityService $cityService,
@@ -42,7 +44,8 @@ class FrameworkResidenceAgreementController extends Controller
         EmployeeService $employeeService,
         ContractStatusService $contractStatusService,
         TypeFrameworkAgreementService $typeFrameworkAgreementService,
-        ProvinceService $provinceService
+        ProvinceService $provinceService,
+        ContractService $contractService
     ) {
         $this->provinceService = $provinceService;
         $this->cityService = $cityService;
@@ -52,15 +55,18 @@ class FrameworkResidenceAgreementController extends Controller
         $this->employeeService = $employeeService;
         $this->contractStatusService = $contractStatusService;
         $this->typeFrameworkAgreementService = $typeFrameworkAgreementService;
+        $this->contractService = $contractService;
     }
 
     public function create()
     {
+        $companies = $this->companyService->getAllCompanies();
         $response = Http::get('https://apis.datos.gob.ar/georef/api/provincias');
         $provincias = $response->json()['provincias'];
-        $companies = $this->companyService->getCompaniesByTypeFrameworkAgreement('Convenio Marco de Residencia');
-        return view("frameworkResidenceAgreement.create", compact('provincias', 'companies'));
+    
+        return view('frameworkResidenceAgreement.create', compact('provincias', 'companies'));
     }
+    
 
     public function store(StoreFrameworkResidenceAgreement $request)
     {
@@ -72,9 +78,16 @@ class FrameworkResidenceAgreementController extends Controller
         //------------------------------------ logica para crear convenio --------------------------------------------------------------
 
 
+
+
         // Crear o obtener la empresa
         $company = $this->companyService->getOrCreateCompany($validated);
 
+        $existsContract = $this->contractService->getFrameworkAgreementsByCompany($company->id, "Convenio Marco de Residencia"); //el 2 es el id del tipo de convenio marco de residencia
+
+        if ($existsContract->isNotEmpty()) {
+            return redirect()->back()->withErrors(['errorExistsContract' => 'Ya existe un convenio marco de residencia para la empresa ' . $validated['razon_social']]);
+        }
         // Crear o obtener la secretaria
         $secretary = $this->secretaryService->getOrCreateSecretary([
             'user_secretaria' => 'SECRETARIA_USER',
@@ -99,7 +112,7 @@ class FrameworkResidenceAgreementController extends Controller
             'name' => $validated['contact_nombre'],
             'lastname' => $validated['contact_apellido'],
             'dni' => $validated['contact_dni'],
-            'cuil' => $validated['contact_cuil'],
+            'cuil'        => $validated['contact_cuil'] ?? (($validated['cuil_prefijo'] ?? '') .($validated['cuil_dni'] ?? '') .($validated['cuil_dv'] ?? '')),
             'email' => $validated['contact_email'],
             'phone' => $validated['contact_celular'],
             'position' => $validated['contact_cargo'],
@@ -181,6 +194,10 @@ class FrameworkResidenceAgreementController extends Controller
         $templatePath = storage_path('app/plantillas/Convenio_Marco_de_Residencia.docx');
         $templateProcessor = new TemplateProcessor($templatePath);
 
+        function safe($value) {
+            return $value ?? '______';
+        }
+
         // Seteo de valores en el template
         $templateProcessor->setValue('razon_social', $company->denomination);
         $templateProcessor->setValue('calle', $company->street);
@@ -188,7 +205,7 @@ class FrameworkResidenceAgreementController extends Controller
         $templateProcessor->setValue('ciudad', $companyCity->name);
         $templateProcessor->setValue('provincia', $companyProvince->name);
         $templateProcessor->setValue('cuit_empresa', $company->cuit);
-
+        $templateProcessor->setValue('cuil', safe($validated['cuil_prefijo']) . '-' . safe($validated['cuil_dni']) . '-' . safe($validated['cuil_dv']));
         $templateProcessor->setValue('nombre_rep_contacto', $contact_employee->name . ' ' . $contact_employee->lastname);
         $templateProcessor->setValue('cargo_rep_contacto', $contact_employee->position);
         $templateProcessor->setValue('dni_rep_contacto', $contact_employee->dni);
