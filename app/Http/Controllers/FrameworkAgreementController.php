@@ -75,17 +75,18 @@ class FrameworkAgreementController extends Controller
         // 1) Tipo de convenio marco
         $type = $this->typeFrameworkAgreementService->findOrCreateByType('Convenio Marco');
 
+         //obtener empresa
+         $company = $this->companyService->getOrCreateCompany($validated);
 
         // Si viene empresa seleccionada, validamos que no exista otro convenio marco
-        $existsContract = $this->contractService->getFrameworkAgreementsByCompany($validated['company_id'], "Convenio Marco");
+        $existsContract = $this->contractService->getFrameworkAgreementsByCompany($company->id, "Convenio Marco");
         if ($existsContract->isNotEmpty()) {
             return redirect()->back()->withErrors([
-                'error' => 'Ya existe un convenio marco de pasantía para la empresa ' . $validated['razon_social']
+                'error' => 'Ya existe un Convenio Marco para la empresa ' . $validated['razon_social']
             ])->withInput();
         }
         
-        //obtener empresa
-        $company = $this->companyService->getOrCreateCompany($validated);
+       
 
 
         // 5) Empleado de contacto
