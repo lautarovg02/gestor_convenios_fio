@@ -1,15 +1,24 @@
 @extends('layouts.app')
 
+@vite('resources\css\form_convenios\creationSuccessful.css')
+
 @section('content')
-<div class="container mt-5 text-center">
-    <h2>Convenio individual de pasantía guardado con éxito.</h2>
-    <p class="mt-4">
-    
+    <div class="container">
 
- <a href="{{ route('individual-internship-agreements.download', ['id' => $agreement->id]) }}" class="btn btn-primary">
+        <div class="containerTextAndButton">
+            <h1>¡Convenio generado con éxito!</h1>
 
-            Descargar convenio
-        </a>
-    </p>
-</div>
+            <div class="mt-4 flex-row align-items-center justify-content-center">
+                <a href="{{ route('individual-internship-agreements.download', ['id' => $agreement->id]) }}"
+                    class="button btn btn-primary">
+                    Descargar Convenio
+                </a>
+
+                <a href="{{ route('agreements.index') }}" class="button btn btn-primary">
+                    Ver Convenios
+                </a>
+
+            </div>
+        </div>
+    </div>
 @endsection

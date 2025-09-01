@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreIndividualInternshipAgreement;
 use App\Models\IndividualInternshipAgreement;
 use App\Services\CompanyService;
+use App\Services\StudentService;
 use App\Models\Student;
 use App\Models\City;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -17,10 +18,12 @@ use Illuminate\Support\Facades\Storage;
 class IndividualInternshipAgreementController extends Controller
 {
     protected CompanyService $companyService;
+    protected StudentService $studentService;
 
-    public function __construct(CompanyService $companyService)
+    public function __construct(CompanyService $companyService, StudentService $studentService)
     {
         $this->companyService = $companyService;
+        $this->studentService = $studentService;
     }
 
     // 1. Mostrar listado de empresas para seleccionar
@@ -74,13 +77,14 @@ class IndividualInternshipAgreementController extends Controller
 
 public function store(StoreIndividualInternshipAgreement $request)
 {
-    try {
-        $data = $request->validated();
 
-        // 🔹 Validar si ya existe un convenio para ese contrato
-        if (IndividualInternshipAgreement::where('contract_id', $data['contract_id'])->exists()) {
-            return back()
-                ->withErrors(['contract_id' => 'Ya existe un convenio individual para este contrato.'])
+     $data = $request->validated();
+       
+        $exists = $this->studentService->existStudentInAgreement($data['student_id']);
+
+        if ($exists) {
+                return back()
+                ->withErrors(['Ya existe un convenio individual para el alumno seleccionado.'])
                 ->withInput();
         }
 
@@ -103,11 +107,6 @@ public function store(StoreIndividualInternshipAgreement $request)
 
         return redirect()->route('individual-internship-agreements.show', $agreement->id);
 
-    } catch (\Throwable $e) {
-        return back()
-            ->withErrors(['general' => 'Ocurrió un error al guardar el convenio.'])
-            ->withInput();
-    }
 }
 
 

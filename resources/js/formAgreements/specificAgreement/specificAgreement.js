@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    const select = document.getElementById('student_id');
+    const select = document.getElementById('student_id');   
     const becarioInput = document.getElementById('becario');
 
     select.addEventListener('change', function () {

@@ -13,6 +13,7 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use App\Models\Student;
 use App\Services\CompanyService;
 use App\Services\ContractService;
+use App\Services\StudentService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -22,9 +23,11 @@ class SpecificAgreementController extends Controller
 
     protected $companyService;
     protected $contractService;
+    protected $studentService;
 
-    public function __construct(ContractService $contractService, CompanyService $companyService)
+    public function __construct(ContractService $contractService, CompanyService $companyService, StudentService $studentService)
     {
+        $this->studentService = $studentService;
         $this->companyService = $companyService;
         // Inyectar el servicio de contratos
         $this->contractService = $contractService;
@@ -120,6 +123,12 @@ class SpecificAgreementController extends Controller
         // Validar los datos requeridos
         $validated =  $request->validated();
 
+
+        $exists = $this->studentService->existStudentInAgreement($validated['student_id']);
+
+        if ($exists) {
+            return redirect()->back()->withInput()->with('StudentWithAgreement', true);
+        }
 
         if ($request->hasFile('file')) {
             $filePath = $request->file('file')->store('specific_files', 'public');

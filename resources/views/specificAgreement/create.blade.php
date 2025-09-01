@@ -16,6 +16,12 @@
             </div>
         @endif
 
+        @if (session('StudentWithAgreement'))
+            <div class="alert alert-warning">
+                <span>El alumno seleccionado ya forma parte de un acuerdo</span>
+            </div>
+        @endif
+
 
         <p class="textCampos"><span class="text-danger">*</span> Campos obligatorios</p>
 
