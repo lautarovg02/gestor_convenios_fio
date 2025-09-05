@@ -26,61 +26,90 @@ use App\Models\ReportSpecific;
 use App\Models\ReportIndividualInternshipAgreement;
 use App\Models\ReportSpecificResidenceAgreement;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // Otras seeders
+        // 1) Primero, roles fijos
+        $this->call(RolesTableSeeder::class);
+
+
+
+        // 3) Secretaries: crear users y luego perfiles
+        User::factory()->count(10)->create([
+            'role_id' => 1, // secretary
+        ])->each(function (User $u) {
+            Secretary::factory()->create([
+                'user_id' => $u->id,
+                // si tu factory de Secretary pide username y demás, lo completa solo
+            ]);
+        });
+
+        // 4) Teachers: crear users y luego perfiles
+        User::factory()->count(80)->create([
+            'role_id' => 2, // teacher
+        ])->each(function (User $u) {
+            Teacher::factory()->create([
+                'user_id' => $u->id,
+                // el resto de campos vienen de la factory
+            ]);
+        });
+
+
+        // Después de crear los users con role_id=2 y sus Teacher (como ya lo hacés)
+        $anyTeacher = Teacher::inRandomOrder()->first();
+        if ($anyTeacher) {
+            $anyTeacher->update(['is_rector' => true]);
+        }
+
+        // (Opcional) marcar un decano distinto
+        $another = Teacher::where('id', '!=', $anyTeacher->id)->inRandomOrder()->first();
+        if ($another) {
+            $another->update(['is_dean' => true]);
+        }
+
+        // 5) —— Todo lo demás de tu seeding, igual que antes ——
         Province::factory()->count(23)->create();
         City::factory()->count(70)->create();
         CompanyEntity::factory()->count(6)->create();
-
-        // Ruta del archivo CSV
-        $filePath = 'database\seeders\csv\companyNames.csv'; // Cambia según la ubicación real del archivo
-
-        // Obtener los nombres únicos de las compañías
+        // CSV companies…
+        $filePath = 'database\seeders\csv\companyNames.csv';
         $companyNames = \Database\Factories\CompanyFactory::loadCompanyNamesFromCSV($filePath);
-
         foreach ($companyNames as $name) {
             Company::factory()->create([
                 'company_name' => $name,
-                'slug' => Str::slug($name),
+                'slug' => \Illuminate\Support\Str::slug($name),
             ]);
         }
-
         Employee::factory()->count(100)->create();
         EmployeePhone::factory()->count(100)->create();
-        Secretary::factory()->count(10)->create();
-        SecretaryPhone::factory()->count(10)->create();
-        Teacher::factory(80)->create();
 
-        // Crear departamentos asignando un docente único a cada uno
+        // (OJO: ya no necesitamos Secretary::factory()->count(10)->create();
+        //       ni Teacher::factory(80)->create(); porque arriba los hicimos con su user)
+
+        // departamentos con docentes
         $teachersForDepartments = Teacher::inRandomOrder()->take(4)->get();
-
         foreach ($teachersForDepartments as $teacher) {
             Department::factory()->create(['director_id' => $teacher->id]);
         }
 
+
+
+
+
         Career::factory(9)->create();
         Type_Report::factory()->count(5)->create();
-
         TypeFrameworkAgreement::factory(3)->create();
         ContractStatus::factory(10)->create();
         Contract::factory(2)->create();
-
         Student::factory(80)->create();
-
         Specific::factory(6)->create();
         SpecificResidenceAgreement::factory(4)->create();
         IndividualInternshipAgreement::factory(5)->create();
-
         ReportSpecific::factory(4)->create();
-
         ReportSpecificResidenceAgreement::factory(4)->create();
         ReportIndividualInternshipAgreement::factory(4)->create();
 
