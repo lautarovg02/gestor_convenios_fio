@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('contract_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('status',250);
-            $table->time('time_limit')->nullable();
+            $table->integer('time_limit')->nullable(); // ahora es INT (horas)
             $table->timestamps();
         });
     }
