@@ -29,7 +29,7 @@ use App\Http\Controllers\StudentController;
 |
 */
 
-Route::get('/', fn() => redirect('/dashboard'));
+Route::get('/', fn() => redirect('/companies'));
 
 // --- Dashboard (sin 'verified') ---
 Route::get('/dashboard', fn() => view('dashboard'))

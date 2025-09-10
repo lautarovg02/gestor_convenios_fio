@@ -1,25 +1,29 @@
-@extends('layouts.app')
+{{-- resources/views/careers/index.blade.php --}}
 
 @section('title', 'Carreras FIO')
 
-@section('content')
-<div class="container content-with-footer-buffer">
-        <!-- Header con Título y Botón -->
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <div>
-                <h4 class="fw-bold mb-1">Gestión de Carreras</h4>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb bg-transparent p-0">
-                        <li class="breadcrumb-item text-muted">Gestión Académica</li>
-                        <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Carreras</li>
-                    </ol>
-                </nav>
+<x-app-layout>
+    <x-slot name="header">
+        <div class="container content-with-footer-buffer">
+            <!-- Header con Título y Botón -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                    <h4 class="fw-bold mb-1">Gestión de Carreras</h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-transparent p-0">
+                            <li class="breadcrumb-item text-muted">Gestión Académica</li>
+                            <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Carreras</li>
+                        </ol>
+                    </nav>
+                </div>
+                <a href="{{ route('careers.create') }}" class="btn btn-success">
+                    <i class="bi bi-plus-lg me-1"></i> Agregar Carrera
+                </a>
             </div>
-            <a href="{{ route('careers.create') }}" class="btn btn-success">
-                <i class="bi bi-plus-lg me-1"></i> Agregar Carrera
-            </a>
         </div>
+    </x-slot>
 
+    <div class="container content-with-footer-buffer">
         <!-- Filtros -->
         <div class="mb-4">
             @include('careers.filters')
@@ -89,8 +93,7 @@
 
                                     <td class="text-center">
                                         <a href="{{ route('careers.show', $career) }}" class="btn btn-info btn-sm">Ver</a>
-                                        <a href="{{ route('careers.edit', $career) }}"
-                                            class="btn btn-primary btn-sm">Editar</a>
+                                        <a href="{{ route('careers.edit', $career) }}" class="btn btn-primary btn-sm">Editar</a>
                                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#modal-delete" data-entity-id="{{ $career->id }}"
                                             data-entity-name="{{ $career->name }}" data-entity-type="careers">
@@ -109,10 +112,8 @@
             </div>
         @endif
 
-
         @include('layouts.modals.modal-delete')
         @include('layouts.modals.modal-loading')
         @vite('resources/js/modals/modalDelete.js')
-
     </div>
-@endsection
+</x-app-layout>
