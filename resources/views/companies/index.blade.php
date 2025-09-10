@@ -1,35 +1,41 @@
-@extends('layouts.app')
+{{-- resources/views/companies/index.blade.php --}}
 
+{{-- (Opcional) Si usabas @section('title'), puedes mantenerlo si tu layout lo lee --}}
 @section('title', 'Empresas FIO')
 
-@section('content')
-    <div class="container ">
-
-        <!-- Encabezado + Botón -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-                <h4 class="fw-bold mb-1">Gestión de Empresas</h4>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb bg-transparent p-0 mb-0">
-                        <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Empresas</li>
-                    </ol>
-                </nav>
+<x-app-layout>
+    {{-- Encabezado Breeze --}}
+    <x-slot name="header">
+        <div class="container">
+            <!-- Encabezado + Botón -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h4 class="fw-bold mb-1">Gestión de Empresas</h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-transparent p-0 mb-0">
+                            <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Empresas</li>
+                        </ol>
+                    </nav>
+                </div>
+                <a href="{{ route('companies.create') }}" class="btn btn-success">
+                    <i class="bi bi-plus-lg me-1"></i> Agregar Empresa
+                </a>
             </div>
-            <a href="{{ route('companies.create') }}" class="btn btn-success">
-                <i class="bi bi-plus-lg me-1"></i> Agregar Empresa
-            </a>
         </div>
+    </x-slot>
+
+    <div class="container">
 
         <!-- Filtros -->
         <div class="mb-4">
             @include('companies.filters')
         </div>
+
         <!-- Mensajes -->
         @if (session('success'))
             <div id="flash-message" class="alert alert-success">
                  {!! session('success') !!}
             </div>
-
         @elseif (Session::get('error'))
             <div class="alert alert-danger">{{ Session::get('error') }}</div>
         @endif
@@ -47,71 +53,70 @@
 
         <!-- Tabla de Empresas -->
         @unless ($companies->isEmpty())
-        <div class="table-responsive rounded shadow-sm table-scrollable-container">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th class="col-max-width">Razón Social</th>
-                        <th class="col-max-width">CUIT</th>
-                        <th class="col-max-width">Nombre Fantasía</th>
-                        <th class="col-max-width">Sector</th>
-                        <th class="col-max-width">Entidad</th>
-                        <th class="col-max-width">Categoría</th>
-                        <th class="col-max-width">Ciudad</th>
-                        <th class="text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($companies as $company)
+            <div class="table-responsive rounded shadow-sm table-scrollable-container">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <td>{{ $company->id }}</td>
-
-                            <td class="col-max-width text-truncate" title="{{ $company->denomination }}">
-                                {{ highlightKeyword($company->denomination, request('search')) }}
-                            </td>
-
-                            <td class="col-max-width text-truncate" title="{{ $company->cuit }}">
-                                {{ highlightKeyword($company->cuit, request('search')) }}
-                            </td>
-
-                            <td class="col-max-width text-truncate" title="{{ $company->company_name }}">
-                                {{ highlightKeyword($company->company_name ?? 'N/A', request('search')) }}
-                            </td>
-
-                            <td class="col-max-width text-truncate" title="{{ $company->sector }}">
-                                {{ highlightKeyword($company->sector ?? 'N/A', request('search')) }}
-                            </td>
-
-                            <td class="col-max-width text-truncate" title="{{ $company->entity->name }}">
-                                {{ highlightKeyword($company->entity->name ?? 'N/A', request('search')) }}
-                            </td>
-
-                            <td class="col-max-width text-truncate" title="{{ $company->company_category }}">
-                                {{ highlightKeyword($company->company_category ?? 'N/A', request('search')) }}
-                            </td>
-
-                            <td class="col-max-width text-truncate" title="{{ $company->city->name }}">
-                                {{ highlightKeyword($company->city->name ?? 'N/A', request('search')) }}
-                            </td>
-
-                            <td class="text-center">
-                                <a href="{{ route('companies.show', $company) }}" class="btn btn-info btn-sm">Ver</a>
-                                <a href="{{ route('companies.edit', $company) }}" class="btn btn-primary btn-sm">Editar</a>
-                                <button type="button" class="btn btn-danger btn-sm"
-                                    data-entity-id="{{ $company->id }}"
-                                    data-entity-name="{{ $company->company_name }}"
-                                    data-entity-type="companies"
-                                    data-bs-toggle="modal" data-bs-target="#modal-delete">
-                                    Eliminar
-                                </button>
-                            </td>
+                            <th>#</th>
+                            <th class="col-max-width">Razón Social</th>
+                            <th class="col-max-width">CUIT</th>
+                            <th class="col-max-width">Nombre Fantasía</th>
+                            <th class="col-max-width">Sector</th>
+                            <th class="col-max-width">Entidad</th>
+                            <th class="col-max-width">Categoría</th>
+                            <th class="col-max-width">Ciudad</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach ($companies as $company)
+                            <tr>
+                                <td>{{ $company->id }}</td>
 
+                                <td class="col-max-width text-truncate" title="{{ $company->denomination }}">
+                                    {{ highlightKeyword($company->denomination, request('search')) }}
+                                </td>
+
+                                <td class="col-max-width text-truncate" title="{{ $company->cuit }}">
+                                    {{ highlightKeyword($company->cuit, request('search')) }}
+                                </td>
+
+                                <td class="col-max-width text-truncate" title="{{ $company->company_name }}">
+                                    {{ highlightKeyword($company->company_name ?? 'N/A', request('search')) }}
+                                </td>
+
+                                <td class="col-max-width text-truncate" title="{{ $company->sector }}">
+                                    {{ highlightKeyword($company->sector ?? 'N/A', request('search')) }}
+                                </td>
+
+                                <td class="col-max-width text-truncate" title="{{ $company->entity->name }}">
+                                    {{ highlightKeyword($company->entity->name ?? 'N/A', request('search')) }}
+                                </td>
+
+                                <td class="col-max-width text-truncate" title="{{ $company->company_category }}">
+                                    {{ highlightKeyword($company->company_category ?? 'N/A', request('search')) }}
+                                </td>
+
+                                <td class="col-max-width text-truncate" title="{{ $company->city->name }}">
+                                    {{ highlightKeyword($company->city->name ?? 'N/A', request('search')) }}
+                                </td>
+
+                                <td class="text-center">
+                                    <a href="{{ route('companies.show', $company) }}" class="btn btn-info btn-sm">Ver</a>
+                                    <a href="{{ route('companies.edit', $company) }}" class="btn btn-primary btn-sm">Editar</a>
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                        data-entity-id="{{ $company->id }}"
+                                        data-entity-name="{{ $company->company_name }}"
+                                        data-entity-type="companies"
+                                        data-bs-toggle="modal" data-bs-target="#modal-delete">
+                                        Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
             <!-- Paginación -->
             <div class="mt-3 d-flex justify-content-center">
@@ -122,7 +127,8 @@
         <!-- Modales -->
         @include('layouts.modals.modal-delete')
         @include('layouts.modals.modal-loading')
+
         @vite('resources/js/utils/flashMessage.js')
         @vite('resources/js/modals/modalDelete.js')
     </div>
-@endsection
+</x-app-layout>

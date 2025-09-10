@@ -17,6 +17,7 @@
         "fakerphp/faker": "^1.23",
         "friendsofphp/php-cs-fixer": "^3.64",
         "laravel-lang/lang": "^15.2",
+        "laravel/breeze": "^1.29",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",

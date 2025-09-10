@@ -1,5 +1,7 @@
-import 'bootstrap'; // Importa Bootstrap
-import { toggleOtherOption } from './utils/toggleOtherOption'; // Importa la función toggleOtherOption
-import './formAgreements/specificAgreement/specificAgreement';
+import './bootstrap';
 
-import './formAgreements/specificAgreement/tareas';
+import Alpine from 'alpinejs';
+
+window.Alpine = Alpine;
+
+Alpine.start();

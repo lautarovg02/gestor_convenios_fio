@@ -25,8 +25,10 @@ use App\Models\IndividualInternshipAgreement;
 use App\Models\ReportSpecific;
 use App\Models\ReportIndividualInternshipAgreement;
 use App\Models\ReportSpecificResidenceAgreement;
+use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
+use Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -36,7 +38,13 @@ class DatabaseSeeder extends Seeder
         // 1) Primero, roles fijos
         $this->call(RolesTableSeeder::class);
 
-
+        // 2) Admin fijo (útil para login inmediato)
+        User::factory()->create([
+            'name' => 'secretaria',
+            'email' => 'admin@test.com',
+            'password' => Hash::make('password'),
+            'role_id' => Role::where('name', 'secretaria')->value('id') ?? 1, // fallback
+        ]);
 
         // 3) Secretaries: crear users y luego perfiles
         User::factory()->count(10)->create([
@@ -87,9 +95,7 @@ class DatabaseSeeder extends Seeder
         Employee::factory()->count(100)->create();
         EmployeePhone::factory()->count(100)->create();
 
-        // (OJO: ya no necesitamos Secretary::factory()->count(10)->create();
-        //       ni Teacher::factory(80)->create(); porque arriba los hicimos con su user)
-
+     
         // departamentos con docentes
         $teachersForDepartments = Teacher::inRandomOrder()->take(4)->get();
         foreach ($teachersForDepartments as $teacher) {

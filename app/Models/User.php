@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -30,7 +31,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+       // 'remember_token',
     ];
 
     /**
@@ -39,7 +40,22 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+     //'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class, 'user_id');
+    }
+    
+    public function secretary()
+    {
+        return $this->hasOne(Secretary::class, 'user_id');
+    }
 }

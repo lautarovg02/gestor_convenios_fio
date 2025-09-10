@@ -1,41 +1,41 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Gestor-Convenios FIO')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    {{-- Bootstrap 5 (CSS y JS con Popper) --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+
+    {{-- Íconos de Bootstrap --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-
-    </style>
 </head>
 
-<body>
-    @include('layouts.header')
-    <div class="container-fluid flex-grow-1 d-flex flex-column">
-        <div class="row flex-grow-1">
-            @include('layouts.sidebar')
-            <main class="main-content" style="margin-left: 220px; padding-top: 90px;">
-                @yield('content')
-            </main>
-        </div>
+<body class="font-sans antialiased">
+    <div class="min-h-screen bg-gray-100">
+         @include('layouts.navigation')
+        <!-- Page Heading -->
+        @if (isset($header))
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                {{ $header }}
+            </div>
+        </header>
+        @endif
+
+        <!-- Page Content -->
+        <main>
+            {{ $slot }}
+        </main>
     </div>
-    @include('layouts.footer')
-    @yield('scripts')
-
-    @include('modals.convenios')
-
-
-    <script src="{{ asset('js/gestionAcademica.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

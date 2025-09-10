@@ -1,26 +1,30 @@
-<!-- resources/views/companies/edit.blade.php -->
-<!-- @extends('layouts.app') -->
+{{-- resources/views/companies/edit.blade.php --}}
 
-@section('content')
+@section('title', 'Editar Empresa')
+
+<x-app-layout>
+    <x-slot name="header">
+        <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
+            <h3 class="card-title"> Detalles de la empresa</h3>
+            <nav aria-label="breadcrumb" class="ms-3 mt-3">
+                <ol class="breadcrumb bg-light p-2 rounded shadow-sm mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('companies.index') }}">Empresas</a></li>
+                    <li class="breadcrumb-item">
+                        <span class="text-muted">
+                            {{ $company->company_name }}
+                        </span>
+                    </li>
+                    <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Editar</li>
+                </ol>
+            </nav>
+            <a href="{{ route('companies.index') }}" class="btn btn-outline-primary">← Volver</a>
+        </div>
+    </x-slot>
+
     <div class="row row-deck row-cards content-with-footer-buffer">
         <div class="col-12 ">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
-                    <h3 class="card-title"> Detalles de la empresa</h3>
-                    <nav aria-label="breadcrumb" class="ms-3 mt-3">
-                        <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
-                            <li class="breadcrumb-item"><a href="{{ route('companies.index') }}">Empresas</a></li>
-                            <li class="breadcrumb-item">
-                                <span class="text-muted">
-                                    {{ $company->company_name }}
-                                </span>
-                            </li>
-                            <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Editar
-                            </li>
-                        </ol>
-                    </nav>
-                    <a href="{{ route('companies.index') }}" class="btn btn-outline-primary">← Volver</a>
-                </div>
+
                 <div>
                     <!-- Mensajes flash de success-->
                     @if (Session::has('success'))
@@ -38,8 +42,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('companies.update', $company) }}" id="" role="form"
-                        enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('companies.update', $company) }}" id="" role="form" enctype="multipart/form-data">
                         {{ method_field('PATCH') }}
                         @csrf
 
@@ -57,9 +60,10 @@
                                 @enderror
                             </div>
                         </div>
+
                         <!-- Campo CUIT -->
                         <div class="form-group mb-3">
-                            <label class="form-label required-field" for= "cuit">CUIT</label>
+                            <label class="form-label required-field" for="cuit">CUIT</label>
                             <div>
                                 <input class="form-control" name="cuit" id="cuit" type="text"
                                     value="{{ old('cuit', $company->cuit) }}" placeholder="Ingrese el CUIT de la empresa "
@@ -70,6 +74,7 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <!-- Campo nombre fantasía -->
                         <div class="form-group mb-3">
                             <label class="form-label" for="company_name">Nombre de fantasía</label>
@@ -85,6 +90,7 @@
                                 value="{{ old('sector', $company->sector) }}"
                                 placeholder="Ingrese el sector al que pertenece la empresa" autocomplete="off">
                         </div>
+
                         <!-- Campo Entidad -->
                         <div class="mb-3">
                             <label class="form-label">Entidad</label>
@@ -143,27 +149,28 @@
                             @enderror
                         </div>
 
-
                         <div class="form-group mb-3">
                             <h6>Dirección:</h6>
                             <div class="row align-items-end">
                                 <!-- Campo Calle -->
-                                <label class="form-label required" for= "street">Calle</label>
+                                <label class="form-label required" for="street">Calle</label>
                                 <div>
                                     <input class="form-control" maxlength="100" name="street" id="street"
                                         type="text" value="{{ old('street', $company->street) }}" placeholder="Calle"
                                         autocomplete="off">
                                 </div>
                             </div>
+
                             <!-- Campo número -->
                             <div class="form-group mb-3">
-                                <label class="form-label required" for= "number">Número</label>
+                                <label class="form-label required" for="number">Número</label>
                                 <div>
                                     <input class="form-control" name="number" id="number" type="text"
                                         value="{{ old('number', $company->number) }}" placeholder="Número"
                                         autocomplete="off">
                                 </div>
                             </div>
+
                             <!-- Campo Ciudad -->
                             <div class="form-group mb-3">
                                 <label class="form-label required-field mt-3" for="city_id">Ciudad</label>
@@ -175,8 +182,8 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <small class="form-hint">Si no encuentra la <b>ciudad</b> en la lista, ingresarla en <a
-                                        href="">Agregar Ciudad.</a></small>
+                                <small class="form-hint">Si no encuentra la <b>ciudad</b> en la lista, ingresarla en
+                                    <a href="">Agregar Ciudad.</a></small>
                                 @error('city_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -193,8 +200,8 @@
                             </div>
                         </div>
                     </form>
-                </div>
-            </div>
+                </div> <!-- ./card-body -->
+            </div> <!-- ./card -->
         </div>
     </div>
-@endsection
+</x-app-layout>
