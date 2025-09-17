@@ -519,4 +519,6 @@
 
 @section('scripts')
     @vite('resources/js/formAgreements/createAgreement/formCreateAgreement.js')
-@endsection
+    @vite('resources/js/formAgreements/specificAgreement/tareas.js')
+    @vite('resources/js/formAgreements/specificAgreement/specificAgreement')
+@endsection 

@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contract_statuses', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('status',250);
-            $table->time('time_limit')->nullable();
+            $table->string('name', 55)->unique(); // <— ESTA es la columna que falta
             $table->timestamps();
         });
     }
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contract_statuses');
+        Schema::dropIfExists('roles');
     }
 };

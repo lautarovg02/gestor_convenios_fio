@@ -17,9 +17,7 @@ class SecretaryFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_name' => $this->faker->unique()->userName,   
-            'password' => bcrypt('password'),  
-            'email' => $this->faker->unique()->safeEmail,      
+            'username' => $this->faker->unique()->userName(),
         ];
     }
 }

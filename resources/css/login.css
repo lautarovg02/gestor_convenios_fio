@@ -1,0 +1,177 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+
+body {
+    background-image: url("../../public/images/fio-fondo.png");
+    background-size: cover;
+    background-position: center;
+    font-family: "DM Sans", sans-serif;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.card {
+    border: 1px;
+    background-color: #f4fbe6e8;
+    width: 1080px;
+    border-radius: 63px;
+    height: 580px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerLogoAndTitle {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    width: 300px;
+    height: auto;
+}
+
+.containerImgAndText {
+    height: 486px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-left: 64px;
+    width: 50%;
+    border-right: 2px solid #33333354;
+}
+
+.containerForm {
+    display: flex;
+    flex-direction: column;
+    height: 486px;
+    justify-content: center;
+    width: 50%;
+    margin-right: 50px;
+    align-items: center;
+}
+
+.containerCard {
+    height: 284px;
+    width: 80%;
+    display: flex;
+    box-shadow: rgb(99 99 99 / 30%) 0px 2px 8px 0px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5%;
+    margin-left: 8%;
+    background-color: #e3f5bd;
+    border-radius: 63px;
+    border: 1px;
+    padding-bottom: 15%;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 50px;
+    justify-content: space-around;
+    margin-bottom: 12%;
+}
+
+form {
+    width: 63%;
+}
+
+label {
+    margin-bottom: 4px;
+    font-size: 17px;
+}
+
+input {
+    padding: 2% 4%;
+    border-radius: 5.59px;
+    font-size: 15px;
+    border: 1px #00000066 solid;
+    height: 36px;
+}
+
+.password {
+    margin-bottom: 0;
+}
+
+input:focus,
+a:focus {
+    outline: 2px solid #00000021;
+}
+
+.containerInputs {
+    height: 163px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.rememberMe {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 8% 0 10% 0;
+}
+
+#rememberLabel,
+#remember {
+    margin: 0 2% 0% 0;
+    margin: 0 2% 0% 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+button {
+    padding: 2%;
+    border-radius: 6px;
+    background-color: #2668d2;
+    color: white;
+    margin-top: 7%;
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-size: 17px;
+    font-style: normal;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+button:hover {
+    background: #0a419a;
+    color: #fff;
+}
+
+.text-muted {
+    margin-top: 46%;
+    font-size: 18px;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+h1 {
+    margin: 5% 0 4px 0;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+h2 {
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.msjError {
+    color: #e02424;
+    width: 107%;
+    font-weight: 500;
+}

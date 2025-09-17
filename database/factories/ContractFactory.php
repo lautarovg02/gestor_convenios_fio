@@ -10,46 +10,35 @@ use App\Models\Teacher;
 use App\Models\TypeFrameworkAgreement;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Contract>
+ */
 class ContractFactory extends Factory
 {
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
+        
+        
         return [
-            'signing_date'                 => $this->faker->date(),
-            'url_certificate_afip'         => $this->faker->url(),
-            'url_statute'                  => $this->faker->url(),
-            'url_assignment_authorities'   => $this->faker->url(),
-
-            // 👉 Estas líneas crean los relacionados si no los pasás explícitamente en create()
-            'company_id'                   => Company::factory(),
-            'secretary_id'                 => Secretary::factory(),
-            'teacher_id'                   => Teacher::factory(),
-            'rector'                       => Teacher::factory()->state(['is_rector' => true]),
-            'contract_status_id'           => ContractStatus::factory(),
-            'type_framework_agreement_id'  => TypeFrameworkAgreement::factory(),
-
-            'creation_date'                => $this->faker->date(),
-            // Empleados se crean si no los seteás desde el test
-            'contact_employee_id'          => Employee::factory(),
-            'representative_employee_id'   => Employee::factory(),
-
-            'file'                         => random_bytes(256),
+            'signing_date' => $this->faker->date(),
+            'url_certificate_afip' =>$this->faker->url(),
+            'url_statute' =>$this->faker->url(),
+            'url_assignment_authorities' =>$this->faker->url(),
+            'company_id' => Company::inRandomOrder()->first()->id,
+            'secretary_id' => Secretary::inRandomOrder()->first()->id,
+            'teacher_id' => Teacher::inRandomOrder()->first()->id,
+            'creation_date' =>$this->faker->date(),
+            'contact_employee_id' => Employee::inRandomOrder()->first()->id,
+            'representative_employee_id' => Employee::inRandomOrder()->first()->id,
+            'rector' => Teacher::where('is_rector', true)->inRandomOrder()->first()->id, //Siempre debe ser true, para que no falle el trigger
+            'contract_status_id' => ContractStatus::inRandomOrder()->first()->id,
+            'type_framework_agreement_id' => TypeFrameworkAgreement::inRandomOrder()->first()->id,
+            'file' => random_bytes(256), // 256 bytes binarios aleatorios
         ];
-    }
-
-    /**
-     * (Opcional) Helper para asegurar que todos los IDs pertenezcan a la MISMA empresa.
-     * Útil si tu dominio exige consistencia de company_id.
-     */
-    public function forCompany(Company $company): self
-    {
-        return $this->state(fn () => [
-            'company_id' => $company->id,
-            'contact_employee_id' => Employee::factory()->state(['company_id' => $company->id]),
-            'representative_employee_id' => Employee::factory()->state(['company_id' => $company->id]),
-            'secretary_id' => Secretary::factory(), // si Secretary/Teacher no dependen de company, dejalos así
-            'teacher_id' => Teacher::factory(),
-            'rector' => Teacher::factory()->state(['is_rector' => true]),
-        ]);
     }
 }

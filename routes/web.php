@@ -15,27 +15,35 @@ use App\Http\Controllers\SpecificResidenceAgreementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndividualInternshipAgreementController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\AuthController;
 
 
+// Autenticación
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+if(Auth::check()){
 
-Route::get('/', function () {
-    return redirect('/companies');
-});
+    Route::get('/', function () {
+        return redirect('/companies');
+    });
+}
+
+if (!Auth::check()) {
+    Route::get('/', function () {
+        return redirect('/login');
+    });
+}
+
+
+//agrupa todas las rutas que requieran autenticación
+Route::group(['middleware' => ['role:secretary,admin,teacher']], function () {
+
 
 // COMPANIES
-Route::resource('/companies', CompanyController::class);
+Route::resource('companies', CompanyController::class);
 
 // EMPLOYEES
 Route::resource('companies.employees', EmployeeController::class)->shallow();
@@ -115,3 +123,4 @@ Route::resource('students', StudentController::class);
 
 
 
+});
