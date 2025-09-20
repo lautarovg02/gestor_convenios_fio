@@ -20,7 +20,7 @@
             </div>
             <!--Cuando tengamos sesiones hay que mostrar el nombre del usuario y no hardcodear -->
             <!-- Logout -->
-            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+            <form class="logout" action="{{ route('logout') }}" method="POST" class="d-inline">
                 @csrf
                 <div class="containerIconLogout">
                     <button type="submit" class="btn btn-link text-dark p-0 m-0 ms-3" style="text-decoration: none;">

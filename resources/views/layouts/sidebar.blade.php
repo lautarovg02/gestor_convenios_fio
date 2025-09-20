@@ -4,7 +4,7 @@
     <div class="position-sticky">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="btnHome nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home.index') }}">
+                <a class="btnHome nav-link {{ request()->routeIs('home.index') ? 'active' : '' }}" href="{{ route('home.index') }}">
                     <i class="iconHome bi bi-house-door"></i>
                     Inicio
                 </a>

@@ -37,6 +37,11 @@
     transform: scale(1.2); /* efecto agrandar */
 }
 
-form {
+.logout {
     margin-bottom: 0;
+    background-color: transparent;
+    width: 100%;
+    justify-content: center;
+    padding: 3%;
+    display: flex;
 }
