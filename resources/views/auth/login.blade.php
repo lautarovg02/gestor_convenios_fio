@@ -51,10 +51,6 @@
                                 <p class="msjError">{{ $message }}</p>
                             @enderror
 
-                            <div class="rememberMe">
-                                <input type="checkbox" name="remember" id="remember">
-                                <label id="rememberLabel" for="remember">Recordarme</label>
-                            </div>
 
                             <button class="btn" type="submit">Ingresar</button>
                     </form>

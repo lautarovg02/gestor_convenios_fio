@@ -1,0 +1,28 @@
+.containerHeader{
+    height: 52px;
+} 
+
+.text-end {
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.containerIconLogoutAndText{
+    width: 14%;
+    flex-direction: row;
+}
+
+.containerIconLogout{
+    margin-left: 19%;
+    padding-left: 24%;
+    border-left: 1px solid #0000005e;
+}
+
+.imgFacultad{
+    height: 58x;
+width: 154px;
+}
+
+.spanGestor{
+    font-size: 15px;
+}
