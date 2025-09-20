@@ -1,28 +1,42 @@
-.containerHeader{
+.containerHeader {
     height: 52px;
-} 
+}
 
 .text-end {
     font-size: 14px;
     text-transform: uppercase;
 }
 
-.containerIconLogoutAndText{
+.containerIconLogoutAndText {
     width: 14%;
     flex-direction: row;
 }
 
-.containerIconLogout{
+.containerIconLogout {
     margin-left: 19%;
     padding-left: 24%;
     border-left: 1px solid #0000005e;
 }
 
-.imgFacultad{
+.imgFacultad {
     height: 58x;
-width: 154px;
+    width: 154px;
 }
 
-.spanGestor{
+.spanGestor {
     font-size: 15px;
+    margin-bottom: 2%;
+}
+
+.iconLogout {
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.iconLogout:hover {
+    color: #fd0d11; /* azul bootstrap */
+    transform: scale(1.2); /* efecto agrandar */
+}
+
+form {
+    margin-bottom: 0;
 }

@@ -4,7 +4,9 @@
     <div class=" containerHeader container-fluid d-flex justify-content-between align-items-center px-4">
 
         <div class=" d-flex align-items-center gap-3">
+            <a href="{{ route('home.index') }}">
             <img class="imgFacultad" src="{{ asset('images/image5.png') }}" alt="Logo Facultad"">
+            </a>
             <span class=" spanGestor fw-semibold text-secondary d-none d-md-inline">Gestor de convenios</span>
         </div>
 
@@ -22,7 +24,7 @@
                 @csrf
                 <div class="containerIconLogout">
                     <button type="submit" class="btn btn-link text-dark p-0 m-0 ms-3" style="text-decoration: none;">
-                        <i class="bi bi-box-arrow-right fs-4"></i>
+                        <i class=" iconLogout bi bi-box-arrow-right fs-4"></i>
                     </button>
                 </div>
             </form>

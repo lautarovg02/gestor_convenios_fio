@@ -1,0 +1,20 @@
+.containerSeleccionarConvenio{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 7% 0;
+}
+
+.selectConvenio{
+    width: 70%;
+        border: 1px solid #0000002e;
+    border-radius: 0.5rem;
+    background: #e0dddd0f;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.lk{
+    font-size: 17px;
+
+}

@@ -1,0 +1,41 @@
+.btnAddConvenio {
+    background-color: #198754;
+    font-weight: 400;
+    border-radius: 0px 0px 0px 0px;
+    padding: 5% 11% 5% 7%;
+    text-decoration: none;
+    font-size: 14px;
+    color: white;
+    list-style: upper-alpha;
+    transition: all 0.2s ease-in-out;
+}
+
+.btnAddConvenio:hover {
+    background-color: #26632d;
+    color: white;
+    text-decoration: none;
+}
+
+.licontainer {
+    margin-top: 0%;
+    width: 119%;
+    margin-bottom: 8%;
+}
+
+.iconAdd {
+    margin-right: 8px;
+}
+
+.containerAllConvenios {
+    height: 48px;
+}
+
+.iconHome {
+    width: 16px;
+    margin-right: 8px;
+}
+
+.btnHome {
+    display: flex;
+    align-items: center;
+}

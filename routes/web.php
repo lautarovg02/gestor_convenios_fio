@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndividualInternshipAgreementController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\HomeController;
 
 // Autenticación
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -27,7 +27,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 if(Auth::check()){
 
     Route::get('/', function () {
-        return redirect('/companies');
+        return redirect('/home');
     });
 }
 
@@ -41,7 +41,7 @@ if (!Auth::check()) {
 //agrupa todas las rutas que requieran autenticación
 Route::group(['middleware' => ['role:secretary,admin,teacher']], function () {
 
-
+Route::resource('home', HomeController::class);
 // COMPANIES
 Route::resource('companies', CompanyController::class);
 
