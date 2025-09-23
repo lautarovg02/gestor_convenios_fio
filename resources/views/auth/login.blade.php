@@ -46,12 +46,13 @@
 
                             </div>
 
+                            <div class="containerError">
 
                             @error('email')
                                 <p class="msjError">{{ $message }}</p>
                             @enderror
-
-
+                            </div>  
+                                
                             <button class="btn" type="submit">Ingresar</button>
                     </form>
 
