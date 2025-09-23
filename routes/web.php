@@ -24,22 +24,11 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-if(Auth::check()){
-
-    Route::get('/', function () {
-        return redirect('/home');
-    });
-}
-
-if (!Auth::check()) {
-    Route::get('/', function () {
-        return redirect('/login');
-    });
-}
+Route::get('/', fn() => auth()->check() ? redirect('/home') : redirect('/login'));
 
 
 //agrupa todas las rutas que requieran autenticación
-Route::group(['middleware' => ['role:secretary,admin,teacher']], function () {
+Route::group(['middleware' => ['role:secretary|admin|teacher']], function () {
 
 Route::resource('home', HomeController::class);
 // COMPANIES
