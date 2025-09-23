@@ -108,7 +108,7 @@ a:focus {
 }
 
 .containerInputs {
-    height: 163px;
+    
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -174,4 +174,6 @@ h2 {
     color: #e02424;
     width: 107%;
     font-weight: 500;
+    margin: 0;
+    margin-top: 1%;
 }
