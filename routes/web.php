@@ -1,5 +1,7 @@
 <?php
 
+
+use App\Http\Controllers\AdminUsersController;
 use App\Http\Controllers\AgreementController;
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\CityController;
@@ -30,7 +32,13 @@ Route::get('/', fn() => auth()->check() ? redirect('/home') : redirect('/login')
 //agrupa todas las rutas que requieran autenticación
 Route::group(['middleware' => ['role:secretary|admin|teacher']], function () {
 
+
+//ADMIN USERS
+Route::resource('adminUsers', AdminUsersController::class);
+
+// HOME
 Route::resource('home', HomeController::class);
+
 // COMPANIES
 Route::resource('companies', CompanyController::class);
 

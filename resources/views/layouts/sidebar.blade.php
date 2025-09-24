@@ -45,9 +45,9 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('COMPLETAR*') ? 'active-nav-link' : '' }}" href="#">
+                <a class="nav-link {{ request()->is('adminUsers*') ? 'active-nav-link' : '' }}" href="{{ route('adminUsers.index') }}">
                     <i class="bi bi-person"></i>
-                    Usuarios de secretaría
+                    Administrar usuarios
                 </a>
             </li>
 

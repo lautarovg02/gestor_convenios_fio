@@ -44,6 +44,11 @@ class Teacher extends Model
         'is_dean',
     ];
 
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
+
     //Relación 1:n atributo multivaluado en la tabla Contract
     public function contracts(): HasMany
     {

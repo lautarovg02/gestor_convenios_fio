@@ -10,15 +10,21 @@ class Secretary extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_name', 'password', 'email'];
+    protected $fillable = [
+        'user_id',
+        'username',
+    ];
 
-    // Define la relación uno a muchos con SecretaryPhone
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function phones()
     {
         return $this->hasMany(SecretaryPhone::class);
     }
 
-    //Relación 1:n atributo multivaluado en la tabla Contract
     public function contracts(): HasMany
     {
         return $this->hasMany(Contract::class, 'secretary_id');
