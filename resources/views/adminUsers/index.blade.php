@@ -35,7 +35,7 @@
         </div>
     @endif
 
-    @if (!$secretaries->isEmpty() || !$teachers->isEmpty())
+    @if (!$users->isEmpty() )
         <div class="card shadow-sm rounded">
             <div class="table-responsive rounded shadow-sm table-scrollable-container">
                 <table class="table table-hover align-middle mb-0">
@@ -49,48 +49,26 @@
                     </thead>
                     <tbody>
                         {{-- Secretarios --}}
-                        @foreach ($secretaries as $secretary)
+                        @foreach ($users as $u)
                             <tr>
-                                <td class="text-center">{{ $secretary['username'] }}</td>
-                                <td class="text-center">{{ $secretary['email'] }}</td>
-                                <td class="text-center">{{ $secretary['role'] }}</td>
+                                <td class="text-center">{{ $u->teacher->name ?? $u->secretary->username ?? '—'  }}</td>
+                                <td class="text-center">{{ $u['email'] }}</td>
+                                <td class="text-center">{{ $u->role->name }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('adminUsers.show', $secretary['id']) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('adminUsers.show', $u['id']) }}" class="btn btn-info btn-sm">
                                         Ver datos <i class="bi bi-eye"></i>
                                     </a>
-                                    <a href="{{ route('adminUsers.edit', $secretary['id']) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('adminUsers.edit', $u['id']) }}" class="btn btn-primary btn-sm">
                                         Editar datos <i class="bi bi-file-earmark-text"></i>
                                     </a>
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalDelete" data-user-id="{{ $secretary['id'] }}">
+                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalDelete" data-user-id="{{ $u['id'] }}">
                                         Eliminar <i class="bi bi-trash"></i>
                                     </button>
                                 </td>
                             </tr>
                         @endforeach
 
-                        {{-- Profesores --}}
-                        @foreach ($teachers as $teacher)
-                            <tr>
-                                <td class="text-center">{{ $teacher['name'] }} {{ $teacher['lastname'] }}</td>
-                                <td class="text-center">{{ $teacher['email'] }}</td>
-                                <td class="text-center">{{ $teacher['role'] }}</td>
-                                <td class="text-center">
-                                    <a href="{{ route('adminUsers.show', $teacher['id']) }}" class="btn btn-info btn-sm">
-                                        Ver datos <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="{{ route('adminUsers.edit', $teacher['id']) }}" class="btn btn-primary btn-sm">
-                                        Editar datos <i class="bi bi-file-earmark-text"></i>
-                                    </a>
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalDelete" data-user-id="{{ $teacher['id'] }}">
-                                        Eliminar <i class="bi bi-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                  
     @endif
 
     {{-- Modales --}}
