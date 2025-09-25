@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\UserService;
+use DB;
 
 class AdminUsersController extends Controller
 {
@@ -48,26 +49,36 @@ class AdminUsersController extends Controller
         return view('adminUsers.show', compact('id'));
     }
 
-    public function destroy($id)
-    {
-        $user = User::findOrFail($id);
 
-        // Guardarraíles
-        if (auth()->id() === $user->id) {
+    public function destroy(User $user) // <-- route model binding, ruta debe ser {user}
+    {
+        // No permitir que te borres a vos mismo
+        if (auth()->check() && auth()->id() === $user->id) {
             return back()->with('error', 'No podés eliminarte a vos mismo.');
         }
-
-        // Evitar borrar al último admin (ajustá según tu modelo de rol)
-        if ($user->rol?->name === 'admin') {
-            $remaining = User::whereHas('rol', fn($q) => $q->where('name', 'admin'))
-                ->where('id', '!=', $user->id)
-                ->count();
+    
+        // Evitar borrar al último admin (ajustá el nombre del rol si corresponde)
+        if ($user->role?->name === 'admin') {
+            $remaining = User::whereHas('role', function($q) {
+                $q->where('name', 'admin');
+            })->where('id', '!=', $user->id)->count();
+    
             if ($remaining === 0) {
                 return back()->with('error', 'No se puede eliminar al último administrador.');
             }
         }
-
-        $user->delete(); // dispara ON DELETE CASCADE en secretaries/teachers
-        return back()->with('success', 'Usuario eliminado correctamente.');
+    
+        // Borro en transacción por si hay deletes encadenados
+        DB::beginTransaction();
+        try {
+            $user->delete(); // si tenés ON DELETE CASCADE en la BD, eliminará teacher/secretary; si usás softDeletes, será soft
+            DB::commit();
+            return back()->with('success', 'Usuario eliminado correctamente.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            \Log::error('Error al eliminar usuario: '.$e->getMessage());
+            return back()->with('error', 'Ocurrió un error al intentar eliminar el usuario.');
+        }
     }
+    
 }
