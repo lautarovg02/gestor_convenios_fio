@@ -19,6 +19,7 @@ use App\Http\Controllers\IndividualInternshipAgreementController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SecretaryController;
 
 // Autenticación
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -37,17 +38,31 @@ Route::group(['middleware' => ['role:secretary|admin|teacher']], function () {
     //ADMIN USERS
     Route::resource('adminUsers', AdminUsersController::class);
 
+    /*
     Route::delete('/admin/users/{user}', [AdminUsersController::class, 'destroy'])
         ->name('adminUsers.destroy')
         ->middleware(['auth', 'role:admin']);
+*/
+    // eliminar user (si lo necesitás)
+    Route::delete('/admin/users/{user}', [AdminUsersController::class, 'destroy'])
+        ->name('adminUsers.destroy')
+        ->middleware(['auth', 'role:admin']);
+
+    // eliminar teacher
+    Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])
+        ->name('teachers.destroy')
+        ->middleware(['auth', 'role:admin']);
+
+    // eliminar secretary
+    Route::delete('/secretaries/{secretary}', [SecretaryController::class, 'destroy'])
+        ->name('secretaries.destroy')
+        ->middleware(['auth', 'role:admin']);
+
 
     //ADMIN USERS
     Route::get('/admin/users', [AdminUsersController::class, 'index'])
         ->name('adminUsers.index');
 
-    Route::delete('/admin/users/{user}', [AdminUsersController::class, 'destroy'])
-        ->name('adminUsers.destroy')
-        ->middleware(['auth', 'role:admin']);
 
     Route::get('/admin/users/{user}/edit',  [AdminUsersController::class, 'edit'])
         ->name('adminUsers.edit');
