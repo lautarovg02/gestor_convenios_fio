@@ -12,11 +12,11 @@ return new class extends Migration
             $table->id();
 
             // Relación 1:1 con users
-            $table->unsignedBigInteger('user_id')->unique();
+            $table->unsignedBigInteger('user_id')->unique()->nullable();
             $table->foreign('user_id')
-                  ->references('id')->on('users')
-                  ->cascadeOnUpdate()
-                  ->cascadeOnDelete();
+                ->references('id')->on('users')
+                ->cascadeOnUpdate()
+                ->nullOnDelete(); // Si se borra el user, el secretary queda sin user (null).
 
             // Atributos propios del secretary
             $table->string('username', 40)->unique();

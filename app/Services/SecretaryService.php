@@ -17,14 +17,10 @@ class SecretaryService
     {
         return Secretary::firstOrCreate(
             [
-                'user_name' => $data['user_secretaria'],
-                'password' => $data['password_secretaria'],
-                'email' => $data['email_secretaria'],
+                'username' => $data['user_secretaria'],
             ],
             [
-                'user_name' => 'user_' . Str::random(8),
-                'password' => bcrypt(Str::random(12)),
-                'email' => Str::random(10) . '@example.com',
+                'username' => 'user_' . Str::random(8),
             ]
         );
     }
