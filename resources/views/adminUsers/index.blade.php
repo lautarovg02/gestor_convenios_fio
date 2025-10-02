@@ -61,13 +61,11 @@
                             <a href="{{ route('adminUsers.edit', $u['id']) }}" class="btn btn-primary btn-sm">
                                 Editar datos <i class="bi bi-file-earmark-text"></i>
                             </a>
-                            <button
-                                type="button"
-                                class="btn btn-danger btn-sm"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modal-delete"
+                            <button type="button" class="btn btn-danger btn-sm"
+                                data-entity-name="{{ $u->teacher->name ?? $u->secretary->username ?? '—' }}"
                                 data-action="{{ route('adminUsers.destroy', $u->id) }}"
-                                data-entity="{{ $u->teacher->name ?? $u->secretary->username ?? $u->email }}">
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-delete">
                                 Eliminar <i class="bi bi-trash"></i>
                             </button>
                         </td>

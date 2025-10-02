@@ -50,7 +50,8 @@ class AdminUsersController extends Controller
     }
 
 
-    public function destroy(User $user) // <-- route model binding, ruta debe ser {user}
+
+    public function destroy(User $user)
     {
         // No permitir que te borres a vos mismo
         if (auth()->check() && auth()->id() === $user->id) {
@@ -68,10 +69,20 @@ class AdminUsersController extends Controller
             }
         }
     
-        // Borro en transacción por si hay deletes encadenados
         DB::beginTransaction();
         try {
-            $user->delete(); // si tenés ON DELETE CASCADE en la BD, eliminará teacher/secretary; si usás softDeletes, será soft
+            // Si existen relaciones one-to-one, borrarlas explícitamente (si no usás ON DELETE CASCADE)
+            // Ajustá los nombres de relaciones si tus métodos se llaman distinto (teacher(), secretary()).
+            if (method_exists($user, 'teacher') && $user->teacher) {
+                $user->teacher()->delete();
+            }
+            if (method_exists($user, 'secretary') && $user->secretary) {
+                $user->secretary()->delete();
+            }
+    
+            // Finalmente borrar el usuario
+            $user->delete();
+    
             DB::commit();
             return back()->with('success', 'Usuario eliminado correctamente.');
         } catch (\Throwable $e) {
@@ -80,5 +91,6 @@ class AdminUsersController extends Controller
             return back()->with('error', 'Ocurrió un error al intentar eliminar el usuario.');
         }
     }
+    
     
 }
