@@ -64,6 +64,11 @@ Route::group(['middleware' => ['role:secretary|admin|teacher']], function () {
         ->name('adminUsers.index');
 
 
+
+    // Show con model binding
+    Route::get('/admin/users/{user}', [AdminUsersController::class, 'show'])
+        ->name('adminUsers.show');
+
     Route::get('/admin/users/{user}/edit',  [AdminUsersController::class, 'edit'])
         ->name('adminUsers.edit');
 

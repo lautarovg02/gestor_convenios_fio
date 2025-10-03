@@ -44,11 +44,27 @@ class AdminUsersController extends Controller
         return view('adminUsers.edit', compact('id'));
     }
 
-    public function show($id)
+    public function show(User $user)
     {
-        return view('adminUsers.show', compact('id'));
+        // Asegurate que $user->role exista (relación role)
+        $roleName = optional($user->role)->name;
+    
+        if ($roleName === 'teacher') {
+            // Si tenés una ruta para teachers.show
+            if ($user->teacher) {
+                return redirect()->route('teachers.show', $user->teacher->id);
+            }
+    
+            // Fallback: si relacion teacher no existe, mostrar la vista con mensaje
+            return view('adminUsers.show', [
+                'user' => $user,
+                'warning' => 'El usuario tiene rol teacher pero no tiene datos en la relación teacher.'
+            ]);
+        }
+    
+        // Si es secretary (o cualquier otro), mostramos la vista de adminUsers.show
+        return view('adminUsers.show', compact('user'));
     }
-
 
 
     public function destroy(User $user)
