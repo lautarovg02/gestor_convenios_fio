@@ -19,17 +19,17 @@ class AdminUsersController extends Controller
 
     public function index()
     {
-        //   $teachers = $this->serviceUsers->getAllTeachers(); //Obtengo todos los teachers
-        // $secretaries = $this->serviceUsers->getAllSecretaries(); // Obtengo todos los secretaries
-        $users = User::select('id', 'email', 'role_id')
-            ->with([
-                'role:id,name',
-                'teacher:id,user_id,name,lastname',
-                'secretary:id,user_id,username'
-            ])
-            ->orderByDesc('id')
-            ->get();
-
+        // Obtener todos los usuarios con sus roles y datos relacionados
+     $users = User::select('id', 'email', 'role_id')
+    ->with([
+        'role:id,name',
+        'teacher:id,user_id,name,lastname,dni,cuil,faculty',
+        'secretary:id,user_id,username'
+    ])
+    ->leftJoin('teachers', 'users.id', '=', 'teachers.user_id')
+    ->orderBy('teachers.name', 'asc')
+    ->select('users.*') // evita conflicto de columnas
+    ->get();
 
         return view('adminUsers.index', compact('users'));
     }
