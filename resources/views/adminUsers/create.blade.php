@@ -18,7 +18,8 @@
             </nav>
         </div>
        
-        <a class="btn btn-outline-primary">
+          {{-- Enlace "Volver" usando la ruta index --}}
+        <a href="{{ route('adminUsers.index') }}" class="btn btn-outline-primary">
             ← Volver
         </a>
     </div>
@@ -31,9 +32,8 @@
         <div class="card-body">
             {{-- Formulario de Creación de Usuario  --}}
            
-            <form action="" method="POST"> 
+            <form action="{{ route('admin.users.store') }}" method="POST"> 
                 @csrf
-
                 {{-- Mensajes de error globales (si los hay) --}}
                 @if ($errors->any())
                     <div class="alert alert-danger mb-4">
@@ -88,19 +88,27 @@
                                     <select name="role_id" id="role_id" class="form-select @error('role_id') is-invalid @enderror" required>
                                         <option value="">Seleccione un rol</option>
                                         {{-- Asegúrate de que $roles se pasa desde el controlador --}}
-                                        @if(isset($roles))
-                                            @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
-                                                    {{ ucfirst($role->name) }}
-                                                </option>
-                                            @endforeach
-                                        @endif
+                                       @if(isset($roles))
+        @foreach ($roles as $role)
+            <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                {{ ucfirst($role->name) }}
+            </option>
+        @endforeach
+        {{-- 💡 Identificamos los IDs para JavaScript --}}
+        @php
+            $teacherRole = $roles->firstWhere('name', 'teacher');
+            $teacherRoleId = $teacherRole ? $teacherRole->id : 0;
+            
+            $secretaryRole = $roles->firstWhere('name', 'secretary');
+            $secretaryRoleId = $secretaryRole ? $secretaryRole->id : 0; // <-- ¡Añadir esta línea!
+        @endphp
+    @endif
                                     </select>
                                     @error('role_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
+               
                             </div>
                         </div>
                     </div>
@@ -108,14 +116,19 @@
                     {{-- Columna 2: Datos de usuario --}}
                     <div class="col-md-6">
                         <div class="card h-100 ">
+                            <div id="teacher_fields"> 
                               <div class="card-header  bg-light fw-bold">     
-                                Datos del Usuario
+                                Datos del Usuario  
+
                             </div>
+                                <div  class="px-3 pt-2" >   
+                            <small class="form-hint">Completar campos obligatorios  <b>*</b> para un docente.</small>
+                                </div>
                             <div class="card-body">
                                 
                                 {{-- Nombre Docente --}}
                                 <div class="mb-3">
-                                    <label for="docente_nombre" class="form-label">Nombre</label>
+                                    <label for="docente_nombre" class="form-label required-field fs-8">Nombre</label>
                                     <input type="text" name="docente_nombre" id="docente_nombre" class="form-control @error('docente_nombre') is-invalid @enderror" value="{{ old('docente_nombre') }}">
                                     @error('docente_nombre')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -124,7 +137,7 @@
 
                                 {{-- Apellido Docente --}}
                                 <div class="mb-3">
-                                    <label for="docente_apellido" class="form-label">Apellido</label>
+                                    <label for="docente_apellido" class="form-label required-field fs-8">Apellido</label>
                                     <input type="text" name="docente_apellido" id="docente_apellido" class="form-control @error('docente_apellido') is-invalid @enderror" value="{{ old('docente_apellido') }}">
                                     @error('docente_apellido')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -133,7 +146,7 @@
 
                                 {{-- DNI --}}
                                 <div class="mb-3">
-                                    <label for="dni" class="form-label">DNI</label>
+                                    <label for="dni" class="form-label required-field fs-8">DNI</label>
                                     <input type="text" name="dni" id="dni" class="form-control @error('dni') is-invalid @enderror" value="{{ old('dni') }}">
                                     @error('dni')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -160,12 +173,16 @@
 
                             </div>
                         </div>
+  </div>
                     </div>
+
+
                 </div>
 
                 <div class="mt-4 d-flex justify-content-end">
                    
-                    <a class="btn btn-danger m-2">
+                    {{-- Botón "Cancelar" usando la ruta index --}}
+                    <a href="{{ route('adminUsers.index') }}" class="btn btn-danger m-2">
                         Cancelar
                     </a>
                     <button type="submit" class="btn btn-success m-2">
@@ -179,3 +196,48 @@
 </div>
 
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Obtenemos los IDs de los roles pasados desde PHP/Blade
+        const TEACHER_ROLE_ID = {{ $teacherRoleId ?? 0 }};
+        const SECRETARY_ROLE_ID = {{ $secretaryRoleId ?? 0 }}; // <-- Usamos este ID
+        
+        const roleSelect = document.getElementById('role_id');
+        const teacherFields = document.getElementById('teacher_fields');
+
+        // Función para cambiar la visibilidad y el estado 'disabled'
+        function toggleTeacherFields() {
+            // El contenedor se debe mostrar/habilitar SOLO si el rol seleccionado es TEACHER.
+            const isTeacher = roleSelect.value == TEACHER_ROLE_ID;
+
+            if (isTeacher) {
+                // ROL TEACHER: MOSTRAR y HABILITAR CAMPOS
+                teacherFields.style.display = ''; 
+                teacherFields.querySelectorAll('input, select').forEach(field => {
+                    field.disabled = false;
+                });
+                
+            } else if (roleSelect.value == SECRETARY_ROLE_ID) {
+                // ROL SECRETARY: OCULTAR y DESHABILITAR CAMPOS
+                teacherFields.style.display = 'none';
+                teacherFields.querySelectorAll('input, select').forEach(field => {
+                    field.disabled = true; // Deshabilita para que no se envíen
+                });
+                
+            } else {
+                // Para cualquier otro rol (ej: Alumno, Admin), por defecto se oculta
+                teacherFields.style.display = 'none';
+                teacherFields.querySelectorAll('input, select').forEach(field => {
+                    field.disabled = true;
+                });
+            }
+        }
+
+        // 1. Ejecutar al cargar la página (para manejar 'old' values)
+        toggleTeacherFields();
+
+        // 2. Ejecutar cada vez que el valor del selector de rol cambie
+        roleSelect.addEventListener('change', toggleTeacherFields);
+    });
+</script>

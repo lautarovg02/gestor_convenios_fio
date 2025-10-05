@@ -68,8 +68,12 @@ Route::get('/admin/users/create', [AdminUsersController::class, 'create'])
 // Ruta para mostrar el formulario de edición de usuario
 Route::get('/admin/users/{user}/edit', [AdminUsersController::class, 'edit'])
     ->name('adminUsers.edit');
+    
+// Ruta para procesar el formulario de creación de usuario (POST)
+Route::post('/users', [AdminUsersController::class, 'store'])
+    ->name('admin.users.store');
 
-// Falta la ruta POST para guardar (STORE) y la ruta PUT/PATCH para actualizar (UPDATE).
+// Falta la ruta PUT/PATCH para actualizar (UPDATE).
 
 
 

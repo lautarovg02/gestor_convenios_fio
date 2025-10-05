@@ -35,11 +35,13 @@ class Teacher extends Model
     ];
 
     protected $fillable = [
+        'user_id', 
         'lastname',
         'name',
         'dni',
         'cuil',
         'teacher_id',
+        'faculty',
         'is_rector',
         'is_dean',
     ];
