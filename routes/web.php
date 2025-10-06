@@ -36,17 +36,12 @@ Route::group(['middleware' => ['role:secretary|admin|teacher']], function () {
 
 
     //ADMIN USERS
-    Route::resource('adminUsers', AdminUsersController::class);
+    Route::resource('adminUsers', AdminUsersController::class)->parameters(['adminUsers' => 'user']);;
 
-    /*
-    Route::delete('/admin/users/{user}', [AdminUsersController::class, 'destroy'])
-        ->name('adminUsers.destroy')
-        ->middleware(['auth', 'role:admin']);
-*/
+   
     // eliminar user (si lo necesitás)
     Route::delete('/admin/users/{user}', [AdminUsersController::class, 'destroy'])
-        ->name('adminUsers.destroy')
-        ->middleware(['auth', 'role:admin']);
+        ->name('adminUsers.destroy');
 
     // eliminar teacher
     Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])
