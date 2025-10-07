@@ -74,6 +74,7 @@ class SpecificAgreementController extends Controller
                 'empresa_calle'         => $contract->company->street ?? '',
                 'empresa_numero'        => $contract->company->number ?? '',
                 'empresa_ciudad'        => $contract->company->city->name ?? '',
+                'empresa_codigo_postal' => $contract->company->city->postal_code ?? '',
                 'empresa_provincia'     => $contract->company->city->province->name ?? '',
                 'pais'          => $contract->company->country ?? '',
             ],

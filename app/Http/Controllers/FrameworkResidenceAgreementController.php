@@ -61,10 +61,8 @@ class FrameworkResidenceAgreementController extends Controller
     public function create()
     {
         $companies = $this->companyService->getAllCompanies();
-        $response = Http::get('https://apis.datos.gob.ar/georef/api/provincias');
-        $provincias = $response->json()['provincias'];
     
-        return view('frameworkResidenceAgreement.create', compact('provincias', 'companies'));
+        return view('frameworkResidenceAgreement.create', compact('companies'));
     }
     
 

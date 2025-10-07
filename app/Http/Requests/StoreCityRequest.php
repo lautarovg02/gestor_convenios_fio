@@ -24,14 +24,15 @@ class StoreCityRequest extends FormRequest
         return [
             'name' => 'required|string|max:40',
             'province_id' => 'required|integer',
+            'postal_code' => 'required|integer'
         ];
     }
 
     public function messages(){
         return [
             'name.required' => 'La ciudad es un campo obligatorio.',
-            'name.max' => 'La máxima cantidad de caracteres permitida es de :max',
-            'province_id.required' => 'La provincia es un campo obligatorio.'
+            'province_id.required' => 'La provincia es un campo obligatorio.',
+            'postal_code.required' => 'El código postal es un campo obligatorio.'
         ];
     }
 }

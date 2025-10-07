@@ -64,10 +64,9 @@ class FrameworkInternshipAgreementController extends Controller
 
     public function create()
     {
-        $response = Http::get('https://apis.datos.gob.ar/georef/api/provincias');
-        $provincias = $response->json()['provincias'];
+        
         $companies = $this->companyService->getAllCompanies();
-        return view("frameworkInternshipAgreement.create", compact('provincias', 'companies'));
+        return view("frameworkInternshipAgreement.create", compact('companies'));
     }
 
 

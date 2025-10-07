@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(`/specificAgreement/getFrameworkData/${contractId}`)
             .then(response => response.json())
             .then(data => {
+
+                console.log(data);
                 // 1. Razón social
                 document.getElementById('razon_social').value = data.razon_social || "";
 
@@ -45,7 +47,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById('localidad').value = data.direccion?.empresa_ciudad || "";
 
                 // 11. Provincia
-                document.getElementById('provincia').value = data.direccion?.empresa_provincia || "Buenos Aires";
+                document.getElementById('provincia').value = data.direccion?.empresa_provincia || "";
+
+                document.getElementById('codigo_postal').value = data.direccion?.empresa_codigo_postal || "";
 
                 // 12. País
                 document.getElementById('pais').value = /*data.direccion?.pais ||*/ "Argentina";

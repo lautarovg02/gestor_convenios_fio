@@ -254,8 +254,8 @@ class CompanyController extends Controller
             'provincia' => $company->city->province->name,
             'entity_id' => $company->entity_id,
             'city_id' => $company->city_id,
-            'city_name'        => $company->city?->name,
             'entity_name' => $company->entity_id->name ?? null,
+            'postal_code' => $company->city?->postal_code,
 
         ]);
     }

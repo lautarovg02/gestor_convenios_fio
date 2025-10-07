@@ -2,40 +2,58 @@
 <!-- @extends('layouts.app') -->
 
 @section('content')
-    <div class="row row-deck row-cards content-with-footer-buffer">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="col-12 d-flex justify-content-between align-items-center ps-4 pe-4">
-                        <h3>Agregar nueva empresa</h3>
-                        <nav aria-label="breadcrumb" class="ms-3 mt-3">
-                            <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
-                                <li class="breadcrumb-item"><a href="{{ route('companies.index') }}">Empresas</a></li>
-                                <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Crear Empresa</li>
-                            </ol>
-                        </nav>
-                        <a href="{{ route('companies.index') }}" class="btn btn-outline-primary">← Volver</a>
-                    </div>                </div>
 
-                <!-- Mensajes flash de success-->
-                @if (Session::has('success'))
-                    <div class="alert alert-success">
-                        {{ Session::get('success') }}
-                    </div>
-                @endif
+@section('content')
+    <div class="container mt-4">
 
-                <!-- Mensajes flash de error-->
-                @if ($errors->has('error'))
-                    <div class="alert alert-danger">
-                        {{ $errors->first('error') }}
-                    </div>
-                @endif
+        <!-- Header con Título y Breadcrumb (MISMO DISEÑO QUE DOCENTES) -->
+        <div class="d-flex justify-content-between align-items-center mb-2" style="    padding: 0 6%;">
+            <div>
+                
+                <h4 class="fw-bold mb-1">Agregar empresa</h4>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent p-0">
+                        <li class="breadcrumb-item text-muted">Empresas</li>
+                        <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Agregar empresa</li>
+                    </ol>
+                </nav>
+            
+            </div>
+            <a href="{{ route('companies.index') }}" class="btn btn-outline-primary">
+                ← Volver
+            </a>
+        </div>
+
+        <div style="display: flex; justify-content: center;">
+            <!-- Mensajes flash de success-->
+            @if (Session::has('success'))
+                <div class="alert alert-success" style="width: fit-content;">
+                    {{ Session::get('success') }}
+                </div>
+            @endif
+
+            <!-- Mensajes flash de error-->
+            @if ($errors->has('error'))
+                <div class="alert alert-danger" style="width: fit-content;">
+                    {{ $errors->first('error') }}
+                </div>
+            @endif
+        </div>
+
+        <div class="d-flex justify-content-center">
+
+            <div class="w-50 card shadow-sm rounded">
+
+                <div class="card-header bg-light" style="padding: 2%; margin-bottom: 4%;">
+                    <h4 class="mb-0 fw-bold">Datos de la empresa</h4>
+                </div>
 
                 <div class="card-body">
-                    <form method="POST" action=" {{ route('companies.store') }} " id="" role="form">
+                    <form class="d-flex flex-column align-items-center" method="POST"
+                        action=" {{ route('companies.store') }} " id="" role="form">
                         @csrf
                         <!-- Campo Razón social -->
-                        <div class="form-group mb-3">
+                        <div class="w-75 form-group mb-3">
                             <label class="form-label">
                                 <label for="denomination" class="required-field fs-6">Razón social</label>
                             </label>
@@ -48,7 +66,7 @@
                             @enderror
                         </div>
                         <!-- Campo cuit -->
-                        <div class="form-group mb-3">
+                        <div class="w-75 form-group mb-3">
                             <div class="d-flex align-items-center justify-content-between">
                                 <label class="form-label fs-6 required-field">
                                     <label for="cuit">CUIT</label>
@@ -70,8 +88,8 @@
                         </div>
 
                         <!-- Campo nombre de la empresa -->
-                        <div class="form-group mb-3">
-                            <label class="form-label fs-6">
+                        <div class="w-75 form-group mb-3">
+                            <label class="form-label fs-6 required-field">
                                 <label for="company_name">Nombre de fantasía</label>
                             </label>
                             <div>
@@ -79,8 +97,8 @@
                                     name="company_name" type="text" id="company_name">
                             </div>
                         </div>
-                        <div class="form-group mb-3">
-                            <label class="form-label fs-6">
+                        <div class="w-75 form-group mb-3">
+                            <label class="form-label fs-6 required-field">
                                 <label for="sector">Sector</label>
                             </label>
                             <div>
@@ -89,15 +107,16 @@
                             </div>
                         </div>
                         <!-- Selector de entidad con opción "Otros" -->
-                        <div class="form-group mb-3">
-                            <label class="form-label fs-6">
+                        <div class="w-75 form-group mb-3">
+                            <label class="form-label fs-6 required-field">
                                 <label for="entity">Entidad</label>
                             </label>
                             <select name="entity" id="entity" class="form-select">
                                 <option value="">Seleccionar</option>
                                 @foreach ($entityTypes as $type)
                                     <option value="{{ $type->name }}"
-                                        {{ old('entity_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                                        {{ old('entity_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}
+                                    </option>
                                 @endforeach
                                 <option value="other">Otro tipo</option>
                             </select>
@@ -110,7 +129,7 @@
                             </div>
                         </div>
                         <!-- Campo rubro -->
-                        <div class="form-group mb-3">
+                        <div class="w-75 form-group mb-3">
                             <label class="form-label fs-6"> <label for="company_category">Categoría</label></label>
                             <div>
                                 <input class="form-control" maxlength="20" placeholder="Categoría" name="company_category"
@@ -118,7 +137,7 @@
                             </div>
                         </div>
                         <!-- Campo Ámbito con varias opciones -->
-                        <div class="form-group mb-3">
+                        <div class="w-75 form-group mb-3">
                             <label class="form-label fs-6" for="scope">Ámbito</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <div>
@@ -138,49 +157,60 @@
                             </div>
                         </div>
 
-                        <h6>Dirección:</h6>
-                        <div class="row align-items-end">
-                            <!-- Campo nombre de la calle -->
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fs-6" for="street">Calle</label>
-                                <input class="form-control" maxlength="100" placeholder="Calle" name="street"
-                                    type="text" id="street" value="{{ old('street') }}">
+                        <h3 class="w-100 pt-2 " style="border-top: 1px solid #ccc;">Dirección</h3>
+                        <div class="justify-content-center row align-items-end">
+
+                            <div class=""
+                                style="display: flex; justify-content:center; align-items: center; gap: 30px;">
+
+                                <!-- Campo nombre de la calle -->
+                                <div class="w-36 col-md-6 mb-3" style="width: 32%;">
+                                    <label class="form-label fs-6 required-field" for="street">Calle</label>
+                                    <input class="form-control" maxlength="100" placeholder="Calle" name="street"
+                                        type="text" id="street" value="{{ old('street') }}">
+                                </div>
+
+                                <!-- Campo número -->
+                                <div class="col-md-2 mb-3" style="width: 32%;">
+                                    <label class="form-label fs-6 required-field" for="number">Número</label>
+                                    <input class="form-control" placeholder="Número" name="number" type="number"
+                                        id="number" value="{{ old('number') }}">
+                                </div>
                             </div>
 
-                            <!-- Campo número -->
-                            <div class="col-md-2 mb-3">
-                                <label class="form-label fs-6" for="number">Número</label>
-                                <input class="form-control" placeholder="Número" name="number" type="number"
-                                    id="number" value="{{ old('number') }}">
-                            </div>
 
                             <!-- Campo nombre de la ciudad -->
-                            <div class="col-md-4 mb-3">
+                            <div class=" col-md-4 mb-3" style="width: 71%;">
                                 <label class="form-label fs-6 required-field" for="city_id">Ciudad</label>
+
                                 <select class="form-control" name="city_id" id="city_id">
                                     <option value="">Seleccionar</option>
                                     @foreach ($cities as $city)
                                         <option value="{{ $city->id }}">{{ $city->name }}</option>
                                     @endforeach
                                 </select>
+
                                 @error('city_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
-                            </div>
-                            <small class="form-hint text-end d-block">
+
+                                <small class="fs-10 form-hint text-end d-block" style="font-size: 10px;">
                                 Si no encuentra la <b>ciudad</b> en la lista, ingresarla en
                                 <a href="{{ route('cities.create') }}">Agregar Ciudad.</a>
-                            </small>
+                                </small>
+                            </div>
                         </div>
 
                         <!-- Botones -->
-                        <div class="form-footer">
+                        <div class="mt-4 form-footer w-100">
                             <div class="text-end">
                                 <div class="d-flex">
-                                    <a href="{{ route('companies.index') }}" class="btn btn-danger m-2">Cancelar</a>
-                                    <div>
-                                        <button type="submit" class="btn btn-success ms-auto m-2">Crear</button>
-                                    </div>
+                                    <a href="{{ route('companies.index') }}" class="min-vw-50 btn btn-danger m-2"
+                                        style="min-width: 100px; text-transform: capitalize;">Cancelar</a>
+
+                                    <button type="submit" class="btn btn-success ms-auto m-2"
+                                        style="min-width: 100px">Crear empresa</button>
+
                                 </div>
                             </div>
                         </div>
@@ -188,5 +218,6 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 @endsection
