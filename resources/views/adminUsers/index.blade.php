@@ -52,61 +52,37 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{-- Secretarios --}}
                     @foreach ($users as $u)
-                        <tr>
-                            {{-- Nombre / Usuario --}}
-                            <td class="text-center">
-                                {{ $u->name ?? $u->secretary->username ?? '—' }}
-                            </td>
-
-                            {{-- Email --}}
-                            <td class="text-center">{{ $u->email }}</td>                                                     
-
-                            {{-- Nombre --}}
-                            <td class="text-center">{{ $u->teacher->name ?? '—' }}</td>        
-
-                            {{-- Apellido --}}
-                            <td class="text-center">{{ $u->teacher->lastname ?? '—' }}</td>                                            
-                                    
-                            {{-- Rol de sistema --}}
-                            <td class="text-center">{{ $u->role->name ?? '—' }}</td> 
-                            {{-- DNI --}}
-                            <td class="text-center">{{ $u->teacher->dni ?? '—' }}</td>
-
-                            {{-- CUIL --}}
-                            <td class="text-center">{{ $u->teacher->cuil ?? '—' }}</td>
-                            {{-- Facultad --}}
-                            <td class="text-center">{{ $u->teacher->faculty ?? '—' }}</td>
-
-                           
-                            {{-- Acciones --}}
-                            <td class="text-center">
-                                <a href="{{ route('adminUsers.show', $u->id) }}" class="btn btn-info btn-sm">
-                                    Ver datos <i class="bi bi-eye"></i>
-                                </a>
-                                <a href="{{ route('adminUsers.edit', $u->id) }}" class="btn btn-primary btn-sm">
-                                    Editar <i class="bi bi-file-earmark-text"></i>
-                                </a>
-                                <button type="button" class="btn btn-danger btn-sm"
-                                    data-entity-name="{{ $u->teacher->name ?? $u->secretary->username ?? '—' }}"
-                                    data-action="{{ route('adminUsers.destroy', $u->id) }}"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modal-delete">
-                                    Eliminar <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td class="text-center">{{ $u->teacher->name ?? $u->secretary->username ?? '—'  }}</td>
+                        <td class="text-center">{{ $u['email'] }}</td>
+                        <td class="text-center">{{ $u->role->name }}</td>
+                        <td class="text-center">
+                            <a href="{{ route('adminUsers.show', $u['id']) }}" class="btn btn-info btn-sm">
+                                Ver datos <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{{ route('adminUsers.edit', $u['id']) }}" class="btn btn-primary btn-sm">
+                                Editar datos <i class="bi bi-file-earmark-text"></i>
+                            </a>
+                            <button type="button" class="btn btn-danger btn-sm"
+                                data-entity-name="{{ $u->teacher->name ?? $u->secretary->username ?? '—' }}"
+                                data-action="{{ route('adminUsers.destroy', $u->id) }}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-delete">
+                                Eliminar <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
                     @endforeach
-                </tbody>
-            </table>
+
+
+                    @endif
+
+                    {{-- Modales --}}
+                    @include('layouts.modals.modal-delete')
+                    @include('layouts.modals.modal-loading')
+
+                    @vite('resources/js/modals/modalDelete.js')
         </div>
-    </div>
-    @endif
-
-    {{-- Modales --}}
-    @include('layouts.modals.modal-delete')
-    @include('layouts.modals.modal-loading')
-
-    @vite('resources/js/modals/modalDelete.js')
-</div>
-@endsection
+        @endsection

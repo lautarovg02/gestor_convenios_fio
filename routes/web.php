@@ -36,13 +36,12 @@ Route::group(['middleware' => ['role:secretary|admin|teacher']], function () {
 
 
     //ADMIN USERS
-    Route::resource('adminUsers', AdminUsersController::class);
+    Route::resource('adminUsers', AdminUsersController::class)->parameters(['adminUsers' => 'user']);;
 
-  
+   
     // eliminar user (si lo necesitás)
     Route::delete('/admin/users/{user}', [AdminUsersController::class, 'destroy'])
-        ->name('adminUsers.destroy')
-        ->middleware(['auth', 'role:admin']);
+        ->name('adminUsers.destroy');
 
     // eliminar teacher
     Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])
@@ -61,9 +60,6 @@ Route::group(['middleware' => ['role:secretary|admin|teacher']], function () {
 Route::get('/admin/users', [AdminUsersController::class, 'index'])
     ->name('adminUsers.index');
 
-// Ruta para mostrar el formulario de creación de usuario (CREATE) 
-Route::get('/admin/users/create', [AdminUsersController::class, 'create'])
-    ->name('adminUsers.create'); 
 
 // Ruta para mostrar el formulario de edición de usuario
 Route::get('/admin/users/{user}/edit', [AdminUsersController::class, 'edit'])
