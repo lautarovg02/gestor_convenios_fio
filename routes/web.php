@@ -65,13 +65,18 @@ Route::get('/admin/users', [AdminUsersController::class, 'index'])
 Route::get('/admin/users/{user}/edit', [AdminUsersController::class, 'edit'])
     ->name('adminUsers.edit');
     
+  
+
 // Ruta para procesar el formulario de creación de usuario (POST)
 Route::post('/users', [AdminUsersController::class, 'store'])
     ->name('admin.users.store');
 
 // Falta la ruta PUT/PATCH para actualizar (UPDATE).
 
-
+// Update user (PUT/PATCH)
+Route::match(['put', 'patch'], '/admin/users/{user}', [AdminUsersController::class, 'update'])
+    ->name('adminUsers.update');  
+    
 
 
 

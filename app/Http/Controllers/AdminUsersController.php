@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Role;
+use App\Models\Role;    
 use App\Models\Secretary;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule; 
 use App\Services\UserService;
-
-use Hash;
-use Illuminate\Validation\Rule;
 use Schema;
 
 class AdminUsersController extends Controller
@@ -26,22 +23,23 @@ class AdminUsersController extends Controller
         $this->serviceUsers = $serviceUsers;
     }
 
-    public function index()
-    {
-        // Obtener todos los usuarios con sus roles y datos relacionados
-     $users = User::select('id', 'email', 'role_id')
-    ->with([
-        'role:id,name',
-        'teacher:id,user_id,name,lastname,dni,cuil,faculty',
-        'secretary:id,user_id,username'
-    ])
-    ->leftJoin('teachers', 'users.id', '=', 'teachers.user_id')
-    ->orderBy('teachers.name', 'asc')
-    ->select('users.*') // evita conflicto de columnas
-    ->get();
+   
 
-        return view('adminUsers.index', compact('users'));
-    }
+public function index()
+{
+    
+    $users = User::select('id', 'email', 'name', 'role_id')
+        ->with([
+            'role:id,name',
+            'teacher:id,user_id,name', 
+            'secretary:id,user_id,username' 
+        ])
+        
+        ->orderBy('name', 'asc') // Ordenar por el nombre de la tabla 'users'
+        ->get();
+
+    return view('adminUsers.index', compact('users'));
+}
 
      public function create()
     {
@@ -144,7 +142,7 @@ public function store(Request $request)
 
 
 
-    public function edit($id)
+    public function edit(User $user)
     {
 
         return view('adminUsers.edit', compact('user'));
@@ -152,120 +150,114 @@ public function store(Request $request)
 
 
 
-    public function update(Request $request, User $user)
-    {
+  
+public function update(Request $request, User $user)
+{
+    // --- 1. Definición y Normalización de Datos ---
 
-        // Normalizar email
-        $normalizedEmail = strtolower(trim($request->input('email', '')));
+    // Normalizar email
+    $normalizedEmail = strtolower(trim($request->input('email', '')));
+    $roleName = optional($user->role)->name;
+    
+    // El campo para la columna 'user_name' en la tabla secretary
+    $secColumn = 'username'; // Ajustar si la columna real es 'user_name'
+    
+    // Reglas base
+    $rules = [
+        'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
+        'name' => ['required', 'string', 'max:255'], // Campo 'name' del modelo User
+        
+        // Campos de contraseña (opcionales)
+        'new_password' => ['nullable', 'min:8', 'confirmed'],
+        'old_password' => ['nullable'], // Solo necesario si el propio usuario se edita, como Admin, no necesitamos validarlo, a menos que sea un requerimiento de tu negocio.
+    ];
 
-        $rules = [
-            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id, 'id')],
-            'name' => ['nullable', 'string', 'max:255'],
-            'username' => ['nullable', 'string', 'max:255'],
-            'lastname' => ['nullable', 'string', 'max:255'],
-        ];
+    // --- 2. Reglas Condicionales por Rol ---
 
-        if ($request->filled('new_password') || $request->filled('old_password') || $request->filled('new_password_confirmation')) {
-            $rules['old_password'] = ['required'];
-            $rules['new_password'] = ['required', 'min:8', 'confirmed'];
-        }
-
-        // Reemplazo en el request para validar con el email normalizado
-        $request->merge(['email' => $normalizedEmail]);
-
-        $data = $request->validate($rules);
-
-        DB::beginTransaction();
-        try {
-            // Comprobación adicional por si hay conflicto (útil para depurar)
-            $conflict = User::where('email', $normalizedEmail)
-                ->where('id', '!=', $user->id)
-                ->first();
-
-            if ($conflict) {
-                return back()->withErrors(['email' => 'El email ya está en uso por otro usuario (id: ' . $conflict->id . ')'])->withInput();
-            }
-
-            // Cambio de contraseña: validar old_password
-            if (!empty($data['new_password'])) {
-                if (!Hash::check($data['old_password'] ?? '', $user->password)) {
-                    return back()->withErrors(['old_password' => 'La contraseña actual es incorrecta'])->withInput();
-                }
-                $user->password = Hash::make($data['new_password']);
-            }
-
-            // Actualizar campos básicos
-            $user->name = $data['name'] ?? $user->name;
-            $user->email = $normalizedEmail;
-            $user->save();
-
-            // Recargar relaciones para trabajar con datos actualizados
-            $user->refresh();
-            $user->load('role', 'secretary', 'teacher');
-
-            $roleName = optional($user->role)->name;
-
-            // Si la columna real en la tabla secretaries es user_name (según tu diagrama),
-            // mapeamos el input 'username' a 'user_name'. Cambiar si tu columna se llama 'username'.
-            $secColumn = 'user_name'; // <-- ajustar si la columna real es 'username'
-
-            // --- Si ahora es secretary: crear/actualizar secretary y eliminar teacher si existiera ---
-            if ($roleName === 'secretary') {
-                $sec = $user->secretary; // puede ser null
-
-                $secData = [
-                    $secColumn => $data['username'] ?? optional($sec)->{$secColumn} ?? null,
-                ];
-
-                if ($sec) {
-                    $sec->update($secData);
-                } else {
-                    $secData['user_id'] = $user->id;
-                    \App\Models\Secretary::create($secData);
-                }
-
-                // Opcional: eliminar teacher si existía (para mantener consistencia 1 relación por rol)
-                if ($user->teacher) {
-                    $user->teacher()->delete();
-                }
-            }
-
-            // --- Si ahora es teacher: crear/actualizar teacher y eliminar secretary si existiera ---
-            if ($roleName === 'teacher') {
-                $teach = $user->teacher;
-
-                $teachData = [
-                    'name' => $data['name'] ?? optional($teach)->name ?? null,
-                    'lastname' => $data['lastname'] ?? optional($teach)->lastname ?? null,
-                ];
-
-                if ($teach) {
-                    $teach->update($teachData);
-                } else {
-                    $teachData['user_id'] = $user->id;
-                    \App\Models\Teacher::create($teachData);
-                }
-
-                // Eliminamos secretary previa si existe
-                if ($user->secretary) {
-                    $user->secretary()->delete();
-                }
-            }
-
-            DB::commit();
-
-            return redirect()->route('adminUsers.index')->with('success', 'Usuario actualizado correctamente');
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            // Temporal: mostrar error real para depuración
-            dd($e->getMessage(), $e->getTraceAsString());
-
-            // En producción preferible:
-            // \Log::error('Error update user: '.$e->getMessage());
-            // return back()->withErrors(['general' => 'Ocurrió un error al actualizar el usuario'])->withInput();
-        }
+    if ($roleName === 'teacher') {
+        $rules['teacher_name'] = ['required', 'string', 'max:255'];
+        $rules['teacher_lastname'] = ['required', 'string', 'max:255'];
+        $rules['teacher_dni'] = ['nullable', 'string', 'max:50'];
+        $rules['teacher_cuil'] = ['nullable', 'string', 'max:50'];
+        $rules['teacher_faculty'] = ['nullable', 'string', 'max:255'];
+    } elseif ($roleName === 'secretary') {
+        $rules['secretary_username'] = ['required', 'string', 'max:255'];
     }
 
+    // Si se proporciona new_password, old_password ya no es estrictamente requerido para el admin,
+    // pero si lo dejas en el formulario, es buena práctica validarlo solo si el usuario
+    // lo completó. Para edición de admin, quitamos la lógica de verificación de password.
+    // Si necesitas validar old_password, descomenta la siguiente lógica:
+    /*
+    if ($request->filled('new_password')) {
+        $rules['old_password'] = ['required']; // Si REQUIERES la clave actual para cualquier cambio
+    }
+    */
+    
+    // Reemplazo en el request para validar con el email normalizado
+    $request->merge(['email' => $normalizedEmail]);
+    
+    $data = $request->validate($rules);
+
+    // --- 3. Ejecución de Actualización ---
+
+    DB::beginTransaction();
+    try {
+        // --- 3.1 Actualizar campos base del usuario ---
+        
+        $updateData = [
+            'name' => $data['name'],
+            'email' => $normalizedEmail,
+        ];
+        
+        // --- 3.2 Actualizar contraseña (Admin no necesita old_password) ---
+        if ($request->filled('new_password')) {
+            // Nota: Aquí se asume que un administrador está realizando la edición
+            // y no necesita la contraseña anterior para restablecerla.
+            $updateData['password'] = Hash::make($data['new_password']);
+        }
+        
+        $user->update($updateData);
+
+        // --- 3.3 Actualizar relaciones (Teacher / Secretary) ---
+        if ($roleName === 'teacher' && $user->teacher) {
+            $user->teacher->update([
+                'name' => $data['teacher_name'],
+                'lastname' => $data['teacher_lastname'],
+                'dni' => $data['teacher_dni'],
+                'cuil' => $data['teacher_cuil'],
+                'faculty' => $data['teacher_faculty'],
+            ]);
+        } elseif ($roleName === 'secretary' && $user->secretary) {
+            // Se asume que el input 'secretary_username' se mapea a la columna '$secColumn' (username o user_name)
+            $user->secretary->update([
+                $secColumn => $data['secretary_username'],
+            ]);
+        }
+
+        // --- 3.4 Manejo de Roles (Opcional) ---
+        // Si tienes lógica para actualizar las tablas related incluso si la relación
+        // no existe (ej. el rol se acaba de asignar en otra parte), puedes usar:
+        // User::firstOrCreate(['user_id' => $user->id], $teachData) para crear si no existe.
+        // Pero dado tu formulario, solo actualizamos si la relación existe.
+
+        DB::commit();
+
+        return redirect()->route('adminUsers.show', $user)->with('success', 'Usuario y datos relacionados actualizados correctamente. ✅');
+        
+    } catch (\Throwable $e) {
+        DB::rollBack();
+        
+        // Loggear el error para depuración
+        \Log::error('Error al actualizar el usuario (ID: ' . $user->id . '): ' . $e->getMessage());
+
+        // Mostrar un error genérico en producción
+        // return back()->withErrors(['general' => 'Ocurrió un error al actualizar el usuario: ' . $e->getMessage()])->withInput(); 
+
+        // Mostrar un error detallado para desarrollo
+        return back()->withErrors(['general' => 'Ocurrió un error al actualizar el usuario: ' . $e->getMessage()])->withInput(); 
+    }
+}
 
 
 
@@ -275,24 +267,14 @@ public function store(Request $request)
 
     public function show(User $user)
     {
-        // Asegurate que $user->role exista (relación role)
-        $roleName = optional($user->role)->name;
+      // Carga las relaciones 'role', 'teacher' y 'secretary' de manera eficiente.
+    $user->loadMissing(['role', 'teacher', 'secretary']);
 
-        if ($roleName === 'teacher') {
-            // Si tenés una ruta para teachers.show
-            if ($user->teacher) {
-                return redirect()->route('teachers.show', $user->teacher->id);
-            }
-
-            // Fallback: si relacion teacher no existe, mostrar la vista con mensaje
-            return view('adminUsers.show', [
-                'user' => $user,
-                'warning' => 'El usuario tiene rol teacher pero no tiene datos en la relación teacher.'
-            ]);
-        }
-
-        // Si es secretary (o cualquier otro), mostramos la vista de adminUsers.show
-        return view('adminUsers.show', compact('user'));
+    // La variable $warning es opcional, puedes quitarla si no la necesitas.
+    // La vista ahora maneja todos los roles internamente.
+    $warning = null; 
+    
+    return view('adminUsers.show', compact('user', 'warning'));
     }
 
 
