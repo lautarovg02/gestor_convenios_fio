@@ -2,7 +2,7 @@
 
 @section('title', 'Usuarios FIO')
 
-@section('content')
+@section('content') 
 <div class="container content-with-footer-buffer">
     <!-- Header con Título -->
     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -10,8 +10,7 @@
             <h4 class="fw-bold mb-1">Usuarios</h4>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-transparent p-0">
-
-                    <li class="breadcrumb-item active text-dark " aria-current="page">Todos los usuarios</li>
+                    <li class="breadcrumb-item active text-dark" aria-current="page">Todos los usuarios</li>
                 </ol>
             </nav>
         </div>
@@ -22,20 +21,23 @@
         </a>
     </div>
 
+    <!-- Filtros -->
+    @include('adminUsers.filters', ['allUsers' => $allUsers])
+
     <!-- Mensajes -->
     @if (Session::get('success'))
-    <div class="alert alert-success">{{ Session::get('success') }}</div>
+        <div class="alert alert-success">{{ Session::get('success') }}</div>
     @elseif (Session::get('error'))
-    <div class="alert alert-danger">{{ Session::get('error') }}</div>
+        <div class="alert alert-danger">{{ Session::get('error') }}</div>
     @endif
 
     @if (isset($noResults) && $noResults)
-    <div class="alert alert-warning">
-        No se encontraron resultados para: <strong>"{{ request('search') }}"</strong>
-    </div>
+        <div class="alert alert-warning">
+            No se encontraron resultados para: <strong>"{{ request('search') }}"</strong>
+        </div>
     @endif
 
-    @if (!$users->isEmpty() )
+    @unless ($users->isEmpty())
     <div class="card shadow-sm rounded">
         <div class="table-responsive rounded shadow-sm table-scrollable-container">
             <table class="table table-hover align-middle mb-0">
@@ -48,10 +50,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- Secretarios --}}
                     @foreach ($users as $u)
                     <tr>
-                        <td class="text-center">{{ $u->teacher->name ?? $u->secretary->username ?? '—'  }}</td>
+                        <td class="text-center">{{ $u->teacher->name ?? $u->secretary->username ?? '—' }}</td>
                         <td class="text-center">{{ $u['email'] }}</td>
                         <td class="text-center">{{ $u->role->name }}</td>
                         <td class="text-center">
@@ -71,14 +72,20 @@
                         </td>
                     </tr>
                     @endforeach
-
-
-                    @endif
-
-                    {{-- Modales --}}
-                    @include('layouts.modals.modal-delete')
-                    @include('layouts.modals.modal-loading')
-
-                    @vite('resources/js/modals/modalDelete.js')
+                </tbody>
+            </table>
         </div>
-        @endsection
+
+        <!-- Paginación -->
+        <div class="mt-3 d-flex justify-content-center">
+            {{ $users->appends(request()->except('page'))->onEachSide(1)->links('pagination::bootstrap-4') }}
+        </div>
+    </div>
+    @endunless
+
+    {{-- Modales --}}
+    @include('layouts.modals.modal-delete')
+    @include('layouts.modals.modal-loading')
+    @vite('resources/js/modals/modalDelete.js')
+</div>
+@endsection

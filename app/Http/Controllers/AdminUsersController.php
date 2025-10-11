@@ -17,22 +17,41 @@ class AdminUsersController extends Controller
         $this->serviceUsers = $serviceUsers;
     }
 
-    public function index()
-    {
-        //   $teachers = $this->serviceUsers->getAllTeachers(); //Obtengo todos los teachers
-        // $secretaries = $this->serviceUsers->getAllSecretaries(); // Obtengo todos los secretaries
-        $users = User::select('id', 'email', 'role_id')
-            ->with([
-                'role:id,name',
-                'teacher:id,user_id,name,lastname',
-                'secretary:id,user_id,username'
-            ])
-            ->orderByDesc('id')
-            ->get();
+    public function index(Request $request)
+{
+    $query = User::with(['teacher', 'secretary', 'role']);
 
-
-        return view('adminUsers.index', compact('users'));
+    // Filtro por select de nombre
+    if ($request->filled('name')) {
+        $query->where('id', $request->name);
     }
+
+    // Filtro por select de email
+    if ($request->filled('email')) {
+        $query->where('id', $request->email);
+    }
+
+    // Filtro general de búsqueda
+    if ($request->filled('search')) {
+        $search = $request->search;
+    
+        $query->where('email', 'like', "%{$search}%")
+              ->orWhereRelation('teacher', 'name', 'like', "%{$search}%")
+              ->orWhereRelation('teacher', 'lastname', 'like', "%{$search}%")
+              ->orWhereRelation('secretary', 'username', 'like', "%{$search}%");
+    }    
+
+    $users = $query->orderByDesc('id')->paginate(10); // 10 por página
+
+
+    // Para los selects de filtros
+    $allUsers = User::orderByDesc('id')->get();
+
+    $noResults = $users->isEmpty();
+
+    return view('adminUsers.index', compact('users', 'allUsers', 'noResults'));
+}
+
 
     public function create()
     {
