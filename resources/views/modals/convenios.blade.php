@@ -31,7 +31,7 @@
                         Convenio Específico
                     </a>
 
-                    <a href="{{ route('agreements.create', ['type' => 'indPasantia']) }}"
+                    <a href="{{ route('individual-internship-agreements.create', ['type' => 'indPasantia']) }}"
                         class="lk btn btn-outline-primary fw-semibold btn-lg" role="button">
                         Convenio Individual de Pasantía
                     </a>
