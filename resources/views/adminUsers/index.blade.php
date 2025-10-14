@@ -4,7 +4,6 @@
 
 @section('content') 
 <div class="container content-with-footer-buffer">
-    <!-- Header con Título -->
     <div class="d-flex justify-content-between align-items-center mb-2">
         <div>
             <h4 class="fw-bold mb-1">Usuarios</h4>
@@ -38,39 +37,51 @@
     @endif
 
     @unless ($users->isEmpty())
+    @if (!$users->isEmpty())
     <div class="card shadow-sm rounded">
         <div class="table-responsive rounded shadow-sm table-scrollable-container">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th class="col-max-width text-center">Usuario</th>
-                        <th class="col-max-width text-center">Email</th>
-                        <th class="text-center">Tipo de rol</th>
+                        <th class="text-center">Usuario</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Rol de Sistema</th> 
+                        {{-- Se eliminaron: Nombre, Apellido, DNI, CUIT, Facultad --}}
                         <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($users as $u)
-                    <tr>
-                        <td class="text-center">{{ $u->teacher->name ?? $u->secretary->username ?? '—' }}</td>
-                        <td class="text-center">{{ $u['email'] }}</td>
-                        <td class="text-center">{{ $u->role->name }}</td>
-                        <td class="text-center">
-                            <a href="{{ route('adminUsers.show', $u['id']) }}" class="btn btn-info btn-sm">
-                                Ver datos <i class="bi bi-eye"></i>
-                            </a>
-                            <a href="{{ route('adminUsers.edit', $u['id']) }}" class="btn btn-primary btn-sm">
-                                Editar datos <i class="bi bi-file-earmark-text"></i>
-                            </a>
-                            <button type="button" class="btn btn-danger btn-sm"
-                                data-entity-name="{{ $u->teacher->name ?? $u->secretary->username ?? '—' }}"
-                                data-action="{{ route('adminUsers.destroy', $u->id) }}"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modal-delete">
-                                Eliminar <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
+                        <tr>
+                            {{-- Nombre / Usuario --}}
+                            <td class="text-center">
+                                {{ $u->name ?? $u->secretary->username ?? '—' }}
+                            </td>
+
+                            {{-- Email --}}
+                            <td class="text-center">{{ $u->email }}</td> 
+
+                            {{-- Rol de sistema --}}
+                            <td class="text-center">{{ $u->role->name ?? '—' }}</td> 
+                            {{-- Se eliminaron las <td> de Nombre, Apellido, DNI, CUIT y Facultad --}}
+                            
+                            {{-- Acciones --}}
+                            <td class="text-center">
+                                <a href="{{ route('adminUsers.show', $u->id) }}" class="btn btn-info btn-sm">
+                                    Ver datos <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ route('adminUsers.edit', $u->id) }}" class="btn btn-primary btn-sm">
+                                    Editar <i class="bi bi-file-earmark-text"></i>
+                                </a>
+                                <button type="button" class="btn btn-danger btn-sm"
+                                    data-entity-name="{{ $u->teacher->name ?? $u->secretary->username ?? '—' }}"
+                                    data-action="{{ route('adminUsers.destroy', $u->id) }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modal-delete">
+                                    Eliminar <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -82,6 +93,8 @@
         </div>
     </div>
     @endunless
+    </div>
+    @endif
 
     {{-- Modales --}}
     @include('layouts.modals.modal-delete')
