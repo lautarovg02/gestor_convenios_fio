@@ -36,17 +36,12 @@ Route::group(['middleware' => ['role:secretary|admin|teacher']], function () {
 
 
     //ADMIN USERS
-    Route::resource('adminUsers', AdminUsersController::class);
+    Route::resource('adminUsers', AdminUsersController::class)->parameters(['adminUsers' => 'user']);;
 
-    /*
-    Route::delete('/admin/users/{user}', [AdminUsersController::class, 'destroy'])
-        ->name('adminUsers.destroy')
-        ->middleware(['auth', 'role:admin']);
-*/
+   
     // eliminar user (si lo necesitás)
     Route::delete('/admin/users/{user}', [AdminUsersController::class, 'destroy'])
-        ->name('adminUsers.destroy')
-        ->middleware(['auth', 'role:admin']);
+        ->name('adminUsers.destroy');
 
     // eliminar teacher
     Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])
@@ -58,18 +53,30 @@ Route::group(['middleware' => ['role:secretary|admin|teacher']], function () {
         ->name('secretaries.destroy')
         ->middleware(['auth', 'role:admin']);
 
+ 
+// ADMIN USERS
 
-    //ADMIN USERS
-    Route::get('/admin/users', [AdminUsersController::class, 'index'])
-        ->name('adminUsers.index');
-
-
-    Route::get('/admin/users/{user}/edit',  [AdminUsersController::class, 'edit'])
-        ->name('adminUsers.edit');
+// Ruta para mostrar el listado de usuarios
+Route::get('/admin/users', [AdminUsersController::class, 'index'])
+    ->name('adminUsers.index');
 
 
+// Ruta para mostrar el formulario de edición de usuario
+Route::get('/admin/users/{user}/edit', [AdminUsersController::class, 'edit'])
+    ->name('adminUsers.edit');
+    
+  
 
+// Ruta para procesar el formulario de creación de usuario (POST)
+Route::post('/users', [AdminUsersController::class, 'store'])
+    ->name('admin.users.store');
 
+// Falta la ruta PUT/PATCH para actualizar (UPDATE).
+
+// Update user (PUT/PATCH)
+Route::match(['put', 'patch'], '/admin/users/{user}', [AdminUsersController::class, 'update'])
+    ->name('adminUsers.update');  
+    
 
 
 
