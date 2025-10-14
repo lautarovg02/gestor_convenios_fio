@@ -163,12 +163,9 @@
                 <div class="mb-3">
 
                     <label class="form-label fs-6 fw-bold">Provincia</label><span class="text-danger"> *</span>
-                    <select id="provincia" name="provincia" class="form-select" required>
-                        <option value="">Seleccione una provincia</option>
-                        @foreach ($provincias as $provincia)
-                            <option value="{{ $provincia['nombre'] }}">{{ $provincia['nombre'] }}</option>
-                        @endforeach
-                    </select>
+
+                    <input type="text" name="provincia" id="provincia" placeholder="Provincia" class="form-control"
+                        value="{{ old('provincia') }}" required>
 
                     {{-- Validación de errores --}}
 
@@ -180,10 +177,8 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Ciudad</label><span class="text-danger"> *</span>
 
-                    <select id="ciudad" name="localidad" class="form-select" disabled value="{{ old('localidad') }}"
-                        required>
-                        <option value="">Seleccione una ciudad</option>
-                    </select>
+                    <input type="text" name="localidad" id="ciudad" placeholder="Ciudad" class="form-control"
+                        value="{{ old('localidad') }}" required>
 
                     {{-- Validación de errores --}}
 
@@ -193,7 +188,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Código Postal</label><span class="text-danger"> *</span>
-                    <input type="number" name="codigo_postal" placeholder="Codigo postal" class="form-control"
+                    <input id="postal_code" type="number" name="codigo_postal" placeholder="Codigo postal" class="form-control"
                         value="{{ old('codigo_postal') }}" required>
                     @error('codigo_postal')
                         <div class="text-danger">{{ $message }}</div>
@@ -493,7 +488,7 @@
     </div>
 @endsection
 @section('scripts')
-    @vite('resources/js/formAgreements/frameworkAgreement/getCitiesAndProvinces.js')
+    
     @vite('resources/js/formAgreements/frameworkAgreement/getCompany.js')
     @vite('resources/js/formAgreements/frameworkAgreement/selectEmployee.js')
 @endsection

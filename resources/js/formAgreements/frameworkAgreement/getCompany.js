@@ -72,8 +72,6 @@ async function loadCompany(companyId) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const company = await res.json();
 
-        console.log("Datos de la empresa:", company);
-
         // CUIT dividido en 3 inputs (los de tu Blade)
         const { prefijo, dni, dv } = splitCUIT(company.cuit);
         setValAny(["cuit_prefijo"], prefijo);
@@ -117,8 +115,8 @@ async function loadCompany(companyId) {
             dir.numero ?? company.number ?? ""
         );
         setValAny(
-            ["empresa_codigo_postal", "codigo_postal", "cp"],
-            dir.codigo_postal ?? dir.zip ?? ""
+            ["postal_code", "codigo_postal", "cp"],
+            dir.postal_code ?? dir.zip ?? ""
         );
         setValAny(
             ["empresa_pais", "pais"],
@@ -127,14 +125,15 @@ async function loadCompany(companyId) {
 
         // Provincia / Ciudad: usar integración con tu loader para evitar bucles
         const provName =
-            company?.province_name ?? company?.direccion?.provincia ?? "";
-        const cityName = company?.city_name ?? company?.direccion?.ciudad ?? "";
-        if (provName || cityName) {
-            // getCitiesAndProvinces.js expone geoUI.selectByNames
-            if (window.geoUI?.selectByNames) {
-                await window.geoUI.selectByNames(provName, cityName);
-            }
-        }
+            company?.provincia ?? company?.direccion?.provincia ?? "";
+        const cityName = company?.city ?? company?.direccion?.ciudad ?? "";
+        const postal_code = company?.postal_code ?? "";
+
+        if (postal_code) setVal("postal_code", postal_code);
+
+        if (provName) setVal("provincia", provName);
+
+        if (cityName) setVal("ciudad", cityName);
 
         // Empleados (solo representantes)
         await loadEmployees(companyId);

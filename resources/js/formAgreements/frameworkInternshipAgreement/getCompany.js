@@ -50,11 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 document.querySelector('input[name="pais"]').value = "Argentina";
                 document.getElementById("provincia").value = company.provincia || "";
-                document.getElementById("provincia").dispatchEvent(new Event("change"));
-
-                setTimeout(() => {
-                    document.getElementById("ciudad").value = company.city || "";
-                }, 5000); // pequeño delay para esperar a que se carguen las ciudades
+                
+                document.getElementById("ciudad").value = company.city || "";
+                document.querySelector('input[name="codigo_postal"]').value = company.postal_code || "";
+                
 
                 document.querySelector('input[name="calle"]').value = company.street || "";
                 document.querySelector('input[name="nro_calle"]').value = company.number || "";

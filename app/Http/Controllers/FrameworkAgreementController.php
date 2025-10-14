@@ -61,10 +61,8 @@ class FrameworkAgreementController extends Controller
     {
         // Trae empresas para el select (ajustá si tenés otro método)
         $companies = $this->companyService->getAllCompanies();
-        $response = Http::get('https://apis.datos.gob.ar/georef/api/provincias');
-        $provincias = $response->json()['provincias'];
 
-        return view('frameworkAgreement.create', compact('provincias', 'companies'));
+        return view('frameworkAgreement.create', compact('companies'));
     }
 
 

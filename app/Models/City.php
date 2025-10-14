@@ -11,12 +11,13 @@ class City extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'province_id'];
+    protected $fillable = ['name', 'province_id', 'postal_code'];
+
 
     // ✅ Relación correcta: una ciudad pertenece a una provincia
     public function province(): BelongsTo
     {
-        return $this->belongsTo(Province::class, 'province_id' );
+        return $this->belongsTo(Province::class, 'province_id');
     }
 
     // ✅ (Opcional) Relación inversa: una ciudad puede tener muchas empresas

@@ -156,14 +156,9 @@
                 <div class="mb-3">
 
                     <label class="form-label fs-6 fw-bold">Provincia</label><span class="text-danger"> *</span>
-                    <select id="provincia" name="provincia" class="form-select" required>
-                        <option value="">Seleccione una provincia</option>
-                        @foreach ($provincias as $provincia)
-                            <option value="{{ $provincia['nombre'] }}">{{ $provincia['nombre'] }}</option>
-                        @endforeach
-                    </select>
-
-                    {{-- Validación de errores --}}
+                    <input type="text" id="provincia" name="provincia" placeholder="Provincia" class="form-control"
+                        value="{{ old('provincia') }}" required>
+                    
 
                     @error('provincia')
                         <div class="text-danger">{{ $message }}</div>
@@ -174,9 +169,8 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Ciudad</label><span class="text-danger"> *</span>
 
-                    <select id="ciudad" name="localidad" class="form-select" value="{{ old('ciudad') }}" required>
-                        <option value="">Seleccione una ciudad</option>
-                    </select>
+                    <input type="text" id="ciudad" name="localidad" placeholder="Ciudad" class="form-control"
+                        value="{{ old('localidad') }}" required>
 
                     {{-- Validación de errores --}}
 
@@ -507,7 +501,6 @@
 
 @section('scripts')
     @vite('resources/js/formAgreements/createAgreement/formCreateAgreement.js')
-    @vite('resources/js/formAgreements/frameworkInternshipAgreement/getCitiesAndProvinces.js')
     @vite('resources/js/formAgreements/frameworkInternshipAgreement/getCompany.js')
     @vite('resources/js/formAgreements/frameworkInternshipAgreement/selectEmployee.js')
 @endsection
