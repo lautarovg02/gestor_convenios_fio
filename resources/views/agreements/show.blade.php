@@ -58,7 +58,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <strong>Secretario (FIO):</strong> 
-                    {{-- CORRECCIÓN: Acceder al nombre a través de la relación 'user' y usar 'lastname' --}}
+                    {{-- Acceder al nombre a través de user name ya que secretary no tiene lastname --}}
                     @if ($agreement->secretary && $agreement->secretary->user)
                         {{ $agreement->secretary->user->name }} 
                     @else
@@ -93,13 +93,14 @@
                 <div class="col-md-6 mb-3"><strong>Fecha de Creación:</strong> {{ \Carbon\Carbon::parse($agreement->creation_date)->format('d/m/Y') }}</div>
                 <div class="col-md-6 mb-3"><strong>Fecha de Firma:</strong> {{ $agreement->signing_date ? \Carbon\Carbon::parse($agreement->signing_date)->format('d/m/Y') : 'Pendiente' }}</div>
 
+                {{-- Ahora esto no funciona, habria que conseguir los documentos adjuntos y mostrarlos --}}
                 <div class="col-12 mb-3">
                     <strong class="d-block mb-1">Documentos Adjuntos:</strong>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Certificado AFIP
                             @if($agreement->url_certificate_afip)
-                                <a href="{{ asset('storage/' . $agreement->url_certificate_afip) }}" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
+                                <a href="" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
                             @else
                                 <span class="text-muted">No adjunto</span>
                             @endif
@@ -107,7 +108,7 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Estatuto
                             @if($agreement->url_statute)
-                                <a href="{{ asset('storage/' . $agreement->url_statute) }}" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
+                                <a href="" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
                             @else
                                 <span class="text-muted">No adjunto</span>
                             @endif
@@ -115,7 +116,7 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Asignación de Autoridades
                             @if($agreement->url_assignment_authorities)
-                                <a href="{{ asset('storage/' . $agreement->url_assignment_authorities) }}" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
+                                <a href="" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
                             @else
                                 <span class="text-muted">No adjunto</span>
                             @endif
@@ -123,7 +124,7 @@
                          <li class="list-group-item d-flex justify-content-between align-items-center">
                             Archivo del Convenio (Marco)
                             @if($agreement->file)
-                                <a href="{{ asset('storage/' . $agreement->file) }}" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
+                                <a href="" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
                             @else
                                 <span class="text-muted">No adjunto</span>
                             @endif
