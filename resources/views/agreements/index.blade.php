@@ -60,7 +60,7 @@
                                     <td class="text-center">{{ $agreement->typeFrameworkAgreement->type }}</td>
                                     <td class="text-center">{{ $agreement->company->company_name}}</td>
                                     <td class="text-center">
-                                        <a href="{{ route('agreements.show', $agreement) }}" class="btn btn-primary btn-sm">
+                                        <a href="{{ route('agreements.show', $agreement->id) }}" class="btn btn-primary btn-sm">
                                             Ver <i class="bi bi-file-earmark-text"></i>
                                         </a>
 

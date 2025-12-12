@@ -49,10 +49,37 @@ public function store(Request $request)
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
+ 
+public function show(string $id)
+{
+    try {
+        // Busca el contrato por su ID. Si no lo encuentra, lanza una excepción.
+        $agreement = Contract::findOrFail($id);
+
+        // Puedes usar 'load' para cargar las relaciones que vas a usar en la vista,
+        // aunque Eloquent las cargará automáticamente si las accedes (lazy loading).
+        // Cargar explícitamente (eager loading) puede ser más eficiente:
+        $agreement->load([
+            'company',
+            'secretary',
+            'teacher',
+            'contactEmployee',
+            'representativeEmployee',
+            'rectorTeacher',
+            'status',
+            'typeFrameworkAgreement'
+        ]);
+
+        return view('agreements.show', compact('agreement'));
+        
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        // Manejar caso donde el ID no existe
+        return redirect()->route('agreements.index')->with(['error' => 'Convenio no encontrado.']);
+    } catch (\Exception $e) {
+        // Manejar otros errores
+        return redirect()->route('agreements.index')->with(['error' => 'Error al cargar el detalle del convenio.']);
     }
+}
 
     /**
      * Show the form for editing the specified resource.
