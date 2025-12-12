@@ -20,6 +20,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SecretaryController;
+use App\Http\Controllers\ContractController;
+use App\Http\Controllers\PendingRequestController;
 
 // Autenticación
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -163,3 +165,11 @@ Route::match(['put', 'patch'], '/admin/users/{user}', [AdminUsersController::cla
     //Ruta alumnos
     Route::resource('students', StudentController::class);
 });
+
+ 
+//DESCARGA DE DOCUMENTOS DE CONTRATO
+Route::get('/contract/{contract}/download-doc/{type}', [ContractController::class, 'downloadDocument'])
+    ->name('contract.download.document');
+
+// PENDING REQUESTS
+Route::get('pending-requests', [PendingRequestController::class, 'index'])->name('pending-requests.index');

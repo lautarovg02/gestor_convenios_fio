@@ -38,5 +38,58 @@
                 <div class="col-md-6 mb-3"><strong>Ciudad:</strong> {{ $company->city->name }}</div>
             </div>
         </div>
+ {{-- NUEVA TARJETA: Documentos del Contrato Marco --}}
+        @if (isset($frameworkAgreement) && $frameworkAgreement)
+            <div class="card shadow w-75">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">📁 Documentos del Convenio Marco</h4>
+                        </div>
+                <div class="card-body">
+                    <p class="text-muted">Archivos adjuntos relacionados con el Convenio Marco (ID: {{ $frameworkAgreement->id }}).</p>
+                    
+                    <div class="d-flex flex-wrap gap-3 mt-3">
+                        
+                        {{-- Documento 1: Constancia de AFIP --}}
+                        @if ($frameworkAgreement->url_certificate_afip)
+                            <a href="{{ route('contract.download.document', ['contract' => $frameworkAgreement->id, 'type' => 'afip']) }}" 
+                               class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-download me-1"></i> Constancia AFIP
+                            </a>
+                        @else
+                            <button class="btn btn-sm btn-outline-secondary" disabled>Constancia AFIP (N/A)</button>
+                        @endif
+
+                        {{-- Documento 2: Estatuto de confirmación --}}
+                        @if ($frameworkAgreement->url_statute)
+                            <a href="{{ route('contract.download.document', ['contract' => $frameworkAgreement->id, 'type' => 'estatuto']) }}" 
+                               class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-download me-1"></i> Estatuto
+                            </a>
+                        @else
+                            <button class="btn btn-sm btn-sm btn-outline-secondary" disabled>Estatuto (N/A)</button>
+                        @endif
+
+                        {{-- Documento 3: Asignación de autoridades --}}
+                        @if ($frameworkAgreement->url_assignment_authorities)
+                            <a href="{{ route('contract.download.document', ['contract' => $frameworkAgreement->id, 'type' => 'autoridades']) }}" 
+                               class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-download me-1"></i> Asignación Autoridades
+                            </a>
+                        @else
+                            <button class="btn btn-sm btn-sm btn-outline-secondary" disabled>Autoridades (N/A)</button>
+                        @endif
+                        
+                    </div>
+                </div>
+            </div>
+        @else
+             {{-- Mensaje si no hay contrato marco asociado --}}
+            <div class="card shadow w-75">
+                <div class="card-body">
+                     <p class="alert alert-info mb-0">Esta empresa no tiene un Convenio Marco asociado o no está disponible.</p>
+                </div>
+            </div>
+        @endif
+        
     </div>
 @endsection

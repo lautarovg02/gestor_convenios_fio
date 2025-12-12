@@ -151,13 +151,41 @@ class FrameworkAgreementController extends Controller
             'email_secretaria' => 'SECRETARIA_EMAIL',
         ]);
 
+//GUARDAR LOS ADJUNTOS
+
+$fileFields = [
+        'doc_afip' => 'url_certificate_afip',
+        'doc_estatuto' => 'url_statute',
+        'doc_autoridades' => 'url_assignment_authorities',
+    ];
+
+    // Define la ruta base para los adjuntos: storage/app/documentacion/adjuntos/{año}/{mes}
+    $adjuntosRelativePath = 'documentacion/adjuntos/' . date('Y/m');
+    Storage::makeDirectory($adjuntosRelativePath); // Crea el directorio si no existe
+
+    foreach ($fileFields as $inputName => $dbField) {
+        if ($request->hasFile($inputName)) {
+            $file = $request->file($inputName);
+            
+            // Genera un nombre de archivo único
+            $fileName = Str::slug($dbField) . '-' . time() . '.' . $file->getClientOriginalExtension();
+            
+            // Guardar el archivo en el disco 'local' dentro de la ruta definida
+            // Esto guarda el archivo en storage/app/{$adjuntosRelativePath}/{$fileName}
+            $file->storeAs($adjuntosRelativePath, $fileName);
+            
+            // Guardar la ruta relativa completa en los datos validados para la DB
+            $validated[$dbField] = $adjuntosRelativePath . '/' . $fileName;
+        }
+        // Si no hay archivo, el campo de la DB será NULL (si es `nullable` en la migración).
+    }
 
         // 10) Crear contrato
         $agreement = Contract::create([
             'signing_date'                 => Carbon::parse($validated['fecha_firma']),
-            'url_certificate_afip'         => null,
-            'url_statute'                  => null,
-            'url_assignment_authorities'   => null,
+            'url_certificate_afip'  => $validated['url_certificate_afip'] ?? null,
+            'url_statute'=> $validated['url_statute'] ?? null,
+            'url_assignment_authorities' => $validated['url_assignment_authorities'] ?? null,
             'company_id'                   => $company->id,
             'secretary_id'                 => $secretary->id,
             'teacher_id'                   => $teacher->id,
@@ -170,7 +198,7 @@ class FrameworkAgreementController extends Controller
             'file'                         => null // $fullPath ?? null,
         ]);
 
-        
+
 
 
  //------------------------------------------------------GENERACION DE DOCUMENTO------------------------------------------------------------
