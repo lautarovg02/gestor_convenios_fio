@@ -1,20 +1,21 @@
 <form action="{{ route('adminUsers.index') }}" method="GET" class="p-3 rounded border shadow-sm bg-white">
     <div class="row g-3 align-items-end">
 
-        <!-- Nombre de usuario -->
         <div class="col-md-3">
             <label for="name" class="form-label">Usuario</label>
             <select class="form-select font-size" id="name" name="name">
                 <option value="">Todos</option>
                 @foreach($allUsers as $user)
                     <option value="{{ $user->id }}" {{ request('name') == $user->id ? 'selected' : '' }}>
-                        {{ $user->teacher->name ?? $user->secretary->username ?? $user->name ?? '—' }}
+                        {{-- CORRECCIÓN AQUÍ: --}}
+                        {{-- Si tiene perfil de Teacher, mostramos Nombre y Apellido --}}
+                        {{-- Si no, mostramos el nombre de usuario general --}}
+                        {{ $user->teacher ? ($user->teacher->name . ' ' . $user->teacher->lastname) : $user->name }}
                     </option>
                 @endforeach
             </select>
         </div>
 
-        <!-- Email -->
         <div class="col-md-3">
             <label for="email" class="form-label">Email</label>
             <select class="form-select font-size" id="email" name="email">
@@ -27,7 +28,6 @@
             </select>
         </div>
 
-        <!-- Buscador general -->
         <div class="col-md-5">
             <label for="search" class="form-label">Buscar</label>
             <div class="input-group">

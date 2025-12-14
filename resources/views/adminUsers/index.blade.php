@@ -20,10 +20,8 @@
         </a>
     </div>
 
-    <!-- Filtros -->
     @include('adminUsers.filters', ['allUsers' => $allUsers])
 
-    <!-- Mensajes -->
     @if (Session::get('success'))
         <div class="alert alert-success">{{ Session::get('success') }}</div>
     @elseif (Session::get('error'))
@@ -37,7 +35,6 @@
     @endif
 
     @unless ($users->isEmpty())
-    @if (!$users->isEmpty())
     <div class="card shadow-sm rounded">
         <div class="table-responsive rounded shadow-sm table-scrollable-container">
             <table class="table table-hover align-middle mb-0">
@@ -46,7 +43,6 @@
                         <th class="text-center">Usuario</th>
                         <th class="text-center">Email</th>
                         <th class="text-center">Rol de Sistema</th> 
-                        {{-- Se eliminaron: Nombre, Apellido, DNI, CUIT, Facultad --}}
                         <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
@@ -55,15 +51,23 @@
                         <tr>
                             {{-- Nombre / Usuario --}}
                             <td class="text-center">
-                                {{ $u->name ?? $u->secretary->username ?? '—' }}
+                                {{-- Lógica: Si es docente muestra Nombre+Apellido, si no, usa el nombre del User --}}
+                                @if($u->teacher)
+                                    {{ $u->teacher->name }} {{ $u->teacher->lastname }}
+                                @else
+                                    {{ $u->name }}
+                                @endif
                             </td>
 
                             {{-- Email --}}
                             <td class="text-center">{{ $u->email }}</td> 
 
-                            {{-- Rol de sistema --}}
-                            <td class="text-center">{{ $u->role->name ?? '—' }}</td> 
-                            {{-- Se eliminaron las <td> de Nombre, Apellido, DNI, CUIT y Facultad --}}
+                            {{-- Rol de sistema (CORREGIDO PARA SPATIE) --}}
+                            <td class="text-center">
+                                <span class="badge bg-secondary">
+                                    {{ $u->getRoleNames()->first() ?? 'Sin Rol' }}
+                                </span>
+                            </td> 
                             
                             {{-- Acciones --}}
                             <td class="text-center">
@@ -74,7 +78,7 @@
                                     Editar <i class="bi bi-file-earmark-text"></i>
                                 </a>
                                 <button type="button" class="btn btn-danger btn-sm"
-                                    data-entity-name="{{ $u->teacher->name ?? $u->secretary->username ?? '—' }}"
+                                    data-entity-name="{{ $u->teacher ? ($u->teacher->name . ' ' . $u->teacher->lastname) : $u->name }}"
                                     data-action="{{ route('adminUsers.destroy', $u->id) }}"
                                     data-bs-toggle="modal"
                                     data-bs-target="#modal-delete">
@@ -87,14 +91,11 @@
             </table>
         </div>
 
-        <!-- Paginación -->
         <div class="mt-3 d-flex justify-content-center">
             {{ $users->appends(request()->except('page'))->onEachSide(1)->links('pagination::bootstrap-4') }}
         </div>
     </div>
     @endunless
-    </div>
-    @endif
 
     {{-- Modales --}}
     @include('layouts.modals.modal-delete')

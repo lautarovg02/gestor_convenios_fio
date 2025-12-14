@@ -3,18 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role as SpatieRole; // <--- Importante
 
-class Role extends Model
+// En lugar de "extends Model", extendemos de "SpatieRole"
+class Role extends SpatieRole
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-    ];
-
-    public function users()
-    {
-        return $this->hasMany(User::class, 'role_id');
-    }
+    // Spatie ya tiene su propio $fillable (name, guard_name), no hace falta redefinirlo.
+    
+    // IMPORTANTE:
+    // Borramos la función public function users()
+    // Spatie ya trae esa relación lista usando la tabla intermedia correcta.
 }

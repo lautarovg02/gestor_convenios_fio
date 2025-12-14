@@ -11,111 +11,125 @@ class StudentController extends Controller
 {
     protected $studentService;
 
-    public function __construct( StudentService $studentService )
+    public function __construct(StudentService $studentService)
     {
         $this->studentService = $studentService;
     }
 
-    public function index()
-    {
-        // Muestra todos los alumnos
-        $students = Student::all();
-        return view('students.index', compact('students'));
+public function index(Request $request)
+{
+    // 1. Iniciar query
+    $query = Student::orderBy('last_name')->orderBy('name');
+
+    // 2. Aplicar Filtros
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+              ->orWhere('last_name', 'like', "%{$search}%")
+              ->orWhere('dni', 'like', "%{$search}%");
+        });
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    if ($request->filled('career')) {
+        $query->where('career', 'like', "%{$request->career}%");
+    }
+    
+    if ($request->filled('city')) {
+        $query->where('city', 'like', "%{$request->city}%");
+    }
+
+    // 3. Paginar
+    $students = $query->paginate(10); // 10 por página
+
+    // 4. Obtener carreras para el filtro (opcional)
+    $careers = Career::orderBy('name')->get();
+
+    return view('students.index', compact('students', 'careers'));
+}
 
     public function create()
     {
+        // Pasamos carreras por si quieres usar un select en el futuro
         $careers = Career::orderBy('name')->get(['id', 'name']);
         return view('students.create', compact('careers'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        // Valida los datos
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'dni' => 'required|numeric|digits_between:7,8',
-            'cuil' => 'required|string|max:15',  // 🔥 Ahora obligatorio
-            'email' => 'required|email|unique:students,email',
-            'phone_numb' => 'nullable|numeric',
-            'career' => 'required|string',
-            'street' => 'required|string|max:255', // 🔥 Obligatorio
-            'number' => 'required|numeric',        // 🔥 Obligatorio
-            'city' => 'required|string|max:100',   // 🔥 Obligatorio
+            'name'       => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
+            'dni'        => 'required|numeric|digits_between:7,8|unique:students,dni',
+            'cuil'       => 'required|string|max:15|unique:students,cuil', 
+            'email'      => 'required|email|max:255|unique:students,email',
+            'phone_numb' => 'nullable|string|max:20',
+            'career'     => 'required|string|max:255',
+            'street'     => 'required|string|max:255',
+            'number'     => 'required|numeric',
+            'city'       => 'required|string|max:100',
         ]);
-        // Crea el alumno
-        Student::create($request->all());
+
+        Student::create($validated);
 
         return redirect()->route('students.index')
             ->with('success', 'Alumno creado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Student $student)
     {
-        // Muestra un alumno específico
         return view('students.show', compact('student'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Student $student)
     {
-        // Muestra formulario de edición
-        return view('students.edit', compact('student'));
+        // Pasamos carreras también aquí por si decides cambiar el input text por un select
+        $careers = Career::orderBy('name')->get(['id', 'name']);
+        
+        return view('students.edit', compact('student', 'careers'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Student $student)
     {
-        // Valida los datos
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'dni' => 'required|numeric|unique:students,dni,' . $student->id,
-            'email' => 'nullable|email',
-            'phone' => 'nullable|string|max:20',
+        // Validaciones ajustadas para ignorar al usuario actual en campos únicos
+        $validated = $request->validate([
+            'name'       => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
+            'dni'        => 'required|numeric|digits_between:7,8|unique:students,dni,' . $student->id,
+            'cuil'       => 'required|string|max:15|unique:students,cuil,' . $student->id,
+            'email'      => 'required|email|max:255|unique:students,email,' . $student->id,
+            'phone_numb' => 'nullable|string|max:20', // Corregido de 'phone' a 'phone_numb'
+            'career'     => 'required|string|max:255',
+            'street'     => 'required|string|max:255',
+            'number'     => 'required|numeric',
+            'city'       => 'required|string|max:100',
         ]);
 
-        // Actualiza los datos
-        $student->update($request->all());
+        $student->update($validated);
 
         return redirect()->route('students.index')
             ->with('success', 'Alumno actualizado correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(\App\Models\Student $student)
+    public function destroy(Student $student)
     {
         try {
-            // Si tenés relaciones en pivotes, desvinculá acá (no rompe si no existen)
+            // Desvincular relaciones si existen antes de borrar
             if (method_exists($student, 'specifics')) {
                 $student->specifics()->detach();
             }
+            
             $student->delete();
 
             return redirect()->route('students.index')
-                ->with('status', 'Estudiante eliminado');
+                ->with('success', 'Estudiante eliminado correctamente.'); // Cambié status por success para consistencia
         } catch (\Throwable $e) {
-            return back()->withErrors('No se pudo eliminar el estudiante.');
+            return back()->with('error', 'No se pudo eliminar el estudiante porque tiene registros vinculados.');
         }
     }
 
-    //Busqueda de alumnos para el form del convenio indivual de pasantia u otros.
+    // --- MÉTODOS AJAX / API ---
+
     public function search(Request $request)
     {
         $query = $request->q;
@@ -129,9 +143,9 @@ class StudentController extends Controller
         return response()->json($students);
     }
 
-
-        public function getStudentByDni($dni)
+    public function getStudentByDni($dni)
     {
+        // Usamos el servicio inyectado
         $student = $this->studentService->findStudentByDni($dni);
 
         if ($student) {

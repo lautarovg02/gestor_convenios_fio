@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Secretary>
@@ -17,7 +18,10 @@ class SecretaryFactory extends Factory
     public function definition(): array
     {
         return [
-            'username' => $this->faker->unique()->userName(),
+            // Borramos 'username' porque ya no existe en la BD.
+            
+            // Definimos que por defecto cree un usuario nuevo si no se le pasa uno.
+            'user_id' => User::factory(),
         ];
     }
 }

@@ -4,12 +4,14 @@
     <div class="position-sticky">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="btnHome nav-link {{ request()->routeIs('home.index') ? 'active' : '' }}" href="{{ route('home.index') }}">
+                <a class="btnHome nav-link {{ request()->routeIs('home.index') ? 'active' : '' }}"
+                    href="{{ route('home.index') }}">
                     <i class="iconHome bi bi-house-door"></i>
                     Inicio
                 </a>
             </li>
 
+            @canany(['ver convenios', 'crud solicitudes'])
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#convenioSubmenu" role="button"
                     aria-expanded="{{ request()->is('agreements*') ? 'true' : 'false' }}"
@@ -19,38 +21,48 @@
                 </a>
                 <ul id="convenioSubmenu"
                     class="collapse nav flex-column ms-3 {{ request()->is('agreements*') ? 'show' : '' }}">
-                    <li class=" containerAllConvenios nav-item">
-                        <a class="nav-link {{ request()->is('agreements') ? 'active-nav-link' : '' }}"
-                            href="{{ route('agreements.index') }}">
-                            <i class="bi bi-list-ul"></i>
-                            Todos los convenios
-                        </a>
-                    </li>
-                    <li class=" licontainer nav-item">
-                        <a class="btnAddConvenio" href="#" data-bs-toggle="modal"
-                            data-bs-target="#crearConvenioModal">
-                            <i class=" iconAdd bi bi-plus-circle"></i>
-                            Crear nuevo convenio
-                        </a>
-                    </li>
+                    @canany(['ver convenios'])
+                        <li class=" containerAllConvenios nav-item">
+                            <a class="nav-link {{ request()->is('agreements') ? 'active-nav-link' : '' }}"
+                                href="{{ route('agreements.index') }}">
+                                <i class="bi bi-list-ul"></i>
+                                Todos los convenios
+                            </a>
+                        </li>
+                    @endcanany
+                    @canany(['crud solicitudes', 'crear solicitud convenio'])
+                        <li class=" licontainer nav-item">
+                            <a class="btnAddConvenio" href="#" data-bs-toggle="modal"
+                                data-bs-target="#crearConvenioModal">
+                                <i class=" iconAdd bi bi-plus-circle"></i>
+                                Crear nuevo convenio
+                            </a>
+                        </li>
+                    @endcanany
                 </ul>
             </li>
+            @endcanany
 
+            @canany(['ver solicitudes'])
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('COMPLETAR*') ? 'active-nav-link' : '' }}" href="#">
+                        <i class="bi bi-clock"></i>
+                        Solicitudes pendientes
+                    </a>
+                </li>
+            @endcanany
+            @canany(['ver usuarios'])
+                <li class="nav-item">
 
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('COMPLETAR*') ? 'active-nav-link' : '' }}" href="#">
-                    <i class="bi bi-clock"></i>
-                    Solicitudes pendientes
-                </a>
-            </li>
+                    <a class="nav-link {{ request()->is('adminUsers*') ? 'active-nav-link' : '' }}"
+                        href="{{ route('adminUsers.index') }}">
+                        <i class="bi bi-person"></i>
+                        Administrar usuarios
+                    </a>
+                </li>
+            @endcanany
 
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('adminUsers*') ? 'active-nav-link' : '' }}" href="{{ route('adminUsers.index') }}">
-                    <i class="bi bi-person"></i>
-                    Administrar usuarios
-                </a>
-            </li>
-
+            @canany(['ver docentes', 'ver docentes', 'ver carreras', 'ver departamentos'])
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#academicoSubmenu" role="button"
                     aria-expanded="{{ request()->is('teachers*') || request()->is('careers*') || request()->is('departments*') ? 'true' : 'false' }}"
@@ -60,47 +72,56 @@
                 </a>
                 <ul id="academicoSubmenu"
                     class="collapse nav flex-column ms-3 {{ request()->is('teachers*') || request()->is('careers*') || request()->is('departments*') ? 'show' : '' }}">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('teachers*') ? 'active-nav-link' : '' }}"
-                            href="{{ route('teachers.index') }}">
-                            <i class="bi bi-people"></i>
-                            Docentes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('careers*') ? 'active-nav-link' : '' }}"
-                            href="{{ route('careers.index') }}">
-                            <i class="bi bi-journal"></i>
-                            Carreras
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('departments*') ? 'active-nav-link' : '' }}"
-                            href="{{ route('departments.index') }}">
-                            <i class="bi bi-journal"></i>
-                            Departamentos
-                        </a>
-                    </li>
+                    @canany(['ver docentes'])
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->is('teachers*') ? 'active-nav-link' : '' }}"
+                                href="{{ route('teachers.index') }}">
+                                <i class="bi bi-people"></i>
+                                Docentes
+                            </a>
+                        </li>
+                    @endcanany
+                    @canany(['ver carreras'])
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->is('careers*') ? 'active-nav-link' : '' }}"
+                                href="{{ route('careers.index') }}">
+                                <i class="bi bi-journal"></i>
+                                Carreras
+                            </a>
+                        </li>
+                    @endcanany
+                    @canany(['ver departamentos'])
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->is('departments*') ? 'active-nav-link' : '' }}"
+                                href="{{ route('departments.index') }}">
+                                <i class="bi bi-journal"></i>
+                                Departamentos
+                            </a>
+                        </li>
+                    @endcanany
                 </ul>
             </li>
+            @endcanany
 
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('companies*') ? 'active-nav-link' : '' }}"
-                    href="{{ route('companies.index') }}">
-                    <i class="bi bi-building"></i>
-                    Empresas
-                </a>
-            </li>
+            @canany(['ver empresas'])
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('companies*') ? 'active-nav-link' : '' }}"
+                        href="{{ route('companies.index') }}">
+                        <i class="bi bi-building"></i>
+                        Empresas
+                    </a>
+                </li>
+            @endcanany
 
-
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('students*') ? 'active-nav-link' : '' }}"
-                    href="{{ route('students.index') }}">
-                    <i class="bi bi-mortarboard"></i>
-                    Alumnos
-                </a>
-            </li>
-
+            @canany(['ver alumnos'])
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('students*') ? 'active-nav-link' : '' }}"
+                        href="{{ route('students.index') }}">
+                        <i class="bi bi-mortarboard"></i>
+                        Alumnos
+                    </a>
+                </li>
+            @endcanany
         </ul>
     </div>
 </nav>

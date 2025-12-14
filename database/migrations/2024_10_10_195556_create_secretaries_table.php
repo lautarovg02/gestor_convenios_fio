@@ -13,15 +13,14 @@ return new class extends Migration
 
             // Relación 1:1 con users
             $table->unsignedBigInteger('user_id')->unique()->nullable();
+            
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->cascadeOnUpdate()
-                ->nullOnDelete(); // Si se borra el user, el secretary queda sin user (null).
+                ->nullOnDelete();
 
-            // Atributos propios del secretary
-            $table->string('username', 40)->unique();
-            // Si querés guardar un correo secundario del perfil, dejalo nullable.
-            // $table->string('email', 100)->nullable();
+            // ELIMINAMOS 'username'. No es necesario.
+            // Si necesitas datos extra, agrega teléfono o legajo, pero el usuario ya está en 'users'
 
             $table->timestamps();
         });
