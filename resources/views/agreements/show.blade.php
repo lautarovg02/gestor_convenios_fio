@@ -100,7 +100,7 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Certificado AFIP
                             @if($agreement->url_certificate_afip)
-                                <a href="" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
+                                <a href="{{route('contract.download.document', ['contract' => $agreement->id, 'type' => 'afip'])}}" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
                             @else
                                 <span class="text-muted">No adjunto</span>
                             @endif
@@ -108,7 +108,7 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Estatuto
                             @if($agreement->url_statute)
-                                <a href="" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
+                                <a href="{{route('contract.download.document', ['contract' => $agreement->id, 'type' => 'estatuto'])}}" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
                             @else
                                 <span class="text-muted">No adjunto</span>
                             @endif
@@ -116,15 +116,7 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Asignación de Autoridades
                             @if($agreement->url_assignment_authorities)
-                                <a href="" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
-                            @else
-                                <span class="text-muted">No adjunto</span>
-                            @endif
-                        </li>
-                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Archivo del Convenio (Marco)
-                            @if($agreement->file)
-                                <a href="" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
+                                <a href="{{route('contract.download.document', ['contract' => $agreement->id, 'type' => 'autoridades'])}}" target="_blank" class="btn btn-sm btn-outline-success">Ver Archivo</a>
                             @else
                                 <span class="text-muted">No adjunto</span>
                             @endif
