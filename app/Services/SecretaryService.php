@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Secretary;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Collection;
 
 class SecretaryService
 {
@@ -13,15 +14,10 @@ class SecretaryService
      * @param array $data
      * @return Secretary
      */
-    public function getOrCreateSecretary(array $data): Secretary
+
+
+    public function getAllSecretaries(): Collection
     {
-        return Secretary::firstOrCreate(
-            [
-                'username' => $data['user_secretaria'],
-            ],
-            [
-                'username' => 'user_' . Str::random(8),
-            ]
-        );
+        return Secretary::all();
     }
 }

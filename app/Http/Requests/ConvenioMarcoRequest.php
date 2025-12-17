@@ -27,6 +27,9 @@ class ConvenioMarcoRequest extends FormRequest
 
         return [
             // Representante contacto
+            'secretary_id' => ['required'],
+            'teacher_id' => ['required'],
+            'rector_id' => ['required'],
             'contact_nombre' => ['required', 'string', 'max:255'],
             'contact_apellido' => ['required', 'string', 'max:255'],
             'cuil_prefijo' => ['required', 'numeric'],

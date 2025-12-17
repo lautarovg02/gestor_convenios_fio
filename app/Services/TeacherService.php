@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Teacher;
+use Illuminate\Database\Eloquent\Collection;
 
 class TeacherService
 {
@@ -19,4 +20,19 @@ class TeacherService
             $data
         );
     }
+
+public function getAllTeachers(): Collection
+    {
+        return Teacher::orderBy('lastname')->orderBy('name')->get();
+    }
+
+public function getAllRectors(): Collection
+    {
+        // CORREGIDO: Usamos el booleano 'is_rector' en lugar de string 'category'
+        return Teacher::where('is_rector', true)
+                      ->orderBy('lastname')
+                      ->get();
+    }
+
+    
 }

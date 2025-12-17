@@ -417,6 +417,60 @@
                 </div>
             </div>
 
+            {{-- SECCIÓN: AUTORIDADES DE LA INSTITUCIÓN --}}
+            <div class="mb-4 border rounded containerSectionForm">
+                <h4 class="TitleSection">Autoridades de la Institución</h4>
+
+                {{-- 1. Selector de Rector --}}
+                <div class="mb-3">
+                    <label class="form-label fs-6 fw-bold" for="rector_id">Rector</label><span class="text-danger"> *</span>
+                    <select name="rector_id" id="rector_id" class="form-select">
+                        <option value="">Seleccione el Rector</option>
+                        @foreach ($rectors as $rector)
+                            <option value="{{ $rector->id }}" {{ old('rector_id') == $rector->id ? 'selected' : '' }}>
+                                {{ $rector->lastname }} {{ $rector->name }} (DNI: {{ $rector->dni }})
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('rector_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                {{-- 2. Selector de Profesor (o Decano) --}}
+                <div class="mb-3">
+                    <label class="form-label fs-6 fw-bold" for="teacher_id">Profesor / Decano interviniente</label><span class="text-danger"> *</span>
+                    <select name="teacher_id" id="teacher_id" class="form-select">
+                        <option value="">Seleccione un Profesor</option>
+                        @foreach ($teachers as $teacher)
+                            <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                                {{ $teacher->lastname }} {{ $teacher->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('teacher_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                {{-- 3. Selector de Secretaria --}}
+                <div class="mb-3">
+                    <label class="form-label fs-6 fw-bold" for="secretary_id">Secretaria Académica</label><span class="text-danger"> *</span>
+<select name="secretary_id" id="secretary_id" class="form-select">
+    <option value="">Seleccione una Secretaria</option>
+    @foreach ($secretaries as $secretary)
+        {{-- CORRECTO: Accedemos al nombre a través de la relación user --}}
+        <option value="{{ $secretary->id }}" {{ old('secretary_id') == $secretary->id ? 'selected' : '' }}>
+            {{ $secretary->user->name ?? 'Secretaria ID: ' . $secretary->id }}
+        </option>
+    @endforeach
+</select>
+                    @error('secretary_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
 
             {{-- Lugar y Fecha --}}
             <div class="mb-4 border rounded containerSectionForm">

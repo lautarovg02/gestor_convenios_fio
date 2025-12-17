@@ -62,12 +62,12 @@ Route::middleware(['auth'])->group(function () {
         // IMPORTANTE: Usamos ->except(['destroy']) para que el Docente pueda hacer todo MENOS borrar.
         
         // 1. Marco General
-        Route::resource('frameworkAgreement', FrameworkAgreementController::class)->except(['destroy']);
         Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
+        Route::resource('frameworkAgreement', FrameworkAgreementController::class)->except(['destroy']);
 
         // 2. Marco Pasantía
+        Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('frameworkInternshipAgreement.download');
         Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class)->except(['destroy']);
-        Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
 
         // 3. Marco Residencia
         Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class)->except(['destroy']);
@@ -102,6 +102,14 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('careers', CareerController::class)
             ->only(['index', 'show'])
             ->where(['career' => '[0-9]+']); 
+
+                    //DESCARGA DE DOCUMENTOS DE CONTRATO
+Route::get('/contract/{contract}/download-doc/{type}', [ContractController::class, 'downloadDocument'])
+    ->name('contract.download.document');
+
+// PENDING REQUESTS
+Route::get('pending-requests', [PendingRequestController::class, 'index'])->name('pending-requests.index');
+    });
     });
 
 
@@ -147,13 +155,7 @@ Route::middleware(['auth'])->group(function () {
         
         Route::resource('careers', CareerController::class)->except(['index', 'show']);
 
-        //DESCARGA DE DOCUMENTOS DE CONTRATO
-Route::get('/contract/{contract}/download-doc/{type}', [ContractController::class, 'downloadDocument'])
-    ->name('contract.download.document');
 
-// PENDING REQUESTS
-Route::get('pending-requests', [PendingRequestController::class, 'index'])->name('pending-requests.index');
-    });
 
 
     // ======================================================================
