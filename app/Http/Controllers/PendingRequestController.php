@@ -18,10 +18,13 @@ class PendingRequestController extends Controller
     public function index()
     {
         try {
-            $pendingStatuses = [1,2,3,4,5,11,8,6]; // Estados que representan 'pendiente' de gestión
-            $pendingRequests = Contract::whereIn('contract_status_id', $pendingStatuses)
-                ->orderBy('creation_date', 'desc')
-                ->paginate(10);
+            $pendingRequests = Contract::whereHas('status', function ($query) {
+            // Filtro para que el nombre del estado NO sea 'Finalizado'
+            // 'status' es la columna en la tabla contract_statuses, lo bueno de eloquent es que podemos acceder a la tabla contract_statuses a través de la relación hasMany
+            $query->where('status', '!=', 'Finalizado');
+        })
+        ->orderBy('creation_date', 'desc')
+        ->paginate(10);
 
             if ($pendingRequests->isEmpty()) {
                 return view('pending-requests.index')->with(['pendingRequests' => $pendingRequests, 'noResults' => true]);
