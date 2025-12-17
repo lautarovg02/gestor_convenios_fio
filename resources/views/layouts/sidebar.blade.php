@@ -45,7 +45,7 @@
 
             @canany(['ver solicitudes'])
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('COMPLETAR*') ? 'active-nav-link' : '' }}" href="#">
+                    <a class="nav-link {{ request()->is('pending-requests*') ? 'active-nav-link' : '' }}" href="{{ route('pending-requests.index') }}">
                         <i class="bi bi-clock"></i>
                         Solicitudes pendientes
                     </a>

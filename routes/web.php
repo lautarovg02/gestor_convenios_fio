@@ -146,6 +146,13 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/departments/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
         
         Route::resource('careers', CareerController::class)->except(['index', 'show']);
+
+        //DESCARGA DE DOCUMENTOS DE CONTRATO
+Route::get('/contract/{contract}/download-doc/{type}', [ContractController::class, 'downloadDocument'])
+    ->name('contract.download.document');
+
+// PENDING REQUESTS
+Route::get('pending-requests', [PendingRequestController::class, 'index'])->name('pending-requests.index');
     });
 
 
