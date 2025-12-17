@@ -15,9 +15,11 @@
                     </ol>
                 </nav>
             </div>
+            @canany(['crud empresas'])
             <a href="{{ route('companies.create') }}" class="btn btn-success">
                 <i class="bi bi-plus-lg me-1"></i> Agregar Empresa
             </a>
+            @endcanany
         </div>
 
         <!-- Filtros -->
@@ -97,7 +99,10 @@
 
                             <td class="text-center">
                                 <a href="{{ route('companies.show', $company) }}" class="btn btn-info btn-sm">Ver</a>
+                                @canany(['crud empresas'])
                                 <a href="{{ route('companies.edit', $company) }}" class="btn btn-primary btn-sm">Editar</a>
+                                @endcanany
+                                @canany(['crud empresas'])
                                 <button type="button" class="btn btn-danger btn-sm"
                                     data-entity-id="{{ $company->id }}"
                                     data-entity-name="{{ $company->company_name }}"
@@ -105,6 +110,7 @@
                                     data-bs-toggle="modal" data-bs-target="#modal-delete">
                                     Eliminar
                                 </button>
+                                @endcanany
                             </td>
                         </tr>
                     @endforeach

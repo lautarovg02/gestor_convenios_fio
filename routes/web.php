@@ -1,6 +1,6 @@
 <?php
 
-
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminUsersController;
 use App\Http\Controllers\AgreementController;
 use App\Http\Controllers\CareerController;
@@ -14,7 +14,6 @@ use App\Http\Controllers\FrameworkAgreementController;
 use App\Http\Controllers\FrameworkInternshipAgreementController;
 use App\Http\Controllers\FrameworkResidenceAgreementController;
 use App\Http\Controllers\SpecificResidenceAgreementController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndividualInternshipAgreementController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AuthController;
@@ -23,153 +22,138 @@ use App\Http\Controllers\SecretaryController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\PendingRequestController;
 
-// Autenticación
+/*
+|--------------------------------------------------------------------------
+| AUTENTICACIÓN
+|--------------------------------------------------------------------------
+*/
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
 Route::get('/', fn() => auth()->check() ? redirect('/home') : redirect('/login'));
 
 
+/*
+|--------------------------------------------------------------------------
+| RUTAS PROTEGIDAS
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->group(function () {
 
-//agrupa todas las rutas que requieran autenticación
-Route::group(['middleware' => ['role:secretary|admin|teacher']], function () {
+    // ======================================================================
+    // GRUPO 1: ACCESO GENERAL (Docente incluido)
+    // ======================================================================
+    Route::middleware(['role:Admin|Secretaria|Director|Coordinador|Docente'])->group(function () {
+        
+        Route::resource('home', HomeController::class);
+
+        // --- CRUD COMPLETO ---
+        Route::resource('companies', CompanyController::class);
+        Route::resource('companies.employees', EmployeeController::class)->shallow();
+        Route::resource('students', StudentController::class);
+
+        Route::resource('teachers', TeacherController::class);
+
+        // --- CONVENIOS (Listado General) ---
+        Route::resource('agreements', AgreementController::class)->name('index', 'agreements.index');
+
+        // --- CREACIÓN Y EDICIÓN DE TODOS LOS CONVENIOS ---
+        // IMPORTANTE: Usamos ->except(['destroy']) para que el Docente pueda hacer todo MENOS borrar.
+        
+        // 1. Marco General
+        Route::resource('frameworkAgreement', FrameworkAgreementController::class)->except(['destroy']);
+        Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
+
+        // 2. Marco Pasantía
+        Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class)->except(['destroy']);
+        Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
+
+        // 3. Marco Residencia
+        Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class)->except(['destroy']);
+        Route::get('/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
+
+        // 4. Específicos
+        Route::resource('specificResidenceAgreement', SpecificResidenceAgreementController::class)->except(['destroy']);
+        Route::resource('specificAgreement', SpecificAgreementController::class)->except(['destroy']);
+        Route::get('/specificAgreement/getFrameworkData/{id}', [SpecificAgreementController::class, 'getFrameworkAgreementData']);
+
+        // 5. Pasantías Individuales
+        Route::resource('individual-internship-agreements', IndividualInternshipAgreementController::class);
+        Route::post('individual-internship-agreements/select-company', [IndividualInternshipAgreementController::class, 'selectCompany'])->name('individual-internship-agreements.select-company');
+        Route::get('individual-internship-agreements/fill-form', [IndividualInternshipAgreementController::class, 'fillForm'])->name('individual-internship-agreements.fill-form');
+        Route::get('individual-internship-agreements/{id}/download', [IndividualInternshipAgreementController::class, 'download'])->name('individual-internship-agreements.download');
+
+        // --- UTILIDADES ---
+        Route::get('/cities', [CityController::class, 'getCiudades'])->name('get.ciudades');
+        Route::get('/cities/create', [CityController::class, 'create'])->name('cities.create');
+        Route::post('/cities', [CityController::class, 'store'])->name('cities.store');
+
+        Route::prefix('api')->group(function() {
+            Route::get('/company/{id}', [CompanyController::class, 'getCompanyById']);
+            Route::get('/employees/{companyId}', [EmployeeController::class, 'getEmployeesByCompany']);
+            Route::get('/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
+            Route::get('/employee/{id}', [EmployeeController::class, 'getEmployeeById']);
+            Route::get('/student/{dni}', [StudentController::class, 'getStudentByDni']);
+            Route::get('/students/search', [StudentController::class, 'search'])->name('students.search');
+        });
+
+        // Lectura de Carreras (Restricción numérica para evitar conflicto con 'create' del Grupo 3)
+        Route::resource('careers', CareerController::class)
+            ->only(['index', 'show'])
+            ->where(['career' => '[0-9]+']); 
+    });
 
 
-    //ADMIN USERS
-    Route::resource('adminUsers', AdminUsersController::class)->parameters(['adminUsers' => 'user']);;
+    // ======================================================================
+    // GRUPO 2: GESTIÓN INTERMEDIA (Excluye Docente)
+    // ======================================================================
+    Route::middleware(['role:Admin|Secretaria|Director|Coordinador'])->group(function () {
+        
 
-   
-    // eliminar user (si lo necesitás)
-    Route::delete('/admin/users/{user}', [AdminUsersController::class, 'destroy'])
-        ->name('adminUsers.destroy');
 
-    // eliminar teacher
-    Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])
-        ->name('teachers.destroy')
-        ->middleware(['auth', 'role:admin']);
+        // Lectura Departamentos (Restricción numérica para evitar conflicto)
+        Route::resource('departments', DepartmentController::class)
+            ->only(['index', 'show'])
+            ->where(['department' => '[0-9]+']);
 
-    // eliminar secretary
+        // --- BORRADO DE CONVENIOS ---
+        // Aquí definimos SOLO las rutas DELETE. Esto complementa al 'except(['destroy'])' del Grupo 1.
+        
+        Route::delete('/frameworkAgreement/{frameworkAgreement}', [FrameworkAgreementController::class, 'destroy'])->name('frameworkAgreement.destroy');
+        Route::delete('/frameworkInternshipAgreement/{frameworkInternshipAgreement}', [FrameworkInternshipAgreementController::class, 'destroy'])->name('frameworkInternshipAgreement.destroy');
+        Route::delete('/frameworkResidenceAgreement/{frameworkResidenceAgreement}', [FrameworkResidenceAgreementController::class, 'destroy'])->name('frameworkResidenceAgreement.destroy');
+        Route::delete('/specificResidenceAgreement/{specificResidenceAgreement}', [SpecificResidenceAgreementController::class, 'destroy'])->name('specificResidenceAgreement.destroy');
+        Route::delete('/specificAgreement/{specificAgreement}', [SpecificAgreementController::class, 'destroy'])->name('specificAgreement.destroy');
+    });
+
+
+    // ======================================================================
+    // GRUPO 3: ADMINISTRACIÓN CRÍTICA
+    // ======================================================================
+    Route::middleware(['role:Admin|Secretaria'])->group(function () {
+        
+        // GESTIÓN DE USUARIOS
+        Route::resource('adminUsers', AdminUsersController::class)->parameters(['adminUsers' => 'user']);
+        Route::get('/admin/users', [AdminUsersController::class, 'index'])->name('adminUsers.index');
+        Route::get('/admin/users/{user}/edit', [AdminUsersController::class, 'edit'])->name('adminUsers.edit');
+        Route::post('/users', [AdminUsersController::class, 'store'])->name('admin.users.store');
+        Route::match(['put', 'patch'], '/admin/users/{user}', [AdminUsersController::class, 'update'])->name('adminUsers.update');  
+        Route::delete('/admin/users/{user}', [AdminUsersController::class, 'destroy'])->name('adminUsers.destroy');
+
+        // ESTRUCTURA (ESCRITURA)
+        Route::resource('departments', DepartmentController::class)->except(['index', 'show']);
+        Route::delete('/departments/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+        
+        Route::resource('careers', CareerController::class)->except(['index', 'show']);
+    });
+
+
+    // ======================================================================
+    // RUTAS DE SEGURIDAD EXTRA
+    // ======================================================================
     Route::delete('/secretaries/{secretary}', [SecretaryController::class, 'destroy'])
         ->name('secretaries.destroy')
-        ->middleware(['auth', 'role:admin']);
+        ->middleware(['role:Admin']); 
 
- 
-// ADMIN USERS
-
-// Ruta para mostrar el listado de usuarios
-Route::get('/admin/users', [AdminUsersController::class, 'index'])
-    ->name('adminUsers.index');
-
-
-// Ruta para mostrar el formulario de edición de usuario
-Route::get('/admin/users/{user}/edit', [AdminUsersController::class, 'edit'])
-    ->name('adminUsers.edit');
-    
-  
-
-// Ruta para procesar el formulario de creación de usuario (POST)
-Route::post('/users', [AdminUsersController::class, 'store'])
-    ->name('admin.users.store');
-
-// Falta la ruta PUT/PATCH para actualizar (UPDATE).
-
-// Update user (PUT/PATCH)
-Route::match(['put', 'patch'], '/admin/users/{user}', [AdminUsersController::class, 'update'])
-    ->name('adminUsers.update');  
-    
-
-
-
-
-    // HOME
-    Route::resource('home', HomeController::class);
-
-    // COMPANIES
-    Route::resource('companies', CompanyController::class);
-
-    // EMPLOYEES
-    Route::resource('companies.employees', EmployeeController::class)->shallow();
-
-    //CITIES
-
-    Route::get('/cities', [CityController::class, 'getCiudades'])->name('get.ciudades');
-    Route::get('/cities/create', [CityController::class, 'create'])->name('cities.create');
-    Route::post('/cities', [CityController::class, 'store'])->name('cities.store');
-
-    //TEACHERS
-    Route::resource('/teachers', TeacherController::class);
-
-    //CAREERS
-    Route::resource('/careers', CareerController::class);
-
-    //DEPARTMENTS
-    route::resource('/departments', DepartmentController::class);
-    Route::delete('/departments/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
-
-    // AGREEMENTS
-    Route::resource('/agreements', AgreementController::class)->name('index', 'agreements.index');
-    Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
-
-    Route::resource('frameworkAgreement', FrameworkAgreementController::class);
-
-    Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('agreement.download');
-
-    Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class);
-
-    Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class);
-
-
-
-    Route::resource('specificResidenceAgreement', SpecificResidenceAgreementController::class);
-
-
-
-
-    Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class);
-
-    Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class);
-
-    Route::get('/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
-
-    Route::resource('specificResidenceAgreement', SpecificResidenceAgreementController::class);
-
-
-    Route::resource('specificAgreement', SpecificAgreementController::class);
-    Route::get('/specificAgreement/getFrameworkData/{id}', [SpecificAgreementController::class, 'getFrameworkAgreementData']);
-
-
-    // AJAX Routes
-    Route::get('/api/company/{id}', [CompanyController::class, 'getCompanyById']);
-    Route::get('/api/employees/{companyId}', [EmployeeController::class, 'getEmployeesByCompany']);
-    Route::get('/api/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
-    Route::get('/api/employee/{id}', [EmployeeController::class, 'getEmployeeById']);
-    Route::get('/api/student/{dni}', [StudentController::class, 'getStudentByDni']);
-    // CONVENIOS DE PASANTIA INDIVIDUALES
-    // Acción extra para seleccionar empresa y alumno (POST)
-    Route::post('individual-internship-agreements/select-company', [IndividualInternshipAgreementController::class, 'selectCompany'])
-        ->name('individual-internship-agreements.select-company');
-
-    Route::get('individual-internship-agreements/fill-form', [IndividualInternshipAgreementController::class, 'fillForm'])
-        ->name('individual-internship-agreements.fill-form');
-
-    // Descargar archivo del convenio
-    Route::get('individual-internship-agreements/{id}/download', [IndividualInternshipAgreementController::class, 'download'])
-        ->name('individual-internship-agreements.download');
-
-    Route::resource('individual-internship-agreements', IndividualInternshipAgreementController::class);
-
-    // Buscar alumnos (para AJAX)
-    Route::get('/students/search', [StudentController::class, 'search'])->name('students.search');
-    //Ruta alumnos
-    Route::resource('students', StudentController::class);
 });
-
- 
-//DESCARGA DE DOCUMENTOS DE CONTRATO
-Route::get('/contract/{contract}/download-doc/{type}', [ContractController::class, 'downloadDocument'])
-    ->name('contract.download.document');
-
-// PENDING REQUESTS
-Route::get('pending-requests', [PendingRequestController::class, 'index'])->name('pending-requests.index');

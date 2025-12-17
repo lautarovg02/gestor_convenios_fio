@@ -15,9 +15,11 @@
                 </ol>
             </nav>
         </div>
+        @canany(['crud carreras'])
         <a href="{{ route('careers.create') }}" class="btn btn-success">
             <i class="bi bi-plus-lg me-1"></i> Agregar Carrera
         </a>
+        @endcanany
     </div>
 
     <!-- Filtros -->
@@ -92,13 +94,17 @@
 
                         <td class="text-center">
                             <a href="{{ route('careers.show', $career) }}" class="btn btn-info btn-sm">Ver</a>
+                            @canany(['crud carreras'])
                             <a href="{{ route('careers.edit', $career) }}"
                                 class="btn btn-primary btn-sm">Editar</a>
+                            @endcanany
+                            @canany(['crud carreras'])
                             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#modal-delete" data-entity-id="{{ $career->id }}"
                                 data-entity-name="{{ $career->name }}" data-entity-type="careers">
                                 Eliminar
                             </button>
+                            @endcanany
                         </td>
                     </tr>
                     @endforeach

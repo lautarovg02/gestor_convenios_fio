@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Role;
+use Spatie\Permission\Traits\HasRoles; // <--- Esto hace toda la magia
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    // HasRoles agrega las relaciones roles(), permissions(), etc.
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id',
+        // 'role_id', <--- BORRADO (Ya no existe en la BD)
     ];
 
     /**
@@ -32,7 +33,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-       // 'remember_token',
+        // 'remember_token',
     ];
 
     /**
@@ -41,14 +42,14 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-     //'email_verified_at' => 'datetime',
+        //'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 
-    public function role()
-    {
-        return $this->belongsTo(Role::class, 'role_id');
-    }
+    // --- RELACIONES ---
+
+    // ¡¡BORRADA la función role()!! 
+    // Ahora para ver el rol usarás: $user->roles o $user->getRoleNames()
 
     public function teacher()
     {

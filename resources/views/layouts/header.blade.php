@@ -5,21 +5,22 @@
 
         <div class=" d-flex align-items-center gap-3">
             <a href="{{ route('home.index') }}">
-            <img class="imgFacultad" src="{{ asset('images/image5.png') }}" alt="Logo Facultad"">
+            <img class="imgFacultad" src="{{ asset('images/image5.png') }}" alt="Logo Facultad">
             </a>
             <span class=" spanGestor fw-semibold text-secondary d-none d-md-inline">Gestor de convenios</span>
         </div>
 
-        <!-- Bloque de usuario -->
         <div class=" containerIconLogoutAndText d-flex align-items-center gap-3">
             
-            <!-- Datos del usuario -->
             <div class="text-end">
                 <div class="fw-semibold">{{ Auth::user()->name }}</div>
-                <small class="text-muted">{{ Auth::user()->role->name }}</small>
+                
+                <small class="text-muted">
+                    {{ Auth::user()->getRoleNames()->first() ?? 'Sin Rol' }}
+                </small>
+                
             </div>
-            <!--Cuando tengamos sesiones hay que mostrar el nombre del usuario y no hardcodear -->
-            <!-- Logout -->
+            
             <form class="logout" action="{{ route('logout') }}" method="POST" class="d-inline">
                 @csrf
                 <div class="containerIconLogout">

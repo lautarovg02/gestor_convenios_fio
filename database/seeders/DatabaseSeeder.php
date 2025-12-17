@@ -10,7 +10,6 @@ use App\Models\City;
 use App\Models\Department;
 use App\Models\EmployeePhone;
 use App\Models\Secretary;
-use App\Models\SecretaryPhone;
 use App\Models\Teacher;
 use App\Models\Career;
 use App\Models\Type_Report;
@@ -24,92 +23,96 @@ use App\Models\IndividualInternshipAgreement;
 use App\Models\ReportSpecific;
 use App\Models\ReportIndividualInternshipAgreement;
 use App\Models\ReportSpecificResidenceAgreement;
-use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1) Primero, roles fijos (asumo que RolesTableSeeder crea los roles con nombres correctos)
-        $this->call(RolesTableSeeder::class);
+        // 1. Crear Roles y Permisos (Spatie)
+        $this->call(RolePermissionSeeder::class);
 
-        // Obtener ids de roles de forma segura (fallback al primer role si no existe)
-        $adminRoleId = Role::where('name', 'admin')->value('id')
-            ?? Role::where('name', 'administrador')->value('id')
-            ?? Role::first()->id;
+        // ----------------------------------------------------
+        // 2. CREACIÓN DE USUARIOS CLAVE
+        // ----------------------------------------------------
 
-        $secretaryRoleId = Role::where('name', 'secretary')->value('id')
-            ?? Role::where('name', 'secretaria')->value('id')
-            ?? Role::first()->id;
+        // ADMIN
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@test.com'],
+            ['name' => 'Admin', 'password' => Hash::make('password')]
+        );
+        $admin->assignRole('Admin');
 
-        $teacherRoleId = Role::where('name', 'teacher')->value('id')
-            ?? Role::where('name', 'docente')->value('id')
-            ?? Role::first()->id;
+        // DIRECTOR
+        $director = User::firstOrCreate(
+            ['email' => 'director@test.com'],
+            ['name' => 'Juan Director', 'password' => Hash::make('password')]
+        );
+        $director->assignRole('Director');
 
-        // 2) Admin fijo (útil para login inmediato)
-        User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@test.com',
-            'password' => Hash::make('password'),
-            'role_id' => $adminRoleId,
-        ]);
+        // COORDINADOR
+        $coordinador = User::firstOrCreate(
+            ['email' => 'coordinador@test.com'],
+            ['name' => 'Maria Coordinadora', 'password' => Hash::make('password')]
+        );
+        $coordinador->assignRole('Coordinador');
 
-        // 3) Secretaries: crear users y luego perfiles en secretaries
-        // Usamos sufijo incremental en email para evitar colisiones
-        $secretaryCount = 10;
-        for ($i = 1; $i <= $secretaryCount; $i++) {
-            $user = User::factory()->create([
-                'name' => "Secretary {$i}",
-                'email' => "secretary{$i}@test.com",
-                'password' => Hash::make('1234'),
-                'role_id' => $secretaryRoleId,
-            ]);
+        // SECRETARIA DE PRUEBA
+        $secretary = User::firstOrCreate(
+            ['email' => 'secretary@test.com'],
+            ['name' => 'Maria Secretaria', 'password' => Hash::make('password')]
+        );
+        // Asegúrate que en RolePermissionSeeder el nombre sea 'Secretaria' (con mayúscula)
+        $secretary->assignRole('Secretaria'); 
+        
 
-            // Crear el perfil de secretary (ajustá campos según tu migración)
-            Secretary::factory()->create([
-                'user_id' => $user->id,
-                // si tu factory requiere username u otros campos, la factory los cubrirá
-            ]);
-        }
+        $docente = User::firstOrCreate(
+            ['email' => 'docente@test.com'],
+            ['name' => 'Pedro Docente', 'password' => Hash::make('password')]
+        );
+        $docente->assignRole('Docente');
 
-        // 4) Teachers: crear users y luego perfiles en teachers
-        $teacherCount = 80;
-        for ($i = 1; $i <= $teacherCount; $i++) {
-            $user = User::factory()->create([
-                'name' => "Teacher {$i}",
-                'email' => "teacher{$i}@test.com",
-                'password' => Hash::make('1234'),
-                'role_id' => $teacherRoleId,
-            ]);
 
-            // Crear registro en teachers (ajustá campos según tu migración)
-            Teacher::factory()->create([
-                'user_id' => $user->id,
-            ]);
-        }
 
-        // Después de crear los users con role_id=teacher y sus Teacher
+        // ----------------------------------------------------
+        // 3. GENERACIÓN MASIVA
+        // ----------------------------------------------------
+
+        // Secretarias aleatorias
+        User::factory(1)->create()->each(function ($user) {
+            $user->assignRole('Secretaria');
+            Secretary::factory()->create(['user_id' => $user->id]);
+        });
+
+        // Profesores aleatorios
+        User::factory(1)->create()->each(function ($user) {
+            // CORRECCIÓN AQUÍ: Cambiamos 'Profesor' por 'Docente'
+            // para coincidir con lo que definiste en RolePermissionSeeder
+            $user->assignRole('Docente'); 
+            
+            Teacher::factory()->create(['user_id' => $user->id]);
+        });
+
+        // Asignar Rector y Decano
         $anyTeacher = Teacher::inRandomOrder()->first();
         if ($anyTeacher) {
             $anyTeacher->update(['is_rector' => true]);
-
-            // (Opcional) marcar un decano distinto si existe otro teacher
             $another = Teacher::where('id', '!=', $anyTeacher->id)->inRandomOrder()->first();
-            if ($another) {
-                $another->update(['is_dean' => true]);
-            }
+            if ($another) $another->update(['is_dean' => true]);
         }
 
-        // 5) —— Resto del seeding que ya tenías ——
+        // ----------------------------------------------------
+        // 4. DATOS DEL SISTEMA
+        // ----------------------------------------------------
+        
         Province::factory()->count(23)->create();
         City::factory()->count(70)->create();
         CompanyEntity::factory()->count(6)->create();
 
-        // CSV companies: usar ruta segura
+        // Carga de Compañías
         $filePath = database_path('seeders/csv/companyNames.csv');
         if (file_exists($filePath) && method_exists(\Database\Factories\CompanyFactory::class, 'loadCompanyNamesFromCSV')) {
             $companyNames = \Database\Factories\CompanyFactory::loadCompanyNamesFromCSV($filePath);
@@ -120,20 +123,20 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         } else {
-            // Si no existe CSV, crear algunas companies de ejemplo
             Company::factory()->count(10)->create();
         }
 
         Employee::factory()->count(100)->create();
         EmployeePhone::factory()->count(100)->create();
 
-        // departamentos con docentes
         $teachersForDepartments = Teacher::inRandomOrder()->take(4)->get();
         foreach ($teachersForDepartments as $teacher) {
             Department::factory()->create(['director_id' => $teacher->id]);
         }
+        
+        // Carreras (Usando el Seeder externo para evitar duplicados o errores de lógica)
+        $this->call(CareerSeeder::class);
 
-        Career::factory(9)->create();
         Type_Report::factory()->count(5)->create();
         TypeFrameworkAgreement::factory(3)->create();
         ContractStatus::factory(10)->create();

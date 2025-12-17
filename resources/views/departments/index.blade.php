@@ -16,9 +16,11 @@
                 </ol>
             </nav>
         </div>
+        @canany(['crud departamentos'])
         <a href="{{ route('departments.create') }}" class="btn btn-success">
             <i class="bi bi-plus-lg me-1"></i> Agregar Departamento
         </a>
+        @endcanany
     </div>
 
     <!-- Mensajes -->
@@ -60,7 +62,10 @@
 
                             <td class="text-center">
                                 <a href="{{ route('departments.show', $department) }}" class="btn btn-info btn-sm">Ver</a>
+                                @canany(['crud departamentos'])
                                 <a href="{{ route('departments.edit', $department) }}" class="btn btn-primary btn-sm">Editar</a>
+                                @endcanany
+                                @canany(['crud departamentos'])
                                 <button type="button" class="btn btn-danger btn-sm"
                                     data-entity-id="{{ $department->id }}"
                                     data-entity-name="{{ $department->name }}"
@@ -69,6 +74,7 @@
                                     data-bs-target="#modal-delete">
                                     Eliminar
                                 </button>
+                                @endcanany
                             </td>
                         </tr>
                     @endforeach
