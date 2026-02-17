@@ -51,10 +51,16 @@
                     </a>
                 </li>
             @endcanany
-             @canany(['ver rechazadas'])
+            @canany(['ver rechazadas'])
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('approved-requests*') ? 'active-nav-link' : '' }}" href="{{ route('approved-requests.index') }}">
+                        <i class="bi bi-check-circle"></i>
+                        Solicitudes aprobadas
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('rejected-requests*') ? 'active-nav-link' : '' }}" href="{{ route('rejected-requests.index') }}">
-                        <i class="bi bi-clock"></i>
+                        <i class="bi bi-x-circle"></i>
                         Solicitudes rechazadas
                     </a>
                 </li>

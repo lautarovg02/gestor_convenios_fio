@@ -9,8 +9,16 @@ use App\Models\TypeFrameworkAgreement;
 
 
 
+use App\Services\ContractStateService;
+
 class PendingRequestController extends Controller
 {
+    protected $contractStateService;
+
+    public function __construct(ContractStateService $contractStateService)
+    {
+        $this->contractStateService = $contractStateService;
+    }
     /**
      * Muestra una lista de los contratos que se encuentran en estado 'pendiente' de gestión.
      *
@@ -72,4 +80,13 @@ class PendingRequestController extends Controller
     }
 
 
+    public function approve(Contract $contract)
+    {
+        try {
+            $this->contractStateService->approve($contract);
+            return redirect()->route('pending-requests.index')->with('success', 'Solicitud aprobada correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al aprobar la solicitud: ' . $e->getMessage());
+        }
+    }
 }

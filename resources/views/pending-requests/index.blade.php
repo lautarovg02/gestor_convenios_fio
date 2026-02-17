@@ -49,9 +49,12 @@
                                     <td class="text-center">{{ $request->typeFrameworkAgreement->type }}</td>
                                     <td class="text-center">{{ $request->company->company_name}}</td>
                                     <td class="text-nowrap text-center">
-                                        <button class="btn btn-sm btn-success me-1">
-                                            Aprobar <i class="bi bi-file-earmark-text"></i>
-                                        </button>
+                                        <form action="{{ route('contracts.approve', $request->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-success me-1">
+                                                Aprobar <i class="bi bi-check-circle"></i>
+                                            </button>
+                                        </form>
                                         <button type="button" class="btn btn-sm btn-danger" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#rejectModal"
