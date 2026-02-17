@@ -65,4 +65,8 @@ class Contract extends Model
     {
         return $this->hasMany(IndividualInternshipAgreement::class);
     }
+    public function rejection()
+    {
+        return $this->hasOne(ContractRejection::class);
+    }
 }

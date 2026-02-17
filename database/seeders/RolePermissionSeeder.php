@@ -59,6 +59,7 @@ class RolePermissionSeeder extends Seeder
         $crearSolicitudConvenio      = Permission::firstOrCreate(['name' => 'crear solicitud convenio', 'guard_name' => 'web']);
         $descargarConvenioVinculado  = Permission::firstOrCreate(['name' => 'descargar convenio vinculado', 'guard_name' => 'web']);
         $verMotivoRechazo            = Permission::firstOrCreate(['name' => 'ver motivo rechazo', 'guard_name' => 'web']);
+        $verRechazadas               = Permission::firstOrCreate(['name' => 'ver rechazadas', 'guard_name' => 'web']);
 
 
         // =========================================================================
@@ -80,13 +81,13 @@ class RolePermissionSeeder extends Seeder
         $verTodo = [
             $verUsuarios, $verDocentes, $verAlumnos, 
             $verEmpresas, $verConvenios, $verCarreras, 
-            $verDepartamentos, $verSolicitudes 
+            $verDepartamentos, $verSolicitudes, $verRechazadas
         ];
 
         $todoMenosUsuarios = [
             $verDocentes, $verAlumnos, 
             $verEmpresas, $verConvenios, $verCarreras, 
-            $verDepartamentos, $verSolicitudes 
+            $verDepartamentos, $verSolicitudes, $verRechazadas
         ];
 
         // --- AGRUPACIÓN DE CRUD TOTAL (Para Admin/Secretaria) ---
@@ -137,6 +138,7 @@ class RolePermissionSeeder extends Seeder
             $verAlumnos,
             $descargarConvenioVinculado,
             $verMotivoRechazo,
+            $verRechazadas,
             $verDocentes
         ];
         $docente->syncPermissions($permisosDocente);

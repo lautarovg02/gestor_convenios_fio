@@ -51,6 +51,14 @@
                     </a>
                 </li>
             @endcanany
+             @canany(['ver rechazadas'])
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('rejected-requests*') ? 'active-nav-link' : '' }}" href="{{ route('rejected-requests.index') }}">
+                        <i class="bi bi-clock"></i>
+                        Solicitudes rechazadas
+                    </a>
+                </li>
+            @endcanany
             @canany(['ver usuarios'])
                 <li class="nav-item">
 

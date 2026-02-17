@@ -18,10 +18,11 @@ class PendingRequestController extends Controller
     public function index()
     {
         try {
-            $pendingRequests = Contract::whereHas('status', function ($query) {
-            // Filtro para que el nombre del estado NO sea 'Finalizado'
+            $excludeStatus = ['Finalizado', 'Deshabilitado']; // Estados a excluir - deshabilitados serian los rechazados.
+
+            $pendingRequests = Contract::whereHas('status', function ($query) use ($excludeStatus) {
             // 'status' es la columna en la tabla contract_statuses, lo bueno de eloquent es que podemos acceder a la tabla contract_statuses a través de la relación hasMany
-            $query->where('status', '!=', 'Finalizado');
+            $query->whereNotIn('status', $excludeStatus);
         })
         ->orderBy('creation_date', 'desc')
         ->paginate(10);
@@ -39,7 +40,36 @@ class PendingRequestController extends Controller
 
 
 }
+    public function reject(Request $request, Contract $contract)
+    {
+        $request->validate([
+            'justification' => 'required|string|max:1000',
+        ]);
 
+        try {
+            // 1. Buscar el estado 'Deshabilitado'
+            $rejectedStatus = ContractStatus::where('status', 'Deshabilitado')->first();
+
+            if (!$rejectedStatus) {
+                return redirect()->back()->with('error', 'El estado "Deshabilitado" no existe en la base de datos.');
+            }
+
+            // 2. Actualizar el estado del contrato
+            $contract->contract_status_id = $rejectedStatus->id;
+            $contract->save();
+
+            // 3. Guardar la justificación en la nueva tabla
+            $contract->rejection()->create([
+                'justification' => $request->justification,
+                'user_id' => auth()->id(),
+            ]);
+
+            return redirect()->route('pending-requests.index')->with('success', 'Solicitud rechazada correctamente.');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ocurrió un error al rechazar la solicitud: ' . $e->getMessage());
+        }
+    }
 
 
 }

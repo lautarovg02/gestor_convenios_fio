@@ -21,6 +21,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SecretaryController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\PendingRequestController;
+use App\Http\Controllers\RejectedRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,8 +110,13 @@ Route::get('/contract/{contract}/download-doc/{type}', [ContractController::clas
 
 // PENDING REQUESTS
 Route::get('pending-requests', [PendingRequestController::class, 'index'])->name('pending-requests.index');
+Route::post('contracts/{contract}/reject', [PendingRequestController::class, 'reject'])->name('contracts.reject');
+
+// REJECTED REQUESTS
+Route::get('rejected-requests', [RejectedRequestController::class, 'index'])->name('rejected-requests.index');
     });
     });
+
 
 
     // ======================================================================

@@ -52,7 +52,10 @@
                                         <button class="btn btn-sm btn-success me-1">
                                             Aprobar <i class="bi bi-file-earmark-text"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-danger">
+                                        <button type="button" class="btn btn-sm btn-danger" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#rejectModal"
+                                                data-contract-id="{{ $request->id }}">
                                             Rechazar <i class="bi bi-x-circle"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-primary me-1"  >
@@ -80,4 +83,50 @@
    
     
 </div>
+</div>
+
+{{-- MODAL DE RECHAZO --}}
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="rejectModalLabel">Rechazar Solicitud</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="rejectForm" method="POST" action="">
+                @csrf
+                <div class="modal-body">
+                    <p>Por favor, ingrese el motivo del rechazo para esta solicitud.</p>
+                    <div class="mb-3">
+                        <label for="justification" class="form-label">Justificación</label>
+                        <textarea class="form-control" id="justification" name="justification" rows="4" required maxlength="1000"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Confirmar Rechazo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var rejectModal = document.getElementById('rejectModal');
+        rejectModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var contractId = button.getAttribute('data-contract-id');
+            var form = document.getElementById('rejectForm');
+            
+            // Construir la URL de acción dinámicamente
+            // Asumiendo que la ruta es 'contracts.reject' aceptando el ID del contrato
+            var actionUrl = "{{ route('contracts.reject', ':id') }}";
+            actionUrl = actionUrl.replace(':id', contractId);
+            
+            form.action = actionUrl;
+        });
+    });
+</script>
+
 @endsection
