@@ -20,20 +20,36 @@ class PendingRequestController extends Controller
         $this->contractStateService = $contractStateService;
     }
     /**
-     * Muestra una lista de los contratos que se encuentran en estado 'pendiente' de gestión.
+     * Muestra una lista de los contratos pendientes, filtrada según el rol del usuario.
      *
+     * - Secretaria: ve todos los convenios pendientes.
+     * - Director: ve solo los convenios específicos (tienen registros en `specifics`).
+     * - Coordinador: ve solo los convenios individuales (tienen registros en `specificResidenceAgreements` o `individualIntershipAgreements`).
      */
     public function index()
     {
         try {
-            $excludeStatus = ['Finalizado', 'Deshabilitado']; // Estados a excluir - deshabilitados serian los rechazados.
+            $excludeStatus = ['Finalizado', 'Deshabilitado'];
+            $user = auth()->user();
 
-            $pendingRequests = Contract::whereHas('status', function ($query) use ($excludeStatus) {
-            // 'status' es la columna en la tabla contract_statuses, lo bueno de eloquent es que podemos acceder a la tabla contract_statuses a través de la relación hasMany
-            $query->whereNotIn('status', $excludeStatus);
-        })
-        ->orderBy('creation_date', 'desc')
-        ->paginate(10);
+            $query = Contract::whereHas('status', function ($q) use ($excludeStatus) {
+                $q->whereNotIn('status', $excludeStatus);
+            });
+
+            // Filtrar según el rol del usuario
+            if ($user->hasRole('Director')) {
+                // Director: solo convenios que tienen al menos un registro en `specifics`
+                $query->whereHas('specifics');
+            } elseif ($user->hasRole('Coordinador')) {
+                // Coordinador: solo convenios individuales (residencia o pasantía individual)
+                $query->where(function ($q) {
+                    $q->whereHas('specificResidenceAgreements')
+                      ->orWhereHas('individualIntershipAgreements');
+                });
+            }
+            // Secretaria y Admin ven todos (sin filtro adicional)
+
+            $pendingRequests = $query->orderBy('creation_date', 'desc')->paginate(10);
 
             if ($pendingRequests->isEmpty()) {
                 return view('pending-requests.index')->with(['pendingRequests' => $pendingRequests, 'noResults' => true]);
@@ -43,16 +59,15 @@ class PendingRequestController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('pending-requests.index')->with(['error' => 'Error al cargar las solicitudes pendientes. Inténtalo nuevamente.']);
         }
-
-     
-
-
-}
+    }
     public function reject(Request $request, Contract $contract)
     {
         $request->validate([
             'justification' => 'required|string|max:1000',
         ]);
+
+        // Verificar que el usuario tiene permiso para actuar sobre este tipo de convenio
+        $this->authorizeContractAction($contract);
 
         try {
             // 1. Buscar el estado 'Deshabilitado'
@@ -82,11 +97,42 @@ class PendingRequestController extends Controller
 
     public function approve(Contract $contract)
     {
+        // Verificar que el usuario tiene permiso para actuar sobre este tipo de convenio
+        $this->authorizeContractAction($contract);
+
         try {
             $this->contractStateService->approve($contract);
             return redirect()->route('pending-requests.index')->with('success', 'Solicitud aprobada correctamente.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al aprobar la solicitud: ' . $e->getMessage());
         }
+    }
+    /**
+     * Verifica que el usuario autenticado tiene permiso para actuar sobre el tipo de convenio.
+     *
+     * - Secretaria: puede actuar sobre cualquier convenio.
+     * - Director: solo puede actuar sobre convenios que tienen registros en `specifics`.
+     * - Coordinador: solo puede actuar sobre convenios individuales (residencia o pasantía).
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    private function authorizeContractAction(Contract $contract): void
+    {
+        $user = auth()->user();
+
+        if ($user->hasRole('Director')) {
+            // Director solo puede actuar sobre convenios específicos
+            if ($contract->specifics()->count() === 0) {
+                abort(403, 'No tenés permiso para actuar sobre este tipo de convenio.');
+            }
+        } elseif ($user->hasRole('Coordinador')) {
+            // Coordinador solo puede actuar sobre convenios individuales
+            $esIndividual = $contract->specificResidenceAgreements()->exists()
+                         || $contract->individualIntershipAgreements()->exists();
+            if (!$esIndividual) {
+                abort(403, 'No tenés permiso para actuar sobre este tipo de convenio.');
+            }
+        }
+        // Secretaria puede actuar sobre cualquier convenio (sin restricción)
     }
 }

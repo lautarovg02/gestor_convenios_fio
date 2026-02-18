@@ -49,6 +49,7 @@
                                     <td class="text-center">{{ $request->typeFrameworkAgreement->type }}</td>
                                     <td class="text-center">{{ $request->company->company_name}}</td>
                                     <td class="text-nowrap text-center">
+                                        @can('aprobar rechazar solicitudes')
                                         <form action="{{ route('contracts.approve', $request->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-success me-1">
@@ -61,6 +62,7 @@
                                                 data-contract-id="{{ $request->id }}">
                                             Rechazar <i class="bi bi-x-circle"></i>
                                         </button>
+                                        @endcan
                                         <button type="button" class="btn btn-sm btn-primary me-1"  >
                                             Descargar  <i class="bi bi-download me-1"></i>
                                         </button>

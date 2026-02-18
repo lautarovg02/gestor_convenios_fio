@@ -60,6 +60,7 @@ class RolePermissionSeeder extends Seeder
         $descargarConvenioVinculado  = Permission::firstOrCreate(['name' => 'descargar convenio vinculado', 'guard_name' => 'web']);
         $verMotivoRechazo            = Permission::firstOrCreate(['name' => 'ver motivo rechazo', 'guard_name' => 'web']);
         $verRechazadas               = Permission::firstOrCreate(['name' => 'ver rechazadas', 'guard_name' => 'web']);
+        $aprobarRechazarSolicitudes  = Permission::firstOrCreate(['name' => 'aprobar rechazar solicitudes', 'guard_name' => 'web']);
 
 
         // =========================================================================
@@ -99,30 +100,29 @@ class RolePermissionSeeder extends Seeder
         ];
 
 
-        // 1) ADMIN
+        // 1) ADMIN - Sin permisos de aprobación/rechazo
         $admin->syncPermissions(array_merge($verTodo, $crudTodo));
 
 
-        // 2) SECRETARIA
-        // Sumamos el poder de aprobación
-        $permisosSecretaria = array_merge($verTodo, $crudTodo, [$aprobarConveniosGeneral]);
+        // 2) SECRETARIA - Puede aprobar/rechazar todos los convenios
+        $permisosSecretaria = array_merge($verTodo, $crudTodo, [$aprobarConveniosGeneral, $aprobarRechazarSolicitudes]);
         $secretaria->syncPermissions($permisosSecretaria);
 
 
-        // 3) DIRECTOR
-        // Ve todo, CRUD Docentes, Aprueba Específicos
+        // 3) DIRECTOR - Puede aprobar/rechazar convenios específicos
         $permisosDirector = array_merge($todoMenosUsuarios, [
             $crudDocentes, 
-            $aprobarConveniosEspecificos
+            $aprobarConveniosEspecificos,
+            $aprobarRechazarSolicitudes
         ]);
         $director->syncPermissions($permisosDirector);
 
 
-        // 4) COORDINADOR
-        // Ve todo, CRUD Docentes, Aprueba Individuales
+        // 4) COORDINADOR - Puede aprobar/rechazar convenios individuales
         $permisosCoordinador = array_merge($todoMenosUsuarios, [
             $crudDocentes, 
-            $aprobarConveniosIndividuales
+            $aprobarConveniosIndividuales,
+            $aprobarRechazarSolicitudes
         ]);
         $coordinador->syncPermissions($permisosCoordinador);
 
