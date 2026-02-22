@@ -55,7 +55,19 @@ class ConvenioMarcoRequest extends FormRequest
             'entidad' => ['required', 'string'],
             'titular' => ['required', 'string'],
             'confidencialidad' => ['required', 'in:si,no'],
-            'company_id' => ['required'],
+            'company_id' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $hasActive = \App\Models\Contract::where('company_id', $value)
+                        ->where('type_framework_agreement_id', 3)
+                        ->whereHas('status', function($q) {
+                            $q->whereNotIn('status', ['Deshabilitado', 'Finalizado']);
+                        })->exists();
+                    if ($hasActive) {
+                        $fail('La empresa ya posee un Convenio Marco activo.');
+                    }
+                },
+            ],
             
             // Dirección
             'calle' => ['required', 'string', 'max:255'],

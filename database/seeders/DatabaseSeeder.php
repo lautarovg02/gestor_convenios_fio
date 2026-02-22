@@ -140,14 +140,44 @@ class DatabaseSeeder extends Seeder
         Type_Report::factory()->count(5)->create();
         TypeFrameworkAgreement::factory(3)->create();
         ContractStatus::factory(10)->create();
-        Contract::factory(2)->create();
         Student::factory(80)->create();
-        Specific::factory(6)->create();
-        SpecificResidenceAgreement::factory(4)->create();
-        IndividualInternshipAgreement::factory(5)->create();
-        ReportSpecific::factory(4)->create();
-        ReportSpecificResidenceAgreement::factory(4)->create();
-        ReportIndividualInternshipAgreement::factory(4)->create();
+        
+        // === NEW SEEDING LOGIC FOR CONTRACTS ===
+        // Clean creation of 1 unique contract type per company
+        $companies = Company::inRandomOrder()->take(15)->get();
+        // Types: 1=Pasantia, 2=Residencia, 3=Marco
+        
+        $companiesCount = 0;
+        foreach ($companies as $company) {
+            // Assign 1 or 2 framework agreement types to this company
+            $typesToAssign = collect([1, 2, 3])->random(rand(1, 2));
+            
+            foreach ($typesToAssign as $typeId) {
+                // Ensure no duplicates logic just in case
+                $contract = Contract::factory()->create([
+                    'company_id' => $company->id,
+                    'type_framework_agreement_id' => $typeId
+                ]);
+
+                // Create children depending on the type
+                if ($typeId == 3) {
+                    Specific::factory(1)->create([
+                        'contract_id' => $contract->id
+                    ]);
+                    ReportSpecific::factory(rand(0, 1))->create();
+                } elseif ($typeId == 2) {
+                    SpecificResidenceAgreement::factory(1)->create([
+                        'contract_id' => $contract->id
+                    ]);
+                    ReportSpecificResidenceAgreement::factory(rand(0, 1))->create();
+                } elseif ($typeId == 1) {
+                    IndividualInternshipAgreement::factory(1)->create([
+                        'contract_id' => $contract->id
+                    ]);
+                    ReportIndividualInternshipAgreement::factory(rand(0, 1))->create();
+                }
+            }
+        }
 
         $this->call(CareerTeacherSeeder::class);
     }

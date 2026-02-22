@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Rubro
                 document.querySelector(
                     'input[name="contraparte_rubro"]'
-                ).value = company.sector || "";
+                ).value = company.company_category || "";
 
                 // Ámbito
                 if (company.scope === "nacional") {

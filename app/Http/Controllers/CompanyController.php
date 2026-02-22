@@ -131,8 +131,8 @@ class CompanyController extends Controller
     public function show(Company $company): View
     {
         $company = Company::find($company->id);
-       $frameworkAgreement = $company->contracts()->where('type_framework_agreement_id', 2)->first(); // Ajusta el ID/condición    
-  return view('companies.show', compact('company', 'frameworkAgreement'));
+        $frameworkAgreements = $company->contracts()->with(['typeFrameworkAgreement', 'specifics', 'specificResidenceAgreements', 'individualIntershipAgreements'])->get();
+        return view('companies.show', compact('company', 'frameworkAgreements'));
     }
 
     /**

@@ -56,8 +56,8 @@ class FrameworkAgreementController extends Controller
 
     public function create()
     {
-        // Obtener datos para los selects
-        $companies = $this->companyService->getAllCompanies();
+        // Obtener datos para los selects (solo empresas que no tienen convenio marco común)
+        $companies = $this->companyService->getCompaniesWithoutTypeFrameworkAgreement('Convenio Marco');
         
         // Asumiendo que TeacherService tiene estos métodos (o usas Eloquent directo si no)
         $teachers = $this->teacherService->getAllTeachers(); 

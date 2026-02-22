@@ -16,7 +16,10 @@ class AgreementController extends Controller
     public function index()
     {
         try{
-            $agreements = Contract::where('contract_status_id','!=',10)->orderBy('creation_date', 'desc')->paginate(10);
+            $agreements = Contract::with(['company', 'status', 'typeFrameworkAgreement', 'specifics', 'specificResidenceAgreements', 'individualIntershipAgreements'])
+                ->where('contract_status_id','!=',10)
+                ->orderBy('creation_date', 'desc')
+                ->paginate(10);
             $typeFrameworkAgreement = TypeFrameworkAgreement::orderBy('type', 'ASC')->get();
             $statuses = ContractStatus::where('id','!=',10)->orderBy('status', 'ASC')->get();
             if ($agreements->isEmpty()) {

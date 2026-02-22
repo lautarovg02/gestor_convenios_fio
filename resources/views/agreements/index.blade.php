@@ -48,6 +48,7 @@
                                 <th class="col-max-width">Fecha de inicio</th>
                                 <th class="col-max-width">Estado</th>
                                 <th class="text-center">Tipo</th>
+                                <th class="text-center">Subtipo</th>
                                 <th class="text-center">Razón Social</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
@@ -58,6 +59,7 @@
                                     <td class="text-center">{{ $agreement->creation_date }}</td>
                                     <td class="text-center">{{ $agreement->status->status }}</td>
                                     <td class="text-center">{{ $agreement->typeFrameworkAgreement->type }}</td>
+                                    <td class="text-center">{{ $agreement->subtype }}</td>
                                     <td class="text-center">{{ $agreement->company->company_name}}</td>
                                     <td class="text-center">
                                         <a href="{{ route('agreements.show', $agreement->id) }}" class="btn btn-primary btn-sm">

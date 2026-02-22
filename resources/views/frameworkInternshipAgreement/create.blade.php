@@ -90,7 +90,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Rubro</label><span class="text-danger"> *</span>
                     <input type="text" placeholder="Rubro de la empresa" name="contraparte_rubro" class="form-control"
-                        value="{{ old('contraparte_rubro') }}" required readonly>
+                        value="{{ old('contraparte_rubro') }}" required>
 
                     {{-- Validación de errores --}}
 

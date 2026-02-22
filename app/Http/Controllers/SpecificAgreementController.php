@@ -35,17 +35,28 @@ class SpecificAgreementController extends Controller
 
 
 
-    public function create()
-    {
-        $companies = Company::with(['contracts.typeFrameworkAgreement' => function ($query) {
-            $query->where('type', 'Convenio Marco');
-        }])->whereHas('contracts.typeFrameworkAgreement', function ($query) {
-            $query->where('type', 'Convenio Marco');
-        })->get(['id', 'denomination', 'company_name', 'cuit']);
+   public function create()
+{
+    // Buscamos empresas que tengan contratos Marco que NO tengan un específico aún
+    $companies = Company::whereHas('contracts', function ($query) {
+        $query->whereHas('typeFrameworkAgreement', function ($q) {
+            $q->where('type', 'Convenio Marco');
+        })
+        ->whereDoesntHave('specifics'); // filtramos para que solo traiga empresas cuyos contratos marco no tengan específicos.
+    })
+    ->with(['contracts' => function ($query) {
+        // También filtramos la carga para que el select solo vea los disponibles
+        $query->whereHas('typeFrameworkAgreement', function ($q) {
+            $q->where('type', 'Convenio Marco');
+        })
+        ->whereDoesntHave('specifics'); 
+    }])
+    ->get(['id', 'denomination', 'company_name', 'cuit']);
 
-        $students = Student::all();
-        return view('specificAgreement.create', compact('companies', 'students'));
-    }
+    $students = Student::all();
+
+    return view('specificAgreement.create', compact('companies', 'students'));
+}
 
 
 

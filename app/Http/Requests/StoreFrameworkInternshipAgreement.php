@@ -45,7 +45,20 @@ class StoreFrameworkInternshipAgreement extends FormRequest
             'contraparte_rubro' => ['required', 'string'],
             'titular' => ['required', 'string'],
             'confidencialidad' => ['required'],
-            'company_id' => ['required', 'exists:companies,id'],
+            'company_id' => [
+                'required', 
+                'exists:companies,id',
+                function ($attribute, $value, $fail) {
+                    $hasActive = \App\Models\Contract::where('company_id', $value)
+                        ->where('type_framework_agreement_id', 1)
+                        ->whereHas('status', function($q) {
+                            $q->whereNotIn('status', ['Deshabilitado', 'Finalizado']);
+                        })->exists();
+                    if ($hasActive) {
+                        $fail('La empresa ya posee un Convenio Marco de Pasantía activo.');
+                    }
+                },
+            ],
 
             // Dirección
             'calle' => ['required', 'string', 'max:255'],

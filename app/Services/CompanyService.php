@@ -20,6 +20,14 @@ class CompanyService
 
     public function getOrCreateCompany(array $data): Company
     {
+        // Si se provee un company_id válido, retornamos esa empresa directamente
+        if (!empty($data['company_id'])) {
+            $company = Company::find($data['company_id']);
+            if ($company) {
+                return $company;
+            }
+        }
+
         $city = $this->cityService->getOrCreateByNameAndProvince($data['localidad'], $data['provincia']);
         $entity = $this->companyEntityService->getOrCreateByName($data['razon_social']);
 
@@ -30,10 +38,24 @@ class CompanyService
             return $existingCompany;
         }
 
+        // Construir el CUIT a partir de partes si no viene entero
+        $cuit = $data['contraparte_cuit'] ?? null;
+        if (!$cuit && isset($data['cuit_prefijo']) && isset($data['cuit_dni']) && isset($data['cuit_dv'])) {
+            $cuit = $data['cuit_prefijo'] . $data['cuit_dni'] . $data['cuit_dv'];
+        }
+
+        // Buscar por CUIT si está disponible
+        if ($cuit) {
+            $existingCompanyByCuit = Company::where('cuit', $cuit)->first();
+            if ($existingCompanyByCuit) {
+                return $existingCompanyByCuit;
+            }
+        }
+
         // Si no existe, creamos
         return Company::create([
             'denomination' => $data['razon_social'],
-            'cuit' => $data['contraparte_cuit'] ?? null,
+            'cuit' => $cuit,
             'company_name' => $data['razon_social'] ?? null,
             'sector' => $data['contraparte_rubro'] ?? null,
             'company_category' => $data['category'] ?? null,
@@ -60,6 +82,17 @@ class CompanyService
         return Company::select('id', 'denomination', 'cuit')->whereHas('contracts', function ($query) use ($type) {
             $query->whereHas('typeFrameworkAgreement', function ($subQuery) use ($type) {
                 $subQuery->where('type', $type);
+            });
+        })->get();
+    }
+
+    public function getCompaniesWithoutTypeFrameworkAgreement(string $type): Collection
+    {
+        return Company::select('id', 'denomination', 'cuit')->whereDoesntHave('contracts', function ($query) use ($type) {
+            $query->whereHas('typeFrameworkAgreement', function ($subQuery) use ($type) {
+                $subQuery->where('type', $type);
+            })->whereHas('status', function ($statusQuery) {
+                $statusQuery->whereNotIn('status', ['Deshabilitado', 'Finalizado']);
             });
         })->get();
     }
