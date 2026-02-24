@@ -70,17 +70,5 @@ class Contract extends Model
         return $this->hasOne(ContractRejection::class);
     }
 
-    public function getSubtypeAttribute()
-    {
-        if ($this->type_framework_agreement_id == 3 && $this->specifics->isNotEmpty()) {
-            return 'Convenio Específico';
-        }
-        if ($this->type_framework_agreement_id == 1 && $this->individualIntershipAgreements->isNotEmpty()) {
-            return 'Acuerdo Individual de Pasantía';
-        }
-        if ($this->type_framework_agreement_id == 2 && $this->specificResidenceAgreements->isNotEmpty()) {
-            return 'Acuerdo Específico de Residencia';
-        }
-        return '-';
-    }
+
 }

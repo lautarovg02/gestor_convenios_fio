@@ -138,7 +138,14 @@ class DatabaseSeeder extends Seeder
         $this->call(CareerSeeder::class);
 
         Type_Report::factory()->count(5)->create();
-        TypeFrameworkAgreement::factory(3)->create();
+
+        // Deterministico: 1=Pasantía, 2=Residencia, 3=Común
+        \App\Models\TypeFrameworkAgreement::insert([
+            ['id' => 1, 'type' => 'Convenio Marco de Pasantía', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2, 'type' => 'Convenio Marco de Residencia', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3, 'type' => 'Convenio Marco', 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
         ContractStatus::factory(10)->create();
         Student::factory(80)->create();
         
