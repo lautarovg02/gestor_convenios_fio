@@ -12,6 +12,7 @@ class Specific extends Model
 
     protected $fillable = [
         'contract_id',
+        'contract_status_id',
         'signing_date',
         'objective',
         'commitment_parties',
@@ -23,6 +24,11 @@ class Specific extends Model
     public function contract()
     {
         return $this->belongsTo(Contract::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(ContractStatus::class, 'contract_status_id');
     }
 
     //Relación 1:n atributo multivaluado en la tabla ReportType

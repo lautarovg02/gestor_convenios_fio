@@ -15,6 +15,7 @@ class SpecificResidenceAgreement extends Model
         'task',
         'signing_date',
         'contract_id',
+        'contract_status_id',
         'student_id',
         'file',
     ];
@@ -22,6 +23,11 @@ class SpecificResidenceAgreement extends Model
     public function contract()
     {
         return $this->belongsTo(Contract::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(ContractStatus::class, 'contract_status_id');
     }
 
     public function student()

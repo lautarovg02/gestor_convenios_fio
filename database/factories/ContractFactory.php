@@ -44,7 +44,7 @@ class ContractFactory extends Factory
             'contact_employee_id' => Employee::inRandomOrder()->first()->id ?? Employee::factory(),
             'representative_employee_id' => Employee::inRandomOrder()->first()->id ?? Employee::factory(),
             'rector' => Teacher::where('is_rector', true)->inRandomOrder()->first()->id ?? Teacher::factory()->create(['is_rector' => true])->id, 
-            'contract_status_id' => ContractStatus::inRandomOrder()->first()->id ?? ContractStatus::factory(),
+            'contract_status_id' => ContractStatus::whereIn('status', ['SEVyT', 'SEVyT firma', 'En ejecución', 'Finalizado'])->inRandomOrder()->first()->id ?? ContractStatus::factory(),
             'type_framework_agreement_id' => $type->id,
             'file' => random_bytes(256), // 256 bytes binarios aleatorios
         ];

@@ -80,10 +80,18 @@ class CompanyService
     public function getCompaniesByTypeFrameworkAgreement(string $type): Collection
     {
         return Company::select('id', 'denomination', 'cuit')->whereHas('contracts', function ($query) use ($type) {
-            $query->whereHas('typeFrameworkAgreement', function ($subQuery) use ($type) {
-                $subQuery->where('type', $type);
-            });
-        })->get();
+        $query->whereHas('typeFrameworkAgreement', function ($subQuery) use ($type) {
+            $subQuery->where('type', $type);
+        })->whereHas('status', function ($q) {
+            $q->whereNotIn('status', ['Finalizado', 'Deshabilitado']);
+        });
+    })->with(['contracts' => function ($query) use ($type) {
+        $query->whereHas('typeFrameworkAgreement', function ($q) use ($type) {
+            $q->where('type', $type);
+        })->whereHas('status', function ($q) {
+            $q->whereNotIn('status', ['Finalizado', 'Deshabilitado']);
+        });
+    }])->get();
     }
 
     public function getCompaniesWithoutTypeFrameworkAgreement(string $type): Collection

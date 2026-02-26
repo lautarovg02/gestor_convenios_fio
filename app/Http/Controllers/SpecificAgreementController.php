@@ -37,20 +37,22 @@ class SpecificAgreementController extends Controller
 
    public function create()
 {
-    // Buscamos empresas que tengan contratos Marco que NO tengan un específico aún
-    $companies = Company::whereHas('contracts', function ($query) {
-        $query->whereHas('typeFrameworkAgreement', function ($q) {
-            $q->where('type', 'Convenio Marco');
-        })
-        ->whereDoesntHave('specifics'); // filtramos para que solo traiga empresas cuyos contratos marco no tengan específicos.
-    })
-    ->with(['contracts' => function ($query) {
-        // También filtramos la carga para que el select solo vea los disponibles
-        $query->whereHas('typeFrameworkAgreement', function ($q) {
-            $q->where('type', 'Convenio Marco');
-        })
-        ->whereDoesntHave('specifics'); 
-    }])
+    // Buscamos empresas que tengan contratos Marco que NO estén Finalizados o Deshabilitados
+ $companies = Company::whereHas('contracts', function ($query) {
+     $query->whereHas('typeFrameworkAgreement', function ($q) {
+         $q->where('type', 'Convenio Marco');
+     })->whereHas('status', function ($q) {
+         $q->whereNotIn('status', ['Finalizado', 'Deshabilitado']);
+     });
+ })
+ ->with(['contracts' => function ($query) {
+     // También filtramos la carga para que el select solo vea los disponibles
+     $query->whereHas('typeFrameworkAgreement', function ($q) {
+         $q->where('type', 'Convenio Marco');
+     })->whereHas('status', function ($q) {
+         $q->whereNotIn('status', ['Finalizado', 'Deshabilitado']);
+     });
+ }])
     ->get(['id', 'denomination', 'company_name', 'cuit']);
 
     $students = Student::all();
@@ -147,9 +149,12 @@ class SpecificAgreementController extends Controller
             $validated['file'] = $filePath;
         }
 
+        $status = \App\Models\ContractStatus::firstOrCreate(['status' => 'En Departamento']);
+
         // Crear convenio específico en la base de datos
         $convenio = Specific::create([
             'contract_id' => $validated['contract_id'],
+            'contract_status_id' => $status->id,
             'signing_date' => $validated['fecha_firma'],
             'objective' => $validated['objetivo'],
             'commitment_parties' => $validated['compromisos'],
@@ -164,17 +169,6 @@ class SpecificAgreementController extends Controller
         $convenio->students()->attach($request->student_id, [
             'specific_contract_id' => $convenio->contract_id
         ]);
-
-        $contract = Contract::find($validated['contract_id']);
-        if ($contract) {
-            $status = ContractStatus::firstOrCreate(
-                ['status' => 'En Departamento'],
-                ['time_limit' => null] // o lo que corresponda
-            );
-
-            $contract->contract_status_id = $status->id;
-            $contract->save();
-        }
 
 
 

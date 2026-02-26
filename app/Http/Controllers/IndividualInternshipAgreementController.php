@@ -90,8 +90,11 @@ public function store(StoreIndividualInternshipAgreement $request)
 
         $student_id = $data['student_id'];
 
+        $status = \App\Models\ContractStatus::firstOrCreate(['status' => 'En Coordinación']);
+
         $agreement = IndividualInternshipAgreement::create([
             'contract_id' => $data['contract_id'],
+            'contract_status_id' => $status->id,
             'area' => $data['area_pasantia'],
             'assignment' => $data['sitio_pasantia'],
             'task' => $data['tareas'],

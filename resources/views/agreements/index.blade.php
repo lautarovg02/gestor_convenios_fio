@@ -60,8 +60,7 @@
                                     <td class="text-center">{{ $agreement->creation_date }}</td>
                                     <td class="text-center">{{ $agreement->status->status }}</td>
                                     <td class="text-center fw-bold">{{ $agreement->typeFrameworkAgreement->type }}</td>
-                                    {{-- Subtype for Marco is not applicable in this new view, it's just Marco --}}
-                                    <td class="text-center text-muted">-</td>
+                                    <td class="text-center text-muted">Marco</td>
                                     <td class="text-center">{{ $agreement->company->company_name}}</td>
                                     <td class="text-center">
                                         <a href="{{ route('agreements.show', $agreement->id) }}" class="btn btn-primary btn-sm" title="Ver Convenio Marco">
@@ -79,9 +78,9 @@
                                     @foreach($agreement->specifics as $specific)
                                         <tr class="table-light">
                                             <td class="text-center"><i class="bi bi-arrow-return-right text-muted me-2"></i>{{ $specific->signing_date ?? 'Sin Fecha' }}</td>
-                                            <td class="text-center"><span class="badge bg-secondary">Derivado</span></td>
+                                            <td class="text-center">{{ $specific->status->status ?? 'Sin Estado' }}</td>
                                             <td class="text-center text-muted">Convenio Específico</td>
-                                            <td class="text-center text-muted">-</td>
+                                            <td class="text-center text-muted">Particular</td>
                                             <td class="text-center text-muted">{{ $agreement->company->company_name}}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('specificAgreement.show', $specific->id) }}" class="btn btn-outline-primary btn-sm" title="Ver Convenio Específico">
@@ -97,9 +96,9 @@
                                     @foreach($agreement->individualIntershipAgreements as $individual)
                                         <tr class="table-light">
                                             <td class="text-center"><i class="bi bi-arrow-return-right text-muted me-2"></i>{{ $individual->signing_date ?? 'Sin Fecha' }}</td>
-                                            <td class="text-center"><span class="badge bg-secondary">Derivado</span></td>
+                                            <td class="text-center">{{ $individual->status->status ?? 'Sin Estado' }}</td>
                                             <td class="text-center text-muted">Acu. Indiv. de Pasantía</td>
-                                            <td class="text-center text-muted">-</td>
+                                            <td class="text-center text-muted">Particular</td>
                                             <td class="text-center text-muted">{{ $agreement->company->company_name}}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('individual-internship-agreements.show', $individual->id) }}" class="btn btn-outline-primary btn-sm" title="Ver Acuerdo Individual">
@@ -115,9 +114,9 @@
                                     @foreach($agreement->specificResidenceAgreements as $residence)
                                         <tr class="table-light">
                                             <td class="text-center"><i class="bi bi-arrow-return-right text-muted me-2"></i>{{ $residence->signing_date ?? 'Sin Fecha' }}</td>
-                                            <td class="text-center"><span class="badge bg-secondary">Derivado</span></td>
+                                            <td class="text-center">{{ $residence->status->status ?? 'Sin Estado' }}</td>
                                             <td class="text-center text-muted">Acu. Espec. de Residencia</td>
-                                            <td class="text-center text-muted">-</td>
+                                            <td class="text-center text-muted">Particular</td>
                                             <td class="text-center text-muted">{{ $agreement->company->company_name}}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('specificResidenceAgreement.show', $residence->id) }}" class="btn btn-outline-primary btn-sm" title="Ver Acuerdo Específico de Residencia">

@@ -141,22 +141,8 @@ class FrameworkResidenceAgreementController extends Controller
             'is_dean' => $faker->boolean,
         ]);
 
-        // Crear los estados del contrato
-        //el time_limit de los estados se define en horas
-        $statuses = [
-            ['status' => 'SEVyT (Estado de aprobación/Análisis)', 'time_limit' => 48],
-            ['status' => 'SEVyT-Firma', 'time_limit' => 48],
-            ['status' => 'En ejecución', 'time_limit' => null],
-            ['status' => 'Finalizado', 'time_limit' => null],
-            ['status' => 'En departamento/En coordinación', 'time_limit' => 48],
-            ['status' => 'SEVyT (Estado de aprobación)', 'time_limit' => 48],
-            ['status' => 'SEVyT-Firma (particular)', 'time_limit' => 48],
-            ['status' => 'Contraparte', 'time_limit' => 360], // 15 días * 24h
-            ['status' => 'SEVyT-Enviar a CA', 'time_limit' => 24],
-            ['status' => 'En CA', 'time_limit' => null],
-        ];
         // Crear el primer estado del contrato
-        $contract_status = $this->contractStatusService->createStatus($statuses[0]);
+    $contract_status = \App\Models\ContractStatus::firstOrCreate(['status' => 'SEVyT']);
 
         // Crear o encontrar el tipo de convenio marco
         $type = $this->typeFrameworkAgreementService->findOrCreateByType('Convenio Marco de Residencia');

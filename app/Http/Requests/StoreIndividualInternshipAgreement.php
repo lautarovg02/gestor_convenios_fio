@@ -15,7 +15,16 @@ class StoreIndividualInternshipAgreement extends FormRequest
     {
         return [
             // --- Contrato ---
-            'contract_id' => 'required|exists:contracts,id',
+            'contract_id' => [
+                'required',
+                'exists:contracts,id',
+                function ($attribute, $value, $fail) {
+                    $contract = \App\Models\Contract::find($value);
+                    if ($contract && in_array($contract->status->status, ['Finalizado', 'Deshabilitado'])) {
+                        $fail('El convenio marco seleccionado se encuentra Finalizado o Deshabilitado.');
+                    }
+                },
+            ],
 
             // --- Empresa (solo para mostrar, no es obligatorio validar) ---
             'company_denomination'       => 'nullable|string|max:255',

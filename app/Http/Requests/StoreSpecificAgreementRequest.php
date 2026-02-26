@@ -14,7 +14,16 @@ class StoreSpecificAgreementRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'contract_id' => 'required|exists:contracts,id',
+            'contract_id' => [
+                'required',
+                'exists:contracts,id',
+                function ($attribute, $value, $fail) {
+                    $contract = \App\Models\Contract::find($value);
+                    if ($contract && in_array($contract->status->status, ['Finalizado', 'Deshabilitado'])) {
+                        $fail('El convenio marco seleccionado se encuentra Finalizado o Deshabilitado.');
+                    }
+                },
+            ],
             'razon_social' => 'required|string|max:255',
             'empresa_calle' => 'nullable|string|max:255',
             'empresa_numero' => 'nullable|string|max:20',

@@ -112,11 +112,7 @@ class FrameworkAgreementController extends Controller
         ]);
 
         // 6) Estado inicial del contrato
-        // Nota: Asumiendo que findOrCreateStatus o createStatus devuelve el objeto, obtenemos el ID luego.
-        $contract_status = $this->contractStatusService->createStatus([
-            'status'     => 'SEVyT (Estado de aprobación/Análisis)',
-            'time_limit' => 48, 
-        ]);
+        $contract_status = \App\Models\ContractStatus::firstOrCreate(['status' => 'SEVyT']);
         // Si tu servicio devuelve el modelo, usa $contract_status->id abajo. Si devuelve ID, úsalo directo.
         // Asumiré que devuelve el Modelo para el ejemplo, si no ajusta a $contract_status
 

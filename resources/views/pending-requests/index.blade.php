@@ -45,12 +45,12 @@
                             @foreach ($pendingRequests as $request)
                                 <tr>
                                     <td class="text-center ">{{ $request->creation_date }}</td>
-                                    <td class="text-center ">{{ $request->status->status }}</td>
-                                    <td class="text-center">{{ $request->typeFrameworkAgreement->type }}</td>
-                                    <td class="text-center">{{ $request->company->company_name}}</td>
+                                    <td class="text-center ">{{ $request->status_name }}</td>
+                                    <td class="text-center">{{ $request->type_name }}</td>
+                                    <td class="text-center">{{ $request->company_name}}</td>
                                     <td class="text-nowrap text-center">
                                         @can('aprobar rechazar solicitudes')
-                                        <form action="{{ route('contracts.approve', $request->id) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('contracts.approve', ['type' => $request->model_type, 'id' => $request->id]) }}" method="POST" class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-success me-1">
                                                 Aprobar <i class="bi bi-check-circle"></i>
@@ -59,7 +59,8 @@
                                         <button type="button" class="btn btn-sm btn-danger" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#rejectModal"
-                                                data-contract-id="{{ $request->id }}">
+                                                data-contract-id="{{ $request->id }}"
+                                                data-model-type="{{ $request->model_type }}">
                                             Rechazar <i class="bi bi-x-circle"></i>
                                         </button>
                                         @endcan
@@ -122,12 +123,12 @@
         rejectModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;
             var contractId = button.getAttribute('data-contract-id');
+            var modelType = button.getAttribute('data-model-type');
             var form = document.getElementById('rejectForm');
             
             // Construir la URL de acción dinámicamente
-            // Asumiendo que la ruta es 'contracts.reject' aceptando el ID del contrato
-            var actionUrl = "{{ route('contracts.reject', ':id') }}";
-            actionUrl = actionUrl.replace(':id', contractId);
+            var actionUrl = "{{ route('contracts.reject', ['type' => ':type', 'id' => ':id']) }}";
+            actionUrl = actionUrl.replace(':type', modelType).replace(':id', contractId);
             
             form.action = actionUrl;
         });

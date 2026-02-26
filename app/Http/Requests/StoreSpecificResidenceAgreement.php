@@ -28,10 +28,18 @@ class StoreSpecificResidenceAgreement extends FormRequest
         return [
             'companyName' => 'required|string|max:255',
             'companyRepresentative' => 'required|string|max:255',
-            'contract_id' => 'required',
             'companyId' => 'required',
             'agreementName' => 'required|string|max:255',
-            'contract_id' => 'required',
+            'contract_id' => [
+                'required',
+                'exists:contracts,id',
+                function ($attribute, $value, $fail) {
+                    $contract = \App\Models\Contract::find($value);
+                    if ($contract && in_array($contract->status->status, ['Finalizado', 'Deshabilitado'])) {
+                        $fail('El convenio marco seleccionado se encuentra Finalizado o Deshabilitado.');
+                    }
+                },
+            ],
             'tasks' => 'required|string',
             'fecha_firma' => 'nullable|date',
             'fecha_inicio' => 'nullable|date',

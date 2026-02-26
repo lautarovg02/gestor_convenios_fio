@@ -17,9 +17,8 @@ class TestContractsSeeder extends Seeder
      */
     public function run(): void
     {
-        // Buscamos el primer estado que no sea Finalizado ni Deshabilitado
-        // para que aparezcan en la lista de pendientes
-        $status = ContractStatus::whereNotIn('status', ['Finalizado', 'Deshabilitado'])->first();
+        // Buscamos un estado activo válido para un Convenio Marco
+        $status = ContractStatus::whereIn('status', ['SEVyT', 'SEVyT firma', 'En ejecución'])->inRandomOrder()->first();
 
         $baseData = [
             'signing_date'                 => null,
@@ -38,6 +37,9 @@ class TestContractsSeeder extends Seeder
             'file'                         => null,
         ];
 
+        $statusEnDepto = ContractStatus::firstOrCreate(['status' => 'En Departamento']);
+        $statusEnCoord = ContractStatus::firstOrCreate(['status' => 'En Coordinación']);
+
         // -------------------------------------------------------
         // 2 Convenios ESPECÍFICOS (para Director)
         // -------------------------------------------------------
@@ -48,6 +50,7 @@ class TestContractsSeeder extends Seeder
 
             Specific::create([
                 'contract_id'                => $contract->id,
+                'contract_status_id'         => $statusEnDepto->id,
                 'signing_date'               => null,
                 'objective'                  => "Objetivo del convenio específico de prueba #{$i}",
                 'commitment_parties'         => "Compromisos de prueba #{$i}",
@@ -69,6 +72,7 @@ class TestContractsSeeder extends Seeder
 
             SpecificResidenceAgreement::create([
                 'contract_id'           => $contract->id,
+                'contract_status_id'    => $statusEnCoord->id,
                 'title'                 => "Residencia de prueba #{$i}",
                 'internship_initial_date' => now()->toDateString(),
                 'task'                  => "Tareas de residencia #{$i}",
@@ -90,6 +94,7 @@ class TestContractsSeeder extends Seeder
 
             IndividualInternshipAgreement::create([
                 'contract_id'           => $contract->id,
+                'contract_status_id'    => $statusEnCoord->id,
                 'months_quantity'       => 6,
                 'task'                  => "Tareas de pasantía #{$i}",
                 'internship_initial_date' => now()->toDateString(),

@@ -111,8 +111,8 @@ Route::get('/contract/{contract}/download-doc/{type}', [ContractController::clas
 
 // PENDING REQUESTS
     Route::get('pending-requests', [PendingRequestController::class, 'index'])->name('pending-requests.index');
-    Route::post('contracts/{contract}/approve', [PendingRequestController::class, 'approve'])->name('contracts.approve')->middleware('can:aprobar rechazar solicitudes');
-    Route::post('contracts/{contract}/reject', [PendingRequestController::class, 'reject'])->name('contracts.reject')->middleware('can:aprobar rechazar solicitudes');
+    Route::post('agreements/{type}/{id}/approve', [PendingRequestController::class, 'approve'])->name('contracts.approve')->middleware('can:aprobar rechazar solicitudes');
+    Route::post('agreements/{type}/{id}/reject', [PendingRequestController::class, 'reject'])->name('contracts.reject')->middleware('can:aprobar rechazar solicitudes');
 
 // REJECTED REQUESTS
 Route::get('rejected-requests', [RejectedRequestController::class, 'index'])->name('rejected-requests.index');

@@ -65,6 +65,7 @@ class SpecificResidenceAgreementController extends Controller
             ]);
 
 
+            $status = \App\Models\ContractStatus::firstOrCreate(['status' => 'En Coordinación']);
 
             $agreement = SpecificResidenceAgreement::create([
                 'title' => $data['agreementName'],
@@ -72,6 +73,7 @@ class SpecificResidenceAgreementController extends Controller
                 'signing_date' => $data['fecha_firma'] ?? null,
                 'student_id' => $student->id,
                 'contract_id' => $data['contract_id'],
+                'contract_status_id' => $status->id,
                 'file' => $data['file'] ?? null,
                 'internship_initial_date' => $data['fecha_inicio'],
             ]);

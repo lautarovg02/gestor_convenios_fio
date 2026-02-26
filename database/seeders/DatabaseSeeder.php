@@ -160,28 +160,35 @@ class DatabaseSeeder extends Seeder
             $typesToAssign = collect([1, 2, 3])->random(rand(1, 2));
             
             foreach ($typesToAssign as $typeId) {
-                // Ensure no duplicates logic just in case
                 $contract = Contract::factory()->create([
                     'company_id' => $company->id,
                     'type_framework_agreement_id' => $typeId
                 ]);
 
-                // Create children depending on the type
-                if ($typeId == 3) {
-                    Specific::factory(1)->create([
-                        'contract_id' => $contract->id
-                    ]);
-                    ReportSpecific::factory(rand(0, 1))->create();
-                } elseif ($typeId == 2) {
-                    SpecificResidenceAgreement::factory(1)->create([
-                        'contract_id' => $contract->id
-                    ]);
-                    ReportSpecificResidenceAgreement::factory(rand(0, 1))->create();
-                } elseif ($typeId == 1) {
-                    IndividualInternshipAgreement::factory(1)->create([
-                        'contract_id' => $contract->id
-                    ]);
-                    ReportIndividualInternshipAgreement::factory(rand(0, 1))->create();
+                // Solo algunos contratos tendrán hijos, el resto quedarán vacíos (y quizás Finalizados)
+                $createChildren = rand(0, 1) === 1;
+
+                if ($createChildren) {
+                    // Si tiene hijos, nos aseguramos de que el padre NO esté finalizado ni deshabilitado
+                    $activeStatus = ContractStatus::whereIn('status', ['SEVyT', 'SEVyT firma', 'En ejecución'])->inRandomOrder()->first();
+                    $contract->update(['contract_status_id' => $activeStatus->id]);
+
+                    if ($typeId == 3) {
+                        Specific::factory(rand(1, 3))->create([
+                            'contract_id' => $contract->id
+                        ]);
+                        ReportSpecific::factory(rand(0, 1))->create();
+                    } elseif ($typeId == 2) {
+                        SpecificResidenceAgreement::factory(rand(1, 3))->create([
+                            'contract_id' => $contract->id
+                        ]);
+                        ReportSpecificResidenceAgreement::factory(rand(0, 1))->create();
+                    } elseif ($typeId == 1) {
+                        IndividualInternshipAgreement::factory(rand(1, 3))->create([
+                            'contract_id' => $contract->id
+                        ]);
+                        ReportIndividualInternshipAgreement::factory(rand(0, 1))->create();
+                    }
                 }
             }
         }
