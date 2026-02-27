@@ -38,7 +38,6 @@ function clearCompanyFields() {
         "empresa_numero",
         "nro_calle",
         "empresa_codigo_postal",
-        // OJO: provincia/ciudad NO las tocamos aquí; las maneja getCitiesAndProvinces.js
         "empresa_pais",
         "pais",
     ].forEach((k) => setVal(k, ""));
@@ -49,20 +48,66 @@ function clearCompanyFields() {
 function clearEmployees() {
     const selC = document.getElementById("selectEmployeeContact");
     const selF = document.getElementById("selectEmployeeFirma");
-    if (selC)
-        selC.innerHTML =
-            '<option value="">Seleccione un representante de contacto</option>';
-    if (selF)
-        selF.innerHTML =
-            '<option value="">Seleccione un representante de firma</option>';
+    if (selC) selC.innerHTML = '<option value="">Seleccione un representante de contacto</option>';
+    if (selF) selF.innerHTML = '<option value="">Seleccione un representante de firma</option>';
 }
 
 // parte CUIT en 3 campos (acepta "XX-XXXXXXXX-X" o "XXXXXXXXXXX" o number)
 function splitCUIT(cuitRaw) {
     const digits = String(cuitRaw ?? "").replace(/\D/g, "");
-    const d =
-        digits.length >= 11 ? digits.slice(0, 11) : digits.padStart(11, "0");
+    const d = digits.length >= 11 ? digits.slice(0, 11) : digits.padStart(11, "0");
     return { prefijo: d.slice(0, 2), dni: d.slice(2, 10), dv: d.slice(10, 11) };
+}
+
+// ================== Toggle modo empleado ==================
+function toggleEmployeeMode(hasEmployees) {
+    const contactSelectWrapper = document.getElementById("contactSelectWrapper");
+    const firmaSelectWrapper = document.getElementById("firmaSelectWrapper");
+    const noContactMsg = document.getElementById("noContactMsg");
+    const noFirmaMsg = document.getElementById("noFirmaMsg");
+
+    if (hasEmployees) {
+        contactSelectWrapper?.classList.remove("d-none");
+        firmaSelectWrapper?.classList.remove("d-none");
+        noContactMsg?.classList.add("d-none");
+        noFirmaMsg?.classList.add("d-none");
+        setEmployeeFieldsReadonly(true);
+    } else {
+        contactSelectWrapper?.classList.add("d-none");
+        firmaSelectWrapper?.classList.add("d-none");
+        noContactMsg?.classList.remove("d-none");
+        noFirmaMsg?.classList.remove("d-none");
+        setEmployeeFieldsReadonly(false);
+        clearEmployeeTextFields();
+    }
+}
+
+function setEmployeeFieldsReadonly(readonly) {
+    const names = [
+        "contact_nombre", "contact_apellido", "contact_dni",
+        "contact_celular", "contact_email", "contact_cargo",
+        "cuil_prefijo", "cuil_dni", "cuil_dv",
+        "firma_nombre", "firma_apellido", "firma_dni",
+        "firma_celular", "firma_email", "firma_cargo",
+    ];
+    names.forEach(name => {
+        const el = document.querySelector(`[name="${name}"]`);
+        if (el) el.readOnly = readonly;
+    });
+}
+
+function clearEmployeeTextFields() {
+    const names = [
+        "contact_nombre", "contact_apellido", "contact_dni",
+        "contact_celular", "contact_email", "contact_cargo",
+        "cuil_prefijo", "cuil_dni", "cuil_dv",
+        "firma_nombre", "firma_apellido", "firma_dni",
+        "firma_celular", "firma_email", "firma_cargo",
+    ];
+    names.forEach(name => {
+        const el = document.querySelector(`[name="${name}"]`);
+        if (el) el.value = "";
+    });
 }
 
 // ================== Carga de empresa + empleados ==================
@@ -72,70 +117,36 @@ async function loadCompany(companyId) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const company = await res.json();
 
-        // CUIT dividido en 3 inputs (los de tu Blade)
         const { prefijo, dni, dv } = splitCUIT(company.cuit);
         setValAny(["cuit_prefijo"], prefijo);
         setValAny(["cuit_dni"], dni);
         setValAny(["cuit_dv"], dv);
 
-        // Razón social / Rubro / Entidad
-        setValAny(
-            ["razon_social", "contraparte_razon_social"],
-            company.denomination ?? company.company_name ?? ""
-        );
-        setValAny(
-            ["contraparte_rubro", "rubro", "sector"],
-            company.company_category ?? company.sector ?? ""
-        );
+        setValAny(["razon_social", "contraparte_razon_social"], company.denomination ?? company.company_name ?? "");
+        setValAny(["contraparte_rubro", "rubro", "sector"], company.company_category ?? company.sector ?? "");
         setValAny(["empresa_entidad", "entidad"], company.entity_name || "");
 
-        // Ámbito (si tenés los radios)
         const scope = (company.scope ?? "").toLowerCase().trim();
         setChecked("ambitoNacional", scope.startsWith("nac"));
         setChecked("ambitoInternacional", scope.startsWith("int"));
 
-        // Empresa visible en Contacto y Firma (no pisamos si vienen vacíos desde empleado)
-        setValAny(
-            ["contact_empresa", "empresa_contacto", "empresa"],
-            company.company_name ?? company.denomination ?? ""
-        );
-        setValAny(
-            ["firma_empresa_razon_social", "empresa_firma", "empresa"],
-            company.denomination ?? company.company_name ?? ""
-        );
+        setValAny(["contact_empresa", "empresa_contacto", "empresa"], company.company_name ?? company.denomination ?? "");
+        setValAny(["firma_empresa_razon_social", "empresa_firma", "empresa"], company.denomination ?? company.company_name ?? "");
 
-        // Dirección (sin provincia/ciudad — las maneja geoUI)
         const dir = company?.direccion || company?.address || {};
-        setValAny(
-            ["empresa_calle", "calle"],
-            dir.calle ?? company.street ?? ""
-        );
-        setValAny(
-            ["empresa_numero", "nro_calle", "numero", "nro"],
-            dir.numero ?? company.number ?? ""
-        );
-        setValAny(
-            ["postal_code", "codigo_postal", "cp"],
-            dir.postal_code ?? dir.zip ?? ""
-        );
-        setValAny(
-            ["empresa_pais", "pais"],
-            dir.pais ?? company?.country ?? "Argentina"
-        );
+        setValAny(["empresa_calle", "calle"], dir.calle ?? company.street ?? "");
+        setValAny(["empresa_numero", "nro_calle", "numero", "nro"], dir.numero ?? company.number ?? "");
+        setValAny(["postal_code", "codigo_postal", "cp"], dir.postal_code ?? dir.zip ?? "");
+        setValAny(["empresa_pais", "pais"], dir.pais ?? company?.country ?? "Argentina");
 
-        // Provincia / Ciudad: usar integración con tu loader para evitar bucles
-        const provName =
-            company?.provincia ?? company?.direccion?.provincia ?? "";
+        const provName = company?.provincia ?? company?.direccion?.provincia ?? "";
         const cityName = company?.city ?? company?.direccion?.ciudad ?? "";
         const postal_code = company?.postal_code ?? "";
 
         if (postal_code) setVal("postal_code", postal_code);
-
         if (provName) setVal("provincia", provName);
-
         if (cityName) setVal("ciudad", cityName);
 
-        // Empleados (solo representantes)
         await loadEmployees(companyId);
     } catch (error) {
         console.error("Error al obtener datos de la empresa:", error);
@@ -143,20 +154,16 @@ async function loadCompany(companyId) {
 }
 
 async function loadEmployees(companyId) {
-    const selectEmployeeContact = document.getElementById(
-        "selectEmployeeContact"
-    );
+    const selectEmployeeContact = document.getElementById("selectEmployeeContact");
     const selectEmployeeFirma = document.getElementById("selectEmployeeFirma");
 
     if (selectEmployeeContact) {
         selectEmployeeContact.disabled = true;
-        selectEmployeeContact.innerHTML =
-            '<option value="">Cargando representantes de contacto...</option>';
+        selectEmployeeContact.innerHTML = '<option value="">Cargando representantes de contacto...</option>';
     }
     if (selectEmployeeFirma) {
         selectEmployeeFirma.disabled = true;
-        selectEmployeeFirma.innerHTML =
-            '<option value="">Cargando representantes de firma...</option>';
+        selectEmployeeFirma.innerHTML = '<option value="">Cargando representantes de firma...</option>';
     }
 
     try {
@@ -168,20 +175,17 @@ async function loadEmployees(companyId) {
             if (e.text) return e.text;
             const ape = e.lastname ?? "";
             const nom = e.name ?? "";
-            const cargo = e.position ? ` - ${e.position}` : "";
             const dni = e.dni ? ` - (DNI: ${e.dni})` : "";
             return `${ape}, ${nom}${dni}`.trim();
         };
 
         if (selectEmployeeContact) {
             selectEmployeeContact.disabled = false;
-            selectEmployeeContact.innerHTML =
-                '<option value="">Seleccione un representante de contacto</option>';
+            selectEmployeeContact.innerHTML = '<option value="">Seleccione un representante de contacto</option>';
         }
         if (selectEmployeeFirma) {
             selectEmployeeFirma.disabled = false;
-            selectEmployeeFirma.innerHTML =
-                '<option value="">Seleccione un representante de firma</option>';
+            selectEmployeeFirma.innerHTML = '<option value="">Seleccione un representante de firma</option>';
         }
 
         if (Array.isArray(employees) && employees.length) {
@@ -190,21 +194,17 @@ async function loadEmployees(companyId) {
                 optC.value = e.id;
                 optC.textContent = makeLabel(e);
                 const optF = optC.cloneNode(true);
-                if (selectEmployeeContact)
-                    selectEmployeeContact.appendChild(optC);
+                if (selectEmployeeContact) selectEmployeeContact.appendChild(optC);
                 if (selectEmployeeFirma) selectEmployeeFirma.appendChild(optF);
             });
+            toggleEmployeeMode(true);
         } else {
-            if (selectEmployeeContact)
-                selectEmployeeContact.innerHTML =
-                    '<option value="">No hay representantes para esta empresa</option>';
-            if (selectEmployeeFirma)
-                selectEmployeeFirma.innerHTML =
-                    '<option value="">No hay representantes para esta empresa</option>';
+            toggleEmployeeMode(false);
         }
     } catch (error) {
         console.error("Error al obtener datos de los empleados:", error);
         clearEmployees();
+        toggleEmployeeMode(false);
     }
 }
 

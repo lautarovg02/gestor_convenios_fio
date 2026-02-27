@@ -90,6 +90,11 @@ class StoreFrameworkResidenceAgreement extends FormRequest
             'lugar_firma' => ['required', 'string'],
             'fecha_firma' => ['required', 'date'],
 
+            // Responsables institucionales
+            'teacher_id'   => ['required', 'exists:teachers,id'],
+            'rector_id'    => ['required', 'exists:teachers,id'],
+            'secretary_id' => ['required', 'exists:secretaries,id'],
+
             // Documentos
             'doc_afip' => [
                 'nullable',
@@ -170,7 +175,15 @@ class StoreFrameworkResidenceAgreement extends FormRequest
             // Lugar y fecha
             'lugar_firma.required' => 'El lugar de la firma es obligatorio.',
             'fecha_firma.required' => 'La fecha de la firma es obligatoria.',
-            'fecha_firma.date' => 'La fecha de la firma no es válida.',
+            'fecha_firma.date'     => 'La fecha de la firma no es válida.',
+
+            // Responsables institucionales
+            'teacher_id.required'   => 'Debe seleccionar un docente responsable.',
+            'teacher_id.exists'     => 'El docente seleccionado no existe.',
+            'rector_id.required'    => 'Debe seleccionar un rector.',
+            'rector_id.exists'      => 'El rector seleccionado no existe.',
+            'secretary_id.required' => 'Debe seleccionar una secretaria.',
+            'secretary_id.exists'   => 'La secretaria seleccionada no existe.',
 
             //Archivos
             'doc_afip' => 'El archivo debe ser en formato pdf/jpg/jpeg/png',

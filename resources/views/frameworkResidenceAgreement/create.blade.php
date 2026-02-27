@@ -224,14 +224,18 @@
             <div class="mb-4 border rounded containerSectionForm">
                 <h4 class="TitleSection">Representante de contacto</h4>
 
-                <div class="mb-3">
-
-                    <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label><span
+                <div id="contactSelectWrapper" class="mb-3 d-none">
+                    <label class="form-label fs-6 fw-bold" for="selectEmployeeContact">Seleccionar Representante existente</label><span
                         class="text-danger"> *</span>
                     <select id="selectEmployeeContact" name="id_employee" class="form-select"
-                        data-preselected="{{ old('id_employee', $preselectedEmployeeId ?? '') }}" required>
+                        data-preselected="{{ old('id_employee', $preselectedEmployeeId ?? '') }}">
                         <option value="">Seleccione un representante</option>
                     </select>
+                </div>
+
+                <div id="noContactMsg" class="alert alert-info d-none">
+                    <i class="bi bi-info-circle me-2"></i>
+                    La empresa no tiene representantes registrados. Completá los datos para crear uno nuevo.
                 </div>
 
                 <div class="containerInputNameLastName">
@@ -339,9 +343,20 @@
                     <input type="checkbox" id="sameRepresentative"> El representante de contacto es también el de firma
                 </div>
 
+                <div id="firmaSelectWrapper" class="mb-3 d-none mt-2">
+                    <label class="form-label fs-6 fw-bold" for="selectEmployeeFirma">Seleccionar Representante de Firma existente</label><span
+                        class="text-danger"> *</span>
+                    <select id="selectEmployeeFirma" name="id_employee_firma" class="form-select">
+                        <option value="">Seleccione un representante de firma</option>
+                    </select>
+                </div>
+
+                <div id="noFirmaMsg" class="alert alert-info d-none">
+                    <i class="bi bi-info-circle me-2"></i>
+                    La empresa no tiene representantes de firma registrados. Completá los datos para crear uno nuevo.
+                </div>
 
                 <div class="containerInputNameLastName">
-
                     <div class="mb-3">
                         <label class="form-label fs-6 fw-bold">Nombre(s)</label><span class="text-danger"> *</span>
                         <input type="text" name="firma_nombre" placeholder="Nombre" class="form-control"
@@ -475,6 +490,57 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
+                </div>
+
+            </div>
+
+            {{-- Responsables Institucionales FIO --}}
+            <div class="mb-4 border rounded containerSectionForm">
+                <h4 class="TitleSection">Responsables Institucionales (FIO)</h4>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6 fw-bold" for="teacher_id">Docente Responsable</label><span class="text-danger"> *</span>
+                    <select id="teacher_id" name="teacher_id" class="form-select" required>
+                        <option value="">Seleccionar docente responsable</option>
+                        @foreach ($teachers as $teacher)
+                            <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                                {{ $teacher->lastname }}, {{ $teacher->name }} — DNI: {{ $teacher->dni }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('teacher_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6 fw-bold" for="rector_id">Rector</label><span class="text-danger"> *</span>
+                    <select id="rector_id" name="rector_id" class="form-select" required>
+                        <option value="">Seleccionar rector</option>
+                        @foreach ($rectors as $rector)
+                            <option value="{{ $rector->id }}" {{ old('rector_id') == $rector->id ? 'selected' : '' }}>
+                                {{ $rector->lastname }}, {{ $rector->name }} — DNI: {{ $rector->dni }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('rector_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6 fw-bold" for="secretary_id">Secretaria/o</label><span class="text-danger"> *</span>
+                    <select id="secretary_id" name="secretary_id" class="form-select" required>
+                        <option value="">Seleccionar secretaria/o</option>
+                        @foreach ($secretaries as $secretary)
+                            <option value="{{ $secretary->id }}" {{ old('secretary_id') == $secretary->id ? 'selected' : '' }}>
+                                {{ $secretary->user->name ?? 'Secretaria ID: ' . $secretary->id }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('secretary_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
 
             </div>

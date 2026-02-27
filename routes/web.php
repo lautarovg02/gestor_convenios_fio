@@ -72,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class)->except(['destroy']);
 
         // 3. Marco Residencia
+        Route::get('/frameworkResidenceAgreement/download', [FrameworkResidenceAgreementController::class, 'download'])->name('frameworkResidenceAgreement.download');
         Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class)->except(['destroy']);
         Route::get('/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
 

@@ -225,19 +225,25 @@
             {{-- Representante Contacto --}}
             <div id="contactRepresentativeCard" class="mb-4 border rounded containerSectionForm">
                 <h4 class="TitleSection">Representante de contacto</h4>
-                {{-- Cada campo en bloque separado y ancho completo --}}
 
-                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label><span
-                    class="text-danger"> *</span>
-                <select id="selectEmployeeContact" name="id_employee" class="form-select mb-3" required>
-                    <option value="">Seleccionar representante de contacto</option>
-                </select>
+                <div id="contactSelectWrapper" class="d-none">
+                    <label class="form-label fs-6 fw-bold" for="selectEmployeeContact">Seleccionar Representante existente</label><span
+                        class="text-danger"> *</span>
+                    <select id="selectEmployeeContact" name="id_employee" class="form-select mb-3">
+                        <option value="">Seleccionar representante de contacto</option>
+                    </select>
+                </div>
+
+                <div id="noContactMsg" class="alert alert-info d-none">
+                    <i class="bi bi-info-circle me-2"></i>
+                    La empresa no tiene representantes registrados. Completá los datos para crear uno nuevo.
+                </div>
 
                 <div class="containerInputNameLastName">
                     <div class="mb-3">
                         <label class="form-label fs-6 fw-bold">Nombre(s)</label><span class="text-danger"> *</span>
                         <input id="contact_nombre" type="text" name="contact_nombre" placeholder="Nombre"
-                            class="form-control" value="{{ old('contact_nombre') }}" required readonly>
+                            class="form-control" value="{{ old('contact_nombre') }}" required>
 
                         @error('contact_nombre')
                             <div class="text-danger">{{ $message }}</div>
@@ -248,7 +254,7 @@
                     <div class="mb-3">
                         <label class="form-label fs-6 fw-bold">Apellido(s)</label><span class="text-danger"> *</span>
                         <input id="contact_apellido" type="text" placeholder="Apellido" name="contact_apellido"
-                            class="form-control" value="{{ old('contact_apellido') }}" required readonly>
+                            class="form-control" value="{{ old('contact_apellido') }}" required>
 
                         @error('contact_apellido')
                             <div class="text-danger">{{ $message }}</div>
@@ -261,7 +267,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">DNI</label><span class="text-danger"> *</span>
                     <input id="contact_dni" type="number" name="contact_dni" placeholder="DNI" class="form-control"
-                        value="{{ old('contact_dni') }}" required readonly>
+                        value="{{ old('contact_dni') }}" required>
                     <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
 
                     @error('contact_dni')
@@ -273,21 +279,18 @@
                     <label class="form-label fs-6 fw-bold">CUIL</label><span class="text-danger"> *</span>
 
                     <input type="number" id="contact_cuil" class="form-control" name="contact_cuil" placeholder="CUIL"
-                        value="{{ old('contraparte_cuit') }}" required readonly>
-
+                        value="{{ old('contact_cuil') }}" required>
 
                     @error('contact_cuil')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
-
                 </div>
-
 
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Celular</label><span class="text-danger"> *</span>
                     <input type="number" id="contact_celular" name="contact_celular" class="form-control"
-                        value="{{ old('contact_celular') }}" placeholder="Numero de celular" required readonly>
+                        value="{{ old('contact_celular') }}" placeholder="Numero de celular" required>
 
                     @error('contact_celular')
                         <div class="text-danger">{{ $message }}</div>
@@ -298,7 +301,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Email</label><span class="text-danger"> *</span>
                     <input id="contact_email" type="email" placeholder="Email" name="contact_email"
-                        class="form-control" value="{{ old('contact_email') }}" required readonly>
+                        class="form-control" value="{{ old('contact_email') }}" required>
 
                     @error('contact_email')
                         <div class="text-danger">{{ $message }}</div>
@@ -320,7 +323,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Cargo</label><span class="text-danger"> *</span>
                     <input id="contact_cargo" type="text" placeholder="Cargo en empresa" name="contact_cargo"
-                        class="form-control" value="{{ old('contact_cargo') }}" required" readonly>
+                        class="form-control" value="{{ old('contact_cargo') }}" required>
 
                     @error('contact_cargo')
                         <div class="text-danger">{{ $message }}</div>
@@ -339,18 +342,25 @@
                     <input type="checkbox" id="sameRepresentative"> El representante de contacto es también el de firma
                 </div>
 
-                <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label><span
-                    class="text-danger"> *</span>
-                <select id="selectEmployeeFirma" name="id_employee_firma" class="form-select mb-3">
-                    <option value="">Seleccionar representante de firma</option>
-                </select>
+                <div id="firmaSelectWrapper" class="d-none mt-2">
+                    <label class="form-label fs-6 fw-bold" for="selectEmployeeFirma">Seleccionar Representante existente</label><span
+                        class="text-danger"> *</span>
+                    <select id="selectEmployeeFirma" name="id_employee_firma" class="form-select mb-3">
+                        <option value="">Seleccionar representante de firma</option>
+                    </select>
+                </div>
+
+                <div id="noFirmaMsg" class="alert alert-info d-none">
+                    <i class="bi bi-info-circle me-2"></i>
+                    La empresa no tiene representantes registrados. Completá los datos para crear uno nuevo.
+                </div>
 
                 <div class="containerInputNameLastName">
 
                     <div class="mb-3">
                         <label class="form-label fs-6 fw-bold">Nombre(s)</label><span class="text-danger"> *</span>
                         <input id="firma_nombre" type="text" name="firma_nombre" placeholder="Nombre"
-                            class="form-control" value="{{ old('firma_nombre') }}" required readonly>
+                            class="form-control" value="{{ old('firma_nombre') }}" required>
 
                         @error('firma_nombre')
                             <div class="text-danger">{{ $message }}</div>
@@ -361,7 +371,7 @@
                     <div class="mb-3">
                         <label class="form-label fs-6 fw-bold">Apellido(s)</label><span class="text-danger"> *</span>
                         <input id="firma_apellido" type="text" name="firma_apellido" placeholder="Apellido"
-                            class="form-control" value="{{ old('firma_apellido') }}" required readonly>
+                            class="form-control" value="{{ old('firma_apellido') }}" required>
 
                         {{-- Validación de errores --}}
 
@@ -375,7 +385,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">DNI</label><span class="text-danger"> *</span>
                     <input id="firma_dni" type="number" name="firma_dni" placeholder="DNI" class="form-control"
-                        value="{{ old('firma_dni') }}" readonly required>
+                        value="{{ old('firma_dni') }}" required>
                     <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
 
                     @error('firma_dni')
@@ -401,7 +411,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Cargo</label><span class="text-danger"> *</span>
                     <input id="firma_cargo" type="text" name="firma_cargo" placeholder="Cargo en empresa"
-                        class="form-control" value="{{ old('firma_cargo') }}" readonly required>
+                        class="form-control" value="{{ old('firma_cargo') }}" required>
 
                     {{-- Validación de errores --}}
 
@@ -413,7 +423,7 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Email</label><span class="text-danger"> *</span>
                     <input id="firma_email" type="email" name="firma_email" placeholder="Email" class="form-control"
-                        value="{{ old('firma_email') }}" readonly required>
+                        value="{{ old('firma_email') }}" required>
 
                     {{-- Validación de errores --}}
 
@@ -480,6 +490,57 @@
                     <label class="form-label fs-6 fw-bold">Asignación de autoridades</label>
                     <input type="file" name="doc_autoridades" placeholder="Asignación de autoridades"
                         class="form-control">
+                </div>
+
+            </div>
+
+            {{-- Responsables Institucionales FIO --}}
+            <div class="mb-4 border rounded containerSectionForm">
+                <h4 class="TitleSection">Responsables Institucionales (FIO)</h4>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6 fw-bold" for="teacher_id">Docente Responsable</label><span class="text-danger"> *</span>
+                    <select id="teacher_id" name="teacher_id" class="form-select" required>
+                        <option value="">Seleccionar docente responsable</option>
+                        @foreach ($teachers as $teacher)
+                            <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                                {{ $teacher->lastname }}, {{ $teacher->name }} — DNI: {{ $teacher->dni }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('teacher_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6 fw-bold" for="rector_id">Rector</label><span class="text-danger"> *</span>
+                    <select id="rector_id" name="rector_id" class="form-select" required>
+                        <option value="">Seleccionar rector</option>
+                        @foreach ($rectors as $rector)
+                            <option value="{{ $rector->id }}" {{ old('rector_id') == $rector->id ? 'selected' : '' }}>
+                                {{ $rector->lastname }}, {{ $rector->name }} — DNI: {{ $rector->dni }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('rector_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6 fw-bold" for="secretary_id">Secretaria/o</label><span class="text-danger"> *</span>
+                    <select id="secretary_id" name="secretary_id" class="form-select" required>
+                        <option value="">Seleccionar secretaria/o</option>
+                        @foreach ($secretaries as $secretary)
+                            <option value="{{ $secretary->id }}" {{ old('secretary_id') == $secretary->id ? 'selected' : '' }}>
+                                {{ $secretary->user->name ?? 'Secretaria ID: ' . $secretary->id }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('secretary_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
 
             </div>

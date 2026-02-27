@@ -85,12 +85,10 @@ class StoreFrameworkInternshipAgreement extends FormRequest
             'lugar_firma' => ['required', 'string'],
             'fecha_firma' => ['required', 'date'],
 
-/*          // Documentos
-            'doc_afip' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png'],
-            'doc_estatuto' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png'],
-            'doc_autoridades' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png'],
-*/
-
+            // Responsables institucionales
+            'teacher_id'   => ['required', 'exists:teachers,id'],
+            'rector_id'    => ['required', 'exists:teachers,id'],
+            'secretary_id' => ['required', 'exists:secretaries,id'],
         ];
     }
 
@@ -191,15 +189,14 @@ public function withValidator($validator)
             'lugar_firma.required' => 'El lugar de la firma es obligatorio.',
             'fecha_firma.required' => 'La fecha de la firma es obligatoria.',
             'fecha_firma.date' => 'La fecha de la firma no es válida.',
-/*
-            // Documentos
-            'doc_afip.required' => 'El certificado de la AFIP es obligatorio.',
-            'doc_afip.mimes' => 'El certificado de la AFIP debe ser un archivo PDF o imagen.',
-            'doc_estatuto.required' => 'El estatuto es obligatorio.',
-            'doc_estatuto.mimes' => 'El estatuto debe ser un archivo PDF o imagen.',
-            'doc_autoridades.required' => 'El documento de autoridades es obligatorio.',
-            'doc_autoridades.mimes' => 'El documento de autoridades debe ser un archivo PDF o imagen.',
-*/
+
+            // Responsables institucionales
+            'teacher_id.required'   => 'Debe seleccionar un docente responsable.',
+            'teacher_id.exists'     => 'El docente seleccionado no existe.',
+            'rector_id.required'    => 'Debe seleccionar un rector.',
+            'rector_id.exists'      => 'El rector seleccionado no existe.',
+            'secretary_id.required' => 'Debe seleccionar una secretaria.',
+            'secretary_id.exists'   => 'La secretaria seleccionada no existe.',
         ];
     }
 }

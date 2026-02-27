@@ -60,160 +60,142 @@ class FrameworkResidenceAgreementController extends Controller
 
     public function create()
     {
-        $companies = $this->companyService->getAllCompanies();
-    
-        return view('frameworkResidenceAgreement.create', compact('companies'));
+        $companies   = $this->companyService->getAllCompanies();
+        $teachers    = $this->teacherService->getAllTeachers();
+        $rectors     = $this->teacherService->getAllRectors();
+        $secretaries = $this->secretaryService->getAllSecretaries();
+
+        return view('frameworkResidenceAgreement.create', compact('companies', 'teachers', 'rectors', 'secretaries'));
     }
     
 
     public function store(StoreFrameworkResidenceAgreement $request)
     {
-
-        $faker = \Faker\Factory::create();
         $validated = $request->validated();
 
-
-        //------------------------------------ logica para crear convenio --------------------------------------------------------------
-
-
-
-
-        // Crear o obtener la empresa
+        // Obtener o crear la empresa (company_id ya validado y sin duplicado por FormRequest)
         $company = $this->companyService->getOrCreateCompany($validated);
 
-        $existsContract = $this->contractService->getFrameworkAgreementsByCompany($company->id, "Convenio Marco de Residencia"); //el 2 es el id del tipo de convenio marco de residencia
-
-        if ($existsContract->isNotEmpty()) {
-            return redirect()->back()->withErrors(['errorExistsContract' => 'Ya existe un convenio marco de residencia para la empresa ' . $validated['razon_social']]);
-        }
-        // Crear o obtener la secretaria
-        $secretary = $this->secretaryService->getOrCreateSecretary([
-            'user_secretaria' => 'SECRETARIA_USER',
-            'password_secretaria' => 'SECRETARIA_PASSWORD',
-            'email_secretaria' => 'SECRETARIA_EMAIL',
-        ]);
-
-
-        // Crear o obtener el docente
-        $teacher = $this->teacherService->findOrCreateByDni([
-            'name' => $faker->firstName,
-            'lastname' => $faker->lastName,
-            'dni' => $faker->unique()->numberBetween(20000000, 40000000),
-            'cuil' => '20' . $faker->unique()->numberBetween(20000000, 40000000) . '3',
-            'faculty' => $faker->word,
-            'is_rector' => false,
-            'is_dean' => $faker->boolean,
-        ]);
-
-        // Crear o obtener los empleados de contacto y representante
+        // Obtener empleado de contacto. Si no existe por DNI, crearlo con los datos del form.
         $contact_employee = $this->employeeService->findOrCreateByDni([
-            'name' => $validated['contact_nombre'],
-            'lastname' => $validated['contact_apellido'],
-            'dni' => $validated['contact_dni'],
-            'cuil'        => $validated['contact_cuil'] ?? (($validated['cuil_prefijo'] ?? '') .($validated['cuil_dni'] ?? '') .($validated['cuil_dv'] ?? '')),
-            'email' => $validated['contact_email'],
-            'phone' => $validated['contact_celular'],
-            'position' => $validated['contact_cargo'],
+            'name'         => $validated['contact_nombre'],
+            'lastname'     => $validated['contact_apellido'],
+            'dni'          => $validated['contact_dni'],
+            'cuil'         => ($validated['cuil_prefijo'] ?? '') . ($validated['cuil_dni'] ?? '') . ($validated['cuil_dv'] ?? ''),
+            'email'        => $validated['contact_email'],
+            'phone'        => $validated['contact_celular'],
+            'position'     => $validated['contact_cargo'],
             'is_represent' => true,
-            'company_id' => $company->id,
+            'company_id'   => $company->id,
         ]);
 
+        // Obtener representante firmante. Si no existe por DNI, crearlo.
         $representative_employee = $this->employeeService->findOrCreateByDni([
-            'name' => $validated['firma_nombre'],
-            'lastname' => $validated['firma_apellido'],
-            'dni' => $validated['firma_dni'],
-            'cuil' => null,
-            'email' => $validated['firma_email'],
-            'phone' => $validated['firma_celular'] ?? null,
-            'position' => $validated['firma_cargo'],
+            'name'         => $validated['firma_nombre'],
+            'lastname'     => $validated['firma_apellido'],
+            'dni'          => $validated['firma_dni'],
+            'cuil'         => null,
+            'email'        => $validated['firma_email'],
+            'phone'        => $validated['firma_celular'] ?? null,
+            'position'     => $validated['firma_cargo'],
             'is_represent' => true,
-            'company_id' => $company->id,
+            'company_id'   => $company->id,
         ]);
 
-        // Crear o obtener el rector
-        $rector = $this->teacherService->findOrCreateByDni([
-            'name' => $faker->firstName,
-            'lastname' => $faker->lastName,
-            'dni' => $faker->unique()->numberBetween(20000000, 40000000),
-            'cuil' => '20' . $faker->unique()->numberBetween(20000000, 40000000) . '3',
-            'faculty' => $faker->word,
-            'is_rector' => true,
-            'is_dean' => $faker->boolean,
-        ]);
+        // Obtener docente, rector y secretaria desde IDs seleccionados en el formulario
+        $teacher   = $this->teacherService->getAllTeachers()->find($validated['teacher_id']);
+        $rector    = $this->teacherService->getAllRectors()->find($validated['rector_id']);
+        $secretary = $this->secretaryService->getAllSecretaries()->find($validated['secretary_id']);
 
-        // Crear el primer estado del contrato
-    $contract_status = \App\Models\ContractStatus::firstOrCreate(['status' => 'SEVyT']);
+        if (!$teacher || !$rector || !$secretary) {
+            return redirect()->back()->withInput()
+                ->withErrors(['error' => 'Docente, rector o secretaria no encontrados. Por favor verificá los datos del formulario.']);
+        }
 
-        // Crear o encontrar el tipo de convenio marco
+        // Estado inicial del convenio marco
+        $contract_status = \App\Models\ContractStatus::firstOrCreate(['status' => 'SEVyT']);
+
+        // Tipo de convenio
         $type = $this->typeFrameworkAgreementService->findOrCreateByType('Convenio Marco de Residencia');
+
+        // Guardar documentos adjuntos
+        $adjuntosPath = 'documentacion/adjuntos/' . date('Y/m');
+        Storage::makeDirectory($adjuntosPath);
+        $urlAfip        = null;
+        $urlEstatuto    = null;
+        $urlAutoridades = null;
+        if ($request->hasFile('doc_afip')) {
+            $f = $request->file('doc_afip');
+            $name = 'afip-' . time() . '.' . $f->getClientOriginalExtension();
+            $f->storeAs($adjuntosPath, $name);
+            $urlAfip = $adjuntosPath . '/' . $name;
+        }
+        if ($request->hasFile('doc_estatuto')) {
+            $f = $request->file('doc_estatuto');
+            $name = 'estatuto-' . time() . '.' . $f->getClientOriginalExtension();
+            $f->storeAs($adjuntosPath, $name);
+            $urlEstatuto = $adjuntosPath . '/' . $name;
+        }
+        if ($request->hasFile('doc_autoridades')) {
+            $f = $request->file('doc_autoridades');
+            $name = 'autoridades-' . time() . '.' . $f->getClientOriginalExtension();
+            $f->storeAs($adjuntosPath, $name);
+            $urlAutoridades = $adjuntosPath . '/' . $name;
+        }
 
         // Crear el contrato
         $agreement = Contract::create([
-            'signing_date' => Carbon::parse($validated['fecha_firma']),
-            'url_certificate_afip' => null,
-            'url_statute' => null,
-            'url_assignment_authorities' => null,
-            'company_id' => $company->id,
-            'secretary_id' => $secretary->id,
-            'teacher_id' => $teacher->id,
-            'contact_employee_id' => $contact_employee->id,
-            'representative_employee_id' => $representative_employee->id,
-            'rector' => $rector->id,
-            'contract_status_id' => $contract_status->id,
+            'signing_date'                => Carbon::parse($validated['fecha_firma']),
+            'url_certificate_afip'        => $urlAfip,
+            'url_statute'                 => $urlEstatuto,
+            'url_assignment_authorities'  => $urlAutoridades,
+            'company_id'                  => $company->id,
+            'secretary_id'                => $secretary->id,
+            'teacher_id'                  => $teacher->id,
+            'contact_employee_id'         => $contact_employee->id,
+            'representative_employee_id'  => $representative_employee->id,
+            'rector'                      => $rector->id,
+            'contract_status_id'          => $contract_status->id,
             'type_framework_agreement_id' => $type->id,
-            'file' => null,
-            'creation_date' => Carbon::now(),
+            'file'                        => null,
+            'creation_date'               => Carbon::now(),
         ]);
 
-
-        //------------------------------------------------------GENERACION DE DOCUMENTO------------------------------------------------------------
-
-
+        // Generación del documento Word
         $companyCity = $this->cityService->findCityById($company->city_id);
-        $companyProvince = $this->provinceService->getById($companyCity->province_id);
+        $companyProvince = $companyCity ? $this->provinceService->getById($companyCity->province_id) : null;
         $companyRepresentativeEmployee = $this->companyService->findCompanyById($representative_employee->company_id);
 
-
-        // 3. Cargar plantilla Word desde storage
         $templatePath = storage_path('app/plantillas/Convenio_Marco_de_Residencia.docx');
         $templateProcessor = new TemplateProcessor($templatePath);
 
-        function safe($value) {
-            return $value ?? '______';
-        }
+        $safe = fn($v) => $v ?? '______';
 
-        // Seteo de valores en el template
         $templateProcessor->setValue('razon_social', $company->denomination);
-        $templateProcessor->setValue('calle', $company->street);
-        $templateProcessor->setValue('nro_calle', $company->number);
-        $templateProcessor->setValue('ciudad', $companyCity->name);
-        $templateProcessor->setValue('provincia', $companyProvince->name);
-        $templateProcessor->setValue('cuit_empresa', $company->cuit);
-        $templateProcessor->setValue('cuil', safe($validated['cuil_prefijo']) . '-' . safe($validated['cuil_dni']) . '-' . safe($validated['cuil_dv']));
+        $templateProcessor->setValue('calle', $company->street ?? '');
+        $templateProcessor->setValue('nro_calle', $company->number ?? '');
+        $templateProcessor->setValue('ciudad', $companyCity ? $companyCity->name : '');
+        $templateProcessor->setValue('provincia', $companyProvince ? $companyProvince->name : '');
+        $templateProcessor->setValue('cuit_empresa', $company->cuit ?? '');
+        $templateProcessor->setValue('cuil', $safe($validated['cuil_prefijo']) . '-' . $safe($validated['cuil_dni']) . '-' . $safe($validated['cuil_dv']));
         $templateProcessor->setValue('nombre_rep_contacto', $contact_employee->name . ' ' . $contact_employee->lastname);
         $templateProcessor->setValue('cargo_rep_contacto', $contact_employee->position);
         $templateProcessor->setValue('dni_rep_contacto', $contact_employee->dni);
-
         $templateProcessor->setValue('nombre_rep_firma', $representative_employee->name . ' ' . $representative_employee->lastname);
         $templateProcessor->setValue('cargo_rep_firma', $representative_employee->position);
-        $templateProcessor->setValue('rep_firma_empresa_razon_social',  $companyRepresentativeEmployee->denomination);
+        $templateProcessor->setValue('rep_firma_empresa_razon_social', $companyRepresentativeEmployee ? $companyRepresentativeEmployee->denomination : '');
+        $templateProcessor->setValue('dia', !empty($validated['fecha_firma']) ? Carbon::parse($validated['fecha_firma'])->format('d') : '____');
+        $templateProcessor->setValue('mes', !empty($validated['fecha_firma']) ? Carbon::parse($validated['fecha_firma'])->translatedFormat('F') : '____');
+        $templateProcessor->setValue('anio', !empty($validated['fecha_firma']) ? Carbon::parse($validated['fecha_firma'])->format('Y') : '____');
 
-        $templateProcessor->setValue('dia', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('d') : '____');
-        $templateProcessor->setValue('mes', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->translatedFormat('F') : '____');
-        $templateProcessor->setValue('anio', !empty($validated['fecha_firma']) ? \Carbon\Carbon::parse($validated['fecha_firma'])->format('Y') : '____');
-
-
-        $relativePath = 'convenios_generados/' . date('Y/m'); // Ej: 'convenios_generados/2025/06'
-        Storage::makeDirectory($relativePath); // Crea la carpeta si no existe
+        $relativePath = 'convenios_generados/' . date('Y/m');
+        Storage::makeDirectory($relativePath);
 
         $nombreArchivo = 'convenio_marco_residencia_' . Str::slug($validated['razon_social']) . '.docx';
-
-        // Asegura que no haya barras duplicadas
         $fullPath = storage_path('app/' . trim($relativePath, '/') . '/' . $nombreArchivo);
-
         $templateProcessor->saveAs($fullPath);
 
-        return view('frameworkInternshipAgreement.creationSuccessful', compact('relativePath', 'nombreArchivo'));
+        return view('frameworkResidenceAgreement.creationSuccessful', compact('relativePath', 'nombreArchivo'));
     }
 
 

@@ -223,14 +223,18 @@
             <div class="mb-4 border rounded containerSectionForm">
                 <h4 class="TitleSection">Representante de contacto</h4>
 
-                <div class="mb-3">
-
-                    <label class="form-label fs-6 fw-bold" for="selectCompany">Seleccionar Representante</label><span
+                <div id="contactSelectWrapper" class="mb-3 d-none">
+                    <label class="form-label fs-6 fw-bold" for="selectEmployeeContact">Seleccionar Representante existente</label><span
                         class="text-danger"> *</span>
                     <select id="selectEmployeeContact" name="id_employee" class="form-select"
-                        data-preselected="{{ old('id_employee', $preselectedEmployeeId ?? '') }}" required>
+                        data-preselected="{{ old('id_employee', $preselectedEmployeeId ?? '') }}">
                         <option value="">Seleccione un representante</option>
                     </select>
+                </div>
+
+                <div id="noContactMsg" class="alert alert-info d-none">
+                    <i class="bi bi-info-circle me-2"></i>
+                    La empresa no tiene representantes registrados. Completá los datos para crear uno nuevo.
                 </div>
 
                 <div class="containerInputNameLastName">
@@ -338,9 +342,20 @@
                     <input type="checkbox" id="sameRepresentative"> El representante de contacto es también el de firma
                 </div>
 
+                <div id="firmaSelectWrapper" class="mb-3 d-none mt-2">
+                    <label class="form-label fs-6 fw-bold" for="selectEmployeeFirma">Seleccionar Representante de Firma existente</label><span
+                        class="text-danger"> *</span>
+                    <select id="selectEmployeeFirma" name="id_employee_firma" class="form-select">
+                        <option value="">Seleccione un representante de firma</option>
+                    </select>
+                </div>
+
+                <div id="noFirmaMsg" class="alert alert-info d-none">
+                    <i class="bi bi-info-circle me-2"></i>
+                    La empresa no tiene representantes de firma registrados. Completá los datos para crear uno nuevo.
+                </div>
 
                 <div class="containerInputNameLastName">
-
                     <div class="mb-3">
                         <label class="form-label fs-6 fw-bold">Nombre(s)</label><span class="text-danger"> *</span>
                         <input type="text" name="firma_nombre" placeholder="Nombre" class="form-control"
