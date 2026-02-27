@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Detalle de Acuerdo Individual de Pasantía')
+@section('title', 'Detalle de Acuerdo Específico de Residencia')
 
 @section('content')
 <div class="d-flex flex-column container-xl mt-4 mb-5 justify-content-center align-items-center">
@@ -9,7 +9,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
                     <li class="breadcrumb-item"><a href="{{ route('agreements.index') }}">Convenios</a></li>
-                    <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Acuerdo Individual de Pasantía</li>
+                    <li class="breadcrumb-item active fw-bold text-decoration-underline" aria-current="page">Acuerdo de Residencia</li>
                 </ol>
             </nav>
             <div class="col-auto">
@@ -17,8 +17,8 @@
             </div>
         </div>
         <div class="col-12 mt-3">
-            <h2 class="page-title">Acuerdo Individual de Pasantía:
-                <span class="text-primary">{{ $agreement->contract->company->company_name ?? 'N/A' }}</span>
+            <h2 class="page-title">Acuerdo Específico de Residencia:
+                <span class="text-primary">{{ $residence->title ?? 'Sin Título' }}</span>
             </h2>
         </div>
     </div>
@@ -27,37 +27,35 @@
     <div class="card shadow w-75 mb-4">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
             <h3 class="card-title mb-0">Detalles del Acuerdo</h3>
-            <span class="badge bg-info text-dark fs-6">{{ $agreement->status->status ?? 'Sin Estado' }}</span>
+            <span class="badge bg-info text-dark fs-6">{{ $residence->status->status ?? 'Sin Estado' }}</span>
         </div>
         <div class="card-body row">
 
             <h5 class="mt-2 mb-3 text-secondary">Información General</h5>
-            <div class="col-md-6 mb-3"><strong>Área de Pasantía:</strong> {{ $agreement->area ?? 'N/A' }}</div>
-            <div class="col-md-6 mb-3"><strong>Sitio/Asignación:</strong> {{ $agreement->assignment ?? 'N/A' }}</div>
-            <div class="col-md-6 mb-3"><strong>Duración:</strong> {{ $agreement->months_quantity ?? 'N/A' }} meses</div>
-            <div class="col-md-6 mb-3"><strong>Fecha de Inicio:</strong>
-                {{ $agreement->internship_initial_date ? \Carbon\Carbon::parse($agreement->internship_initial_date)->format('d/m/Y') : 'Pendiente' }}
+            <div class="col-md-6 mb-3"><strong>Título:</strong> {{ $residence->title ?? 'N/A' }}</div>
+            <div class="col-md-6 mb-3"><strong>Fecha de Inicio de Residencia:</strong>
+                {{ $residence->internship_initial_date ? \Carbon\Carbon::parse($residence->internship_initial_date)->format('d/m/Y') : 'Pendiente' }}
             </div>
             <div class="col-md-6 mb-3"><strong>Fecha de Firma:</strong>
-                {{ $agreement->signing_date ? \Carbon\Carbon::parse($agreement->signing_date)->format('d/m/Y') : 'Pendiente' }}
+                {{ $residence->signing_date ? \Carbon\Carbon::parse($residence->signing_date)->format('d/m/Y') : 'Pendiente' }}
             </div>
-            <div class="col-12 mb-3"><strong>Tareas:</strong> {{ $agreement->task ?? 'N/A' }}</div>
+            <div class="col-12 mb-3"><strong>Tareas a Realizar:</strong> {{ $residence->task ?? 'N/A' }}</div>
 
             <hr class="my-2">
 
             {{-- Convenio Marco Padre --}}
             <h5 class="mt-3 mb-3 text-secondary">Convenio Marco Asociado</h5>
-            @if ($agreement->contract)
+            @if ($residence->contract)
                 <div class="col-md-6 mb-3">
                     <strong>Empresa:</strong>
-                    <a href="{{ route('companies.show', $agreement->contract->company) }}">{{ $agreement->contract->company->denomination ?? 'N/A' }}</a>
+                    <a href="{{ route('companies.show', $residence->contract->company) }}">{{ $residence->contract->company->denomination ?? 'N/A' }}</a>
                 </div>
-                <div class="col-md-6 mb-3"><strong>CUIT:</strong> {{ $agreement->contract->company->cuit ?? 'N/A' }}</div>
+                <div class="col-md-6 mb-3"><strong>CUIT:</strong> {{ $residence->contract->company->cuit ?? 'N/A' }}</div>
                 <div class="col-md-6 mb-3"><strong>Estado del Convenio Marco:</strong>
-                    <span class="badge bg-secondary">{{ $agreement->contract->status->status ?? 'N/A' }}</span>
+                    <span class="badge bg-secondary">{{ $residence->contract->status->status ?? 'N/A' }}</span>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <a href="{{ route('agreements.show', $agreement->contract->id) }}" class="btn btn-sm btn-outline-secondary">Ver Convenio Marco</a>
+                    <a href="{{ route('agreements.show', $residence->contract->id) }}" class="btn btn-sm btn-outline-secondary">Ver Convenio Marco</a>
                 </div>
             @else
                 <div class="col-12 mb-3 text-danger">No hay convenio marco asociado.</div>
@@ -66,15 +64,15 @@
             <hr class="my-2">
 
             {{-- Estudiante --}}
-            <h5 class="mt-3 mb-3 text-secondary">Pasante</h5>
-            @if ($agreement->student)
+            <h5 class="mt-3 mb-3 text-secondary">Estudiante</h5>
+            @if ($residence->student)
                 <div class="col-md-6 mb-3">
                     <i class="bi bi-person-fill me-1"></i>
-                    <strong>{{ $agreement->student->last_name }}, {{ $agreement->student->name }}</strong>
+                    <strong>{{ $residence->student->last_name }}, {{ $residence->student->name }}</strong>
                 </div>
-                <div class="col-md-6 mb-3"><strong>DNI:</strong> {{ $agreement->student->dni }}</div>
-                @if($agreement->student->email)
-                    <div class="col-md-6 mb-3"><strong>Email:</strong> {{ $agreement->student->email }}</div>
+                <div class="col-md-6 mb-3"><strong>DNI:</strong> {{ $residence->student->dni }}</div>
+                @if($residence->student->email)
+                    <div class="col-md-6 mb-3"><strong>Email:</strong> {{ $residence->student->email }}</div>
                 @endif
             @else
                 <div class="col-12 mb-3 text-muted">No hay estudiante asociado.</div>
@@ -86,11 +84,11 @@
             <h5 class="mt-3 mb-3 text-secondary">Responsables</h5>
             <div class="col-md-6 mb-3">
                 <strong>Docente Responsable (FIO):</strong>
-                {{ $agreement->contract->teacher->lastname ?? 'N/A' }}, {{ $agreement->contract->teacher->name ?? 'N/A' }}
+                {{ $residence->contract->teacher->lastname ?? 'N/A' }}, {{ $residence->contract->teacher->name ?? 'N/A' }}
             </div>
             <div class="col-md-6 mb-3">
                 <strong>Secretario (FIO):</strong>
-                {{ $agreement->contract->secretary->user->name ?? 'N/A' }}
+                {{ $residence->contract->secretary->user->name ?? 'N/A' }}
             </div>
 
             <hr class="my-2">
@@ -98,8 +96,8 @@
             {{-- Documento --}}
             <h5 class="mt-3 mb-3 text-secondary">Documentación</h5>
             <div class="col-12">
-                @if($agreement->file)
-                    <a href="{{ route('individual-internship-agreements.download', $agreement->id) }}" class="btn btn-sm btn-outline-success">
+                @if($residence->file)
+                    <a href="{{ asset('storage/' . $residence->file) }}" target="_blank" class="btn btn-sm btn-outline-success">
                         <i class="bi bi-download me-1"></i> Descargar Acuerdo
                     </a>
                 @else

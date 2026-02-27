@@ -237,7 +237,8 @@ class SpecificAgreementController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $specific = Specific::with(['contract.company', 'contract.secretary.user', 'contract.teacher', 'status', 'students'])->findOrFail($id);
+        return view('specificAgreement.show', compact('specific'));
     }
 
     /**

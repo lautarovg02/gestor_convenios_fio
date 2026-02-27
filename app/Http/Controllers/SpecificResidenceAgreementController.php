@@ -139,6 +139,12 @@ class SpecificResidenceAgreementController extends Controller
 
 
 
+    public function show(string $id)
+    {
+        $residence = SpecificResidenceAgreement::with(['contract.company', 'contract.secretary.user', 'contract.teacher', 'status', 'student'])->findOrFail($id);
+        return view('specificResidenceAgreement.show', compact('residence'));
+    }
+
         public function download(Request $request)
     {
         $path = $request->get('path');

@@ -121,7 +121,7 @@ public function store(StoreIndividualInternshipAgreement $request)
 
     public function show($id)
 {
-    $agreement = IndividualInternshipAgreement::findOrFail($id);
+    $agreement = IndividualInternshipAgreement::with(['contract.company', 'contract.secretary.user', 'contract.teacher', 'status', 'student'])->findOrFail($id);
     return view('individualInternshipAgreement.show', compact('agreement'));
 }
 
