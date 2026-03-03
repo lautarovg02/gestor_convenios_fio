@@ -50,7 +50,7 @@ class StoreSpecificResidenceAgreement extends FormRequest
                 'numeric',
                 Rule::unique('students', 'dni')->ignore($studentDni, 'dni')
             ],
-            'studentCuil' => ['nullable', 'string', 'size:11'],
+            'studentCuil' => ['nullable', 'string'],
             'studentEmail' => ['required', 'email'],
             'studentCelular' => ['required', 'string'],
             'studentCarrer' => 'required|string|max:255',

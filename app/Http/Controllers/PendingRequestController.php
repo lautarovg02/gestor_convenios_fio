@@ -37,19 +37,19 @@ class PendingRequestController extends Controller
 
                 // Specific
                 $specifics = Specific::with(['status', 'contract.company'])
-                    ->whereHas('status', fn($q) => $q->whereNotIn('status', ['En Departamento', 'En Coordinación', 'Finalizado', 'Deshabilitado']))
+                    ->whereHas('status', fn($q) => $q->whereNotIn('status', ['Finalizado', 'Deshabilitado']))
                     ->get()->map(fn($c) => $this->mapItem($c, 'specific'));
                 $items = $items->concat($specifics);
 
                 // Residence
                 $residences = SpecificResidenceAgreement::with(['status', 'contract.company'])
-                    ->whereHas('status', fn($q) => $q->whereNotIn('status', ['En Departamento', 'En Coordinación', 'Finalizado', 'Deshabilitado']))
+                    ->whereHas('status', fn($q) => $q->whereNotIn('status', ['Finalizado', 'Deshabilitado']))
                     ->get()->map(fn($c) => $this->mapItem($c, 'residence'));
                 $items = $items->concat($residences);
 
                 // Internship
                 $internships = IndividualInternshipAgreement::with(['status', 'contract.company'])
-                    ->whereHas('status', fn($q) => $q->whereNotIn('status', ['En Departamento', 'En Coordinación', 'Finalizado', 'Deshabilitado']))
+                    ->whereHas('status', fn($q) => $q->whereNotIn('status', ['Finalizado', 'Deshabilitado']))
                     ->get()->map(fn($c) => $this->mapItem($c, 'internship'));
                 $items = $items->concat($internships);
 
@@ -219,6 +219,13 @@ class PendingRequestController extends Controller
                 abort(403, 'No tenés permiso para actuar sobre este tipo de convenio.');
             }
         }
-        // Secretaria puede actuar sobre cualquier convenio
+        // Secretaria puede actuar sobre cualquier convenio que no sea En Coordinación / En Departamento
+        // (la vista ya oculta los botones; aquí evitamos el bypass)
+        if ($user->hasRole('Secretaria')) {
+            $statusName = optional($model->status)->status ?? '';
+            if (in_array($statusName, ['En Coordinación', 'En Departamento'])) {
+                abort(403, 'No podés aprobar o rechazar un convenio que está en revisión por otra área.');
+            }
+        }
     }
 }

@@ -50,19 +50,29 @@
                                     <td class="text-center">{{ $request->company_name}}</td>
                                     <td class="text-nowrap text-center">
                                         @can('aprobar rechazar solicitudes')
-                                        <form action="{{ route('contracts.approve', ['type' => $request->model_type, 'id' => $request->id]) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm btn-success me-1">
-                                                Aprobar <i class="bi bi-check-circle"></i>
-                                            </button>
-                                        </form>
-                                        <button type="button" class="btn btn-sm btn-danger" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#rejectModal"
-                                                data-contract-id="{{ $request->id }}"
-                                                data-model-type="{{ $request->model_type }}">
-                                            Rechazar <i class="bi bi-x-circle"></i>
-                                        </button>
+                                            @php
+                                                $blockedForSecretary = auth()->user()->hasRole('Secretaria')
+                                                    && in_array($request->status_name, ['En Coordinación', 'En Departamento']);
+                                            @endphp
+                                            @if(!$blockedForSecretary)
+                                                <form action="{{ route('contracts.approve', ['type' => $request->model_type, 'id' => $request->id]) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-success me-1">
+                                                        Aprobar <i class="bi bi-check-circle"></i>
+                                                    </button>
+                                                </form>
+                                                <button type="button" class="btn btn-sm btn-danger" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#rejectModal"
+                                                        data-contract-id="{{ $request->id }}"
+                                                        data-model-type="{{ $request->model_type }}">
+                                                    Rechazar <i class="bi bi-x-circle"></i>
+                                                </button>
+                                            @else
+                                                <span class="badge bg-secondary" title="En espera de revisión por otro área">
+                                                    <i class="bi bi-hourglass-split me-1"></i>Pendiente de otra área
+                                                </span>
+                                            @endif
                                         @endcan
                                         <button type="button" class="btn btn-sm btn-primary me-1"  >
                                             Descargar  <i class="bi bi-download me-1"></i>
