@@ -26,6 +26,12 @@ class IndividualInternshipAgreementController extends Controller
         $this->studentService = $studentService;
     }
 
+    // 0. Listado — redirige al índice general
+    public function index()
+    {
+        return redirect()->route('agreements.index');
+    }
+
     // 1. Mostrar listado de empresas para seleccionar
     public function create()
     {

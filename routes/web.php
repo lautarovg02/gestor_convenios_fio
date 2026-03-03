@@ -82,10 +82,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/specificAgreement/getFrameworkData/{id}', [SpecificAgreementController::class, 'getFrameworkAgreementData']);
 
         // 5. Pasantías Individuales
-        Route::resource('individual-internship-agreements', IndividualInternshipAgreementController::class);
         Route::post('individual-internship-agreements/select-company', [IndividualInternshipAgreementController::class, 'selectCompany'])->name('individual-internship-agreements.select-company');
         Route::get('individual-internship-agreements/fill-form', [IndividualInternshipAgreementController::class, 'fillForm'])->name('individual-internship-agreements.fill-form');
         Route::get('individual-internship-agreements/{id}/download', [IndividualInternshipAgreementController::class, 'download'])->name('individual-internship-agreements.download');
+        Route::resource('individual-internship-agreements', IndividualInternshipAgreementController::class);
 
         // --- UTILIDADES ---
         Route::get('/cities', [CityController::class, 'getCiudades'])->name('get.ciudades');
