@@ -59,17 +59,11 @@ class StoreIndividualInternshipAgreement extends FormRequest
             'fecha_inicio'      => 'required|date',
             'remuneracion_monto' => 'required|numeric|min:0',
 
-            // --- Tutor empresa ---
-            'tutor_empresa'     => 'required|string|max:255',
-            'tutor_cuil_prefijo' => 'required|digits:2',
-            'tutor_cuil_dni'    => 'required|digits_between:7,8',
-            'tutor_cuil_dv'     => 'required|digits:1',
+            // --- Tutor empresa (teacher select) ---
+            'tutor_teacher_id'  => 'required|exists:teachers,id',
 
-            // --- Docente tutor ---
-            'docente_nombre'        => 'required|string|max:255',
-            'docente_cuil_prefijo'  => 'required|digits:2',
-            'docente_cuil_dni'      => 'required|digits_between:7,8',
-            'docente_cuil_dv'       => 'required|digits:1',
+            // --- Docente tutor (teacher select) ---
+            'docente_teacher_id' => 'required|exists:teachers,id',
 
             // --- Lugar y fecha del convenio ---
             'fecha_convenio' => 'required|date',

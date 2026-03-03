@@ -54,69 +54,99 @@ class IndividualInternshipAgreementController extends Controller
     }
 
     public function fillForm(Request $request)
-{
-    // ✅ Recuperamos empresa y contrato
-    $company = Company::with(['contracts.contactEmployee'])->findOrFail($request->company_id);
-    $contract = $company->contracts->first();
-    $empleado = $contract->contactEmployee;
-    $city = City::find($company->city_id)?->name ?? '';
-    $company->city = $city;
+    {
+        // Recuperamos empresa y contrato
+        $company = Company::with(['contracts.contactEmployee'])->findOrFail($request->company_id);
+        $contract = $company->contracts->first();
+        $empleado = $contract->contactEmployee;
+        $city = City::find($company->city_id)?->name ?? '';
+        $company->city = $city;
 
-    $representante = [
-        'name' => $empleado->name,
-        'cuit' => $empleado->cuil,
-    ];
+        $representante = [
+            'name' => $empleado->name,
+            'cuit' => $empleado->cuil,
+        ];
 
-    // ✅ Recuperamos alumno (si se pasó)
-    $student = null;
-    if ($request->filled('student_id')) {
-        $student = Student::findOrFail($request->student_id);
+        // Recuperamos alumno
+        $student = null;
+        if ($request->filled('student_id')) {
+            $student = Student::findOrFail($request->student_id);
+        }
+
+        // Cargamos todos los docentes para los selects de tutor y docente
+        $teachers = \App\Models\Teacher::orderBy('lastname')->orderBy('name')->get();
+
+        return view('individualInternshipAgreement.formularioEmpresa',
+            compact('company', 'representante', 'contract', 'student', 'teachers'));
     }
-
-    // ✅ Ahora sí devolvemos la vista limpia
-    return view('individualInternshipAgreement.formularioEmpresa', compact('company', 'representante', 'contract', 'student'));
-}
 
 
 
     // Guardar convenio individual
 
-public function store(StoreIndividualInternshipAgreement $request)
-{
+    public function store(StoreIndividualInternshipAgreement $request)
+    {
+        $data = $request->validated();
 
-     $data = $request->validated();
-       
         $exists = $this->studentService->existStudentInAgreement($data['student_id']);
-
         if ($exists) {
-                return back()
+            return back()
                 ->withErrors(['Ya existe un convenio individual para el alumno seleccionado.'])
                 ->withInput();
         }
 
-        $student_id = $data['student_id'];
+        // Resolver tutor y docente desde IDs seleccionados en el form
+        $tutor   = \App\Models\Teacher::findOrFail($data['tutor_teacher_id']);
+        $docente = \App\Models\Teacher::findOrFail($data['docente_teacher_id']);
+
+        // Construir los campos nome/cuil que usa generateAgreementDocument
+        $data['tutor_empresa'] = $tutor->name . ' ' . $tutor->lastname;
+        [$tp, $td, $tv] = $this->splitCuil($tutor->cuil ?? '');
+        $data['tutor_cuil_prefijo'] = $tp;
+        $data['tutor_cuil_dni']     = $td;
+        $data['tutor_cuil_dv']      = $tv;
+
+        $data['docente_nombre'] = $docente->name . ' ' . $docente->lastname;
+        [$dp, $dd, $dv] = $this->splitCuil($docente->cuil ?? '');
+        $data['docente_cuil_prefijo'] = $dp;
+        $data['docente_cuil_dni']     = $dd;
+        $data['docente_cuil_dv']      = $dv;
 
         $status = \App\Models\ContractStatus::firstOrCreate(['status' => 'En Coordinación']);
 
         $agreement = IndividualInternshipAgreement::create([
-            'contract_id' => $data['contract_id'],
-            'contract_status_id' => $status->id,
-            'area' => $data['area_pasantia'],
-            'assignment' => $data['sitio_pasantia'],
-            'task' => $data['tareas'],
-            'months_quantity' => $data['periodo_meses'],
-            'internship_initial_date' => $data['fecha_inicio'],
-            'signing_date' => $data['fecha_convenio'],
-            'student_id' => $student_id,
+            'contract_id'            => $data['contract_id'],
+            'contract_status_id'     => $status->id,
+            'area'                   => $data['area_pasantia'],
+            'assignment'             => $data['sitio_pasantia'],
+            'task'                   => $data['tareas'],
+            'months_quantity'        => $data['periodo_meses'],
+            'internship_initial_date'=> $data['fecha_inicio'],
+            'signing_date'           => $data['fecha_convenio'],
+            'student_id'             => $data['student_id'],
+            'tutor_teacher_id'       => $data['tutor_teacher_id'],
+            'docente_teacher_id'     => $data['docente_teacher_id'],
         ]);
 
         $filePath = $this->generateAgreementDocument($agreement, $data);
         $agreement->file = $filePath;
         $agreement->save();
 
-        return redirect()->route('individual-internship-agreements.show', $agreement->id);
+        [$relativePath, $nombreArchivo] = [dirname($filePath), basename($filePath)];
+        return view('individualInternshipAgreement.creationSuccessful',
+            compact('agreement', 'relativePath', 'nombreArchivo'));
+    }
 
-}
+    /** Parte un CUIL (XX-XXXXXXXX-X) en prefijo, dni, dígito verificador. */
+    private function splitCuil(string $cuil): array
+    {
+        $clean = preg_replace('/\D/', '', $cuil);
+        return [
+            substr($clean, 0, 2),
+            substr($clean, 2, strlen($clean) - 3),
+            substr($clean, -1),
+        ];
+    }
 
 
     public function success($id)

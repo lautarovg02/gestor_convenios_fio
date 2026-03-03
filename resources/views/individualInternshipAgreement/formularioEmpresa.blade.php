@@ -251,50 +251,33 @@
 <div class="mb-4 border rounded containerSectionForm p-3">
 
   {{-- Datos del tutor --}}
-  <h4 class="TitleSection">Datos del tutor</h4>
+  <h4 class="TitleSection">Tutor de la empresa <span class="text-danger">*</span></h4>
   <div class="mb-3">
-    <label class="form-label fw-bold">Nombre y Apellido <span class="text-danger">*</span></label>
-    <input type="text" name="tutor_empresa" class="form-control" value="{{ old('tutor_empresa') }}" required>
-    @error('tutor_empresa')
-      <div class="text-danger">{{ $message }}</div>
-    @enderror
-  </div>
-  <div class="mb-3">
-    <label class="form-label fs-6 fw-bold">CUIT <span class="text-danger">*</span></label>
-    <div class="input-group">
-      <input type="text" class="form-control @error('tutor_cuil_prefijo') is-invalid @enderror" name="tutor_cuil_prefijo" placeholder="00" maxlength="2" pattern="\d{2}" value="{{ old('tutor_cuil_prefijo') }}" required>
-      <span class="input-group-text">-</span>
-      <input type="text" class="form-control @error('tutor_cuil_dni') is-invalid @enderror" name="tutor_cuil_dni" placeholder="12345678" maxlength="8" pattern="\d{7,8}" value="{{ old('tutor_cuil_dni') }}" required>
-      <span class="input-group-text">-</span>
-      <input type="text" class="form-control @error('tutor_cuil_dv') is-invalid @enderror" name="tutor_cuil_dv" placeholder="0" maxlength="1" pattern="\d{1}" value="{{ old('tutor_cuil_dv') }}" required>
-    </div>
-    <div class="form-text">Formato: XX-XXXXXXXX-X</div>
-    @error('tutor_cuil_prefijo')<div class="text-danger">{{ $message }}</div>@enderror
-    @error('tutor_cuil_dni')<div class="text-danger">{{ $message }}</div>@enderror
-    @error('tutor_cuil_dv')<div class="text-danger">{{ $message }}</div>@enderror
+    <label class="form-label fw-bold">Seleccionar tutor (docente FIO) <span class="text-danger">*</span></label>
+    <select name="tutor_teacher_id" class="form-select @error('tutor_teacher_id') is-invalid @enderror" required>
+      <option value="">-- Seleccionar docente --</option>
+      @foreach($teachers as $teacher)
+        <option value="{{ $teacher->id }}" {{ old('tutor_teacher_id') == $teacher->id ? 'selected' : '' }}>
+          {{ $teacher->lastname }}, {{ $teacher->name }}
+        </option>
+      @endforeach
+    </select>
+    @error('tutor_teacher_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
   </div>
 
   {{-- Datos del docente --}}
-  <h4 class="TitleSection mt-4">Datos del docente</h4>
+  <h4 class="TitleSection mt-4">Docente responsable <span class="text-danger">*</span></h4>
   <div class="mb-3">
-    <label class="form-label fw-bold">Nombre y Apellido <span class="text-danger">*</span></label>
-    <input type="text" name="docente_nombre" class="form-control" value="{{ old('docente_nombre') }}" required>
-    @error('docente_nombre')
-      <div class="text-danger">{{ $message }}</div>
-    @enderror
-  </div>
-  <div class="mb-3">
-    <label class="form-label fs-6 fw-bold">CUIT <span class="text-danger">*</span></label>
-    <div class="input-group">
-      <input type="text" class="form-control @error('docente_cuil_prefijo') is-invalid @enderror" name="docente_cuil_prefijo" placeholder="00" maxlength="2" pattern="\d{2}" value="{{ old('docente_cuil_prefijo') }}" required>
-      <span class="input-group-text">-</span>
-      <input type="text" class="form-control @error('docente_cuil_dni') is-invalid @enderror" name="docente_cuil_dni" placeholder="12345678" maxlength="8" pattern="\d{7,8}" value="{{ old('docente_cuil_dni') }}" required>
-      <span class="input-group-text">-</span>
-      <input type="text" class="form-control @error('docente_cuil_dv') is-invalid @enderror" name="docente_cuil_dv" placeholder="0" maxlength="1" pattern="\d{1}" value="{{ old('docente_cuil_dv') }}" required>
-    </div>
-    @error('docente_cuil_prefijo')<div class="text-danger">{{ $message }}</div>@enderror
-    @error('docente_cuil_dni')<div class="text-danger">{{ $message }}</div>@enderror
-    @error('docente_cuil_dv')<div class="text-danger">{{ $message }}</div>@enderror
+    <label class="form-label fw-bold">Seleccionar docente responsable <span class="text-danger">*</span></label>
+    <select name="docente_teacher_id" class="form-select @error('docente_teacher_id') is-invalid @enderror" required>
+      <option value="">-- Seleccionar docente --</option>
+      @foreach($teachers as $teacher)
+        <option value="{{ $teacher->id }}" {{ old('docente_teacher_id') == $teacher->id ? 'selected' : '' }}>
+          {{ $teacher->lastname }}, {{ $teacher->name }}
+        </option>
+      @endforeach
+    </select>
+    @error('docente_teacher_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
   </div>
 
   {{-- Lugar y Fecha del Convenio Individual --}}
@@ -316,10 +299,14 @@
 </div>
 
 
-    {{-- Botón de Envío --}}
-    <div class="d-flex justify-content-end mb-5">
-      <button type="submit" class="btn btn-success">Guardar convenio</button>
-     
+    {{-- Botones --}}
+    <div class="d-flex justify-content-between align-items-center mb-5 mt-4">
+        <a href="{{ route('agreements.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Cancelar
+        </a>
+        <button type="submit" class="btn btn-success px-4">
+            <i class="bi bi-check-lg me-1"></i> Guardar Convenio
+        </button>
     </div>
 
   </form>

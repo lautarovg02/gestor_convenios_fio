@@ -18,6 +18,8 @@ class IndividualInternshipAgreement extends Model
         'contract_id',
         'contract_status_id',
         'student_id',
+        'tutor_teacher_id',
+        'docente_teacher_id',
         'file',
     ];
 
@@ -34,6 +36,18 @@ class IndividualInternshipAgreement extends Model
     public function student()
     {
         return $this->belongsTo(Student::class);
+    }
+
+    /** Tutor de la empresa (docente FIO asignado como tutor) */
+    public function tutor()
+    {
+        return $this->belongsTo(\App\Models\Teacher::class, 'tutor_teacher_id');
+    }
+
+    /** Docente responsable FIO */
+    public function docenteResponsable()
+    {
+        return $this->belongsTo(\App\Models\Teacher::class, 'docente_teacher_id');
     }
 
     public function individualInternshipAgreements()
