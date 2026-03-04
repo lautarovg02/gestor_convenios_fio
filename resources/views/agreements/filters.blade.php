@@ -1,36 +1,65 @@
  <!-- Filtro y Búsqueda -->
  <div class="card shadow-sm rounded mb-4 p-3">
-     <form action="{{ route('agreements.index') }}" method="GET" class="row g-3 align-items-end d-flex wrap">
+     <div class="row g-3 align-items-end">
+
+         {{-- Filtro por Estado --}}
          <div class="col-md-3">
-             <label for="type" class="form-label">Estado</label>
-             <select name="type" id="type" class="form-select">
-                 <option value="">Todos</option>
-                 @foreach ($statuses as $status)
-                     <option value="{{ $status->status }}" {{ request('status') == $status->status ? 'selected' : '' }}>
-                         {{ $status->status }}
+             <label for="status" class="form-label">Estado</label>
+             <select id="filter-status" class="form-select">
+                 <option value="">Todos los estados</option>
+                 @foreach ($statuses as $s)
+                     <option value="{{ $s->status }}" {{ request('status') == $s->status ? 'selected' : '' }}>
+                         {{ $s->status }}
                      </option>
                  @endforeach
              </select>
          </div>
+
+         {{-- Filtro por Tipo de Convenio --}}
          <div class="col-md-3">
-             <label for="type" class="form-label">Convenio</label>
-             <select name="type" id="type" class="form-select">
-                 <option value="">Todos</option>
-                 @foreach ($typeFrameworkAgreement as $type)
-                     <option value="{{ $type->type }}" {{ request('type') == $type->type ? 'selected' : '' }}>
-                         {{ $type->type }}
+             <label for="filter-type" class="form-label">Tipo de Convenio</label>
+             <select id="filter-type" class="form-select">
+                 <option value="">Todos los tipos</option>
+                 @foreach ($typeFrameworkAgreement as $t)
+                     <option value="{{ $t->id }}" {{ request('type') == $t->id ? 'selected' : '' }}>
+                         {{ $t->type }}
                      </option>
                  @endforeach
              </select>
          </div>
-         <div class="col-md-6">
-             <label for="search" class="form-label">Buscar</label>
-             <div class="input-group">
-                 <input type="text" name="search" class="form-control g-3" id="search"
-                     placeholder="Buscar convenios..." value="{{ request('search') }}">
-                 <button class="btn btn-primary" type="submit">Buscar</button>
-                 <a href="{{ route('careers.index') }}" class="btn btn-secondary">Limpiar</a>
-             </div>
+
+         {{-- Búsqueda por Palabra Clave --}}
+         <div class="col-md-4">
+             <label for="filter-search" class="form-label">Buscar por empresa</label>
+             <input type="text" id="filter-search" class="form-control"
+                 placeholder="Razón social, CUIT..." value="{{ request('search') }}">
          </div>
-     </form>
+
+         {{-- Acciones --}}
+         <div class="col-md-2 d-flex gap-2">
+             <button class="btn btn-primary w-100" type="button" onclick="applyFilters()">
+                 <i class="bi bi-search me-1"></i> Filtrar
+             </button>
+             <a href="{{ route('agreements.index') }}" class="btn btn-secondary w-100">
+                 <i class="bi bi-x-lg"></i>
+             </a>
+         </div>
+
+     </div>
  </div>
+
+ <script>
+ function applyFilters() {
+     const type   = document.getElementById('filter-type').value;
+     const status = document.getElementById('filter-status').value;
+     const search = document.getElementById('filter-search').value;
+
+     const params = new URLSearchParams();
+     if (type)   params.set('type',   type);
+     if (status) params.set('status', status);
+     if (search) params.set('search', search);
+
+     const query = params.toString();
+     window.location.href = '{{ route('agreements.index') }}' + (query ? '?' + query : '');
+ }
+ </script>
