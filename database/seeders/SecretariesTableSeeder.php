@@ -10,12 +10,11 @@ class SecretariesTableSeeder extends Seeder
 {
     public function run(): void
     {
-        $secretaries = User::where('role_id', 1)->get();
+        // Usar scope de Spatie para obtener usuarios con rol Secretaria
+        $users = \App\Models\User::role('Secretaria')->get();
 
-        foreach ($secretaries as $user) {
-            Secretary::factory()->create([
-                'user_id' => $user->id,
-            ]);
+        foreach ($users as $user) {
+            Secretary::firstOrCreate(['user_id' => $user->id]);
         }
     }
 }

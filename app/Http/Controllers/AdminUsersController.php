@@ -45,12 +45,7 @@ class AdminUsersController extends Controller
                 $q->where('email', 'like', "%{$search}%")
                   ->orWhere('name', 'like', "%{$search}%")
                   ->orWhereRelation('teacher', 'name', 'like', "%{$search}%")
-                  ->orWhereRelation('teacher', 'lastname', 'like', "%{$search}%")
-                  // Secretary ya no tiene username, buscamos por user.name o lo quitamos
-                  ->orWhereHas('secretary', function($qSec) use ($search) {
-                        // Como secretary no tiene columnas propias de texto, 
-                        // generalmente se busca por el usuario asociado, que ya está arriba.
-                  });
+                  ->orWhereRelation('teacher', 'lastname', 'like', "%{$search}%");
             });
         }    
 

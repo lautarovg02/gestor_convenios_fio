@@ -70,31 +70,31 @@
                             <td>{{ $company->id }}</td>
 
                             <td class="col-max-width text-truncate" title="{{ $company->denomination }}">
-                                {{ highlightKeyword($company->denomination, request('search')) }}
+                                {!! highlightKeyword($company->denomination, request('search')) !!}
                             </td>
 
                             <td class="col-max-width text-truncate" title="{{ $company->cuit }}">
-                                {{ highlightKeyword($company->cuit, request('search')) }}
+                                {!! highlightKeyword($company->cuit, request('search')) !!}
                             </td>
 
                             <td class="col-max-width text-truncate" title="{{ $company->company_name }}">
-                                {{ highlightKeyword($company->company_name ?? 'N/A', request('search')) }}
+                                {!! highlightKeyword($company->company_name ?? 'N/A', request('search')) !!}
                             </td>
 
                             <td class="col-max-width text-truncate" title="{{ $company->sector }}">
-                                {{ highlightKeyword($company->sector ?? 'N/A', request('search')) }}
+                                {!! highlightKeyword($company->sector ?? 'N/A', request('search')) !!}
                             </td>
 
-                            <td class="col-max-width text-truncate" title="{{ $company->entity->name }}">
-                                {{ highlightKeyword($company->entity->name ?? 'N/A', request('search')) }}
+                            <td class="col-max-width text-truncate" title="{{ optional($company->entity)->name }}">
+                                {!! highlightKeyword(optional($company->entity)->name ?? 'N/A', request('search')) !!}
                             </td>
 
                             <td class="col-max-width text-truncate" title="{{ $company->company_category }}">
-                                {{ highlightKeyword($company->company_category ?? 'N/A', request('search')) }}
+                                {!! highlightKeyword($company->company_category ?? 'N/A', request('search')) !!}
                             </td>
 
-                            <td class="col-max-width text-truncate" title="{{ $company->city->name }}">
-                                {{ highlightKeyword($company->city->name ?? 'N/A', request('search')) }}
+                            <td class="col-max-width text-truncate" title="{{ optional($company->city)->name }}">
+                                {!! highlightKeyword(optional($company->city)->name ?? 'N/A', request('search')) !!}
                             </td>
 
                             <td class="text-center">

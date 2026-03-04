@@ -17,11 +17,7 @@
                     </ol>
                 </nav>
             </div>
-            @canany(['crud docentes'])  
-            <a href="{{ route('teachers.create') }}" class="btn btn-success">
-                <i class="bi bi-plus-lg me-1"></i> Agregar Docente
-            </a>
-            @endcanany
+
         </div>
 
         <!-- Filtros -->
@@ -92,18 +88,6 @@
                                     <td class="text-center">
                                         <a href="{{ route('teachers.show', $teacher) }}"
                                             class="btn btn-info btn-sm">Ver</a>
-                                        @canany(['crud docentes'])  
-                                        <a href="{{ route('teachers.edit', $teacher) }}"
-                                            class="btn btn-primary btn-sm">Editar</a>
-                                         @endcanany
-                                        @canany(['crud docentes'])  
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#modal-delete   " data-entity-id="{{ $teacher->id }}"
-                                            data-entity-name="{{ $teacher->name . ' ' . $teacher->lastname }}"
-                                            data-entity-type="teachers">
-                                            Eliminar
-                                        </button>
-                                        @endcanany
                                     </td>
                                 </tr>
                             @endforeach
@@ -118,8 +102,6 @@
         @endif
 
 
-        @include('layouts.modals.modal-delete')
         @include('layouts.modals.modal-loading')
-        @vite('resources/js/modals/modalDelete.js')
     </div>
 @endsection

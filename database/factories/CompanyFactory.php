@@ -22,12 +22,15 @@ class CompanyFactory extends Factory
         $companyName = $this->faker->unique()->company . ' ' . $this->faker->unique()->randomNumber(5);
 
         return [
-            'denomination' => 'Razón social nro: ' . $this->faker->randomNumber(2),
-            'cuit' => $this->faker->unique()->numberBetween(20000000000, 90999999000),
-            'company_name' => $companyName,
-            'entity_id' => CompanyEntity::inRandomOrder()->first()->id ?? CompanyEntity::factory()->create()->id,
-            'city_id' => City::inRandomOrder()->first()->id ?? City::factory()->create()->id,
-            'slug' => Str::slug($companyName . '-' . $this->faker->unique()->randomNumber(5)),
+            'denomination'     => 'Razón social nro: ' . $this->faker->randomNumber(2),
+            'cuit'             => $this->faker->unique()->numberBetween(20000000000, 90999999000),
+            'company_name'     => $companyName,
+            'sector'           => $this->faker->randomElement(['Público', 'Privado', 'Mixto']),
+            'company_category' => $this->faker->randomElement(['Con fines de lucro', 'Sin fines de lucro', 'Gubernamental']),
+            'scope'            => $this->faker->randomElement(['Nacional', 'Internacional']),
+            'entity_id'        => CompanyEntity::inRandomOrder()->first()->id ?? CompanyEntity::factory()->create()->id,
+            'city_id'          => City::inRandomOrder()->first()->id ?? City::factory()->create()->id,
+            'slug'             => Str::slug($companyName . '-' . $this->faker->unique()->randomNumber(5)),
         ];
     }
 

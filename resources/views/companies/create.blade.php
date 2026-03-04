@@ -101,10 +101,15 @@
                             <label class="form-label fs-6 required-field">
                                 <label for="sector">Sector</label>
                             </label>
-                            <div>
-                                <input class="form-control" maxlength="40" placeholder="Sector" name="sector"
-                                    type="text" id="sector" value="{{ old('sector') }}">
-                            </div>
+                            <select class="form-select" name="sector" id="sector">
+                                <option value="">Seleccionar sector</option>
+                                <option value="Público" {{ old('sector') == 'Público' ? 'selected' : '' }}>Público</option>
+                                <option value="Privado" {{ old('sector') == 'Privado' ? 'selected' : '' }}>Privado</option>
+                                <option value="Mixto" {{ old('sector') == 'Mixto' ? 'selected' : '' }}>Mixto</option>
+                            </select>
+                            @error('sector')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <!-- Selector de entidad con opción "Otros" -->
                         <div class="w-75 form-group mb-3">
@@ -130,11 +135,16 @@
                         </div>
                         <!-- Campo rubro -->
                         <div class="w-75 form-group mb-3">
-                            <label class="form-label fs-6"> <label for="company_category">Categoría</label></label>
-                            <div>
-                                <input class="form-control" maxlength="20" placeholder="Categoría" name="company_category"
-                                    type="text" id="company_category" value="{{ old('company_category') }}">
-                            </div>
+                            <label class="form-label fs-6"><label for="company_category">Categoría</label></label>
+                            <select class="form-select" name="company_category" id="company_category">
+                                <option value="">Seleccionar categoría</option>
+                                <option value="Con fines de lucro" {{ old('company_category') == 'Con fines de lucro' ? 'selected' : '' }}>Con fines de lucro</option>
+                                <option value="Sin fines de lucro" {{ old('company_category') == 'Sin fines de lucro' ? 'selected' : '' }}>Sin fines de lucro</option>
+                                <option value="Gubernamental" {{ old('company_category') == 'Gubernamental' ? 'selected' : '' }}>Gubernamental</option>
+                            </select>
+                            @error('company_category')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <!-- Campo Ámbito con varias opciones -->
                         <div class="w-75 form-group mb-3">

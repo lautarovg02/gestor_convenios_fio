@@ -81,9 +81,15 @@
                         <!-- Campo Sector -->
                         <div class="form-group mb-3">
                             <label class="form-label required" for="sector">Sector</label>
-                            <input class="form-control" name="sector" id="sector" type="text"
-                                value="{{ old('sector', $company->sector) }}"
-                                placeholder="Ingrese el sector al que pertenece la empresa" autocomplete="off">
+                            <select class="form-select" name="sector" id="sector">
+                                <option value="">Seleccionar sector</option>
+                                <option value="Público" {{ old('sector', $company->sector) == 'Público' ? 'selected' : '' }}>Público</option>
+                                <option value="Privado" {{ old('sector', $company->sector) == 'Privado' ? 'selected' : '' }}>Privado</option>
+                                <option value="Mixto" {{ old('sector', $company->sector) == 'Mixto' ? 'selected' : '' }}>Mixto</option>
+                            </select>
+                            @error('sector')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <!-- Campo Entidad -->
                         <div class="mb-3">
@@ -113,12 +119,18 @@
                             </div>
                         </div>
 
-                        <!-- Campo Rubro -->
+                        <!-- Campo Categoría -->
                         <div class="form-group mb-3">
-                            <label class="form-label required" for="company_category">Rubro</label>
-                            <input class="form-control" name="company_category" id="company_category" type="text"
-                                value="{{ old('company_category', $company->company_category) }}"
-                                placeholder="Ingrese la categoría de la empresa" autocomplete="off">
+                            <label class="form-label required" for="company_category">Categoría</label>
+                            <select class="form-select" name="company_category" id="company_category">
+                                <option value="">Seleccionar categoría</option>
+                                <option value="Con fines de lucro" {{ old('company_category', $company->company_category) == 'Con fines de lucro' ? 'selected' : '' }}>Con fines de lucro</option>
+                                <option value="Sin fines de lucro" {{ old('company_category', $company->company_category) == 'Sin fines de lucro' ? 'selected' : '' }}>Sin fines de lucro</option>
+                                <option value="Gubernamental" {{ old('company_category', $company->company_category) == 'Gubernamental' ? 'selected' : '' }}>Gubernamental</option>
+                            </select>
+                            @error('company_category')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Campo Ámbito -->

@@ -65,15 +65,28 @@ class DatabaseSeeder extends Seeder
             ['email' => 'secretary@test.com'],
             ['name' => 'Maria Secretaria', 'password' => Hash::make('password')]
         );
-        // Asegúrate que en RolePermissionSeeder el nombre sea 'Secretaria' (con mayúscula)
-        $secretary->assignRole('Secretaria'); 
-        
+        $secretary->assignRole('Secretaria');
+        // Crear perfil Secretary vinculado
+        Secretary::firstOrCreate(['user_id' => $secretary->id]);
 
+
+        // DOCENTE DE PRUEBA
         $docente = User::firstOrCreate(
             ['email' => 'docente@test.com'],
             ['name' => 'Pedro Docente', 'password' => Hash::make('password')]
         );
         $docente->assignRole('Docente');
+        // Crear perfil Teacher vinculado
+        Teacher::firstOrCreate(
+            ['user_id' => $docente->id],
+            [
+                'name'      => 'Pedro',
+                'lastname'  => 'Docente',
+                'dni'       => 12345678,
+                'is_rector' => false,
+                'is_dean'   => false,
+            ]
+        );
 
 
 
