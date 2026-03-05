@@ -83,6 +83,7 @@ class DatabaseSeeder extends Seeder
                 'name'      => 'Pedro',
                 'lastname'  => 'Docente',
                 'dni'       => 12345678,
+                'cuil'      => '20123456789',
                 'is_rector' => false,
                 'is_dean'   => false,
             ]

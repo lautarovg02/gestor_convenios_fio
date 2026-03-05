@@ -59,8 +59,8 @@ class StoreIndividualInternshipAgreement extends FormRequest
             'fecha_inicio'      => 'required|date',
             'remuneracion_monto' => 'required|numeric|min:0',
 
-            // --- Tutor empresa (teacher select) ---
-            'tutor_teacher_id'  => 'required|exists:teachers,id',
+            // --- Tutor empresa (employee select) ---
+            'tutor_employee_id'  => 'required|exists:employees,id',
 
             // --- Docente tutor (teacher select) ---
             'docente_teacher_id' => 'required|exists:teachers,id',

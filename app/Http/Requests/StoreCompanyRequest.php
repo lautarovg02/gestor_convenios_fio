@@ -34,8 +34,8 @@ class StoreCompanyRequest extends FormRequest
                 'other_entity_input' => 'nullable|required_if:entity,other|string|max:40',
                 'company_category' => 'nullable|string|max:20',
                 'scope' => 'nullable|string ',
-                'street' => 'nullable|string|max:40',
-                'number' => 'nullable|integer',
+                'street' => 'required|string|max:40',
+                'number' => 'required|integer',
         ];
     }
 
@@ -52,6 +52,8 @@ class StoreCompanyRequest extends FormRequest
             'other_entity_input' => 'Debe especificar una entidad si selecciona "Otro tipo".',
             'company_name.required' => 'El nombre de la empresa es un campo obligatorio.',
             'sector.required' => 'El sector es un campo obligatorio.',
+            'street.required' => 'La calle es un campo obligatorio.',
+            'number.required' => 'El número es un campo obligatorio.',
 
         ];
     }

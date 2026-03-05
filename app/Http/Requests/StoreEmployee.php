@@ -49,7 +49,7 @@ class StoreEmployee extends FormRequest
             'name'         => ['required', 'string', 'max:255'],
             'lastname'     => ['required', 'string', 'max:255'],
             'dni'          => ['required', 'digits_between:7,8', $dniRule],
-            'cuil'         => ['nullable', 'string', 'max:20'],
+            'cuil'         => ['required', 'string', 'max:20'],
             'email'        => ['nullable', 'email', 'max:255'],
             'position'     => ['required', 'string', 'max:255'],
             'is_represent' => ['nullable', 'boolean'],
@@ -66,6 +66,7 @@ class StoreEmployee extends FormRequest
             'dni.required' => 'El DNI es un campo obligatorio.',
             'dni.digits' => 'El DNI debe tener exactamente 8 dígitos.',
             'dni.unique' => 'El DNI ya se encuentra registrado.',
+            'cuil.required' => 'El CUIL es un campo obligatorio.',
             'phones.*.number.required' => 'El campo no puede ser vacio.'
         ];
     }

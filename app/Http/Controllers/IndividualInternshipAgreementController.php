@@ -73,11 +73,14 @@ class IndividualInternshipAgreementController extends Controller
             $student = Student::findOrFail($request->student_id);
         }
 
-        // Cargamos todos los docentes para los selects de tutor y docente
+        // Cargamos todos los docentes para el select de docente responsable
         $teachers = \App\Models\Teacher::orderBy('lastname')->orderBy('name')->get();
 
+        // Cargamos los empleados de la empresa para el select de tutor
+        $employees = $company->employees()->orderBy('name')->get();
+
         return view('individualInternshipAgreement.formularioEmpresa',
-            compact('company', 'representante', 'contract', 'student', 'teachers'));
+            compact('company', 'representante', 'contract', 'student', 'teachers', 'employees'));
     }
 
 
@@ -95,8 +98,8 @@ class IndividualInternshipAgreementController extends Controller
                 ->withInput();
         }
 
-        // Resolver tutor y docente desde IDs seleccionados en el form
-        $tutor   = \App\Models\Teacher::findOrFail($data['tutor_teacher_id']);
+        // Resolver tutor (empleado de la empresa) y docente (docente FIO) desde IDs
+        $tutor   = \App\Models\Employee::findOrFail($data['tutor_employee_id']);
         $docente = \App\Models\Teacher::findOrFail($data['docente_teacher_id']);
 
         // Construir los campos nome/cuil que usa generateAgreementDocument
@@ -124,7 +127,7 @@ class IndividualInternshipAgreementController extends Controller
             'internship_initial_date'=> $data['fecha_inicio'],
             'signing_date'           => $data['fecha_convenio'],
             'student_id'             => $data['student_id'],
-            'tutor_teacher_id'       => $data['tutor_teacher_id'],
+            'tutor_employee_id'      => $tutor->id,
             'docente_teacher_id'     => $data['docente_teacher_id'],
         ]);
 

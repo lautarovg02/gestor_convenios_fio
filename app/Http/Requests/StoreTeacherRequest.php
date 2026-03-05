@@ -33,7 +33,7 @@ class StoreTeacherRequest extends FormRequest
                 Rule::unique('teachers')->ignore($this->teacher),
             ],
             'cuil' => [
-                'nullable',
+                'required',
                 'integer',
                 'digits:11',
                 function ($attribute, $value, $fail) {

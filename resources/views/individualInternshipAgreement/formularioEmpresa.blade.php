@@ -253,16 +253,16 @@
   {{-- Datos del tutor --}}
   <h4 class="TitleSection">Tutor de la empresa <span class="text-danger">*</span></h4>
   <div class="mb-3">
-    <label class="form-label fw-bold">Seleccionar tutor (docente FIO) <span class="text-danger">*</span></label>
-    <select name="tutor_teacher_id" class="form-select @error('tutor_teacher_id') is-invalid @enderror" required>
-      <option value="">-- Seleccionar docente --</option>
-      @foreach($teachers as $teacher)
-        <option value="{{ $teacher->id }}" {{ old('tutor_teacher_id') == $teacher->id ? 'selected' : '' }}>
-          {{ $teacher->lastname }}, {{ $teacher->name }}
+    <label class="form-label fw-bold">Seleccionar tutor (empleado de la empresa) <span class="text-danger">*</span></label>
+    <select name="tutor_employee_id" class="form-select @error('tutor_employee_id') is-invalid @enderror" required>
+      <option value="">-- Seleccionar empleado --</option>
+      @foreach($employees as $employee)
+        <option value="{{ $employee->id }}" {{ old('tutor_employee_id') == $employee->id ? 'selected' : '' }}>
+          {{ $employee->lastname }}, {{ $employee->name }}
         </option>
       @endforeach
     </select>
-    @error('tutor_teacher_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+    @error('tutor_employee_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
   </div>
 
   {{-- Datos del docente --}}

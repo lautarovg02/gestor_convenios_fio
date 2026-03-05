@@ -30,6 +30,8 @@ class CompanyFactory extends Factory
             'scope'            => $this->faker->randomElement(['Nacional', 'Internacional']),
             'entity_id'        => CompanyEntity::inRandomOrder()->first()->id ?? CompanyEntity::factory()->create()->id,
             'city_id'          => City::inRandomOrder()->first()->id ?? City::factory()->create()->id,
+            'street'           => $this->faker->streetName(),
+            'number'           => $this->faker->buildingNumber(),
             'slug'             => Str::slug($companyName . '-' . $this->faker->unique()->randomNumber(5)),
         ];
     }
