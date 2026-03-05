@@ -140,8 +140,14 @@ class DatabaseSeeder extends Seeder
             Company::factory()->count(10)->create();
         }
 
-        Employee::factory()->count(100)->create();
-        EmployeePhone::factory()->count(100)->create();
+        // Crear al menos de 1 a 3 empleados para cada empresa
+        Company::all()->each(function ($company) {
+            Employee::factory(rand(1, 3))->create([
+                'company_id' => $company->id
+            ]);
+        });
+        
+        EmployeePhone::factory()->count(150)->create();
 
         $teachersForDepartments = Teacher::inRandomOrder()->take(4)->get();
         foreach ($teachersForDepartments as $teacher) {
