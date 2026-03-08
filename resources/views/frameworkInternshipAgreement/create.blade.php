@@ -182,7 +182,7 @@
 
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Código Postal</label><span class="text-danger"> *</span>
-                    <input type="number" name="codigo_postal" placeholder="Codigo postal" class="form-control"
+                    <input type="text" name="codigo_postal" placeholder="Codigo postal" class="form-control"
                         value="{{ old('codigo_postal') }}" required>
 
                     {{-- Validación de errores --}}
