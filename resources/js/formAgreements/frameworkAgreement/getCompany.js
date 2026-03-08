@@ -79,6 +79,12 @@ function toggleEmployeeMode(hasEmployees) {
         noFirmaMsg?.classList.remove("d-none");
         setEmployeeFieldsReadonly(false);
         clearEmployeeTextFields();
+        
+        const selectEmployeeTitular = document.getElementById("selectEmployeeTitular");
+        if (selectEmployeeTitular) {
+            selectEmployeeTitular.disabled = false;
+            selectEmployeeTitular.innerHTML = '<option value="">Esta empresa no tiene empleados registrados</option>';
+        }
     }
 }
 
@@ -156,6 +162,7 @@ async function loadCompany(companyId) {
 async function loadEmployees(companyId) {
     const selectEmployeeContact = document.getElementById("selectEmployeeContact");
     const selectEmployeeFirma = document.getElementById("selectEmployeeFirma");
+    const selectEmployeeTitular = document.getElementById("selectEmployeeTitular");
 
     if (selectEmployeeContact) {
         selectEmployeeContact.disabled = true;
@@ -164,6 +171,10 @@ async function loadEmployees(companyId) {
     if (selectEmployeeFirma) {
         selectEmployeeFirma.disabled = true;
         selectEmployeeFirma.innerHTML = '<option value="">Cargando representantes de firma...</option>';
+    }
+    if (selectEmployeeTitular) {
+        selectEmployeeTitular.disabled = true;
+        selectEmployeeTitular.innerHTML = '<option value="">Cargando titulares...</option>';
     }
 
     try {
@@ -187,15 +198,27 @@ async function loadEmployees(companyId) {
             selectEmployeeFirma.disabled = false;
             selectEmployeeFirma.innerHTML = '<option value="">Seleccione un representante de firma</option>';
         }
+        if (selectEmployeeTitular) {
+            selectEmployeeTitular.disabled = false;
+            selectEmployeeTitular.innerHTML = '<option value="">Seleccione un representante titular</option>';
+        }
 
         if (Array.isArray(employees) && employees.length) {
             employees.forEach((e) => {
                 const optC = document.createElement("option");
                 optC.value = e.id;
                 optC.textContent = makeLabel(e);
+                
+                const optT = document.createElement("option");
+                const nameStr = (e.lastname ?? "") + ", " + (e.name ?? "");
+                optT.value = nameStr;
+                optT.textContent = makeLabel(e);
+                
                 const optF = optC.cloneNode(true);
+                
                 if (selectEmployeeContact) selectEmployeeContact.appendChild(optC);
                 if (selectEmployeeFirma) selectEmployeeFirma.appendChild(optF);
+                if (selectEmployeeTitular) selectEmployeeTitular.appendChild(optT);
             });
             toggleEmployeeMode(true);
         } else {
@@ -211,6 +234,7 @@ async function loadEmployees(companyId) {
 // ================== Listeners ==================
 document.addEventListener("DOMContentLoaded", () => {
     const selectCompany = document.getElementById("selectCompany");
+    
     if (!selectCompany) return;
 
     if (selectCompany.value) loadCompany(selectCompany.value);

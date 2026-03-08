@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     .then((employees) => {
                         const selectEmployeeContact = document.getElementById("selectEmployeeContact");
                         const selectEmployeeFirma = document.getElementById("selectEmployeeFirma");
+                        const selectEmployeeTitular = document.getElementById("selectEmployeeTitular");
 
                         const contactSelectWrapper = document.getElementById("contactSelectWrapper");
                         const firmaSelectWrapper = document.getElementById("firmaSelectWrapper");
@@ -51,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             // Mostrar selects, ocultar aviso de creación
                             contactSelectWrapper.classList.remove("d-none");
                             firmaSelectWrapper.classList.remove("d-none");
+                            
                             noContactMsg.classList.add("d-none");
                             noFirmaMsg.classList.add("d-none");
 
@@ -61,17 +63,22 @@ document.addEventListener("DOMContentLoaded", () => {
                             // Limpiar y rellenar selects
                             selectEmployeeContact.innerHTML = '<option value="">Seleccione un representante de contacto</option>';
                             selectEmployeeFirma.innerHTML = '<option value="">Seleccione un representante de firma</option>';
+                            if(selectEmployeeTitular) selectEmployeeTitular.innerHTML = '<option value="">Seleccione un representante titular</option>';
 
                             employees.forEach((employee) => {
-                                const option = `<option value="${employee.id}">${employee.lastname}, ${employee.name} - (DNI: ${employee.dni})</option>`;
-                                selectEmployeeContact.innerHTML += option;
-                                selectEmployeeFirma.innerHTML += option;
+                                const optionContactFirma = `<option value="${employee.id}">${employee.lastname}, ${employee.name} - (DNI: ${employee.dni})</option>`;
+                                const optionTitular = `<option value="${employee.lastname}, ${employee.name}">${employee.lastname}, ${employee.name} - (DNI: ${employee.dni})</option>`;
+                                
+                                selectEmployeeContact.innerHTML += optionContactFirma;
+                                selectEmployeeFirma.innerHTML += optionContactFirma;
+                                if(selectEmployeeTitular) selectEmployeeTitular.innerHTML += optionTitular;
                             });
 
                         } else {
                             // ---- Modo CREACIÓN: no hay empleados, habilitar campos para llenar ----
                             contactSelectWrapper.classList.add("d-none");
                             firmaSelectWrapper.classList.add("d-none");
+                            
                             noContactMsg.classList.remove("d-none");
                             noFirmaMsg.classList.remove("d-none");
 
@@ -82,6 +89,10 @@ document.addEventListener("DOMContentLoaded", () => {
                             // Limpiar valores previos
                             clearContactFields();
                             clearFirmaFields();
+                            
+                            if (selectEmployeeTitular) {
+                                selectEmployeeTitular.innerHTML = '<option value="">Esta empresa no tiene empleados registrados</option>';
+                            }
                         }
                     })
                     .catch((error) => {
@@ -123,3 +134,7 @@ function clearFirmaFields() {
         if (el) el.value = "";
     });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const selectEmployeeTitular = document.getElementById("selectEmployeeTitular");
+});

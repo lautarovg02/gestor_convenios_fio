@@ -123,8 +123,10 @@
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado</label><span
                         class="text-danger"> *</span>
-                    <input type="text" placeholder="Titular / Representante Legal / Apoderado" name="titular"
-                        class="form-control" value="{{ old('titular') }}" required>
+
+                    <select id="selectEmployeeTitular" name="titular" class="form-select" required>
+                        <option value="">Seleccione un titular</option>
+                    </select>
                     @error('titular')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
