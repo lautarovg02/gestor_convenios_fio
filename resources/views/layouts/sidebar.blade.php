@@ -118,13 +118,31 @@
             @endcanany
 
             @canany(['ver empresas'])
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('companies*') ? 'active-nav-link' : '' }}"
-                        href="{{ route('companies.index') }}">
-                        <i class="bi bi-building"></i>
-                        Empresas
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#empresaSubmenu" role="button"
+                    aria-expanded="{{ request()->is('companies*') ? 'true' : 'false' }}"
+                    aria-controls="empresaSubmenu">
+                    <i class="bi bi-building"></i>
+                    Empresas
+                </a>
+                <ul id="empresaSubmenu"
+                    class="collapse nav flex-column ms-3 {{ request()->is('companies*') ? 'show' : '' }}">
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('companies.index') ? 'active-nav-link' : '' }}"
+                            href="{{ route('companies.index') }}">
+                            <i class="bi bi-list-ul"></i>
+                            Ver empresas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('companies.create') ? 'active-nav-link' : '' }}"
+                            href="{{ route('companies.create') }}">
+                            <i class="bi bi-plus-circle"></i>
+                            Agregar empresa
+                        </a>
+                    </li>
+                </ul>
+            </li>
             @endcanany
 
             @canany(['ver alumnos'])

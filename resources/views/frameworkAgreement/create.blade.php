@@ -45,11 +45,23 @@
                     @endforeach
                 </select>
 
+                <div class="mt-3 d-flex align-items-center gap-2">
+                    <small class="text-muted">¿No encontrás la empresa?</small>
+                    <a href="{{ route('companies.create') }}" class="btn btn-sm btn-outline-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-plus-circle me-1" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                        </svg>
+                        Crear nueva empresa
+                    </a>
+                </div>
+
             </div>
 
             {{-- Contraparte --}}
             <div class=" mb-4 border rounded containerSectionForm">
                 <h4 class="TitleSection">Datos de contraparte</h4>
+                <fieldset id="contreparteFieldset" disabled>
 
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">Razón Social</label><span class="text-danger"> *</span>
@@ -149,11 +161,13 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
+                </fieldset>
             </div>
 
             {{-- Dirección --}}
             <div class="mb-4 border rounded containerSectionForm">
                 <h4 class="TitleSection">Dirección de contraparte</h4>
+                <fieldset id="direccionFieldset" disabled>
                 <div class="mb-3">
                     <label class="form-label fs-6 fw-bold">País</label><span class="text-danger"> *</span>
                     <input type="text" name="pais" placeholder="País" class="form-control"
@@ -218,6 +232,7 @@
 
                 </div>
 
+                </fieldset>
             </div>
 
 

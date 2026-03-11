@@ -108,12 +108,14 @@ class CompanyController extends Controller
             if (!$existsEntity) {
                 $newEntity = CompanyEntity::create(['name' => $entitySelected]);
                 //Crear la empresa con el valor seleccionado de entidad
-                Company::create(array_merge($request->validated(), ['entity_id' => $newEntity->id]));
-            } else Company::create(array_merge($request->validated(), ['entity_id' => $existsEntity->id]));
+                $company = Company::create(array_merge($request->validated(), ['entity_id' => $newEntity->id]));
+            } else {
+                $company = Company::create(array_merge($request->validated(), ['entity_id' => $existsEntity->id]));
+            }
 
-
-            return  redirect()->route('companies.index')
-                ->with('success', 'Empresa ingresada exitosamente.');
+            return redirect()
+                ->route('companies.employees.create', $company)
+                ->with('success', 'Empresa creada. Ahora agrega al menos un empleado.');
         } catch (Exception $e) {
             \Log::error('Error al crear la empresa: ' . $e->getMessage());
 

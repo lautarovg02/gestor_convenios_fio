@@ -3,7 +3,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     selectCompany.addEventListener("change", function () {
         const companyId = this.value;
-        if (!companyId) return;
+
+        const contreparteFieldset = document.getElementById("contreparteFieldset");
+        const direccionFieldset = document.getElementById("direccionFieldset");
+
+        if (!companyId) {
+            if (contreparteFieldset) contreparteFieldset.disabled = true;
+            if (direccionFieldset) direccionFieldset.disabled = true;
+            return;
+        }
+
+        // Enable the sections now that a company is selected
+        if (contreparteFieldset) contreparteFieldset.disabled = false;
+        if (direccionFieldset) direccionFieldset.disabled = false;
 
         fetch(`/api/company/${companyId}`)
             .then((res) => res.json())

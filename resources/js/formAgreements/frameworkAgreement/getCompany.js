@@ -43,6 +43,11 @@ function clearCompanyFields() {
     ].forEach((k) => setVal(k, ""));
     setChecked("ambitoNacional", false);
     setChecked("ambitoInternacional", false);
+    
+    const contreparteFieldset = document.getElementById("contreparteFieldset");
+    const direccionFieldset = document.getElementById("direccionFieldset");
+    if (contreparteFieldset) contreparteFieldset.disabled = true;
+    if (direccionFieldset) direccionFieldset.disabled = true;
 }
 
 function clearEmployees() {
@@ -122,6 +127,11 @@ async function loadCompany(companyId) {
         const res = await fetch(`/api/company/${companyId}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const company = await res.json();
+
+        const contreparteFieldset = document.getElementById("contreparteFieldset");
+        const direccionFieldset = document.getElementById("direccionFieldset");
+        if (contreparteFieldset) contreparteFieldset.disabled = false;
+        if (direccionFieldset) direccionFieldset.disabled = false;
 
         const { prefijo, dni, dv } = splitCUIT(company.cuit);
         setValAny(["cuit_prefijo"], prefijo);
