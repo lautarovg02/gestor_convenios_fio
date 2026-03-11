@@ -155,6 +155,27 @@
                             @enderror
                         </div>
 
+                        <!-- Campo Confidencialidad -->
+                        <div class="form-group mb-3">
+                            <label class="form-label required" for="confidentiality">Cláusula de Confidencialidad</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="confidentiality" id="confidentiality_si"
+                                        value="1"
+                                        {{ old('confidentiality', $company->confidentiality) == '1' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="confidentiality_si">Sí</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="confidentiality"
+                                        id="confidentiality_no" value="0"
+                                        {{ old('confidentiality', $company->confidentiality) == '0' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="confidentiality_no">No</label>
+                                </div>
+                            </div>
+                            @error('confidentiality')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
 
                         <div class="form-group mb-3">
                             <h6>Dirección:</h6>

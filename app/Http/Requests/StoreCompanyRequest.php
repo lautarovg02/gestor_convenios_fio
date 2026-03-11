@@ -33,6 +33,7 @@ class StoreCompanyRequest extends FormRequest
                 'entity_id' => ['nullable', 'in:' . implode(',', EntityType::values()) . ',other'],
                 'other_entity_input' => 'nullable|required_if:entity,other|string|max:40',
                 'company_category' => 'nullable|string|max:20',
+                'confidentiality' => 'nullable|boolean',
                 'scope' => 'nullable|string ',
                 'street' => 'required|string|max:40',
                 'number' => 'required|integer',

@@ -27,6 +27,7 @@ class CompanyFactory extends Factory
             'company_name'     => $companyName,
             'sector'           => $this->faker->randomElement(['Público', 'Privado', 'Mixto']),
             'company_category' => $this->faker->randomElement(['Con fines de lucro', 'Sin fines de lucro', 'Gubernamental']),
+            'confidentiality'  => $this->faker->boolean(),
             'scope'            => $this->faker->randomElement(['Nacional', 'Internacional']),
             'entity_id'        => CompanyEntity::inRandomOrder()->first()->id ?? CompanyEntity::factory()->create()->id,
             'city_id'          => City::inRandomOrder()->first()->id ?? City::factory()->create()->id,

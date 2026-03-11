@@ -167,6 +167,27 @@
                             </div>
                         </div>
 
+                        <!-- Campo Confidencialidad -->
+                        <div class="w-75 form-group mb-3">
+                            <label class="form-label fs-6" for="confidentiality">Cláusula de Confidencialidad</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div>
+                                    <input class="form-check-input" type="radio" id="confidentiality_1" name="confidentiality"
+                                        value="1" {{ old('confidentiality', '0') == '1' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="confidentiality_1">
+                                        Sí
+                                    </label>
+                                </div>
+                                <div>
+                                    <input class="form-check-input" type="radio" id="confidentiality_0" name="confidentiality"
+                                        value="0" {{ old('confidentiality', '0') == '0' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="confidentiality_0">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
                         <h3 class="w-100 pt-2 " style="border-top: 1px solid #ccc;">Dirección</h3>
                         <div class="justify-content-center row align-items-end">
 

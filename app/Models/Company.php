@@ -38,7 +38,7 @@ class Company extends Model
      *
      * @var array
      */
-    protected $fillable = ['denomination','cuit','company_name','sector','entity_id','company_category','scope','street','number','city_id', 'slug'];
+    protected $fillable = ['denomination','cuit','company_name','sector','entity_id','company_category','confidentiality','scope','street','number','city_id', 'slug'];
 
 
       //Relación 1:n atributo multivaluado en la tabla Contract

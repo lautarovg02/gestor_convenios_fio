@@ -256,6 +256,7 @@ class CompanyController extends Controller
             'city_id' => $company->city_id,
             'entity_name' => $company->entity_id->name ?? null,
             'postal_code' => $company->city?->postal_code,
+            'confidentiality' => $company->confidentiality,
 
         ]);
     }

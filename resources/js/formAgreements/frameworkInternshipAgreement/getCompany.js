@@ -20,6 +20,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById("ambitoInternacional").checked = true;
                 }
 
+                if (company.confidentiality == 1) {
+                    const confSi = document.getElementById("confSi");
+                    if (confSi) confSi.checked = true;
+                } else if (company.confidentiality == 0) {
+                    const confNo = document.getElementById("confNo");
+                    if (confNo) confNo.checked = true;
+                }
+
                 document.querySelector('input[name="contact_empresa"]').value = company.denomination || "";
                 document.querySelector('input[name="firma_empresa_razon_social"]').value = company.denomination || "";
 

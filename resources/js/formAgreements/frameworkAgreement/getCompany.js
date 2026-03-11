@@ -136,6 +136,11 @@ async function loadCompany(companyId) {
         setChecked("ambitoNacional", scope.startsWith("nac"));
         setChecked("ambitoInternacional", scope.startsWith("int"));
 
+        if (company.confidentiality !== undefined && company.confidentiality !== null) {
+            setChecked("confSi", company.confidentiality == 1);
+            setChecked("confNo", company.confidentiality == 0);
+        }
+
         setValAny(["contact_empresa", "empresa_contacto", "empresa"], company.company_name ?? company.denomination ?? "");
         setValAny(["firma_empresa_razon_social", "empresa_firma", "empresa"], company.denomination ?? company.company_name ?? "");
 
