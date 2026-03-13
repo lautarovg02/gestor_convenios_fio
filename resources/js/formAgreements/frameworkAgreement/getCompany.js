@@ -48,6 +48,8 @@ function clearCompanyFields() {
     const direccionFieldset = document.getElementById("direccionFieldset");
     if (contreparteFieldset) contreparteFieldset.disabled = true;
     if (direccionFieldset) direccionFieldset.disabled = true;
+
+    setCompanyFieldsReadonly(false);
 }
 
 function clearEmployees() {
@@ -121,6 +123,32 @@ function clearEmployeeTextFields() {
     });
 }
 
+function setCompanyFieldsReadonly(readonly) {
+    const fields = [
+        "razon_social", "contraparte_razon_social",
+        "cuit_prefijo", "cuit_dni", "cuit_dv",
+        "contraparte_rubro", "rubro", "sector",
+        "empresa_entidad", "entidad",
+        "contact_empresa", "empresa_contacto", "empresa",
+        "firma_empresa_razon_social", "empresa_firma",
+        "empresa_calle", "calle",
+        "empresa_numero", "nro_calle", "numero", "nro",
+        "postal_code", "codigo_postal", "cp",
+        "empresa_pais", "pais", "provincia", "ciudad"
+    ];
+    fields.forEach(f => {
+        const el = document.getElementById(f) || document.querySelector(`[name="${f}"]`);
+        if (el) el.readOnly = readonly;
+    });
+
+    // Radios
+    const radios = ["ambitoNacional", "ambitoInternacional", "confSi", "confNo"];
+    radios.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.disabled = readonly;
+    });
+}
+
 // ================== Carga de empresa + empleados ==================
 async function loadCompany(companyId) {
     try {
@@ -167,6 +195,8 @@ async function loadCompany(companyId) {
         if (postal_code) setVal("postal_code", postal_code);
         if (provName) setVal("provincia", provName);
         if (cityName) setVal("ciudad", cityName);
+
+        setCompanyFieldsReadonly(true);
 
         await loadEmployees(companyId);
     } catch (error) {

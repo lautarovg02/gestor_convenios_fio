@@ -56,10 +56,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Tutor
                 if (data.teacher) {
-                    $form.find('input[name="tutorFacuName"]').val(data.teacher.name);
-                    $form.find('input[name="tutorFacuLastName"]').val(data.teacher.lastname);
-                    $form.find('input[name="tutorFacuDni"]').val(data.teacher.dni);
+                    $form.find('input[name="tutorFacuName"]').val(data.teacher.name).prop('readonly', true);
+                    $form.find('input[name="tutorFacuLastName"]').val(data.teacher.lastname).prop('readonly', true);
+                    $form.find('input[name="tutorFacuDni"]').val(data.teacher.dni).prop('readonly', true);
                 }
+
+                // Make company fields readonly
+                $form.find('input[name="companyName"]').prop('readonly', true);
+                $form.find('input[name="companyRepresentative"]').prop('readonly', true);
 
                 // Mensaje de éxito
                 $("#formEmpresaSeleccionada").prepend(`

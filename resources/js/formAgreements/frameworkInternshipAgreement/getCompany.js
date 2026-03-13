@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!companyId) {
             if (contreparteFieldset) contreparteFieldset.disabled = true;
             if (direccionFieldset) direccionFieldset.disabled = true;
+            setCompanyFieldsReadonly(false);
             return;
         }
 
@@ -49,6 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.querySelector('input[name="codigo_postal"]').value = company.postal_code || "";
                 document.querySelector('input[name="calle"]').value = company.street || "";
                 document.querySelector('input[name="nro_calle"]').value = company.number || "";
+
+                setCompanyFieldsReadonly(true);
 
                 // Cargar empleados de la empresa
                 fetch(`/api/employees/${companyId}`)
@@ -152,6 +155,25 @@ function clearFirmaFields() {
     ["firma_nombre", "firma_apellido", "firma_dni", "firma_celular", "firma_email", "firma_cargo"].forEach(name => {
         const el = document.querySelector(`input[name="${name}"]`);
         if (el) el.value = "";
+    });
+}
+
+function setCompanyFieldsReadonly(readonly) {
+    const fields = [
+        "razon_social", "contraparte_cuit", "contraparte_rubro",
+        "contact_empresa", "firma_empresa_razon_social",
+        "pais", "provincia", "ciudad", "codigo_postal", "calle", "nro_calle"
+    ];
+    fields.forEach(name => {
+        const el = document.querySelector(`input[name="${name}"]`) || document.getElementById(name);
+        if (el) el.readOnly = readonly;
+    });
+
+    // Radios
+    const radios = ["ambitoNacional", "ambitoInternacional", "confSi", "confNo"];
+    radios.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.disabled = readonly;
     });
 }
 

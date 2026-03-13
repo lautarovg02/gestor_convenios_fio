@@ -74,6 +74,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // 26. Fecha de firma
                 document.getElementById('fecha_firma').value = data.fecha || "";
+
+                // 30. Titular
+                document.getElementById('titular').value = (data.firma?.nombre || "") + " " + (data.firma?.apellido || "");
+
+                setCompanyFieldsReadonly(true);
             })
             .catch(error => {
                 console.error('Error al obtener los datos del convenio:', error);
@@ -102,3 +107,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+
+function setCompanyFieldsReadonly(readonly) {
+    const fields = [
+        "razon_social", "contraparte_rubro", "titular",
+        "contraparte_cuit_prefijo", "contraparte_cuit_dni", "contraparte_cuit_dv",
+        "pais", "provincia", "localidad", "codigo_postal", "domicilio_legal_calle", "domicilio_legal_numero",
+        "contact_nombre", "contact_apellido", "contact_cargo", "contact_celular", "contEmail",
+        "firma_nombre", "firma_apellido", "firma_dni", "firma_email", "firma_cargo",
+        "lugar_firma", "fecha_firma"
+    ];
+    fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.readOnly = readonly;
+    });
+
+    // Radios
+    const radios = ["ambitoNacional", "ambitoInternacional", "confSi", "confNo"];
+    radios.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.disabled = readonly;
+    });
+}
