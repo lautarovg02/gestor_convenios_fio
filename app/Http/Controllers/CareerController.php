@@ -53,7 +53,7 @@ class CareerController extends Controller
      */
     public function create(): View
     {
-        $coordinators = Teacher::getTeachersWithoutRoles()->orderBy('name', 'ASC')->get();
+        $coordinators = Teacher::getAvailableCoordinators()->orderBy('name', 'ASC')->get();
         $departments = Department::orderBy('name', 'ASC')->get();
         return view('careers.create', compact('departments', 'coordinators'));
     }
@@ -105,7 +105,7 @@ class CareerController extends Controller
      */
     public function edit(Career $career): View
     {
-        $teachersWithoutRol = Teacher::getTeachersWithoutRoles()->orderBy('lastname' , 'ASC')->get();
+        $teachersWithoutRol = Teacher::getAvailableCoordinators()->orderBy('lastname' , 'ASC')->get();
         $departments = Department::orderBy('name' , 'ASC')->get();
         return view('careers.edit', compact('career' , 'departments', 'teachersWithoutRol'));
     }

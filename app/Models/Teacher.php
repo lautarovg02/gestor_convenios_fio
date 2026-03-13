@@ -245,6 +245,42 @@ class Teacher extends Model
     }
 
     /**
+     * Obtener docentes que tienen el rol de 'Coordinador' en el sistema (Spatie)
+     * pero que AÚN NO tienen una carrera asignada.
+     */
+    public static function getAvailableCoordinators()
+    {
+        // Traemos los IDs de los usuarios que tienen el rol de Coordinador en Spatie
+        $coordinatorUserIds = User::role('Coordinador')->pluck('id');
+
+        return self::whereIn('user_id', $coordinatorUserIds)
+            ->whereNotExists(function ($query) {
+                // El docente no debe estar ya asignado como coordinador de una carrera
+                $query->select(\DB::raw(1))
+                    ->from('careers')
+                    ->whereColumn('careers.coordinator_id', 'teachers.id');
+            });
+    }
+
+    /**
+     * Obtener docentes que tienen el rol de 'Director' en el sistema (Spatie)
+     * pero que AÚN NO tienen un departamento asignado.
+     */
+    public static function getAvailableDirectors()
+    {
+        // Traemos los IDs de los usuarios que tienen el rol de Director en Spatie
+        $directorUserIds = User::role('Director')->pluck('id');
+
+        return self::whereIn('user_id', $directorUserIds)
+            ->whereNotExists(function ($query) {
+                // El docente no debe estar ya asignado como director de un depto
+                $query->select(\DB::raw(1))
+                    ->from('departments')
+                    ->whereColumn('departments.director_id', 'teachers.id');
+            });
+    }
+
+    /**
      * @dairagalceran
      * Scope for search in teachers.index
      */

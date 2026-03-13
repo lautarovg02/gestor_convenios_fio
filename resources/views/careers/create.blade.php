@@ -49,8 +49,7 @@
                                             {{ $coordinator->name . ' ' . $coordinator->lastname }}</option>
                                     @endforeach
                                 </select>
-                                <small class="form-hint">Seleccione el <b>coordinador</b> al cual pertenece la
-                                    carrera.</small>
+                                <small class="form-hint">Seleccione el <b>coordinador</b> al cual pertenece la carrera. Si no encuentra al <b>docente</b> en la lista, agregarlo en <a href="{{route('adminUsers.create')}}">Agregar Docente</a>.</small>
                                 @error('coordinator_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror

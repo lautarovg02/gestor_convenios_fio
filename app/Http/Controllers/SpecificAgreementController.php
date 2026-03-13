@@ -149,12 +149,10 @@ class SpecificAgreementController extends Controller
             $validated['file'] = $filePath;
         }
 
-        $status = \App\Models\ContractStatus::firstOrCreate(['status' => 'En Departamento']);
-
         // Crear convenio específico en la base de datos
         $convenio = Specific::create([
             'contract_id' => $validated['contract_id'],
-            'contract_status_id' => $status->id,
+            'contract_status_id' => 2, // 2 = En Departamento
             'signing_date' => $validated['fecha_firma'],
             'objective' => $validated['objetivo'],
             'commitment_parties' => $validated['compromisos'],

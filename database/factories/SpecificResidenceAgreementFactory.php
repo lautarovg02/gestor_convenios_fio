@@ -24,7 +24,7 @@ class SpecificResidenceAgreementFactory extends Factory
             'task' => $this->faker->text(),
             'signing_date' => $this->faker->date(),
             'contract_id' => Contract::factory(),
-            'contract_status_id' => \App\Models\ContractStatus::whereIn('status', ['En Coordinación', 'SEVyT', 'SEVyT firma', 'Contraparte', 'Enviar a CA', 'En CA', 'En ejecución', 'Finalizado'])->inRandomOrder()->first()->id ?? \App\Models\ContractStatus::factory(),
+            'contract_status_id' => $this->faker->numberBetween(1, 10),
             'student_id' => Student::factory(),
             'file' => null,
         ];

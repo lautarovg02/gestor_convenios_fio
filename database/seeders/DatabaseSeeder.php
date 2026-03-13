@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Crear Roles y Permisos (Spatie)
         $this->call(RolePermissionSeeder::class);
+        $this->call(ContractStatusSeeder::class);
 
         // ----------------------------------------------------
         // 2. CREACIÓN DE USUARIOS CLAVE
@@ -166,7 +167,6 @@ class DatabaseSeeder extends Seeder
             ['id' => 3, 'type' => 'Convenio Marco', 'created_at' => now(), 'updated_at' => now()],
         ]);
 
-        ContractStatus::factory(10)->create();
         Student::factory(80)->create();
         
         // === NEW SEEDING LOGIC FOR CONTRACTS ===
@@ -190,8 +190,8 @@ class DatabaseSeeder extends Seeder
 
                 if ($createChildren) {
                     // Si tiene hijos, nos aseguramos de que el padre NO esté finalizado ni deshabilitado
-                    $activeStatus = ContractStatus::whereIn('status', ['SEVyT', 'SEVyT firma', 'En ejecución'])->inRandomOrder()->first();
-                    $contract->update(['contract_status_id' => $activeStatus->id]);
+                    $activeStatusIds = [1, 4, 8]; // SEVyT, SEVyT firma, En ejecución
+                    $contract->update(['contract_status_id' => collect($activeStatusIds)->random()]);
 
                     if ($typeId == 3) {
                         Specific::factory(rand(1, 3))->create([

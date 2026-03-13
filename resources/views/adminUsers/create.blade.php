@@ -95,9 +95,14 @@
                                             
                                             {{-- Identificamos los IDs para JavaScript --}}
                                             @php
-                                                // CORRECCIÓN:
                                                 $teacherRole = $roles->firstWhere('name', 'Docente');
                                                 $teacherRoleId = $teacherRole ? $teacherRole->id : 0;
+
+                                                $coordinatorRole = $roles->firstWhere('name', 'Coordinador');
+                                                $coordinatorRoleId = $coordinatorRole ? $coordinatorRole->id : 0;
+
+                                                $directorRole = $roles->firstWhere('name', 'Director');
+                                                $directorRoleId = $directorRole ? $directorRole->id : 0;
                                                 
                                                 $secretaryRole = $roles->firstWhere('name', 'Secretaria');
                                                 $secretaryRoleId = $secretaryRole ? $secretaryRole->id : 0;
@@ -124,7 +129,7 @@
                                 {{-- BLOQUE MENSAJE POR DEFECTO --}}
                                 <div id="no_profile_msg" class="alert alert-secondary text-center mt-4">
                                     <i class="bi bi-info-circle"></i><br>
-                                    Seleccione el rol <strong>Docente</strong> para cargar datos académicos.<br>
+                                    Seleccione el rol <strong>Docente, Coordinador o Director</strong> para cargar datos académicos.<br>
                                     Los demás roles no requieren información adicional.
                                 </div>
 
@@ -214,6 +219,8 @@
     document.addEventListener('DOMContentLoaded', function () {
         // Obtenemos los IDs de los roles pasados desde PHP/Blade
         const TEACHER_ROLE_ID = {{ $teacherRoleId ?? 0 }};
+        const COORDINATOR_ROLE_ID = {{ $coordinatorRoleId ?? 0 }};
+        const DIRECTOR_ROLE_ID = {{ $directorRoleId ?? 0 }};
         
         const roleSelect = document.getElementById('role_id');
         const teacherFields = document.getElementById('teacher_fields');
@@ -221,7 +228,7 @@
 
         function toggleFields() {
             const selectedRole = roleSelect.value;
-            const isTeacher = selectedRole == TEACHER_ROLE_ID;
+            const isTeacher = selectedRole == TEACHER_ROLE_ID || selectedRole == COORDINATOR_ROLE_ID || selectedRole == DIRECTOR_ROLE_ID;
 
             if (isTeacher) {
                 // Mostrar campos docentes

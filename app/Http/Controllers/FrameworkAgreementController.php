@@ -152,7 +152,7 @@ class FrameworkAgreementController extends Controller
             'contact_employee_id'        => $contact_employee->id,
             'representative_employee_id' => $representative_employee->id,
             
-            'contract_status_id'         => 1, // O usar $contract_status->id si es dinámico
+            'contract_status_id'         => 1, // 1 = SEVyT
             'type_framework_agreement_id'=> $type->id ?? 1,
             'file'                       => null 
         ]);

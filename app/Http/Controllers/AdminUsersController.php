@@ -74,9 +74,9 @@ class AdminUsersController extends Controller
             'role_id'  => ['required', 'exists:roles,id'], // Validamos que el ID del rol exista
 
             // Validaciones condicionales (buscamos el nombre del rol según el ID enviado)
-            'docente_nombre'   => [Rule::requiredIf(fn() => Role::find($request->role_id)?->name === 'teacher'), 'nullable', 'string', 'max:40'],
-            'docente_apellido' => [Rule::requiredIf(fn() => Role::find($request->role_id)?->name === 'teacher'), 'nullable', 'string', 'max:40'],
-            'dni'              => [Rule::requiredIf(fn() => Role::find($request->role_id)?->name === 'teacher'), 'nullable', 'integer', 'unique:teachers,dni'],
+            'docente_nombre'   => [Rule::requiredIf(fn() => in_array(Role::find($request->role_id)?->name, ['Docente', 'Coordinador', 'Director'])), 'nullable', 'string', 'max:40'],
+            'docente_apellido' => [Rule::requiredIf(fn() => in_array(Role::find($request->role_id)?->name, ['Docente', 'Coordinador', 'Director'])), 'nullable', 'string', 'max:40'],
+            'dni'              => [Rule::requiredIf(fn() => in_array(Role::find($request->role_id)?->name, ['Docente', 'Coordinador', 'Director'])), 'nullable', 'integer', 'unique:teachers,dni'],
             'cuil'             => ['nullable', 'string', 'max:20', 'unique:teachers,cuil'],
             'facultad'         => ['nullable', 'string', 'max:20'],
             'is_rector'        => ['nullable', 'boolean'],
@@ -106,7 +106,7 @@ class AdminUsersController extends Controller
                     'user_id' => $user->id,
                     // 'username' => ... ELIMINADO (Ya no existe en la BD)
                 ]);
-            } elseif ($role->name === 'Docente') {
+            } elseif (in_array($role->name, ['Docente', 'Coordinador', 'Director'])) {
                 Teacher::create([
                     'user_id'   => $user->id,
                     'name'      => $validated['docente_nombre'],
@@ -153,7 +153,7 @@ class AdminUsersController extends Controller
         ];
 
         // Reglas según el rol que tiene asignado
-        if ($currentRole === 'teacher') {
+        if (in_array($currentRole, ['Docente', 'Coordinador', 'Director'])) {
             $rules['teacher_name']     = ['required', 'string', 'max:255'];
             $rules['teacher_lastname'] = ['required', 'string', 'max:255'];
             $rules['teacher_dni']      = ['nullable', 'string', 'max:50'];
@@ -179,7 +179,7 @@ class AdminUsersController extends Controller
             $user->update($updateData);
 
             // 3. Actualizar Perfil
-            if ($currentRole === 'teacher' && $user->teacher) {
+            if (in_array($currentRole, ['Docente', 'Coordinador', 'Director']) && $user->teacher) {
                 $user->teacher->update([
                     'name'     => $data['teacher_name'],
                     'lastname' => $data['teacher_lastname'],

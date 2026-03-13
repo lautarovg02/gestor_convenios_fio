@@ -19,7 +19,7 @@ class SpecificFactory extends Factory
     {
         return [
             'contract_id' => Contract::factory(),
-            'contract_status_id' => \App\Models\ContractStatus::whereIn('status', ['En Departamento', 'SEVyT', 'SEVyT firma', 'Contraparte', 'Enviar a CA', 'En CA', 'En ejecución', 'Finalizado'])->inRandomOrder()->first()->id ?? \App\Models\ContractStatus::factory(),
+            'contract_status_id' => $this->faker->numberBetween(1, 10),
             'signing_date' => $this->faker->date(),
             'objective' => $this->faker->text(100),
             'commitment_parties' => $this->faker->text(),
