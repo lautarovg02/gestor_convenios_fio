@@ -155,7 +155,7 @@ class FrameworkResidenceAgreementController extends Controller
             'contact_employee_id'         => $contact_employee->id,
             'representative_employee_id'  => $representative_employee->id,
             'rector'                      => $rector->id,
-            'contract_status_id'          => 1, // 1 = SEVyT
+            'contract_status_id'          => $contract_status->id,
             'type_framework_agreement_id' => $type->id,
             'file'                        => null,
             'creation_date'               => Carbon::now(),

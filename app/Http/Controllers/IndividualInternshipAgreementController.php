@@ -115,9 +115,11 @@ class IndividualInternshipAgreementController extends Controller
         $data['docente_cuil_dni']     = $dd;
         $data['docente_cuil_dv']      = $dv;
 
+        $status = \App\Models\ContractStatus::firstOrCreate(['status' => 'En Coordinación']);
+
         $agreement = IndividualInternshipAgreement::create([
             'contract_id'            => $data['contract_id'],
-            'contract_status_id'     => 3, // 3 = En Coordinación
+            'contract_status_id'     => $status->id,
             'area'                   => $data['area_pasantia'],
             'assignment'             => $data['sitio_pasantia'],
             'task'                   => $data['tareas'],

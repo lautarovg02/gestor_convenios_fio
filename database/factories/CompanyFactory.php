@@ -33,8 +33,6 @@ class CompanyFactory extends Factory
             'city_id'          => City::inRandomOrder()->first()->id ?? City::factory()->create()->id,
             'street'           => $this->faker->streetName(),
             'number'           => $this->faker->buildingNumber(),
-            'rubro'            => $this->faker->randomElement(['Industrial', 'Comercial', 'Tecnológico', 'Servicios', 'Agropecuario']),
-            'dedicacion'       => $this->faker->randomElement(['Tiempo Completo', 'Tiempo Parcial', 'Dedicación Exclusiva']),
             'slug'             => Str::slug($companyName . '-' . $this->faker->unique()->randomNumber(5)),
         ];
     }

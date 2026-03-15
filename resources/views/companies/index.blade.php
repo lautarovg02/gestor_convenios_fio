@@ -59,7 +59,6 @@
                         <th class="col-max-width">Nombre Fantasía</th>
                         <th class="col-max-width">Sector</th>
                         <th class="col-max-width">Entidad</th>
-                        <th class="col-max-width">Categoría</th>
                         <th class="col-max-width">Rubro</th>
                         <th class="col-max-width">Dedicación</th>
                         <th class="col-max-width">Ciudad</th>
@@ -89,10 +88,6 @@
 
                             <td class="col-max-width text-truncate" title="{{ optional($company->entity)->name }}">
                                 {!! highlightKeyword(optional($company->entity)->name ?? 'N/A', request('search')) !!}
-                            </td>
-
-                            <td class="col-max-width text-truncate" title="{{ $company->company_category }}">
-                                {!! highlightKeyword($company->company_category ?? 'N/A', request('search')) !!}
                             </td>
 
                             <td class="col-max-width text-truncate" title="{{ $company->rubro }}">
