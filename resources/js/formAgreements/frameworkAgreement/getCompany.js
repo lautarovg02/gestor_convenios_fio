@@ -32,6 +32,7 @@ function clearCompanyFields() {
         "cuit_dni",
         "cuit_dv",
         "contraparte_rubro",
+        "dedicacion",
         "contact_empresa",
         "firma_empresa_razon_social",
         "empresa_calle",
@@ -127,7 +128,7 @@ function setCompanyFieldsReadonly(readonly) {
     const fields = [
         "razon_social", "contraparte_razon_social",
         "cuit_prefijo", "cuit_dni", "cuit_dv",
-        "contraparte_rubro", "rubro", "sector",
+        "contraparte_rubro", "rubro", "sector", "dedicacion",
         "empresa_entidad", "entidad",
         "contact_empresa", "empresa_contacto", "empresa",
         "firma_empresa_razon_social", "empresa_firma",
@@ -141,11 +142,15 @@ function setCompanyFieldsReadonly(readonly) {
         if (el) el.readOnly = readonly;
     });
 
-    // Radios
+    // Radios (usamos pointer-events para que no se puedan cambiar pero se envíen igual)
     const radios = ["ambitoNacional", "ambitoInternacional", "confSi", "confNo"];
     radios.forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.disabled = readonly;
+        if (el) {
+            el.style.pointerEvents = readonly ? 'none' : 'auto';
+            // el.style.opacity = readonly ? '1' : '1'; 
+            // Opcional: el.parentElement.style.opacity = readonly ? '0.8' : '1';
+        }
     });
 }
 
@@ -168,6 +173,7 @@ async function loadCompany(companyId) {
 
         setValAny(["razon_social", "contraparte_razon_social"], company.denomination ?? company.company_name ?? "");
         setValAny(["contraparte_rubro", "rubro", "sector"], company.company_category ?? company.sector ?? "");
+        setValAny(["dedicacion"], company.dedicacion ?? "");
         setValAny(["empresa_entidad", "entidad"], company.entity_name || "");
 
         const scope = (company.scope ?? "").toLowerCase().trim();
@@ -293,4 +299,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         loadCompany(companyId);
     });
+
+    // Habilitar fieldsets antes de enviar el formulario para que lleguen al servidor
+    const form = document.querySelector("form");
+    if (form) {
+        form.addEventListener("submit", function () {
+            const contreparteFieldset = document.getElementById("contreparteFieldset");
+            const direccionFieldset = document.getElementById("direccionFieldset");
+            if (contreparteFieldset) contreparteFieldset.disabled = false;
+            if (direccionFieldset) direccionFieldset.disabled = false;
+        });
+    }
 });

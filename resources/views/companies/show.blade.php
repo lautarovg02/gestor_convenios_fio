@@ -31,7 +31,9 @@
                 <div class="col-md-6 mb-3"><strong>Nombre de fantasía:</strong> {{ $company->company_name }}</div>
                 <div class="col-md-6 mb-3"><strong>Sector:</strong> {{ $company->sector }}</div>
                 <div class="col-md-6 mb-3"><strong>Entidad:</strong> {{ $company->entity->name }}</div>
-                <div class="col-md-6 mb-3"><strong>Rubro:</strong> {{ $company->company_category }}</div>
+                <div class="col-md-6 mb-3"><strong>Categoría:</strong> {{ $company->company_category }}</div>
+                <div class="col-md-6 mb-3"><strong>Rubro:</strong> {{ $company->rubro }}</div>
+                <div class="col-md-6 mb-3"><strong>Dedicación:</strong> {{ $company->dedicacion }}</div>
                 <div class="col-md-6 mb-3"><strong>Ámbito:</strong> {{ $company->scope }}</div>
                 <div class="col-md-6 mb-3"><strong>Calle:</strong> {{ $company->street }}</div>
                 <div class="col-md-6 mb-3"><strong>Número:</strong> {{ $company->number }}</div>

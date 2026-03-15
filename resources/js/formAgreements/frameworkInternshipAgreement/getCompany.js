@@ -121,11 +121,19 @@ document.addEventListener("DOMContentLoaded", () => {
                     .catch((error) => {
                         console.error("Error al obtener datos de los empleados:", error);
                     });
-            })
-            .catch((error) => {
-                console.error("Error al obtener datos de la empresa:", error);
             });
     });
+
+    // Habilitar fieldsets antes de enviar el formulario para que lleguen al servidor
+    const form = document.querySelector("form");
+    if (form) {
+        form.addEventListener("submit", function () {
+            const contreparteFieldset = document.getElementById("contreparteFieldset");
+            const direccionFieldset = document.getElementById("direccionFieldset");
+            if (contreparteFieldset) contreparteFieldset.disabled = false;
+            if (direccionFieldset) direccionFieldset.disabled = false;
+        });
+    }
 });
 
 function setContactReadonly(readonly) {
@@ -169,11 +177,13 @@ function setCompanyFieldsReadonly(readonly) {
         if (el) el.readOnly = readonly;
     });
 
-    // Radios
+    // Radios (usamos pointer-events para que no se puedan cambiar pero se envíen igual)
     const radios = ["ambitoNacional", "ambitoInternacional", "confSi", "confNo"];
     radios.forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.disabled = readonly;
+        if (el) {
+            el.style.pointerEvents = readonly ? 'none' : 'auto';
+        }
     });
 }
 

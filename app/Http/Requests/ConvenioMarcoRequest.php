@@ -52,6 +52,7 @@ class ConvenioMarcoRequest extends FormRequest
             'cuit_dni' => ['required', 'numeric'],
             'cuit_dv' => ['required', 'numeric'],
             'contraparte_rubro' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'dedicacion' => ['required', 'string', 'max:255'],
             'entidad' => ['required', 'string'],
             'titular' => ['required', 'string'],
             'confidencialidad' => ['required', 'in:si,no'],
@@ -72,7 +73,7 @@ class ConvenioMarcoRequest extends FormRequest
             // Dirección
             'calle' => ['required', 'string', 'max:255'],
             'nro_calle' => ['required', 'string', 'max:20'],
-            'codigo_postal' => ['required', 'numeric'],
+            'codigo_postal' => ['required', 'string'],
             'localidad' => ['required', 'string'],
             'provincia' => ['required', 'string'],
             'pais' => ['required', 'string'],

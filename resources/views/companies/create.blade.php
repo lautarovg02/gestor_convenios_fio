@@ -133,7 +133,6 @@
                                 <input type="hidden" name="other_entity" id="other_entity">
                             </div>
                         </div>
-                        <!-- Campo rubro -->
                         <div class="w-75 form-group mb-3">
                             <label class="form-label fs-6"><label for="company_category">Categoría</label></label>
                             <select class="form-select" name="company_category" id="company_category">
@@ -143,6 +142,24 @@
                                 <option value="Gubernamental" {{ old('company_category') == 'Gubernamental' ? 'selected' : '' }}>Gubernamental</option>
                             </select>
                             @error('company_category')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Campo rubro -->
+                        <div class="w-75 form-group mb-3">
+                            <label class="form-label fs-6"><label for="rubro">Rubro</label></label>
+                            <input class="form-control" maxlength="255" placeholder="Rubro" name="rubro" type="text" id="rubro" value="{{ old('rubro') }}">
+                            @error('rubro')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Campo dedicacion -->
+                        <div class="w-75 form-group mb-3">
+                            <label class="form-label fs-6"><label for="dedicacion">Dedicación</label></label>
+                            <input class="form-control" maxlength="255" placeholder="Dedicación" name="dedicacion" type="text" id="dedicacion" value="{{ old('dedicacion') }}">
+                            @error('dedicacion')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>

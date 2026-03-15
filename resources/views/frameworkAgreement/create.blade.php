@@ -102,7 +102,7 @@
                             pattern="\d{1}" value="{{ old('cuit_dv') }}">
                     </div>
                     <div class="form-text">Formato: XX-XXXXXXXX-X</div>
-                    @error('contact_cuil')
+                    @error('cuit_prefijo')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
@@ -118,6 +118,16 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6 fw-bold">Dedicación</label><span class="text-danger"> *</span>
+                    <input type="text" placeholder="Dedicación de la empresa" id="dedicacion" name="dedicacion"
+                        class="form-control" value="{{ old('dedicacion') }}">
+
+                    @error('dedicacion')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
 
 

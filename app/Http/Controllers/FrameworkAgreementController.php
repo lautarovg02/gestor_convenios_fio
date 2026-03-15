@@ -174,6 +174,7 @@ class FrameworkAgreementController extends Controller
         $template->setValue('cuil', safe($validated['cuil_prefijo']) . '-' . safe($validated['cuil_dni']) . '-' . safe($validated['cuil_dv']));
         $template->setValue('cuit', safe($validated['cuit_prefijo']) . '-' . safe($validated['cuit_dni']) . '-' . safe($validated['cuit_dv']));
         $template->setValue('rubro', safe($validated['contraparte_rubro'] ?? null));
+        $template->setValue('dedicacion', safe($validated['dedicacion'] ?? null));
         $template->setValue('entidad', safe($validated['entidad']));
         
         $template->setValue('nombre_rep_contacto', safe($validated['contact_nombre']) . ' ' . safe($validated['contact_apellido']));

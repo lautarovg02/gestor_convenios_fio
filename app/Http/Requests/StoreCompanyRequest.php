@@ -37,6 +37,8 @@ class StoreCompanyRequest extends FormRequest
                 'scope' => 'nullable|string ',
                 'street' => 'required|string|max:40',
                 'number' => 'required|integer',
+                'rubro' => 'nullable|string|max:255',
+                'dedicacion' => 'nullable|string|max:255',
         ];
     }
 

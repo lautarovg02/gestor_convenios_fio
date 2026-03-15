@@ -69,7 +69,7 @@ class StoreFrameworkResidenceAgreement extends FormRequest
             // Dirección
             'calle' => ['required', 'string', 'max:255'],
             'nro_calle' => ['required', 'string', 'max:20'],
-            'codigo_postal' => ['required', 'numeric'],
+            'codigo_postal' => ['required', 'string'],
             'localidad' => ['required', 'string'],
             'provincia' => ['required', 'string'],
             'pais' => ['required', 'string'],

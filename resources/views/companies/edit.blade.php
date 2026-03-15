@@ -119,7 +119,6 @@
                             </div>
                         </div>
 
-                        <!-- Campo Categoría -->
                         <div class="form-group mb-3">
                             <label class="form-label required" for="company_category">Categoría</label>
                             <select class="form-select" name="company_category" id="company_category">
@@ -129,6 +128,28 @@
                                 <option value="Gubernamental" {{ old('company_category', $company->company_category) == 'Gubernamental' ? 'selected' : '' }}>Gubernamental</option>
                             </select>
                             @error('company_category')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Campo rubro -->
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="rubro">Rubro</label>
+                            <input class="form-control" name="rubro" id="rubro" type="text"
+                                value="{{ old('rubro', $company->rubro) }}"
+                                placeholder="Ingrese el rubro de la empresa" autocomplete="off">
+                            @error('rubro')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Campo dedicacion -->
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="dedicacion">Dedicación</label>
+                            <input class="form-control" name="dedicacion" id="dedicacion" type="text"
+                                value="{{ old('dedicacion', $company->dedicacion) }}"
+                                placeholder="Ingrese la dedicación de la empresa" autocomplete="off">
+                            @error('dedicacion')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
