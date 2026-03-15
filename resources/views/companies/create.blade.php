@@ -134,8 +134,8 @@
                             </div>
                         </div>
                         <div class="w-75 form-group mb-3">
-                            <label class="form-label fs-6"><label for="company_category">Categoría</label></label>
-                            <select class="form-select" name="company_category" id="company_category">
+                            <label class="form-label fs-6 required-field"><label for="company_category">Categoría</label></label>
+                            <select class="form-select" name="company_category" id="company_category" required>
                                 <option value="">Seleccionar categoría</option>
                                 <option value="Con fines de lucro" {{ old('company_category') == 'Con fines de lucro' ? 'selected' : '' }}>Con fines de lucro</option>
                                 <option value="Sin fines de lucro" {{ old('company_category') == 'Sin fines de lucro' ? 'selected' : '' }}>Sin fines de lucro</option>
@@ -148,8 +148,8 @@
 
                         <!-- Campo rubro -->
                         <div class="w-75 form-group mb-3">
-                            <label class="form-label fs-6"><label for="rubro">Rubro</label></label>
-                            <input class="form-control" maxlength="255" placeholder="Rubro" name="rubro" type="text" id="rubro" value="{{ old('rubro') }}">
+                            <label class="form-label fs-6 required-field"><label for="rubro">Rubro</label></label>
+                            <input class="form-control" maxlength="255" placeholder="Rubro" name="rubro" type="text" id="rubro" value="{{ old('rubro') }}" required>
                             @error('rubro')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -157,15 +157,15 @@
 
                         <!-- Campo dedicacion -->
                         <div class="w-75 form-group mb-3">
-                            <label class="form-label fs-6"><label for="dedicacion">Dedicación</label></label>
-                            <input class="form-control" maxlength="255" placeholder="Dedicación" name="dedicacion" type="text" id="dedicacion" value="{{ old('dedicacion') }}">
+                            <label class="form-label fs-6 required-field"><label for="dedicacion">Dedicación</label></label>
+                            <input class="form-control" maxlength="255" placeholder="Dedicación" name="dedicacion" type="text" id="dedicacion" value="{{ old('dedicacion') }}" required>
                             @error('dedicacion')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <!-- Campo Ámbito con varias opciones -->
                         <div class="w-75 form-group mb-3">
-                            <label class="form-label fs-6" for="scope">Ámbito</label>
+                            <label class="form-label fs-6 required-field" for="scope">Ámbito</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <div>
                                     <input class="form-check-input" type="radio" id="scope_1" name="scope"
@@ -186,7 +186,7 @@
 
                         <!-- Campo Confidencialidad -->
                         <div class="w-75 form-group mb-3">
-                            <label class="form-label fs-6" for="confidentiality">Cláusula de Confidencialidad</label>
+                            <label class="form-label fs-6 required-field" for="confidentiality">Cláusula de Confidencialidad</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <div>
                                     <input class="form-check-input" type="radio" id="confidentiality_1" name="confidentiality"

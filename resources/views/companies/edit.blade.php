@@ -72,10 +72,10 @@
                         </div>
                         <!-- Campo nombre fantasía -->
                         <div class="form-group mb-3">
-                            <label class="form-label" for="company_name">Nombre de fantasía</label>
+                            <label class="form-label required-field" for="company_name">Nombre de fantasía</label>
                             <input class="form-control" name="company_name" id="company_name" type="text"
                                 value="{{ old('company_name', $company->company_name) }}"
-                                placeholder="Ingrese el Nombre de fantasía" autocomplete="off">
+                                placeholder="Ingrese el Nombre de fantasía" autocomplete="off" required>
                         </div>
 
                         <!-- Campo Sector -->
@@ -93,8 +93,8 @@
                         </div>
                         <!-- Campo Entidad -->
                         <div class="mb-3">
-                            <label class="form-label">Entidad</label>
-                            <select name="entity" id="entity" class="form-select">
+                            <label class="form-label required-field">Entidad</label>
+                            <select name="entity" id="entity" class="form-select" required>
                                 <option value="" disabled {{ old('entity') ? '' : 'selected' }}>Seleccionar</option>
                                 @foreach ($entityTypes as $type)
                                     <option value="{{ $type->name }}"
@@ -134,10 +134,10 @@
 
                         <!-- Campo rubro -->
                         <div class="form-group mb-3">
-                            <label class="form-label" for="rubro">Rubro</label>
+                            <label class="form-label required-field" for="rubro">Rubro</label>
                             <input class="form-control" name="rubro" id="rubro" type="text"
                                 value="{{ old('rubro', $company->rubro) }}"
-                                placeholder="Ingrese el rubro de la empresa" autocomplete="off">
+                                placeholder="Ingrese el rubro de la empresa" autocomplete="off" required>
                             @error('rubro')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -145,10 +145,10 @@
 
                         <!-- Campo dedicacion -->
                         <div class="form-group mb-3">
-                            <label class="form-label" for="dedicacion">Dedicación</label>
+                            <label class="form-label required-field" for="dedicacion">Dedicación</label>
                             <input class="form-control" name="dedicacion" id="dedicacion" type="text"
                                 value="{{ old('dedicacion', $company->dedicacion) }}"
-                                placeholder="Ingrese la dedicación de la empresa" autocomplete="off">
+                                placeholder="Ingrese la dedicación de la empresa" autocomplete="off" required>
                             @error('dedicacion')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
