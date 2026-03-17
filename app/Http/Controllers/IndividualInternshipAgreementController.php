@@ -260,15 +260,19 @@ class IndividualInternshipAgreementController extends Controller
 
 
     public function download($id)
-{
-    $agreement = IndividualInternshipAgreement::findOrFail($id);
+    {
+        $agreement = IndividualInternshipAgreement::findOrFail($id);
 
-    if (!$agreement->file || !Storage::exists($agreement->file)) {
-        return redirect()->back()->with('error', 'Archivo no disponible para descargar.');
+        if (!$agreement->file) {
+            return redirect()->back()->with('error', 'El archivo no está registrado en el sistema.');
+        }
+
+        if (!Storage::exists($agreement->file)) {
+            return redirect()->back()->with('error', 'El archivo no se encuentra físicamente en el servidor.');
+        }
+
+        return Storage::download($agreement->file, 'Convenio_Individual_Pasantia_' . $id . '.docx');
     }
-
-    return Storage::download($agreement->file, 'Convenio_Individual_Pasantia_' . $id . '.docx');
-}
 
 
 

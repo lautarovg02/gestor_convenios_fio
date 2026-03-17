@@ -68,9 +68,9 @@
                                         <a href="{{ route('agreements.show', $agreement->id) }}" class="btn btn-primary btn-sm" title="Ver Convenio Marco">
                                             Ver <i class="bi bi-file-earmark-text"></i>
                                         </a>
-                                        <button type="button" class="btn btn-success btn-sm" title="Descargar Convenio Marco">
+                                        <a href="{{ route('agreement.download', $agreement->id) }}" class="btn btn-success btn-sm" title="Descargar Convenio Marco">
                                             Descargar <i class="bi bi-download me-1"></i>
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
 
@@ -88,6 +88,7 @@
                                             <td class="text-center text-muted">{{ optional($agreement->company)->company_name ?? 'N/A' }}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('specificAgreement.show', $specific->id) }}" class="btn btn-outline-primary btn-sm">Ver <i class="bi bi-file-earmark-text"></i></a>
+                                                <a href="{{ route('specificAgreement.download', $specific->id) }}" class="btn btn-outline-success btn-sm">Descargar <i class="bi bi-download"></i></a>
                                             </td>
                                         </tr>
                                         @endif
@@ -106,6 +107,7 @@
                                             <td class="text-center text-muted">{{ optional($agreement->company)->company_name ?? 'N/A' }}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('individual-internship-agreements.show', $individual->id) }}" class="btn btn-outline-primary btn-sm">Ver <i class="bi bi-file-earmark-text"></i></a>
+                                                <a href="{{ route('individual-internship-agreements.download', $individual->id) }}" class="btn btn-outline-success btn-sm">Descargar <i class="bi bi-download"></i></a>
                                             </td>
                                         </tr>
                                         @endif
@@ -124,6 +126,7 @@
                                             <td class="text-center text-muted">{{ optional($agreement->company)->company_name ?? 'N/A' }}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('specificResidenceAgreement.show', $residence->id) }}" class="btn btn-outline-primary btn-sm">Ver <i class="bi bi-file-earmark-text"></i></a>
+                                                <a href="{{ route('specificResidenceAgreement.download', $residence->id) }}" class="btn btn-outline-success btn-sm">Descargar <i class="bi bi-download"></i></a>
                                             </td>
                                         </tr>
                                         @endif

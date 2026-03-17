@@ -195,28 +195,28 @@ class FrameworkResidenceAgreementController extends Controller
         $fullPath = storage_path('app/' . trim($relativePath, '/') . '/' . $nombreArchivo);
         $templateProcessor->saveAs($fullPath);
 
-        return view('frameworkResidenceAgreement.creationSuccessful', compact('relativePath', 'nombreArchivo'));
+        // Guardar la ruta del archivo generado en la DB
+        $agreement->update(['file' => $relativePath . '/' . $nombreArchivo]);
+
+        return view('frameworkResidenceAgreement.creationSuccessful', compact('agreement', 'relativePath', 'nombreArchivo'));
     }
 
 
 
 
-    public function download(Request $request)
+    public function download($id)
     {
-        $path = $request->get('path');
-        $file = $request->get('file');
+        $agreement = Contract::findOrFail($id);
 
-        if (!$path || !$file) {
-            abort(400, 'Parámetros inválidos');
+        if (!$agreement->file) {
+            return redirect()->back()->with('error', 'El archivo no está registrado en el sistema.');
         }
 
-        $fullPath = storage_path('app/' . ltrim($path, '/') . '/' . $file);
-
-        if (!file_exists($fullPath)) {
-            abort(404, 'Archivo no encontrado');
+        if (!Storage::exists($agreement->file)) {
+            return redirect()->back()->with('error', 'El archivo no se encuentra físicamente en el servidor.');
         }
 
-        return response()->download($fullPath);
+        return Storage::download($agreement->file, basename($agreement->file));
     }
 
 

@@ -133,7 +133,15 @@ class SpecificResidenceAgreementController extends Controller
 
         $templateProcessor->saveAs($fullPath);
 
-        return view('frameworkInternshipAgreement.creationSuccessful', compact('relativePath', 'nombreArchivo'));
+        // Guardar la ruta del archivo generado en la DB
+        $agreement->update(['file' => $relativePath . '/' . $nombreArchivo]);
+
+        return view('frameworkInternshipAgreement.creationSuccessful', [
+            'agreement' => $agreement,
+            'download_route' => 'specificResidenceAgreement.download',
+            'relativePath' => $relativePath,
+            'nombreArchivo' => $nombreArchivo
+        ]);
     }
 
 
@@ -145,21 +153,18 @@ class SpecificResidenceAgreementController extends Controller
         return view('specificResidenceAgreement.show', compact('residence'));
     }
 
-        public function download(Request $request)
+    public function download($id)
     {
-        $path = $request->get('path');
-        $file = $request->get('file');
+        $agreement = SpecificResidenceAgreement::findOrFail($id);
 
-        if (!$path || !$file) {
-            abort(400, 'Parámetros inválidos');
+        if (!$agreement->file) {
+            return redirect()->back()->with('error', 'El archivo no está registrado en el sistema.');
         }
 
-        $fullPath = storage_path('app/' . ltrim($path, '/') . '/' . $file);
-
-        if (!file_exists($fullPath)) {
-            abort(404, 'Archivo no encontrado');
+        if (!Storage::exists($agreement->file)) {
+            return redirect()->back()->with('error', 'El archivo no se encuentra físicamente en el servidor.');
         }
 
-        return response()->download($fullPath);
+        return Storage::download($agreement->file, basename($agreement->file));
     }
 }

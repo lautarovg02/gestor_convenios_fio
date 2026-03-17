@@ -64,21 +64,23 @@ Route::middleware(['auth'])->group(function () {
         // IMPORTANTE: Usamos ->except(['destroy']) para que el Docente pueda hacer todo MENOS borrar.
         
         // 1. Marco General
-        Route::get('/frameworkAgreement/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
+        Route::get('/frameworkAgreement/{id}/download', [FrameworkAgreementController::class, 'download'])->name('agreement.download');
         Route::resource('frameworkAgreement', FrameworkAgreementController::class)->except(['destroy']);
 
         // 2. Marco Pasantía
-        Route::get('/frameworkInternshipAgreement/download', [FrameworkInternshipAgreementController::class, 'download'])->name('frameworkInternshipAgreement.download');
+        Route::get('/frameworkInternshipAgreement/{id}/download', [FrameworkInternshipAgreementController::class, 'download'])->name('frameworkInternshipAgreement.download');
         Route::resource('frameworkInternshipAgreement', FrameworkInternshipAgreementController::class)->except(['destroy']);
 
         // 3. Marco Residencia
-        Route::get('/frameworkResidenceAgreement/download', [FrameworkResidenceAgreementController::class, 'download'])->name('frameworkResidenceAgreement.download');
+        Route::get('/frameworkResidenceAgreement/{id}/download', [FrameworkResidenceAgreementController::class, 'download'])->name('frameworkResidenceAgreement.download');
         Route::resource('frameworkResidenceAgreement', FrameworkResidenceAgreementController::class)->except(['destroy']);
         Route::get('/buscarConvenio/{company}', [FrameworkResidenceAgreementController::class, 'searchAgreementByCompany']);
 
         // 4. Específicos
-        Route::resource('specificResidenceAgreement', SpecificResidenceAgreementController::class)->except(['destroy']);
+        Route::get('/specificAgreement/{id}/download', [SpecificAgreementController::class, 'download'])->name('specificAgreement.download');
         Route::resource('specificAgreement', SpecificAgreementController::class)->except(['destroy']);
+        Route::get('/specificResidenceAgreement/{id}/download', [SpecificResidenceAgreementController::class, 'download'])->name('specificResidenceAgreement.download');
+        Route::resource('specificResidenceAgreement', SpecificResidenceAgreementController::class)->except(['destroy']);
         Route::get('/specificAgreement/getFrameworkData/{id}', [SpecificAgreementController::class, 'getFrameworkAgreementData']);
 
         // 5. Pasantías Individuales

@@ -227,8 +227,16 @@ class SpecificAgreementController extends Controller
         // Opción de descargar
 
 
+        // Guardar la ruta del archivo generado en la DB
+        $convenio->update(['file' => $relativePath . '/' . $nombreArchivo]);
+
         // Redirigir al main
-        return view('frameworkInternshipAgreement.creationSuccessful', compact('relativePath', 'nombreArchivo'));
+        return view('frameworkInternshipAgreement.creationSuccessful', [
+            'agreement' => $convenio,
+            'download_route' => 'specificAgreement.download',
+            'relativePath' => $relativePath,
+            'nombreArchivo' => $nombreArchivo
+        ]);
     }
 
 
@@ -260,8 +268,18 @@ class SpecificAgreementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function download($id)
     {
-        //
+        $agreement = Specific::findOrFail($id);
+
+        if (!$agreement->file) {
+            return redirect()->back()->with('error', 'El archivo no está registrado en el sistema.');
+        }
+
+        if (!Storage::exists($agreement->file)) {
+            return redirect()->back()->with('error', 'El archivo no se encuentra físicamente en el servidor.');
+        }
+
+        return Storage::download($agreement->file, basename($agreement->file));
     }
 }

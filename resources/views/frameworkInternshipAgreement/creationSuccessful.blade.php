@@ -9,7 +9,8 @@
             <h1>¡Convenio generado con éxito!</h1>
 
             <div class="mt-4 flex-row align-items-center justify-content-center">
-                <a href="{{ route('frameworkInternshipAgreement.download', ['path' => $relativePath, 'file' => $nombreArchivo]) }}"
+                <p>Tu convenio se ha generado correctamente.</p>
+                <a href="{{ route($download_route, $agreement->id) }}"
                     class="button btn btn-primary">
                     Descargar Convenio
                 </a>
@@ -17,7 +18,6 @@
                 <a href="{{ route('agreements.index') }}" class="button btn btn-primary">
                     Ver Convenios
                 </a>
-
             </div>
         </div>
     </div>
