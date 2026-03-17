@@ -145,10 +145,12 @@ class DatabaseSeeder extends Seeder
         Company::all()->each(function ($company) {
             Employee::factory(rand(1, 3))->create([
                 'company_id' => $company->id
-            ]);
+            ])->each(function ($employee) {
+                EmployeePhone::factory()->create([
+                    'employee_id' => $employee->id
+                ]);
+            });
         });
-        
-        EmployeePhone::factory()->count(150)->create();
 
         $teachersForDepartments = Teacher::inRandomOrder()->take(4)->get();
         foreach ($teachersForDepartments as $teacher) {
