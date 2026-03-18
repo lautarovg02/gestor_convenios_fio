@@ -25,6 +25,11 @@ class SpecificResidenceAgreement extends Model
         return $this->belongsTo(Contract::class);
     }
 
+    public function rejections()
+    {
+        return $this->morphMany(ContractRejection::class, 'agreement');
+    }
+
     public function status()
     {
         return $this->belongsTo(ContractStatus::class, 'contract_status_id');

@@ -45,10 +45,14 @@
                             @foreach ($rejectedRequests as $request)
                                 <tr>
                                     <td class="text-center ">{{ $request->creation_date }}</td>
-                                    <td class="text-center ">{{ $request->status->status }}</td>
-                                    <td class="text-center">{{ $request->typeFrameworkAgreement->type }}</td>
-                                    <td class="text-center">{{ $request->company->company_name}}</td>
-                                    <td class="text-center">{{ $request->rejection->justification ?? 'Sin justificación' }}</td>
+                                    <td class="text-center ">{{ $request->status_name }}</td>
+                                    <td class="text-center">{{ $request->type_name }}</td>
+                                    <td class="text-center">{{ $request->company_name }}</td>
+                                    <td class="text-center">
+                                        {{ $request->justification }}
+                                        <br>
+                                        <small class="text-muted">Por: {{ $request->rejected_by }}</small>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -9,11 +9,11 @@ class ContractRejection extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['contract_id', 'justification', 'user_id'];
+    protected $fillable = ['agreement_id', 'agreement_type', 'justification', 'user_id'];
 
-    public function contract()
+    public function agreement()
     {
-        return $this->belongsTo(Contract::class);
+        return $this->morphTo();
     }
 
     public function user()

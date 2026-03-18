@@ -175,16 +175,11 @@ class PendingRequestController extends Controller
             $model->contract_status_id = $rejectedStatus->id;
             $model->save();
 
-            // Guardar justificación asumiendo que relations existen en todos (se necesitan migraciones si no existen).
-            // Por simplicidad en la DB vieja o actual (donde solo había ContractRejection)
-            /* 
-            $model->rejection()->create([
+            // Guardar justificación usando la relación polimórfica
+            $model->rejections()->create([
                 'justification' => $request->justification,
                 'user_id' => auth()->id(),
             ]);
-            */
-            // Aquí dejamos pendiente la persistencia del rechazo si falta tabla, 
-            // pero el estado sí se actualiza.
 
             return redirect()->route('pending-requests.index')->with('success', 'Solicitud rechazada correctamente.');
 
