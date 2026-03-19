@@ -55,7 +55,7 @@
 
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Razón Social</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Razón Social</label>
                     <input type="text" placeholder="Razón Social" name="razon_social" class="form-control"
                         value="{{ old('razon_social') }}" required readonly>
 
@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label d-block fs-6 fw-bold">Ámbito <span class="text-danger"> *</span></label>
+                    <label class="form-label d-block fs-6 fw-bold">Ámbito</label>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="ambito" value="nacional" id="ambitoNacional"
                             checked required>
@@ -85,7 +85,7 @@
 
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">CUIT</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">CUIT</label>
                     <div class="input-group">
                         <input type="number" class="form-control" name="contraparte_cuit" placeholder="CUIT"
                             value="{{ old('contraparte_cuit') }}" required readonly>
@@ -100,7 +100,7 @@
 
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Rubro</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Rubro</label>
                     <input type="text" placeholder="Rubro de la empresa" name="contraparte_rubro" class="form-control"
                         value="{{ old('contraparte_rubro') }}" required>
 
@@ -113,8 +113,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado</label> <span
-                        class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Titular / Representante Legal / Apoderado</label>
 
                     <select id="selectEmployeeTitular" name="titular" class="form-select" required>
                         <option value="">Seleccione un titular</option>
@@ -126,8 +125,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label d-block fs-6 fw-bold">Cláusula de Confidencialidad</label><span
-                        class="text-danger"> *</span>
+                    <label class="form-label d-block fs-6 fw-bold">Cláusula de Confidencialidad</label>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="confidencialidad" value="si" id="confSi"
                             checked required>
@@ -156,7 +154,7 @@
 
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">País</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">País</label>
                     <input type="text" name="pais" placeholder="País" class="form-control"
                         value="{{ old('pais') }}" required>
 
@@ -171,7 +169,7 @@
 
                 <div class="mb-3">
 
-                    <label class="form-label fs-6 fw-bold">Provincia</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Provincia</label>
                     <input type="text" id="provincia" name="provincia" placeholder="Provincia" class="form-control"
                         value="{{ old('provincia') }}" required>
                     
@@ -183,7 +181,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Ciudad</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Ciudad</label>
 
                     <input type="text" id="ciudad" name="localidad" placeholder="Ciudad" class="form-control"
                         value="{{ old('localidad') }}" required>
@@ -197,7 +195,7 @@
 
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Código Postal</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Código Postal</label>
                     <input type="text" name="codigo_postal" placeholder="Codigo postal" class="form-control"
                         value="{{ old('codigo_postal') }}" required>
 
@@ -210,7 +208,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Calle</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Calle</label>
                     <input type="text" name="calle" placeholder="Calle" class="form-control"
                         value="{{ old('calle') }}" required>
 
@@ -223,7 +221,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Numero</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Numero</label>
                     <input type="number" name="nro_calle" placeholder="Nro. de calle" class="form-control"
                         value="{{ old('nro_calle') }}" required>
 
@@ -258,7 +256,7 @@
 
                 <div class="containerInputNameLastName">
                     <div class="mb-3">
-                        <label class="form-label fs-6 fw-bold">Nombre(s)</label><span class="text-danger"> *</span>
+                        <label class="form-label fs-6 fw-bold">Nombre(s)</label>
                         <input id="contact_nombre" type="text" name="contact_nombre" placeholder="Nombre"
                             class="form-control" value="{{ old('contact_nombre') }}" required>
 
@@ -269,7 +267,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fs-6 fw-bold">Apellido(s)</label><span class="text-danger"> *</span>
+                        <label class="form-label fs-6 fw-bold">Apellido(s)</label>
                         <input id="contact_apellido" type="text" placeholder="Apellido" name="contact_apellido"
                             class="form-control" value="{{ old('contact_apellido') }}" required>
 
@@ -282,7 +280,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">DNI</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">DNI</label>
                     <input id="contact_dni" type="number" name="contact_dni" placeholder="DNI" class="form-control"
                         value="{{ old('contact_dni') }}" required>
                     <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
@@ -293,7 +291,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">CUIL</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">CUIL</label>
 
                     <input type="number" id="contact_cuil" class="form-control" name="contact_cuil" placeholder="CUIL"
                         value="{{ old('contact_cuil') }}" required>
@@ -305,7 +303,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Celular</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Celular</label>
                     <input type="number" id="contact_celular" name="contact_celular" class="form-control"
                         value="{{ old('contact_celular') }}" placeholder="Numero de celular" required>
 
@@ -316,7 +314,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Email</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Email</label>
                     <input id="contact_email" type="email" placeholder="Email" name="contact_email"
                         class="form-control" value="{{ old('contact_email') }}" required>
 
@@ -327,7 +325,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Empresa</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Empresa</label>
                     <input id="contact_empresa" type="text" placeholder="Empresa" name="contact_empresa"
                         class="form-control" value="{{ old('contact_empresa') }}" required readonly>
 
@@ -338,7 +336,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Cargo</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Cargo</label>
                     <input id="contact_cargo" type="text" placeholder="Cargo en empresa" name="contact_cargo"
                         class="form-control" value="{{ old('contact_cargo') }}" required>
 
@@ -360,8 +358,7 @@
                 </div>
 
                 <div id="firmaSelectWrapper" class="d-none mt-2">
-                    <label class="form-label fs-6 fw-bold" for="selectEmployeeFirma">Seleccionar Representante existente</label><span
-                        class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold" for="selectEmployeeFirma">Seleccionar Representante existente</label>
                     <select id="selectEmployeeFirma" name="id_employee_firma" class="form-select mb-3">
                         <option value="">Seleccionar representante de firma</option>
                     </select>
@@ -375,7 +372,7 @@
                 <div class="containerInputNameLastName">
 
                     <div class="mb-3">
-                        <label class="form-label fs-6 fw-bold">Nombre(s)</label><span class="text-danger"> *</span>
+                        <label class="form-label fs-6 fw-bold">Nombre(s)</label>
                         <input id="firma_nombre" type="text" name="firma_nombre" placeholder="Nombre"
                             class="form-control" value="{{ old('firma_nombre') }}" required>
 
@@ -386,7 +383,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fs-6 fw-bold">Apellido(s)</label><span class="text-danger"> *</span>
+                        <label class="form-label fs-6 fw-bold">Apellido(s)</label>
                         <input id="firma_apellido" type="text" name="firma_apellido" placeholder="Apellido"
                             class="form-control" value="{{ old('firma_apellido') }}" required>
 
@@ -400,7 +397,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">DNI</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">DNI</label>
                     <input id="firma_dni" type="number" name="firma_dni" placeholder="DNI" class="form-control"
                         value="{{ old('firma_dni') }}" required>
                     <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
@@ -411,8 +408,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Razon Social de Empresa</label><span class="text-danger">
-                        *</span>
+                    <label class="form-label fs-6 fw-bold">Razon Social de Empresa</label>
                     <input id="firma_razon_social" type="text" placeholder="Razon social"
                         name="firma_empresa_razon_social" class="form-control"
                         value="{{ old('firma_empresa_razon_social') }}" readonly required>
@@ -426,7 +422,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Cargo</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Cargo</label>
                     <input id="firma_cargo" type="text" name="firma_cargo" placeholder="Cargo en empresa"
                         class="form-control" value="{{ old('firma_cargo') }}" required>
 
@@ -438,7 +434,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fs-6 fw-bold">Email</label><span class="text-danger"> *</span>
+                    <label class="form-label fs-6 fw-bold">Email</label>
                     <input id="firma_email" type="email" name="firma_email" placeholder="Email" class="form-control"
                         value="{{ old('firma_email') }}" required>
 

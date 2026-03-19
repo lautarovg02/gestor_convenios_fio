@@ -89,7 +89,7 @@
 
   {{-- Nombre --}}
   <div class="mb-3">
-    <label class="form-label fw-bold">Nombre <span class="text-danger">*</span></label>
+    <label class="form-label fw-bold">Nombre</label>
     <input type="text" name="student_name" class="form-control" 
            value="{{ old('student_name', $student->name ?? '') }}" readonly>
     @error('student_name')<div class="text-danger">{{ $message }}</div>@enderror
@@ -97,7 +97,7 @@
 
   {{-- Apellido --}}
   <div class="mb-3">
-    <label class="form-label fw-bold">Apellido <span class="text-danger">*</span></label>
+    <label class="form-label fw-bold">Apellido</label>
     <input type="text" name="student_last_name" class="form-control" 
            value="{{ old('student_last_name', $student->last_name ?? '') }}" readonly>
     @error('student_last_name')<div class="text-danger">{{ $message }}</div>@enderror
@@ -105,7 +105,7 @@
 
   {{-- DNI --}}
   <div class="mb-3">
-    <label class="form-label fw-bold">DNI <span class="text-danger">*</span></label>
+    <label class="form-label fw-bold">DNI</label>
     <input type="number" name="student_dni" class="form-control" 
            value="{{ old('student_dni', $student->dni ?? '') }}" readonly>
     @error('student_dni')<div class="text-danger">{{ $message }}</div>@enderror
@@ -113,7 +113,7 @@
 
   {{-- CUIL --}}
   <div class="mb-3">
-    <label class="form-label fw-bold">CUIL <span class="text-danger">*</span></label>
+    <label class="form-label fw-bold">CUIL</label>
     <div class="input-group">
       @php
           $cuil = $student->cuil ?? '';
@@ -137,7 +137,7 @@
 
   {{-- Email --}}
   <div class="mb-3">
-    <label class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+    <label class="form-label fw-bold">Email</label>
     <input type="email" name="student_email" class="form-control" 
            value="{{ old('student_email', $student->email ?? '') }}" readonly>
     @error('student_email')<div class="text-danger">{{ $message }}</div>@enderror
@@ -145,7 +145,7 @@
 
   {{-- Teléfono --}}
   <div class="mb-3">
-    <label class="form-label fw-bold">Teléfono <span class="text-danger">*</span></label>
+    <label class="form-label fw-bold">Teléfono</label>
     <input type="number" name="student_phone" class="form-control" 
            value="{{ old('student_phone', $student->phone_numb ?? '') }}" readonly>
     @error('student_phone')<div class="text-danger">{{ $message }}</div>@enderror
@@ -153,7 +153,7 @@
 
   {{-- Carrera --}}
   <div class="mb-3">
-    <label class="form-label fw-bold">Carrera <span class="text-danger">*</span></label>
+    <label class="form-label fw-bold">Carrera</label>  
     <input type="text" name="student_career" class="form-control" 
            value="{{ old('student_career', $student->career ?? '') }}" readonly>
     @error('student_career')<div class="text-danger">{{ $message }}</div>@enderror
@@ -161,7 +161,7 @@
 
   {{-- Calle --}}
   <div class="mb-3">
-    <label class="form-label fw-bold">Calle (Domicilio)<span class="text-danger">*</span></label>
+    <label class="form-label fw-bold">Calle (Domicilio)</label>
     <input type="text" name="student_domicilio_calle" class="form-control" 
            value="{{ old('student_domicilio_calle', $student->street ?? '') }}" readonly>
     @error('student_domicilio_calle')<div class="text-danger">{{ $message }}</div>@enderror
@@ -169,7 +169,7 @@
 
   {{-- Número --}}
   <div class="mb-3">
-    <label class="form-label fw-bold">Número <span class="text-danger">*</span></label>
+    <label class="form-label fw-bold">Número</label>
     <input type="text" name="student_domicilio_numero" class="form-control" 
            value="{{ old('student_domicilio_numero', $student->number ?? '') }}" readonly>
     @error('student_domicilio_numero')<div class="text-danger">{{ $message }}</div>@enderror
@@ -177,7 +177,7 @@
 
   {{-- Ciudad --}}
   <div class="mb-3">
-    <label class="form-label fw-bold">Ciudad <span class="text-danger">*</span></label>
+    <label class="form-label fw-bold">Ciudad</label>
     <input type="text" name="student_ciudad" class="form-control" 
            value="{{ old('student_ciudad', $student->city ?? '') }}" readonly>
     @error('student_ciudad')<div class="text-danger">{{ $message }}</div>@enderror
