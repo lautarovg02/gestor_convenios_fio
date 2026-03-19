@@ -234,6 +234,12 @@ class AdminUsersController extends Controller
 
             DB::commit();
             return back()->with('success', 'Usuario eliminado correctamente.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+            if ($e->errorInfo[1] == 1451 || str_contains($e->getMessage(), '1451') || $e->getCode() == 23000) {
+                return back()->with('error', 'No se puede eliminar la cuenta del usuario porque actualmente está asignado como contacto, tutor o responsable en convenios existentes. Debe reasignar o eliminar esos convenios primero.');
+            }
+            return back()->with('error', 'Error en la base de datos al intentar eliminar el usuario: ' . $e->getMessage());
         } catch (\Throwable $e) {
             DB::rollBack();
             return back()->with('error', 'Error al eliminar: ' . $e->getMessage());
