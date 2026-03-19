@@ -78,6 +78,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 // 30. Titular
                 document.getElementById('titular').value = (data.firma?.nombre || "") + " " + (data.firma?.apellido || "");
 
+                // 31. Responsable Empresa options
+                const respEmpresa = document.getElementById('responsable_control_company');
+                if (respEmpresa) {
+                    respEmpresa.innerHTML = '<option value="">Seleccione responsable de la empresa</option>';
+                    if (data.empleados && data.empleados.length > 0) {
+                        data.empleados.forEach(emp => {
+                            const option = document.createElement('option');
+                            option.value = emp.nombre;
+                            option.text = emp.nombre + (emp.cargo ? ' - ' + emp.cargo : '');
+                            respEmpresa.appendChild(option);
+                        });
+                    } else {
+                        respEmpresa.innerHTML = '<option value="">La empresa no tiene empleados registrados</option>';
+                    }
+                }
+
                 setCompanyFieldsReadonly(true);
             })
             .catch(error => {

@@ -460,15 +460,23 @@
                     <div class="mb-3">
                         <label class="form-label fs-6 fw-bold" for="responsable_control_fio">Responsable Control
                             FIO</label><span class="text-danger"> *</span>
-                        <input type="text" name="responsable_control_fio" class="form-control"
-                            value="{{ old('responsable_control_fio') }}" required>
+                        <select name="responsable_control_fio" id="responsable_control_fio" class="form-select" required>
+                            <option value="">Seleccione un responsable de FIO</option>
+                            @foreach ($teachers as $teacher)
+                                <option value="{{ $teacher->name }} {{ $teacher->lastname }}" {{ old('responsable_control_fio') == ($teacher->name . ' ' . $teacher->lastname) ? 'selected' : '' }}>
+                                    {{ $teacher->name }} {{ $teacher->lastname }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fs-6 fw-bold" for="responsable_control_company">Responsable Control
                             Empresa</label><span class="text-danger"> *</span>
-                        <input type="text" name="responsable_control_company" class="form-control"
-                            value="{{ old('responsable_control_company') }}" required>
+                        <select name="responsable_control_company" id="responsable_control_company" class="form-select" required>
+                            <option value="">Seleccione primero la empresa superior</option>
+                            {{-- Se carga dinámicamente por JS cuando se selecciona la empresa --}}
+                        </select>
                     </div>
 
                 </div>

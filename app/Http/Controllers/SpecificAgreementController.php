@@ -56,8 +56,9 @@ class SpecificAgreementController extends Controller
     ->get(['id', 'denomination', 'company_name', 'cuit']);
 
     $students = Student::all();
+    $teachers = \App\Models\Teacher::orderBy('lastname')->get();
 
-    return view('specificAgreement.create', compact('companies', 'students'));
+    return view('specificAgreement.create', compact('companies', 'students', 'teachers'));
 }
 
 
@@ -68,6 +69,7 @@ class SpecificAgreementController extends Controller
         $contract = Contract::with([
             'company.city',
             'company.entity',
+            'company.employees',
             'contactEmployee.phones',
             'representativeEmployee.phones'
 
@@ -112,13 +114,20 @@ class SpecificAgreementController extends Controller
                 'cargo'     => $contract->representativeEmployee->position ?? '',
             ],
 
-
-
             // Lugar y Fecha
             'lugar' => $contract->company->city->name ?? '',
             'fecha' => $contract->signing_date
                 ? \Carbon\Carbon::parse($contract->signing_date)->format('Y-m-d')
                 : now()->format('Y-m-d'),
+                
+            // Empleados de la empresa
+            'empleados' => $contract->company->employees->map(function ($emp) {
+                return [
+                    'id' => $emp->id,
+                    'nombre' => $emp->name . ' ' . $emp->lastname,
+                    'cargo' => $emp->position
+                ];
+            }),
         ]);
     }
 
@@ -158,8 +167,8 @@ class SpecificAgreementController extends Controller
             'signing_date' => $validated['fecha_firma'],
             'objective' => $validated['objetivo'],
             'commitment_parties' => $validated['compromisos'],
-            'responsable_control_company' => $validated['responsable_control_fio'] ?? null,
-            'responsable_control_fio' => $validated['responsable_control_company'] ?? null,
+            'responsable_control_company' => $validated['responsable_control_company'] ?? null,
+            'responsable_control_fio' => $validated['responsable_control_fio'] ?? null,
             //file
             'file' => $validated['file'] ?? null,
         ]);
