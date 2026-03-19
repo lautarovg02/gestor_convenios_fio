@@ -46,7 +46,6 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th>#</th>
                         <th class="col-max-width">
                             <a
                                 href="{{ route('careers.index', [
@@ -73,8 +72,6 @@
                 <tbody>
                     @foreach ($careers as $career)
                     <tr>
-                        <td>{{ $career->id }}</td>
-
                         <td class="col-max-width text-truncate" title="{{ $career->name }}">
                             {!! highlightKeyword($career->name, request('search')) !!}
                         </td>

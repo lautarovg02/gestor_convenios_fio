@@ -144,8 +144,14 @@
                                 
                                 <div class="form-group mb-3">
                                     <label class="form-label" for="career">Carrera</label>
-                                    <input class="form-control @error('career') is-invalid @enderror" name="career" id="career" type="text"
-                                        value="{{ old('career', $student->career) }}" placeholder="Carrera">
+                                    <select class="form-select @error('career') is-invalid @enderror" name="career" id="career">
+                                        <option value="">Seleccione una carrera...</option>
+                                        @foreach($careers as $career)
+                                            <option value="{{ $career->name }}" {{ old('career', $student->career) === $career->name ? 'selected' : '' }}>
+                                                {{ $career->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                     @error('career')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
