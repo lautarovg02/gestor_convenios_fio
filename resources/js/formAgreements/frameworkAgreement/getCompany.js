@@ -58,6 +58,8 @@ function clearEmployees() {
     const selF = document.getElementById("selectEmployeeFirma");
     if (selC) selC.innerHTML = '<option value="">Seleccione un representante de contacto</option>';
     if (selF) selF.innerHTML = '<option value="">Seleccione un representante de firma</option>';
+    setEmployeeFieldsReadonly(true);
+    clearEmployeeTextFields();
 }
 
 // parte CUIT en 3 campos (acepta "XX-XXXXXXXX-X" o "XXXXXXXXXXX" o number)
@@ -288,7 +290,11 @@ document.addEventListener("DOMContentLoaded", () => {
     
     if (!selectCompany) return;
 
-    if (selectCompany.value) loadCompany(selectCompany.value);
+    if (selectCompany.value) {
+        loadCompany(selectCompany.value);
+    } else {
+        setEmployeeFieldsReadonly(true);
+    }
 
     selectCompany.addEventListener("change", function () {
         const companyId = this.value;

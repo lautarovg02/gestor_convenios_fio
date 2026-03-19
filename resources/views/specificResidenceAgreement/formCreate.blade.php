@@ -217,7 +217,7 @@
 
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Nombre</label><span class="text-danger"> *</span>
+            <label for="status" class="form-label fs-6 fw-bold">Nombre</label>
             <input type="text" name="tutorName" class="form-control" value="{{ old('tutorName') }}"
                 placeholder="Nombre" required readonly>
 
@@ -228,7 +228,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Apellido</label><span class="text-danger"> *</span>
+            <label for="status" class="form-label fs-6 fw-bold">Apellido</label>
             <input type="text" name="tutorLastName" class="form-control" value="{{ old('tutorLastName') }}"
                 placeholder="Apellido" required readonly>
 
@@ -239,7 +239,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">DNI</label><span class="text-danger"> *</span>
+            <label for="status" class="form-label fs-6 fw-bold">DNI</label>
             <input type="number" name="tutorDni" maxlength="8" oninput="validarDigitos(this)"
                 class="form-control" placeholder="DNI" value="{{ old('tutorDni') }}" required readonly>
             <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>
@@ -255,7 +255,7 @@
     <div class=" mb-4 border rounded containerSectionForm">
         <h4 class="TitleSection">Datos del tutor de la facultad</h4>
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Nombre</label><span class="text-danger"> *</span>
+            <label for="status" class="form-label fs-6 fw-bold">Nombre</label>
             <input type="text" name="tutorFacuName" class="form-control" value="{{ old('tutorFacuName') }}"
                 placeholder="Nombre" required readonly>
 
@@ -266,7 +266,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">Apellido</label><span class="text-danger"> *</span>
+            <label for="status" class="form-label fs-6 fw-bold">Apellido</label>
             <input type="text" name="tutorFacuLastName" class="form-control"
                 value="{{ old('tutorFacuLastName') }}" placeholder="Apellido" required readonly>
 
@@ -277,7 +277,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="status" class="form-label fs-6 fw-bold">DNI</label><span class="text-danger"> *</span>
+            <label for="status" class="form-label fs-6 fw-bold">DNI</label>
             <input type="number" name="tutorFacuDni" class="form-control" placeholder="DNI" readonly
                 value="{{ old('tutorFacuDni') }}" maxlength="9" oninput="validarDigitos(this)" required>
             <small class="form-hint">Ingresar <b>DNI</b> sin puntos.</small>

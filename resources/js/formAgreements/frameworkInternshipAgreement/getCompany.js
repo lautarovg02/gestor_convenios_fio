@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (contreparteFieldset) contreparteFieldset.disabled = true;
             if (direccionFieldset) direccionFieldset.disabled = true;
             setCompanyFieldsReadonly(false);
+            setContactReadonly(true);
+            setFirmaReadonly(true);
             return;
         }
 
@@ -189,4 +191,9 @@ function setCompanyFieldsReadonly(readonly) {
 
 document.addEventListener("DOMContentLoaded", () => {
     const selectEmployeeTitular = document.getElementById("selectEmployeeTitular");
+    const selectCompany = document.getElementById("selectCompany");
+    if (selectCompany && !selectCompany.value) {
+        setContactReadonly(true);
+        setFirmaReadonly(true);
+    }
 });
