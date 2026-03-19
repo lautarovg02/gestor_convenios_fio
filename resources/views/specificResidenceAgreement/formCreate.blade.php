@@ -70,7 +70,7 @@
             <input type="hidden" value="{{ old('contract_id') }}" name="contract_id" id="contract_id_field">
 
             <div class="mb-3">
-                <label for="status" class="form-label fs-6 fw-bold">Empresa</label><span class="text-danger"> *</span>
+                <label for="status" class="form-label fs-6 fw-bold">Empresa</label>
                 <input type="text" name="companyName" value="{{ old('companyName') }}" class="form-control"
                     placeholder="Nombre" readonly>
                 <input type="hidden" value="{{ old('companyId') }}" name="companyId" id="companyId">
@@ -82,8 +82,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="status" class="form-label fs-6 fw-bold">Apoderado de la empresa</label><span
-                    class="text-danger"> *</span>
+                <label for="status" class="form-label fs-6 fw-bold">Apoderado de la empresa</label>
                 <input type="text" name="companyRepresentative" value="{{ old('companyRepresentative') }}"
                     placeholder="Apoderado de la empresa" class="form-control" readonly>
             </div>
