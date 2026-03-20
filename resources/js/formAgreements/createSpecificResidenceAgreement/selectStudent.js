@@ -22,6 +22,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.querySelector('input[name="studentCelular"]').value =
                     student.phone_numb || "";
                     document.querySelector('input[name="studentIdHidden"]').value = student.id || "";
+                    
+                    const careerSelect = document.getElementById("carrer");
+                    if (careerSelect) {
+                        if (student.career) {
+                            careerSelect.innerHTML = `<option value="${student.career}" selected>${student.career}</option>`;
+                        } else {
+                            careerSelect.innerHTML = '<option value="" disabled selected>No tiene carrera registrada</option>';
+                        }
+                    }
             })
             .catch((error) => {
                 console.error(

@@ -189,7 +189,7 @@
                 required>
                 <option value="" disabled selected>Seleccione una carrera</option>
                 @foreach ($carrers as $carrer)
-                    <option value="{{ $carrer->id }}">{{ $carrer->name }}</option>
+                    <option value="{{ $carrer->name }}">{{ $carrer->name }}</option>
                 @endforeach
             </select>
 
