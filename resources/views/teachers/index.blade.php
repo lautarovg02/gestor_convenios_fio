@@ -42,7 +42,6 @@
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>#</th>
                                 <th class="col-max-width">Nombre</th>
                                 <th>DNI</th>
                                 <th>CUIT</th>
@@ -55,8 +54,6 @@
                         <tbody>
                             @foreach ($teachers as $teacher)
                                 <tr>
-                                    <td>{{ $teacher->id }}</td>
-
                                     <td class="text-truncate col-max-width"
                                         title="{{ $teacher->name . ' ' . $teacher->lastname }}">
                                         {!! highlightKeyword($teacher->name, request('search')) !!}

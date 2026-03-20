@@ -53,7 +53,6 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th>#</th>
                         <th class="col-max-width">Razón Social</th>
                         <th class="col-max-width">CUIT</th>
                         <th class="col-max-width">Nombre Fantasía</th>
@@ -68,8 +67,6 @@
                 <tbody>
                     @foreach ($companies as $company)
                         <tr>
-                            <td>{{ $company->id }}</td>
-
                             <td class="col-max-width text-truncate" title="{{ $company->denomination }}">
                                 {!! highlightKeyword($company->denomination, request('search')) !!}
                             </td>

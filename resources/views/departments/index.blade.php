@@ -41,7 +41,6 @@
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th>#</th>
                         <th class="col-max-width">Denominación</th>
                         <th class="col-max-width">Director del Departamento</th>
                         <th class="text-center" style="width: 200px;">Acciones</th>
@@ -50,8 +49,6 @@
                 <tbody>
                     @foreach ($departments as $department)
                         <tr>
-                            <td>{{ $department->id }}</td>
-
                             <td class="text-truncate col-max-width" title="{{ $department->name }}">
                                 {!! highlightKeyword($department->name, request('search')) !!}
                             </td>
