@@ -73,11 +73,7 @@
                                                     <i class="bi bi-hourglass-split me-1"></i>Pendiente de otra área
                                                 </span>
                                             @endif
-                                        @endcan
-                                        <button type="button" class="btn btn-sm btn-primary me-1"  >
-                                            Descargar  <i class="bi bi-download me-1"></i>
-                                        </button>
-                                          
+                                        @endcan     
                                     </td>
                                 </tr>
                             @endforeach

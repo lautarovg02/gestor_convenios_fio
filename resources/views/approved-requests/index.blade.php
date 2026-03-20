@@ -52,10 +52,6 @@
                                         <button type="button" class="btn btn-sm btn-primary me-1"  >
                                             Ver Detalles <i class="bi bi-eye"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-secondary me-1"  >
-                                            Descargar  <i class="bi bi-download me-1"></i>
-                                        </button>
-                                          
                                     </td>
                                 </tr>
                             @endforeach
