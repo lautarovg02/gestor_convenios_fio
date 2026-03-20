@@ -44,7 +44,6 @@
             <table class="table table-hover mb-0 align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>#</th>
                         <th class="col-max-width">Nombre</th>
                         <th>DNI</th>
                         <th>CUIL</th>
@@ -57,8 +56,6 @@
                 <tbody>
                     @foreach ($students as $student)
                     <tr>
-                        <td>{{ $student->id }}</td>
-
                         <td class="text-truncate col-max-width"
                             title="{{ $student->name . ' ' . $student->last_name }}">
                             @if(function_exists('highlightKeyword'))
