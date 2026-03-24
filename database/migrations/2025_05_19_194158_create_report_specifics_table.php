@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('specific_id')->references('id')->on('specifics');
 
             $table->unsignedBigInteger('specific_contract_id');
-            $table->foreign('specific_contract_id')->references('contract_id')->on('specifics');
+            $table->foreign('specific_contract_id')->references('id')->on('contracts');
 
             $table->date('upload_date');
             $table->integer('type');

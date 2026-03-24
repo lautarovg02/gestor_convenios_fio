@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('individual_internship_id', 'fk_rpt_indiv_internship')->references('id')->on('individual_internship_agreements');
             
             $table->unsignedBigInteger('individual_internship_contract_id');
-            $table->foreign('individual_internship_contract_id', 'fk_indiv_intern_contract')->references('contract_id')->on('individual_internship_agreements');
+            $table->foreign('individual_internship_contract_id', 'fk_indiv_intern_contract')->references('id')->on('contracts');
             
             $table->date('upload_date');
             $table->string('url_report');
