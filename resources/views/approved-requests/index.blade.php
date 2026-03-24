@@ -49,9 +49,9 @@
                                     <td class="text-center">{{ $request->typeFrameworkAgreement->type }}</td>
                                     <td class="text-center">{{ $request->company->company_name}}</td>
                                     <td class="text-nowrap text-center">
-                                        <button type="button" class="btn btn-sm btn-primary me-1"  >
+                                        <a href="{{ route('agreements.show', $request->id) }}" class="btn btn-sm btn-primary me-1" title="Ver Detalles">
                                             Ver Detalles <i class="bi bi-eye"></i>
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
