@@ -28,6 +28,9 @@ class ContractService
         return Contract::with(['company', 'contactEmployee', 'representativeEmployee'])
             ->where('company_id', $idCompany)
             ->where('type_framework_agreement_id', $typeId)
+            ->whereHas('status', function($q) {
+                $q->whereNotIn('status', ['Deshabilitado']);
+            })
             ->get();
     }
 }
