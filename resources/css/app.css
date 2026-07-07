@@ -13,42 +13,51 @@
     --min-column-width: 80px;
     --min-font-size: small;
 }
-body, button, form, option,input{
+
+body,
+button,
+form,
+option,
+input {
     font-size: var(--min-font-size);
 }
-body{
+
+body {
     overflow-x: hidden;
 }
-.btn{
+
+.btn {
     font-size: var(--min-font-size);
 
 }
 
-.font-size{
+.font-size {
     font-size: var(--min-font-size);
 }
 
 
 .content-with-footer-buffer {
-    padding-bottom: 5rem;
+    /* Padding removed since flexbox handles footer placement */
 }
 
 main {
-    min-height: 612px; /* Altura máxima del main */
-    overflow-y: auto; /* Muestra scroll si el contenido excede la altura */
+    /* Altura máxima del main */
+    overflow-y: auto;
+    /* Muestra scroll si el contenido excede la altura */
     max-width: 70%;
-    padding-bottom: 100px; /* espacio para el footer */
 }
 
 /* Contenedor principal del contenido */
 .main-content {
-    margin-left: 220px; /* Mismo ancho que sidebar */
+    margin-left: 220px;
+    /* Mismo ancho que sidebar */
     padding: 1.5rem;
     max-width: calc(100% - 220px);
 }
 
 .table .col-max-width {
-    max-width: var(--max-column-width); /* 150px */
+    max-width: var(--max-column-width);
+    /* 150px */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -60,12 +69,18 @@ main {
 
 
 .message-box {
-    max-width: 400px; /* Reducir ancho máximo */
-    margin: 1rem auto; /* Margen superior e inferior */
-    padding: 10px 15px; /* Espaciado interno */
-    border-radius: 8px; /* Bordes redondeados */
-    font-size: 14px; /* Tamaño de fuente más pequeño */
-    text-align: center; /* Centra el texto */
+    max-width: 400px;
+    /* Reducir ancho máximo */
+    margin: 1rem auto;
+    /* Margen superior e inferior */
+    padding: 10px 15px;
+    /* Espaciado interno */
+    border-radius: 8px;
+    /* Bordes redondeados */
+    font-size: 14px;
+    /* Tamaño de fuente más pequeño */
+    text-align: center;
+    /* Centra el texto */
 }
 
 .required-field::after {
@@ -74,16 +89,7 @@ main {
     font-weight: bold;
 }
 
-/*SIDEBAR*/
-.active-nav-link {
-    background-color: var(--active-nav-bg-color);
-    font-weight: 500;
-}
 
-.nav-link:not(.active-nav-link):hover {
-    /*todos los '.nav-link' que no tienen la clase '.active-nav-link*/
-    background-color: var(--hover-inactive-nav-bg-color);
-}
 
 
 
@@ -127,8 +133,9 @@ td.text-truncate {
         transform: rotate(360deg);
     }
 }
+
 .fixed-footer {
-    padding-left: 17%;
+    /*padding-left: 17%;*/
     height: 80px;
     background-color: #f8f9fa;
     display: flex;
@@ -138,12 +145,13 @@ td.text-truncate {
     font-family: 'Arial', sans-serif;
     border-top: 1px solid #dee2e6;
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
-    z-index: 999; /* aseguramos visibilidad */
+    z-index: 999;
+    /* aseguramos visibilidad */
 }
+
 /*SIDEBAR*/
 .active-nav-link {
     background-color: var(--active-nav-bg-color);
-    font-weight: 500;
 }
 
 .nav-link:not(.active-nav-link):hover {
@@ -202,7 +210,7 @@ td.text-truncate {
 }
 
 .table-scrollable-container {
-    max-height: 357px;
+    max-height: 45vh;
     overflow-y: auto;
 }
 
@@ -216,7 +224,8 @@ td.text-truncate {
 /* Sidebar fija mejorada */
 .sidebar {
     position: fixed;
-    top: 70px; /* altura del header */
+    top: 70px;
+    /* altura del header */
     left: 0;
     width: 220px;
     height: calc(100vh - 70px);
@@ -224,21 +233,30 @@ td.text-truncate {
     border-right: 1px solid #dee2e6;
     overflow-y: auto;
     padding-top: 1rem;
-    z-index: 1000;
+    /*z-index: 1000;*/
 }
 
 /* Nav links dentro de la sidebar */
+
+
 .sidebar .nav-link {
     padding: 8px 16px;
+    margin-bottom: 4px;
     font-size: 14px;
     color: #343a40;
-    transition: all 0.2s;
+    transition: all 0.2s ease 0.05s;
 }
 
 .sidebar .nav-link:hover,
 .sidebar .nav-link.active-nav-link {
     background-color: #0d6efd;
     color: #fff !important;
+}
+
+.sidebar .nav-link.active-nav-link {
+    border-left: 4px solid #003a8c;
+    padding-left: 12px;
+    /* Reduce padding to offset the border width */
 }
 
 .sidebar .nav-link i {

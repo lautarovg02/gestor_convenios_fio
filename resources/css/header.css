@@ -43,7 +43,7 @@
 .logout {
     margin-bottom: 0;
     background-color: transparent;
-    width: 100%;
+    /*width: 100%;*/
     justify-content: center;
     padding: 3%;
     display: flex;

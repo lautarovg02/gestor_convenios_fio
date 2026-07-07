@@ -18,7 +18,7 @@
     </style>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     @include('layouts.header')
     <div class="container-fluid flex-grow-1 d-flex flex-column">
         <div class="row flex-grow-1">
