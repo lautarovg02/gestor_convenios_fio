@@ -17,9 +17,7 @@
                     </ol>
                 </nav>
             </div>
-            <a href="{{ route('teachers.create') }}" class="btn btn-success">
-                <i class="bi bi-plus-lg me-1"></i> Agregar Docente
-            </a>
+
         </div>
 
         <!-- Filtros -->
@@ -44,7 +42,6 @@
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>#</th>
                                 <th class="col-max-width">Nombre</th>
                                 <th>DNI</th>
                                 <th>CUIT</th>
@@ -57,8 +54,6 @@
                         <tbody>
                             @foreach ($teachers as $teacher)
                                 <tr>
-                                    <td>{{ $teacher->id }}</td>
-
                                     <td class="text-truncate col-max-width"
                                         title="{{ $teacher->name . ' ' . $teacher->lastname }}">
                                         {!! highlightKeyword($teacher->name, request('search')) !!}
@@ -86,18 +81,10 @@
                                             {{ $teacher->is_dean ? 'Decano' : 'No es Decano' }}
                                         </span>
                                     </td>
-
+                                    
                                     <td class="text-center">
                                         <a href="{{ route('teachers.show', $teacher) }}"
                                             class="btn btn-info btn-sm">Ver</a>
-                                        <a href="{{ route('teachers.edit', $teacher) }}"
-                                            class="btn btn-primary btn-sm">Editar</a>
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#modal-delete" data-entity-id="{{ $teacher->id }}"
-                                            data-entity-name="{{ $teacher->name . ' ' . $teacher->lastname }}"
-                                            data-entity-type="teachers">
-                                            Eliminar
-                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -112,8 +99,6 @@
         @endif
 
 
-        @include('layouts.modals.modal-delete')
         @include('layouts.modals.modal-loading')
-        @vite('resources/js/modals/modalDelete.js')
     </div>
 @endsection

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Specific extends Model
 {
@@ -11,6 +12,7 @@ class Specific extends Model
 
     protected $fillable = [
         'contract_id',
+        'contract_status_id',
         'signing_date',
         'objective',
         'commitment_parties',
@@ -22,5 +24,34 @@ class Specific extends Model
     public function contract()
     {
         return $this->belongsTo(Contract::class);
+    }
+
+    public function rejections()
+    {
+        return $this->morphMany(ContractRejection::class, 'agreement');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(ContractStatus::class, 'contract_status_id');
+    }
+
+    //Relación 1:n atributo multivaluado en la tabla ReportType
+    public function reports(): HasMany
+    {
+        return $this->hasMany(ReportSpecific::class, 'specific_id');
+    }
+
+    //Relación 0:n atributo multivaluado en la tabla ReportType
+    public function reportContracts(): HasMany
+    {
+        return $this->hasMany(ReportSpecific::class, 'specific_contract_id');
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'student_scholar_specific')
+            ->withTimestamps()
+            ->withPivot('specific_contract_id');
     }
 }

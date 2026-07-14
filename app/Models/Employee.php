@@ -29,12 +29,12 @@ class Employee extends Model
     // Define la relación uno a muchos con EmployeePhone
     public function phones()
     {
-        return $this->hasMany(EmployeePhone::class);
+        return $this->hasMany(EmployeePhone::class, 'employee_id');
     }
 
     // Relación inversa con Company
     public function company()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
     }
 }

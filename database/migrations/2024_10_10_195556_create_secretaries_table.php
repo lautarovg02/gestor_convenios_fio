@@ -6,23 +6,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('secretaries', function (Blueprint $table) {
             $table->id();
-            $table->string("user_name", 40)->unique();
-            $table->string("password");
-            $table->string("email")->unique();
+
+            // Relación 1:1 con users
+            $table->unsignedBigInteger('user_id')->unique()->nullable();
+            
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+
+            // ELIMINAMOS 'username'. No es necesario.
+            // Si necesitas datos extra, agrega teléfono o legajo, pero el usuario ya está en 'users'
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('secretaries');

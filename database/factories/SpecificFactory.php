@@ -19,6 +19,7 @@ class SpecificFactory extends Factory
     {
         return [
             'contract_id' => Contract::factory(),
+            'contract_status_id' => $this->faker->numberBetween(1, 10),
             'signing_date' => $this->faker->date(),
             'objective' => $this->faker->text(100),
             'commitment_parties' => $this->faker->text(),

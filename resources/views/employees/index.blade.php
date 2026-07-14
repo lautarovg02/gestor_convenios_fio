@@ -21,22 +21,31 @@
             </div>
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="fw-bold mb-1">Gestión de Empleados - {{ $company->company_name }}</h4>
+                @canany(['crud empresas'])
+                <div>
+                    <a href="{{ route('companies.employees.create', $company->id) }}"
+                        class="btn btn-success bi bi-plus-lg me-1">Agregar Empleado</a>
+                </div>
+                @endcanany
             </div>
+
         </div>
         @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         @if (session('success'))
             <div id="flash-message" class="alert alert-success">
                 {{ session('success') }}
             </div>
         @endif
+
+
 
         @unless ($employees->isEmpty())
             <div class="w-75 table-responsive rounded shadow-sm table-scrollable-container">
@@ -46,6 +55,7 @@
                             <th class="col-max-width">Nombre</th>
                             <th class="col-max-width">Apellido</th>
                             <th class="col-max-width">DNI</th>
+                            <th class="col-max-width">CUIL</th>
                             <th class="col-max-width">Cargo</th>
                             <th class="col-max-width">Email</th>
                             <th class="col-max-width">Representante</th>
@@ -64,6 +74,9 @@
                                 </td>
                                 <td class="col-max-width text-truncate" title="{{ $employee->dni }}">
                                     {{ $employee->dni }}
+                                </td>
+                                <td class="col-max-width text-truncate" title="{{ $employee->cuil }}">
+                                    {{ $employee->cuil }}
                                 </td>
                                 <td class="col-max-width text-truncate" title="{{ $employee->position }}">
                                     {{ $employee->position }}
@@ -87,10 +100,19 @@
                                         <span class="text-muted">Sin número</span>
                                     @endif
                                 </td>
+
+                                @canany(['crud empresas'])
                                 <td class="text-center">
                                     <a href="{{ route('employees.edit', $employee) }}"
                                         class="btn btn-primary btn-sm">Editar</a>
+                                    <form action="{{ route('employees.destroy', $employee) }}" method="POST" class="d-inline"
+                                        onsubmit="return confirm('¿Estás seguro de eliminar este empleado?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                    </form>
                                 </td>
+                                @endcanany
                             </tr>
                         @endforeach
                     </tbody>

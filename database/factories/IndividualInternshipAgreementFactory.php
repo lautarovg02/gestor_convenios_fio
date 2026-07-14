@@ -26,6 +26,7 @@ class IndividualInternshipAgreementFactory extends Factory
             'area' => $this->faker->word(),
             'signing_date' => $this->faker->date(),
             'contract_id' => Contract::factory(),
+            'contract_status_id' => $this->faker->numberBetween(1, 10),
             'student_id' => Student::factory(),
             'file' => null,
         ];

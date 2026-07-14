@@ -37,8 +37,8 @@ class DepartmentController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(): View {
-        //Consigue a todos los teachers sin rol
-        $teachers = Teacher::getTeachersWithoutRoles()->orderBy('lastname', 'ASC')->get();
+        //Consigue a todos los teachers disponibles para ser directores
+        $teachers = Teacher::getAvailableDirectors()->orderBy('lastname', 'ASC')->get();
 
         return view('departments.create', compact('teachers'));
     }
@@ -74,7 +74,7 @@ class DepartmentController extends Controller
     public function edit(Department $department): View
     {
 
-        $teachersWithoutRol = Teacher::getTeachersWithoutRoles()->orderBy('lastname', 'ASC')->get();
+        $teachersWithoutRol = Teacher::getAvailableDirectors()->orderBy('lastname', 'ASC')->get();
 
         return view('departments.edit', compact('department' ,  'teachersWithoutRol'));
     }

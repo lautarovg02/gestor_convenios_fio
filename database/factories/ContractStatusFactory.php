@@ -20,9 +20,11 @@ class ContractStatusFactory extends Factory
     public function definition(): array
     {
         return [
-            'status'=>$this->faker->unique()->randomElement(['En Departamento', 'En Coordinación', 'SEVyT', 'SEVyT-Firma',
-                                                             'Contraparte', 'SEVyT-Enviar a CA', 'En CA', 'En Ejecución',
-                                                             'Deshabilitado','Finalizado']),
+            'status'=>$this->faker->unique()->randomElement([
+                'En Departamento', 'En Coordinación', 'SEVyT', 'SEVyT firma', 
+                'Contraparte', 'Enviar a CA', 'En CA', 'En ejecución', 
+                'Deshabilitado', 'Finalizado'
+            ]),
             'time_limit'=>$this->faker->optional()->time('H:i:s')
         ];
     }

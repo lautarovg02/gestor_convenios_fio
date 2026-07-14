@@ -16,12 +16,16 @@ class TeacherFactory extends Factory
      */
     public function definition(): array
     {
+
         return [
-            'name' =>  $this->faker->firstName,
-            'lastname' =>  $this->faker->lastName(),
-            'dni' => $this->faker->numberBetween(10000000, 50000000),
+            // 'user_id' => se setea en el seeder
+            'name' => $this->faker->firstName(),
+            'lastname' => $this->faker->lastName(),
+            'dni' => $dni = $this->faker->unique()->numberBetween(10000000, 70000000),
+            'cuil' => '20' . str_pad($dni, 8, '0', STR_PAD_LEFT) . $this->faker->randomElement([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
+            'faculty' => $this->faker->randomElement(['FIO', 'FCE', 'FCH', null]),
+            'is_rector' => false,
             'is_dean' => false,
-            'is_rector' => $this->faker->boolean() //al azar true o false
         ];
     }
 }

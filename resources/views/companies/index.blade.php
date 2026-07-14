@@ -15,9 +15,11 @@
                     </ol>
                 </nav>
             </div>
+            @canany(['crud empresas'])
             <a href="{{ route('companies.create') }}" class="btn btn-success">
                 <i class="bi bi-plus-lg me-1"></i> Agregar Empresa
             </a>
+            @endcanany
         </div>
 
         <!-- Filtros -->
@@ -27,8 +29,9 @@
         <!-- Mensajes -->
         @if (session('success'))
             <div id="flash-message" class="alert alert-success">
-                {{ session('success') }}
+                 {!! session('success') !!}
             </div>
+
         @elseif (Session::get('error'))
             <div class="alert alert-danger">{{ Session::get('error') }}</div>
         @endif
@@ -50,13 +53,13 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th>#</th>
                         <th class="col-max-width">Razón Social</th>
                         <th class="col-max-width">CUIT</th>
                         <th class="col-max-width">Nombre Fantasía</th>
                         <th class="col-max-width">Sector</th>
                         <th class="col-max-width">Entidad</th>
-                        <th class="col-max-width">Categoría</th>
+                        <th class="col-max-width">Rubro</th>
+                        <th class="col-max-width">Dedicación</th>
                         <th class="col-max-width">Ciudad</th>
                         <th class="text-center">Acciones</th>
                     </tr>
@@ -64,39 +67,44 @@
                 <tbody>
                     @foreach ($companies as $company)
                         <tr>
-                            <td>{{ $company->id }}</td>
-
                             <td class="col-max-width text-truncate" title="{{ $company->denomination }}">
-                                {{ highlightKeyword($company->denomination, request('search')) }}
+                                {!! highlightKeyword($company->denomination, request('search')) !!}
                             </td>
 
                             <td class="col-max-width text-truncate" title="{{ $company->cuit }}">
-                                {{ highlightKeyword($company->cuit, request('search')) }}
+                                {!! highlightKeyword($company->cuit, request('search')) !!}
                             </td>
 
                             <td class="col-max-width text-truncate" title="{{ $company->company_name }}">
-                                {{ highlightKeyword($company->company_name ?? 'N/A', request('search')) }}
+                                {!! highlightKeyword($company->company_name ?? 'N/A', request('search')) !!}
                             </td>
 
                             <td class="col-max-width text-truncate" title="{{ $company->sector }}">
-                                {{ highlightKeyword($company->sector ?? 'N/A', request('search')) }}
+                                {!! highlightKeyword($company->sector ?? 'N/A', request('search')) !!}
                             </td>
 
-                            <td class="col-max-width text-truncate" title="{{ $company->entity->name }}">
-                                {{ highlightKeyword($company->entity->name ?? 'N/A', request('search')) }}
+                            <td class="col-max-width text-truncate" title="{{ optional($company->entity)->name }}">
+                                {!! highlightKeyword(optional($company->entity)->name ?? 'N/A', request('search')) !!}
                             </td>
 
-                            <td class="col-max-width text-truncate" title="{{ $company->company_category }}">
-                                {{ highlightKeyword($company->company_category ?? 'N/A', request('search')) }}
+                            <td class="col-max-width text-truncate" title="{{ $company->rubro }}">
+                                {!! highlightKeyword($company->rubro ?? 'N/A', request('search')) !!}
                             </td>
 
-                            <td class="col-max-width text-truncate" title="{{ $company->city->name }}">
-                                {{ highlightKeyword($company->city->name ?? 'N/A', request('search')) }}
+                            <td class="col-max-width text-truncate" title="{{ $company->dedicacion }}">
+                                {!! highlightKeyword($company->dedicacion ?? 'N/A', request('search')) !!}
+                            </td>
+
+                            <td class="col-max-width text-truncate" title="{{ optional($company->city)->name }}">
+                                {!! highlightKeyword(optional($company->city)->name ?? 'N/A', request('search')) !!}
                             </td>
 
                             <td class="text-center">
                                 <a href="{{ route('companies.show', $company) }}" class="btn btn-info btn-sm">Ver</a>
+                                @canany(['crud empresas'])
                                 <a href="{{ route('companies.edit', $company) }}" class="btn btn-primary btn-sm">Editar</a>
+                                @endcanany
+                                @canany(['crud empresas'])
                                 <button type="button" class="btn btn-danger btn-sm"
                                     data-entity-id="{{ $company->id }}"
                                     data-entity-name="{{ $company->company_name }}"
@@ -104,6 +112,7 @@
                                     data-bs-toggle="modal" data-bs-target="#modal-delete">
                                     Eliminar
                                 </button>
+                                @endcanany
                             </td>
                         </tr>
                     @endforeach
@@ -121,7 +130,7 @@
         <!-- Modales -->
         @include('layouts.modals.modal-delete')
         @include('layouts.modals.modal-loading')
-    @vite('resources/js/utils/flashMessage.js')
+        @vite('resources/js/utils/flashMessage.js')
         @vite('resources/js/modals/modalDelete.js')
     </div>
 @endsection

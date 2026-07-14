@@ -38,7 +38,7 @@ class Company extends Model
      *
      * @var array
      */
-    protected $fillable = ['denomination','cuit','company_name','sector','entity_id','company_category','scope','street','number','city_id', 'slug'];
+    protected $fillable = ['denomination','cuit','company_name','sector','entity_id','company_category','confidentiality','scope','street','number','city_id', 'slug', 'rubro', 'dedicacion'];
 
 
       //Relación 1:n atributo multivaluado en la tabla Contract
@@ -70,7 +70,7 @@ class Company extends Model
      */
     public function entity()
     {
-        return $this->belongsTo(CompanyEntity::class);
+        return $this->belongsTo(CompanyEntity::class, 'entity_id');  
     }
 
     // Scope para la búsqueda

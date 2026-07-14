@@ -62,7 +62,7 @@
                                         <option value="{{$teacher->id}}">{{$teacher->lastname}} {{$teacher->name}}</option>
                                     @endforeach
                             </select>
-                            <small class="form-hint">Si no encuentra al <b>docente</b> en la lista, agregarlo en  <a href="{{route('teachers.create')}}">Agregar Docente</a>.</small>
+                            <small class="form-hint">Si no encuentra al <b>docente</b> en la lista, agregarlo en  <a href="{{route('adminUsers.create')}}">Agregar Docente</a>.</small>
                             @error('director_id')
                                 <div class="text-danger">{{$message}}</div>
                             @enderror

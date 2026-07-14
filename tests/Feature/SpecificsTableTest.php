@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\QueryException;
-use App\Models\{City, CompanyEntity, Company, Secretary, Employee, Teacher, Contract, Specific, ContractStatus, TypeFrameworkAgreement};
+use App\Models\{City, CompanyEntity, Company, Secretary, Employee, Teacher, Contract, Specific, ContractStatus, Province, TypeFrameworkAgreement};
 
 
 
@@ -141,6 +141,7 @@ public function contract_has_many_specifics_relation_works()
 {
     // Crear un contrato
     // Crear dependencias mínimas
+    Province::factory()->create(); //No olvidar crear una provincia antes que una ciudad.
     City::factory()->create();
     CompanyEntity::factory()->create();
     Company::factory()->create();

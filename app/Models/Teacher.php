@@ -35,25 +35,32 @@ class Teacher extends Model
     ];
 
     protected $fillable = [
+        'user_id', 
         'lastname',
         'name',
         'dni',
         'cuil',
         'teacher_id',
+        'faculty',
         'is_rector',
         'is_dean',
     ];
 
-      //Relación 1:n atributo multivaluado en la tabla Contract
-      public function contracts(): HasMany
-      {
-          return $this->hasMany(Contract::class, 'teacher_id');
-      }
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
 
-      public function rectorContracts(): HasMany
-      {
-          return $this->hasMany(Contract::class, 'rector');
-      }
+    //Relación 1:n atributo multivaluado en la tabla Contract
+    public function contracts(): HasMany
+    {
+        return $this->hasMany(Contract::class, 'teacher_id');
+    }
+
+    public function rectorContracts(): HasMany
+    {
+        return $this->hasMany(Contract::class, 'rector');
+    }
 
     //Relación 1:n atributo multivaluado en la tabla Teacher
     public function cathedras(): HasMany
@@ -67,18 +74,18 @@ class Teacher extends Model
         return $this->belongsToMany(Career::class, 'career_teacher');
     }
 
-     //Relación n:n con tabla Student
-     public function students(): BelongsToMany
-        {
-            return $this->belongsToMany(Student::class, 'teacher_tutor_student');
-        }
+    //Relación n:n con tabla Student
+    public function students(): BelongsToMany
+    {
+        return $this->belongsToMany(Student::class, 'teacher_tutor_student');
+    }
 
     /** Relación con Department (uno a uno)
      * Obtener el department del cual el teacher es director de departemento.
      */
     public function department(): HasOne
     {
-        return  $this->hasOne(Department::class);
+        return $this->hasOne(Department::class, 'director_id');
     }
 
     /** Relación con Career (uno a uno)
@@ -229,11 +236,47 @@ class Teacher extends Model
             })
             ->where(function ($query) {
                 $query->where('is_rector', 0)
-                      ->orWhereNull('is_rector');
+                    ->orWhereNull('is_rector');
             })
             ->where(function ($query) {
                 $query->where('is_dean', 0)
-                      ->orWhereNull('is_dean');
+                    ->orWhereNull('is_dean');
+            });
+    }
+
+    /**
+     * Obtener docentes que tienen el rol de 'Coordinador' en el sistema (Spatie)
+     * pero que AÚN NO tienen una carrera asignada.
+     */
+    public static function getAvailableCoordinators()
+    {
+        // Traemos los IDs de los usuarios que tienen el rol de Coordinador en Spatie
+        $coordinatorUserIds = User::role('Coordinador')->pluck('id');
+
+        return self::whereIn('user_id', $coordinatorUserIds)
+            ->whereNotExists(function ($query) {
+                // El docente no debe estar ya asignado como coordinador de una carrera
+                $query->select(\DB::raw(1))
+                    ->from('careers')
+                    ->whereColumn('careers.coordinator_id', 'teachers.id');
+            });
+    }
+
+    /**
+     * Obtener docentes que tienen el rol de 'Director' en el sistema (Spatie)
+     * pero que AÚN NO tienen un departamento asignado.
+     */
+    public static function getAvailableDirectors()
+    {
+        // Traemos los IDs de los usuarios que tienen el rol de Director en Spatie
+        $directorUserIds = User::role('Director')->pluck('id');
+
+        return self::whereIn('user_id', $directorUserIds)
+            ->whereNotExists(function ($query) {
+                // El docente no debe estar ya asignado como director de un depto
+                $query->select(\DB::raw(1))
+                    ->from('departments')
+                    ->whereColumn('departments.director_id', 'teachers.id');
             });
     }
 
@@ -286,41 +329,41 @@ class Teacher extends Model
             ->first(); // Retornar el primer resultado o null si no existe.
     }
 
-   /**
- * Obtener las carreras relacionadas con un docente específico y determinar su relación (Coordinador o Profesor).
- *
- * Este método realiza una consulta que combina las carreras donde el docente está relacionado como "Profesor"
- * y aquellas donde es "Coordinador". Devuelve el nombre y apellido del docente, el nombre de la carrera
- * y una columna adicional que indica si el docente es "Coordinador" o "Profesor".
- *
- * @param int $teacherId El ID del docente.
- * @return \Illuminate\Support\Collection Resultado de la consulta con la relación del docente y sus carreras.
- * @lautarovg02
- */
-public static function getTeacherWithRelationToCareers(int $teacherId)
-{
-    // Subconsulta para obtener las carreras donde el docente es Profesor
-    $professorQuery = self::select(
-        'teachers.name',
-        'teachers.lastname',
-        'careers.name as career',
-        \DB::raw("'Profesor' as relation")
-    )
-        ->join('career_teacher', 'teachers.id', '=', 'career_teacher.teacher_id')
-        ->join('careers', 'career_teacher.career_id', '=', 'careers.id')
-        ->where('teachers.id', $teacherId);
+    /**
+     * Obtener las carreras relacionadas con un docente específico y determinar su relación (Coordinador o Profesor).
+     *
+     * Este método realiza una consulta que combina las carreras donde el docente está relacionado como "Profesor"
+     * y aquellas donde es "Coordinador". Devuelve el nombre y apellido del docente, el nombre de la carrera
+     * y una columna adicional que indica si el docente es "Coordinador" o "Profesor".
+     *
+     * @param int $teacherId El ID del docente.
+     * @return \Illuminate\Support\Collection Resultado de la consulta con la relación del docente y sus carreras.
+     * @lautarovg02
+     */
+    public static function getTeacherWithRelationToCareers(int $teacherId)
+    {
+        // Subconsulta para obtener las carreras donde el docente es Profesor
+        $professorQuery = self::select(
+            'teachers.name',
+            'teachers.lastname',
+            'careers.name as career',
+            \DB::raw("'Profesor' as relation")
+        )
+            ->join('career_teacher', 'teachers.id', '=', 'career_teacher.teacher_id')
+            ->join('careers', 'career_teacher.career_id', '=', 'careers.id')
+            ->where('teachers.id', $teacherId);
 
-    // Subconsulta para obtener las carreras donde el docente es Coordinador
-    $coordinatorQuery = self::select(
-        'teachers.name',
-        'teachers.lastname',
-        'careers.name as career',
-        \DB::raw("'Coordinador' as relation")
-    )
-        ->join('careers', 'careers.coordinator_id', '=', 'teachers.id')
-        ->where('teachers.id', $teacherId);
+        // Subconsulta para obtener las carreras donde el docente es Coordinador
+        $coordinatorQuery = self::select(
+            'teachers.name',
+            'teachers.lastname',
+            'careers.name as career',
+            \DB::raw("'Coordinador' as relation")
+        )
+            ->join('careers', 'careers.coordinator_id', '=', 'teachers.id')
+            ->where('teachers.id', $teacherId);
 
-    // Unión de ambas consultas
-    return $professorQuery->union($coordinatorQuery)->get();
-}
+        // Unión de ambas consultas
+        return $professorQuery->union($coordinatorQuery)->get();
+    }
 }

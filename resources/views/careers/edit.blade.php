@@ -1,9 +1,8 @@
-<!-- resources/views/careers/edit.blade.php -->
 @extends('layouts.app')
 
 @section('content')
 
-<div class="row row-deck row-cards justify-content-center  content-with-footer-buffer"">
+<div class="row row-deck row-cards justify-content-center content-with-footer-buffer">
     <div class="col-12 ">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center ps-4 pe-4">
@@ -22,15 +21,14 @@
                 </nav>
                 <a href="{{route('careers.index')}}" class="btn btn-outline-primary">← Volver</a>
             </div>
+            
             <div>
-                <!-- Mensajes flash de success-->
                 @if (Session::has('success'))
                     <div class="alert alert-success">
                         {{Session::get('success')}}
                     </div>
                 @endif
 
-                <!-- Mensajes flash de error-->
                 @if ($errors->has('error'))
                     <div class="alert alert-danger">
                         {{ $errors->first('error') }}
@@ -44,7 +42,6 @@
                     {{ method_field('PATCH') }}
                     @csrf
 
-                    <!-- Campo nombre Carrera -->
                     <div class="form-group mb-3">
                         <label class="form-label required-field" for= "name">Carrera</label>
                         <div>
@@ -57,20 +54,16 @@
                         @enderror
                     </div>
 
-                    <!-- Campo nombre Departamento al cual pertenece -->
-                    <!-- Selector con departamentos" -->
                     <div class="form-group mb-3">
                         <label class="form-label fs-6 required-field" for="department_id">Departamento</label>
                         <select name="department_id" id="department_id" class="form-select">
                             <option value="" disabled>Seleccione un departamento</option>
 
-                            <!-- Primero mostrar el departamento actual si no hay errores de validación -->
                             <option value="{{ $career->department_id }}"
                                 {{ old('department_id', $career->department_id) == $career->department_id ? 'selected' : '' }}>
-                                {{ $career->department->name }}
+                                {{ optional($career->department)->name ?? 'Sin departamento asignado' }}
                             </option>
 
-                            <!-- Luego mostrar los departamentos sin seleccionar-->
                             @foreach ($departments as $department)
                                 @if ($department->id !== $career->department_id)
                                     <option value="{{ $department->id }}"
@@ -88,20 +81,20 @@
                         @enderror
                     </div>
 
-                    <!-- Campo coordinador -->
-                    <!-- Selector con docentes sin rol" -->
                     <div class="form-group mb-3">
                         <label class="form-label fs-6 required-field" for="coordinator_id">Coordinador de carrera</label>
                         <select name="coordinator_id" id="coordinator_id" class="form-select">
                             <option value="" disabled>Seleccione un coordinador</option>
 
-                            <!-- Primero mostrar el coordinador actual si no hay errores de validación -->
                             <option value="{{ $career->coordinator_id }}"
                                 {{ old('coordinator_id', $career->coordinator_id) == $career->coordinator_id ? 'selected' : '' }}>
-                                {{ $career->teacher->lastname }} {{ $career->teacher->name }}
+                                @if($career->teacher)
+                                    {{ $career->teacher->lastname }} {{ $career->teacher->name }}
+                                @else
+                                    Sin coordinador asignado
+                                @endif
                             </option>
 
-                            <!-- Luego mostrar los docentes disponibles para coordinador porque no tienen roles asignados -->
                             @foreach ($teachersWithoutRol as $teacher)
                                 <option value="{{ $teacher->id }}"
                                     {{ old('coordinator_id', $career->coordinator_id) == $teacher->id ? 'selected' : '' }}>
@@ -118,14 +111,20 @@
                         <div class="text-end">
                             <div class="d-flex">
                                 <a href="{{route('careers.index')}}" class="btn btn-danger m-2">Cancelar</a>
+                                
+                                {{-- 
+                                    IMPORTANTE: 
+                                    He protegido los atributos data-* con ?? '' para que no exploten si son null.
+                                    Si usas un modal JS que lee esto, asegúrate que maneje strings vacíos.
+                                --}}
                                 <button type="button" class="btn btn-success ms-auto m-2"
                                     data-id= "{{$career->id}}"
                                     data-career-name ="{{old('name' , $career->name) }}"
                                     data-department-id="{{$career->department_id}}"
-                                    data-department-name="{{$career->department->name}}"
+                                    data-department-name="{{ optional($career->department)->name ?? ''}}"
                                     data-coordinator-id="{{$career->coordinator_id}}"
-                                    data-coordinator-name="{{$career->teacher->name}}"
-                                    data-coordinator-lastname="{{$career->teacher->lastname}}"
+                                    data-coordinator-name="{{ $career->teacher->name ?? ''}}"
+                                    data-coordinator-lastname="{{ $career->teacher->lastname ?? ''}}"
                                     data-bs-toggle="modal"
                                     data-bs-target="#modal-edit-career">Guardar modificación</button>
                             </div>
@@ -135,11 +134,9 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
     @include('layouts/modals/modal-edit-career')
 </div>
 
-<!--Link a .js del modal al template utilizando Vite-->
 @vite('resources/js/modals/modalEditCareer.js')
 
 @endsection

@@ -11,17 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
-            $table->id();
-            $table->string('name',40);
-            $table->string('last_name',40);
-            $table->integer('dni')->unique();
-            $table->bigInteger('cuil')->unique()->nullable();
-            $table->string('email')->unique();
-            $table->bigInteger('phone_numb')->unique()->length(10);
-            $table->string('career',250)->nullable();
-            $table->timestamps();
-        });
+     Schema::create('students', function (Blueprint $table) {
+        $table->id();
+        $table->string('name', 40);
+        $table->string('last_name', 40);
+        $table->integer('dni')->unique();
+        $table->bigInteger('cuil')->unique()->nullable();
+        
+        // 📍 Nuevos campos de dirección
+        $table->string('street', 100);   // Calle
+        $table->string('number', 10);    // Número de la casa
+        $table->string('city', 60);      // Ciudad
+
+        $table->string('email')->unique();
+        $table->bigInteger('phone_numb')->unique()->length(10);
+        $table->string('career', 250)->nullable();
+        $table->timestamps();
+    });
     }
 
     /**

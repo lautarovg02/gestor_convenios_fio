@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Student extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'last_name', 'dni','cuil','email','phone_numb','career'];
+    protected $fillable = ['name', 'last_name', 'dni','cuil','email','phone_numb','career', 
+    'street', 
+    'number',  
+
+    'city'   ];
 
      //Relación n:n con tabla Teacher
      public function teachers(): BelongsToMany

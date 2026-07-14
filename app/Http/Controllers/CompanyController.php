@@ -8,10 +8,13 @@ use App\Models\City;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\CompanyEntity;
+use App\Models\Contract;
 use App\Models\Employee;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use App\Services\CompanyEntityService;
+use App\Services\CityService;
 
 /**
  * Class CompanyController
@@ -19,6 +22,7 @@ use Illuminate\Http\RedirectResponse;
  */
 class CompanyController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -104,12 +108,14 @@ class CompanyController extends Controller
             if (!$existsEntity) {
                 $newEntity = CompanyEntity::create(['name' => $entitySelected]);
                 //Crear la empresa con el valor seleccionado de entidad
-                Company::create(array_merge($request->validated(), ['entity_id' => $newEntity->id]));
-            } else Company::create(array_merge($request->validated(), ['entity_id' => $existsEntity->id]));
+                $company = Company::create(array_merge($request->validated(), ['entity_id' => $newEntity->id]));
+            } else {
+                $company = Company::create(array_merge($request->validated(), ['entity_id' => $existsEntity->id]));
+            }
 
-
-            return  redirect()->route('companies.index')
-                ->with('success', 'Empresa ingresada exitosamente.');
+            return redirect()
+                ->route('companies.employees.create', $company)
+                ->with('success', 'Empresa creada. Ahora agrega al menos un empleado.');
         } catch (Exception $e) {
             \Log::error('Error al crear la empresa: ' . $e->getMessage());
 
@@ -127,8 +133,8 @@ class CompanyController extends Controller
     public function show(Company $company): View
     {
         $company = Company::find($company->id);
-
-        return view('companies.show', compact('company'));
+        $frameworkAgreements = $company->contracts()->with(['typeFrameworkAgreement', 'specifics', 'specificResidenceAgreements', 'individualIntershipAgreements'])->get();
+        return view('companies.show', compact('company', 'frameworkAgreements'));
     }
 
     /**
@@ -153,38 +159,39 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
 
-     public function update(StoreCompanyRequest $request, Company $company): RedirectResponse
-     {
-         try {
-             // Validar CUIT único
-             $exists = Company::where('cuit', $request->cuit)
-                 ->where('id', '!=', $company->id)
-                 ->first();
-             if ($exists) {
-                 throw new Exception("El CUIT ingresado ya está registrado.");
-             }
+    public function update(StoreCompanyRequest $request, Company $company): RedirectResponse
+    {
+        try {
+            // Validar CUIT único
+            $exists = Company::where('cuit', $request->cuit)
+                ->where('id', '!=', $company->id)
+                ->first();
+            if ($exists) {
+                throw new Exception("El CUIT ingresado ya está registrado.");
+            }
 
-             // Manejar el campo entidad
-             $entitySelected = $request->entity === 'other' ? $request->other_entity_input : $request->entity;
-             $existsEntity = CompanyEntity::where('name', $entitySelected)->first();
-             if (!$existsEntity) {
-                 $newEntity = CompanyEntity::create(['name' => $entitySelected]);
-                 //Crear la empresa con el valor seleccionado de entidad
-                 $company->update(array_merge(
-                     $request->validated(),
-                     ['entity_id' => $newEntity->id]
-                 ));            } else {
-                 // Actualizar empresa
-                 $company->update(array_merge(
-                     $request->validated(),
-                     ['entity_id' => $existsEntity->id]
-                 ));
-             }
-             return redirect()->route('companies.index')->with('success', 'Empresa actualizada exitosamente.');
-         } catch (Exception $e) {
+            // Manejar el campo entidad
+            $entitySelected = $request->entity === 'other' ? $request->other_entity_input : $request->entity;
+            $existsEntity = CompanyEntity::where('name', $entitySelected)->first();
+            if (!$existsEntity) {
+                $newEntity = CompanyEntity::create(['name' => $entitySelected]);
+                //Crear la empresa con el valor seleccionado de entidad
+                $company->update(array_merge(
+                    $request->validated(),
+                    ['entity_id' => $newEntity->id]
+                ));
+            } else {
+                // Actualizar empresa
+                $company->update(array_merge(
+                    $request->validated(),
+                    ['entity_id' => $existsEntity->id]
+                ));
+            }
+            return redirect()->route('companies.index')->with('success', 'Empresa actualizada exitosamente.');
+        } catch (Exception $e) {
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
-     }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -194,27 +201,67 @@ class CompanyController extends Controller
         // Encuentra la empresa por ID
         $company = Company::findOrFail($company->id);
 
-        //Verifica si hay empleados relacionados a la empresa
-        $employeesCount = Employee::where('company_id', $company->id)->count();
+        $hasEmployees = Employee::where('company_id', $company->id)->exists();
 
-        //!!!!NOTA!!!!: Las condición dentro de los operadores if son temporales hasta que la tabla 'contract' esta disponible.
-        if ($employeesCount == 0) {
-            // Si no hay empleados, procede con la eliminación
+        //Verifica si hay convenios relacionados a la empresa
+        $contractsCount = Contract::where('company_id', $company->id)->count();
+
+        //!!!!NOTA!!!!: Queda para proximo sprint deshabilitar empresa si tiene todos los convenios finalizados, ya que no se eliminan
+        if ($contractsCount == 0 && !$hasEmployees) {
+            // Si no hay convenios, procede con la eliminación
             $company->delete();
 
             // Redirecciona a la lista de empresas con un mensaje de éxito
-            return redirect()->route('companies.index')->with('success', 'La empresa "<span class="fw-bold">' . $company->denomination . '</span>" eliminada exitosamente!');
-        } else if ($employeesCount > 3) {   //Si la empresa solo tiene convenios finalizados, se deshabilita.
-            $company->is_enabled = false;
+            return redirect()->route('companies.index')->with('success', 'La empresa "' . $company->company_name . '" eliminada exitosamente!');
+        }else if($contractsCount >=1){
+            //Se redirecciona con mensaje de error.
+            return redirect()->route('companies.index')->with('error', 'La empresa "' . $company->company_name . '" tiene convenios activos y no puede ser eliminada.');
 
-            //Se actualiza a la empresa en la base de datos
-            $company->save();
-
-            //Se redirecciona con mensaje de success
-            return redirect()->route('companies.index')->with('success', 'La empresa "<span class="fw-bold">' . $company->denomination . '</span>" fue deshabilitada correctamente.');
-        } else if ($employeesCount <= 3) {   //Si la empresa tiene convenios en curso, no se puede ni eliminar ni deshabilitar.
-            //Se redirecciona con mensaje de error
-            return redirect()->route('companies.index')->with('error', 'La empresa "<span class="fw-bold">' . $company->denomination . '</span>" tiene convenios activos y no puede ser deshabilitada.');
+        } 
+        else if($hasEmployees){   
+            return redirect()->route('companies.index')->with('error', 'La empresa "' . $company->company_name . '" tiene empleados asociados y no puede ser eliminada.');
+         
         }
+       //NOTA!! SI TIENE CONTRACTS Y EMPLEADOS ASOCIADOS VA A ENTRAR EN EL PRIMER ELSE IF Y NO SE PUEDE ELIMINAR
     }
+
+    /**
+     * Get company by ID for AJAX requests.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCompanyById(int $id) {
+        $company = Company::find($id);
+
+        if (!$company) {
+            return response()->json(['error' => 'Company not found'], 404);
+        }
+
+        //busco el name de la entity relacionada a company
+        $eName =  $company->entity_id = CompanyEntity::find($company->entity_id);
+
+    
+        return response()->json([
+            'id' => $company->id,
+            'denomination' => $company->denomination,
+            'cuit' => $company->cuit,
+            'company_name' => $company->company_name,
+            'company_category' => $company->company_category,
+            'sector' => $company->sector,
+            'scope' => $company->scope,
+            'street' => $company->street,
+            'number' => $company->number,
+            'city' => $company->city->name,
+            'provincia' => $company->city->province->name,
+            'entity_id' => $company->entity_id,
+            'city_id' => $company->city_id,
+            'entity_name' => $company->entity_id->name ?? null,
+            'postal_code' => $company->city?->postal_code,
+            'confidentiality' => $company->confidentiality,
+            'rubro' => $company->rubro,
+            'dedicacion' => $company->dedicacion,
+        ]);
+    }
+
 }

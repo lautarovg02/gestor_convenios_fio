@@ -57,6 +57,11 @@ class Contract extends Model
     {
         return $this->hasMany(Specific::class);
     }
+
+    public function rejections()
+    {
+        return $this->morphMany(ContractRejection::class, 'agreement');
+    }
     public function specificResidenceAgreements()
     {
         return $this->hasMany(SpecificResidenceAgreement::class);
@@ -65,4 +70,10 @@ class Contract extends Model
     {
         return $this->hasMany(IndividualInternshipAgreement::class);
     }
+    public function rejection()
+    {
+        return $this->hasOne(ContractRejection::class);
+    }
+
+
 }

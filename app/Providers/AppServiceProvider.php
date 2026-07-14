@@ -14,11 +14,13 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        //
+        \Illuminate\Database\Eloquent\Relations\Relation::morphMap([
+            'contract' => \App\Models\Contract::class,
+            'specific' => \App\Models\Specific::class,
+            'residence' => \App\Models\SpecificResidenceAgreement::class,
+            'internship' => \App\Models\IndividualInternshipAgreement::class,
+        ]);
     }
 }

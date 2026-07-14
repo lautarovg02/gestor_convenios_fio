@@ -6,9 +6,12 @@ use App\Http\Requests\StoreCityRequest;
 use App\Models\City;
 use App\Models\Province;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class CityController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      */
@@ -69,4 +72,6 @@ class CityController extends Controller
     {
         //
     }
+
+
 }

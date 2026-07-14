@@ -15,6 +15,7 @@ class SpecificResidenceAgreement extends Model
         'task',
         'signing_date',
         'contract_id',
+        'contract_status_id',
         'student_id',
         'file',
     ];
@@ -24,8 +25,30 @@ class SpecificResidenceAgreement extends Model
         return $this->belongsTo(Contract::class);
     }
 
+    public function rejections()
+    {
+        return $this->morphMany(ContractRejection::class, 'agreement');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(ContractStatus::class, 'contract_status_id');
+    }
+
     public function student()
     {
         return $this->belongsTo(Student::class);
     }
+
+    public function SpecificResidenceAgreements()
+    {
+        return $this->hasMany(ReportSpecificResidenceAgreement::class);
+    }
+
+      public function SpecificResidenceAgreementContracts()
+    {
+        return $this->hasMany(ReportSpecificResidenceAgreement::class);
+    }
+
+    
 }

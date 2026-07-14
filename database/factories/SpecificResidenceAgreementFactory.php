@@ -24,6 +24,7 @@ class SpecificResidenceAgreementFactory extends Factory
             'task' => $this->faker->text(),
             'signing_date' => $this->faker->date(),
             'contract_id' => Contract::factory(),
+            'contract_status_id' => $this->faker->numberBetween(1, 10),
             'student_id' => Student::factory(),
             'file' => null,
         ];

@@ -10,87 +10,43 @@ class CareerSeeder extends Seeder
 {
     public function run()
     {
-        // Desactiva restricciones de clave foránea para evitar problemas durante el seeding.
         Schema::disableForeignKeyConstraints();
-
         // Limpia la tabla antes de insertar datos para evitar duplicados.
         DB::table('careers')->truncate();
 
-        // Inserta las carreras
-        DB::table('careers')->insert([
-            [
-                'coordinator_id' => 1,
-                'department_id' => 1,
-                'name' => 'Licenciatura en Matemáticas',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'coordinator_id' => 2,
-                'department_id' => 1,
-                'name' => 'Licenciatura en Física',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'coordinator_id' => 3,
-                'department_id' => 1,
-                'name' => 'Licenciatura en Química',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'coordinator_id' => 4,
-                'department_id' => 1,
-                'name' => 'Licenciatura en Ciencias de la Computación',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'coordinator_id' => 5,
-                'department_id' => 1,
-                'name' => 'Profesorado en Matemáticas',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'coordinator_id' => 6,
-                'department_id' => 1,
-                'name' => 'Profesorado en Física',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'coordinator_id' => 7,
-                'department_id' => 1,
-                'name' => 'Profesorado en Química',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'coordinator_id' => 8,
-                'department_id' => 1,
-                'name' => 'Ingeniería en Informática',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'coordinator_id' => 9,
-                'department_id' => 1,
-                'name' => 'Licenciatura en Estadística',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'coordinator_id' => 10,
-                'department_id' => 1,
-                'name' => 'Licenciatura en Biotecnología',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        // Asegurarnos de que haya al menos 10 docentes para ser coordinadores
+        $teacherCount = \App\Models\Teacher::count();
+        if ($teacherCount < 10) {
+            \App\Models\Teacher::factory(10 - $teacherCount)->create();
+        }
 
-        // Reactiva restricciones de clave foránea.
+        $teachers = \App\Models\Teacher::inRandomOrder()->take(10)->get();
+
+        $careersData = [
+            'Licenciatura en Matemáticas',
+            'Licenciatura en Física',
+            'Licenciatura en Química',
+            'Licenciatura en Ciencias de la Computación',
+            'Profesorado en Matemáticas',
+            'Profesorado en Física',
+            'Profesorado en Química',
+            'Ingeniería en Informática',
+            'Licenciatura en Estadística',
+            'Licenciatura en Biotecnología'
+        ];
+
+        $insertData = [];
+        foreach ($careersData as $index => $careerName) {
+            $insertData[] = [
+                'coordinator_id' => $teachers[$index]->id,
+                'department_id' => 1, // Asumiendo que el departametno 1 siempre existe
+                'name' => $careerName,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        DB::table('careers')->insert($insertData);
         Schema::enableForeignKeyConstraints();
     }
 }

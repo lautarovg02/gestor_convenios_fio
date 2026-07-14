@@ -16,9 +16,11 @@
                 </ol>
             </nav>
         </div>
+        @canany(['crud departamentos'])
         <a href="{{ route('departments.create') }}" class="btn btn-success">
             <i class="bi bi-plus-lg me-1"></i> Agregar Departamento
         </a>
+        @endcanany
     </div>
 
     <!-- Mensajes -->
@@ -39,7 +41,6 @@
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th>#</th>
                         <th class="col-max-width">Denominación</th>
                         <th class="col-max-width">Director del Departamento</th>
                         <th class="text-center" style="width: 200px;">Acciones</th>
@@ -48,8 +49,6 @@
                 <tbody>
                     @foreach ($departments as $department)
                         <tr>
-                            <td>{{ $department->id }}</td>
-
                             <td class="text-truncate col-max-width" title="{{ $department->name }}">
                                 {!! highlightKeyword($department->name, request('search')) !!}
                             </td>
@@ -60,7 +59,10 @@
 
                             <td class="text-center">
                                 <a href="{{ route('departments.show', $department) }}" class="btn btn-info btn-sm">Ver</a>
+                                @canany(['crud departamentos'])
                                 <a href="{{ route('departments.edit', $department) }}" class="btn btn-primary btn-sm">Editar</a>
+                                @endcanany
+                                @canany(['crud departamentos'])
                                 <button type="button" class="btn btn-danger btn-sm"
                                     data-entity-id="{{ $department->id }}"
                                     data-entity-name="{{ $department->name }}"
@@ -69,6 +71,7 @@
                                     data-bs-target="#modal-delete">
                                     Eliminar
                                 </button>
+                                @endcanany
                             </td>
                         </tr>
                     @endforeach
